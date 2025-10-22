@@ -16,7 +16,7 @@ interface Item {
 }
 
 /** Valida se é URL absoluta */
-function isValidUrl(s?: string) {
+function isValidUrl(s?: string): boolean {
   if (!s) return false;
   try {
     const u = new URL(s);
@@ -26,11 +26,11 @@ function isValidUrl(s?: string) {
   }
 }
 
-export default function CarcaraHighlights() {
+export default function CarcaraHighlights(): JSX.Element {
   const [items, setItems] = useState<Item[]>([]);
 
   useEffect(() => {
-    async function fetchItems() {
+    async function fetchItems(): Promise<void> {
       const { data, error } = await supabase
         .from("items")
         .select("*")

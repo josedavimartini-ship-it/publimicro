@@ -1,6 +1,7 @@
 import Image from "next/image";
+import Link from "next/link";
 
-export default function CarcaraPage() {
+export default function CarcaraPage(): JSX.Element {
   return (
     <main className="relative min-h-screen flex flex-col">
       {/* Imagem de fundo */}
@@ -23,12 +24,12 @@ export default function CarcaraPage() {
           Um projeto ecológico e exclusivo às margens do rio, com 6 sítios à venda,
           cada um com vocação natural para descanso, agrofloresta e turismo sustentável.
         </p>
-        <a
+        <Link
           href="#galeria"
           className="mt-8 inline-block bg-amber-600 hover:bg-amber-700 text-white px-6 py-3 rounded-lg text-lg font-semibold transition"
         >
           Confira as unidades disponíveis
-        </a>
+        </Link>
       </section>
 
       {/* Galeria */}
@@ -48,7 +49,7 @@ export default function CarcaraPage() {
             <div key={file} className="relative h-64 rounded-lg overflow-hidden">
               <Image
                 src={`https://irrzpwzyqcubhhjeuakc.supabase.co/storage/v1/object/public/imagens-sitios/${file}`}
-                alt={file}
+                alt={`Imagem ${file.replace(".jpg", "")}`}
                 fill
                 className="object-cover hover:scale-105 transition-transform duration-300"
               />

@@ -2,7 +2,11 @@
 
 import { useState } from "react";
 
-export default function ContactForm({ itemTitle }: { itemTitle: string }) {
+interface ContactFormProps {
+  itemTitle: string;
+}
+
+export default function ContactForm({ itemTitle }: ContactFormProps): JSX.Element {
   const [form, setForm] = useState({
     nome: "",
     email: "",
@@ -12,7 +16,7 @@ export default function ContactForm({ itemTitle }: { itemTitle: string }) {
 
   const [status, setStatus] = useState<"idle" | "sending" | "sent" | "error">("idle");
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>): Promise<void> => {
     e.preventDefault();
     setStatus("sending");
     try {
@@ -26,7 +30,7 @@ export default function ContactForm({ itemTitle }: { itemTitle: string }) {
   return (
     <section className="bg-white rounded-2xl shadow p-6">
       <h2 className="text-2xl font-semibold mb-4 text-gray-800">
-        Contate o anunciante sobre "{itemTitle}"
+        Contate o anunciante sobre &quot;{itemTitle}&quot;
       </h2>
 
       <form onSubmit={handleSubmit} className="space-y-4">

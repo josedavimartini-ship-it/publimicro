@@ -1,0 +1,16 @@
+node_modules
+.next
+out
+build
+dist
+*.log
+*.lock
+
+# vercel build cache
+.vercel
+
+# coverage reports
+coverage
+
+# optional build assets
+public/build

@@ -1,25 +1,38 @@
+interface PageParams {
+  section: string;
+}
 
-export default function Page({ params }) {
+export default async function Page({
+  params,
+}: {
+  params: PageParams;
+}): Promise<JSX.Element> {
   const { section } = params;
-  const titleMap = {
-    'alugueis':'Aluguéis de curto prazo / viagens',
-    'veiculos':'Veículos (Publiautos)',
-    'imoveis':'Imóveis (Publiproper)',
-    'embarcacoes':'Embarcações',
-    'equipamentos':'Equipamentos e bens de alto valor',
-    'maquinarios':'Maquinários Agrícolas e Industriais',
-    'aluguel-particulares':'Aluguel entre particulares',
-    'co-ownership':'Co-ownership / Aquisição conjunta',
-    'servicos':'Serviços sob demanda / profissionais',
-    'comex':'Intermediação de negócios e Comércio Exterior',
-    'publicoisas':'Classificados Geral de Vendas (Publicoisas)'
+
+  const titleMap: Record<string, string> = {
+    alugueis: "Aluguéis de curto prazo / viagens",
+    imoveis: "Imóveis residenciais e comerciais",
+    autos: "Veículos e maquinários (Publimotors)",
+    servicos: "Serviços e profissionais (Publiservices)",
+    produtos: "Produtos novos e usados (Publicoisas)",
   };
-  const title = titleMap[section] || 'Seção';
+
+  const title = titleMap[section] || "Classificados";
 
   return (
-    <main style={{ padding: 24, maxWidth:900, margin:'0 auto' }}>
-      <h1>{title}</h1>
-      <p>Esta seção apresenta a proposta da área {title}. Em futuro desenvolvimento criaremos listagens completas, filtros e ferramentas dedicadas.</p>
+    <main className="max-w-5xl mx-auto px-6 py-16">
+      <h1 className="text-3xl font-bold mb-6 text-emerald-900">{title}</h1>
+
+      <p className="text-gray-700 leading-relaxed mb-4">
+        Esta seção faz parte da plataforma Publimicro. Em breve, aqui você
+        encontrará anúncios, filtros, mapas e ferramentas dedicadas a{" "}
+        <strong>{title.toLowerCase()}</strong>.
+      </p>
+
+      <p className="text-gray-500 italic mt-4">
+        © {new Date().getFullYear()} Publimicro — conectando pessoas, negócios e
+        ideias.
+      </p>
     </main>
-  )
+  );
 }

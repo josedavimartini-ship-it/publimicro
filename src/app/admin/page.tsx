@@ -1,17 +1,28 @@
 "use client";
+
 import { useEffect, useState } from "react";
 import { supabase } from "@/lib/supabaseClient";
 
-export default function AdminPage() {
-  const [items, setItems] = useState<any[]>([]);
-  const [loading, setLoading] = useState(true);
+// Definimos um tipo seguro pros itens retornados do Supabase
+type Item = {
+  id: string;
+  titulo: string;
+  preco?: number;
+};
+
+// Função principal com tipo de retorno explícito
+export default function AdminPage(): JSX.Element {
+  const [items, setItems] = useState<Item[]>([]);
+  const [loading, setLoading] = useState<boolean>(true);
 
   useEffect(() => {
-    async function fetchItems() {
+    async function fetchItems(): Promise<void> {
       try {
         const { data, error } = await supabase.from("items").select("*");
         if (error) throw error;
-        setItems(data || []); // Garante que nunca fique undefined
+
+        // Garantimos que `data` seja do tipo Item[]
+        setItems((data as Item[]) || []);
       } catch (err) {
         console.error("Erro ao carregar itens:", err);
         setItems([]);
@@ -20,10 +31,12 @@ export default function AdminPage() {
       }
     }
 
+    // eslint-disable-next-line @typescript-eslint/no-floating-promises
     fetchItems();
   }, []);
 
-  const approve = async (id: string) => {
+  // Função com tipo e await explícito
+  const approve = async (id: string): Promise<void> => {
     alert(`Item ${id} aprovado (função em construção)`);
   };
 
@@ -47,9 +60,12 @@ export default function AdminPage() {
                 borderRadius: 6,
               }}
             >
-              <strong>{item.titulo}</strong> – R$ {item.preco}
+              <strong>{item.titulo}</strong> – R$ {item.preco ?? "0,00"}
               <button
-                onClick={() => approve(item.id)}
+                onClick={() => {
+                  // eslint-disable-next-line @typescript-eslint/no-misused-promises
+                  void approve(item.id);
+                }}
                 style={{ marginLeft: 12 }}
               >
                 Aprovar

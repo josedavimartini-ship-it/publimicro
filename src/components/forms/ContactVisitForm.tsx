@@ -1,44 +1,75 @@
-
 'use client';
+
 import { useState, useEffect } from 'react';
 
-export default function ContactVisitForm({ propId }) {
-  const [nome,setNome]=useState('');
-  const [email,setEmail]=useState('');
-  const [telefone,setTelefone]=useState('');
-  const [cidade,setCidade]=useState('');
-  const [pais,setPais]=useState('Brasil');
-  const [mensagem,setMensagem]=useState('');
-  const [datePref,setDatePref]=useState('');
+type ContactVisitFormProps = {
+  propId?: string | null;
+};
 
-  useEffect(()=>{
+export default function ContactVisitForm({
+  propId,
+}: ContactVisitFormProps): JSX.Element {
+  const [nome, setNome] = useState('');
+  const [email, setEmail] = useState('');
+  const [telefone, setTelefone] = useState('');
+
+  useEffect(() => {
     if (propId) {
-      // placeholder for future fetch
+      console.log('Formulário carregado para o imóvel:', propId);
     }
-  },[propId]);
+  }, [propId]);
 
-  async function handleSubmit(e){
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>): void => {
     e.preventDefault();
-    const payload = { nome, email, telefone, cidade, pais, mensagem, preferencia_date: datePref, prop_id: propId || null };
-    const res = await fetch('/api/contato', { method: 'POST', headers: {'Content-Type':'application/json'}, body: JSON.stringify(payload) });
-    const data = await res.json();
-    if (res.ok) {
-      alert('Obrigado — sua solicitação foi enviada!');
-    } else {
-      alert('Erro: ' + data.error);
-    }
-  }
+    console.log('Dados enviados:', { nome, email, telefone, propId });
+  };
 
   return (
-    <form onSubmit={handleSubmit} style={{display:'flex',flexDirection:'column',gap:10}}>
-      <input required placeholder="Nome completo" value={nome} onChange={e=>setNome(e.target.value)} />
-      <input required placeholder="Email" value={email} onChange={e=>setEmail(e.target.value)} />
-      <input placeholder="Telefone/WhatsApp" value={telefone} onChange={e=>setTelefone(e.target.value)} />
-      <input placeholder="Cidade" value={cidade} onChange={e=>setCidade(e.target.value)} />
-      <input placeholder="País" value={pais} onChange={e=>setPais(e.target.value)} />
-      <input type="datetime-local" value={datePref} onChange={e=>setDatePref(e.target.value)} />
-      <textarea placeholder="Mensagem" value={mensagem} onChange={e=>setMensagem(e.target.value)} />
-      <button type="submit" style={{background:'#1A3C40', color:'#FFD700', padding:'8px 10px', borderRadius:6}}>Enviar solicitação</button>
+    <form
+      onSubmit={handleSubmit}
+      className="p-4 border rounded-md bg-white shadow-sm space-y-4"
+    >
+      <h2 className="text-xl font-semibold">Agendar Visita</h2>
+
+      <div>
+        <label className="block text-sm font-medium text-gray-700">Nome</label>
+        <input
+          type="text"
+          value={nome}
+          onChange={(e) => setNome(e.target.value)}
+          required
+          className="w-full border px-3 py-2 rounded-md"
+        />
+      </div>
+
+      <div>
+        <label className="block text-sm font-medium text-gray-700">E-mail</label>
+        <input
+          type="email"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          required
+          className="w-full border px-3 py-2 rounded-md"
+        />
+      </div>
+
+      <div>
+        <label className="block text-sm font-medium text-gray-700">Telefone</label>
+        <input
+          type="tel"
+          value={telefone}
+          onChange={(e) => setTelefone(e.target.value)}
+          required
+          className="w-full border px-3 py-2 rounded-md"
+        />
+      </div>
+
+      <button
+        type="submit"
+        className="bg-amber-700 text-white px-4 py-2 rounded hover:bg-amber-800 transition"
+      >
+        Enviar
+      </button>
     </form>
-  )
+  );
 }

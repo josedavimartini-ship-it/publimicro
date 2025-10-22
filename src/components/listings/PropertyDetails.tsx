@@ -13,7 +13,8 @@ interface PropertyDetailsProps {
   };
 }
 
-function isValidUrl(url?: string) {
+/** Verifica se uma URL é válida */
+function isValidUrl(url?: string): boolean {
   if (!url) return false;
   try {
     const u = new URL(url);
@@ -23,16 +24,13 @@ function isValidUrl(url?: string) {
   }
 }
 
-export default function PropertyDetails({ item }: PropertyDetailsProps) {
-  const [selected, setSelected] = useState(item.imagem?.trim() || "");
-
+export default function PropertyDetails({ item }: PropertyDetailsProps): JSX.Element {
+  const [selected] = useState(item.imagem?.trim() || ""); // 🔹 removido o setSelected não usado
   const valid = isValidUrl(selected);
 
   return (
     <section className="max-w-6xl mx-auto px-6 py-12">
-      <h1 className="text-4xl font-bold text-gray-800 mb-6">
-        {item.titulo}
-      </h1>
+      <h1 className="text-4xl font-bold text-gray-800 mb-6">{item.titulo}</h1>
 
       <div className="mt-6">
         {valid ? (

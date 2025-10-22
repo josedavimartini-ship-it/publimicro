@@ -1,4 +1,7 @@
+import Stripe from "stripe";
 
-import Stripe from 'stripe';
-const stripeSecret = process.env.STRIPE_SECRET_KEY || '';
-export const stripe = new Stripe(stripeSecret, { apiVersion: '2024-08-01' });
+const stripeKey = process.env.STRIPE_SECRET_KEY || "";
+
+export const stripe = new Stripe(stripeKey, {
+  apiVersion: "2024-09-30", // ✅ última versão estável em 2025
+});

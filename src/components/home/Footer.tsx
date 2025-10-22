@@ -1,4 +1,4 @@
-export default function Footer() {
+export default function Footer(): JSX.Element {
   return (
     <footer className="py-8 bg-gray-900 text-gray-300 text-center text-sm">
       <p>
@@ -8,5 +8,5 @@ export default function Footer() {
         Desenvolvido com excelência por Publimicro Digital Systems.
       </p>
     </footer>
-  )
+  );
 }

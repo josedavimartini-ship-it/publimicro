@@ -1,9 +1,9 @@
-import Hero from '@/components/home/Hero'
-import CarcaraHighlights from '@/components/home/CarcaraHighlights'
-import CategoryGrid from '@/components/home/CategoryGrid'
-import CallToAction from '@/components/home/CallToAction'
+import Hero from "@/components/home/Hero";
+import CarcaraHighlights from "@/components/home/CarcaraHighlights";
+import CategoryGrid from "@/components/home/CategoryGrid";
+import CallToAction from "@/components/home/CallToAction";
 
-export default function Home() {
+export default function Home(): JSX.Element {
   return (
     <main>
       <Hero />
@@ -11,5 +11,5 @@ export default function Home() {
       <CategoryGrid />
       <CallToAction />
     </main>
-  )
+  );
 }
