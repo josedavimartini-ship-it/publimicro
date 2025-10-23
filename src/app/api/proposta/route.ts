@@ -20,13 +20,13 @@ export async function POST(req: Request): Promise<NextResponse> {
     const data: PropostaData = {
       nome: (formData.get("nome") as string) || "",
       email: (formData.get("email") as string) || "",
-      telefone: formData.get("telefone") as string | null,
-      cidade: formData.get("cidade") as string | null,
-      pais: formData.get("pais") as string | null,
+      telefone: (formData.get("telefone")?.toString().trim() || undefined),
+      cidade: (formData.get("cidade")?.toString().trim() || undefined),
+      pais: (formData.get("pais")?.toString().trim() || undefined),
       valor: (formData.get("valor") as string) || "",
-      condicoes: formData.get("condicoes") as string | null,
-      justificativa: formData.get("justificativa") as string | null,
-      prop_id: formData.get("prop_id") as string | null,
+      condicoes: (formData.get("condicoes")?.toString().trim() || undefined),
+      justificativa: (formData.get("justificativa")?.toString().trim() || undefined),
+      prop_id: (formData.get("prop_id")?.toString().trim() || undefined),
     };
 
     // Validação mínima de campos obrigatórios
