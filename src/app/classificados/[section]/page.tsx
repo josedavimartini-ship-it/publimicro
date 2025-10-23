@@ -2,11 +2,7 @@ interface PageParams {
   section: string;
 }
 
-export default async function Page({
-  params,
-}: {
-  params: PageParams;
-}): Promise<JSX.Element> {
+export default async function Page({ params }: { params: PageParams }) {
   const { section } = params;
 
   const titleMap: Record<string, string> = {
