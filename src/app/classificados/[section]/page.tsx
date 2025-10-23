@@ -1,9 +1,5 @@
-interface PageParams {
-  section: string;
-}
-
-export default async function Page({ params }: { params: PageParams }) {
-  const { section } = params;
+export default async function Page({ params }: any) {
+  const { section } = await params;
 
   const titleMap: Record<string, string> = {
     alugueis: "Aluguéis de curto prazo / viagens",
@@ -26,8 +22,7 @@ export default async function Page({ params }: { params: PageParams }) {
       </p>
 
       <p className="text-gray-500 italic mt-4">
-        © {new Date().getFullYear()} Publimicro — conectando pessoas, negócios e
-        ideias.
+        © {new Date().getFullYear()} Publimicro — conectando pessoas, negócios e ideias.
       </p>
     </main>
   );
