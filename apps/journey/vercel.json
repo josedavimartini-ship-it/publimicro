@@ -1,4 +1,4 @@
-﻿{
+{
   "buildCommand": "turbo run build --filter=@publimicro/journey",
   "installCommand": "pnpm install"
 }

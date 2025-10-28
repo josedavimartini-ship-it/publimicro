@@ -1,4 +1,4 @@
-﻿{
+{
   "buildCommand": "turbo run build --filter=proper",
   "installCommand": "pnpm install"
 }
