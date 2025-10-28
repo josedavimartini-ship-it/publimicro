@@ -1,1 +1,1 @@
-{"installCommand":"pnpm install --no-frozen-lockfile","buildCommand":"pnpm build"}
+{"installCommand":"cd ../.. && pnpm install --no-frozen-lockfile","buildCommand":"cd ../.. && pnpm build --filter=@publimicro/tudo","outputDirectory":"../../apps/tudo/.next"}
