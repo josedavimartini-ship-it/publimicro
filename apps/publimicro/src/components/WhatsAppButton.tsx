@@ -1,7 +1,7 @@
 "use client";
 
 export default function WhatsAppButton() {
-  const whatsappNumber = "5534999999999"; // Replace with actual number
+  const whatsappNumber = "+5534992610004"; // Replace with actual number
   const whatsappMessage = encodeURIComponent("Olá! Vim através do site PubliMicro.");
   const whatsappUrl = `https://wa.me/${whatsappNumber}?text=${whatsappMessage}`;
 
