@@ -32,18 +32,18 @@ export default function ArticlePage() {
       <div className="prose prose-lg max-w-none" style={{color:'var(--text-primary)'}}>
 <p>Equipamentos agrícolas com telemetria entregam dados de consumo, horas ativas, falhas e produtividade, permitindo manutenção preditiva e otimização de uso.</p>
 <h2>Stack</h2>
-<ul style="color:var(--text-primary)">
+<ul style={{color:'var(--text-primary)'}}>
   <li>Sensores: GPS, consumo, RPM, carga</li>
   <li>Conectividade: LoRa/NB-IoT para áreas remotas</li>
   <li>Plataforma: TMS + BI integrado</li>
 </ul>
 <h2>Economia</h2>
-<ul style="color:var(--text-primary)">
+<ul style={{color:'var(--text-primary)'}}>
   <li>-19% consumo diesel</li>
   <li>-27% paradas não planejadas</li>
   <li>+14% produtividade média</li>
 </ul>
-<div style="background:var(--bg-elevated);border:1px solid var(--border);padding:1rem;border-radius:0.5rem;margin-top:1.5rem">
+<div style={{background:'var(--bg-elevated)',border:'1px solid var(--border)',padding:'1rem',borderRadius:'0.5rem',marginTop:'1.5rem'}}>
   <strong>ROI médio:</strong> 10 meses | Payback conservador: 14 meses.
 </div>
       </div>

@@ -32,20 +32,20 @@ export default function ArticlePage() {
       <div className="prose prose-lg max-w-none" style={{color:'var(--text-primary)'}}>
 <p>Expansão internacional exige mais que traduzir UI. Jornadas de compra, meios de pagamento, calendários promocionais e tom de comunicação variam por região.</p>
 <h2>Clusters Regionais</h2>
-<ul style="color:var(--text-primary)">
+<ul style={{color:'var(--text-primary)'}}>
   <li><strong>LATAM:</strong> pagamento parcelado sem juros, boleto, Pix, influência forte de marketplaces</li>
   <li><strong>Europa:</strong> SEPA, GDPR strict, preferência por marcas locais</li>
   <li><strong>Ásia-Pacífico:</strong> super-apps, social commerce, pagamento via QR, live shopping</li>
   <li><strong>MENA:</strong> calendário islâmico, COD dominante, preferência mobile-first</li>
 </ul>
 <h2>Playbook</h2>
-<ol style="color:var(--text-primary)">
+<ol style={{color:'var(--text-primary)'}}>
   <li>Pesquisa qualitativa local antes de lançar</li>
   <li>Parcerias com provedores de pagamento regionais</li>
   <li>Time local para criação de conteúdo e atendimento</li>
   <li>Infraestrutura multi-moeda e fiscal desde day 1</li>
 </ol>
-<div style="background:var(--bg-elevated);border:1px solid var(--border);padding:1rem;border-radius:0.5rem;margin-top:1.5rem">
+<div style={{background:'var(--bg-elevated)',border:'1px solid var(--border)',padding:'1rem',borderRadius:'0.5rem',marginTop:'1.5rem'}}>
   <strong>Métrica:</strong> Marcas com localização profunda têm conversão 2,4x maior vs apenas traduzir conteúdo.
 </div>
       </div>

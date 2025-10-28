@@ -32,21 +32,21 @@ export default function ArticlePage() {
       <div className="prose prose-lg max-w-none" style={{color:'var(--text-primary)'}}>
 <p>DOOH programático combina sinais de contexto (clima, tráfego, eventos) com dados de audiência mobile para ativar criativos dinâmicos e mensurar impacto incremental.</p>
 <h2>Sinais de Ativação</h2>
-<ul style="color:var(--text-primary)">
+<ul style={{color:'var(--text-primary)'}}>
   <li><strong>Clima:</strong> temperatura, chuva, poluição → ajusta produto (ex: sorvete vs café quente)</li>
   <li><strong>Tráfego:</strong> congestionamento → expande tempo de exposição</li>
   <li><strong>Eventos:</strong> jogo, show, feriado → mensagem contextual</li>
   <li><strong>Audiência:</strong> densidade mobile por demografia e interesse</li>
 </ul>
 <h2>Stack Tecnológico</h2>
-<ol style="color:var(--text-primary)">
+<ol style={{color:'var(--text-primary)'}}>
   <li>SSP/DSP de DOOH: Hivestack, Vistar, Broadsign</li>
   <li>Creative Management: dynamic templates com API feeds</li>
   <li>Measurement: geofencing + panel matching para lift</li>
 </ol>
 <h2>Performance</h2>
 <p>Campanhas com criativo dinâmico geram +37% CTR mobile e +22% visitas incrementais em varejo vs criativo estático.</p>
-<div style="background:var(--bg-elevated);border:1px solid var(--border);padding:1rem;border-radius:0.5rem;margin-top:1.5rem">
+<div style={{background:'var(--bg-elevated)',border:'1px solid var(--border)',padding:'1rem',borderRadius:'0.5rem',marginTop:'1.5rem'}}>
   <strong>CPM médio:</strong> R$ 18-45 (SP/RJ prime locations) vs R$ 8-15 locais secundários.
 </div>
       </div>
