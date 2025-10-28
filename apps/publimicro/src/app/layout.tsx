@@ -1,13 +1,21 @@
 ﻿import SharedHeader from './components/SharedHeader';
 import "./globals.css"
 import Link from "next/link"
+import type { Metadata } from "next"
 
-export const metadata = { title: "Publimicro — publimicro" }
+export const metadata: Metadata = {
+  title: "PubliMicro — Classificados e Negócios",
+  description: "Encontre imóveis, veículos, equipamentos e serviços em todo o Brasil",
+}
 
-export default function RootLayout({ children }: { children: React.ReactNode }) {
+export default function RootLayout({ 
+  children 
+}: { 
+  children: React.ReactNode 
+}) {
   return (
     <html lang="pt-BR">
-      <body className="min-h-screen bg-[#0f1110] text-[#e6c86b]">
+      <body className="antialiased min-h-screen bg-[#0f1110] text-[#e6c86b]">
         <SharedHeader />
 
         {/* Top header / global navigation */}
