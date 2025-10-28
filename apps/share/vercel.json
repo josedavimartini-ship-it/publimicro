@@ -1,1 +1,4 @@
-﻿{"buildCommand":"turbo run build --filter=@publimicro/share","installCommand":"pnpm install","framework":"nextjs"}
+﻿{
+  "buildCommand": "turbo run build --filter=@publimicro/share",
+  "installCommand": "pnpm install"
+}
