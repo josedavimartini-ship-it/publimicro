@@ -1,0 +1,18 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body {
+  background-color: #0a0a0a;
+  color: #c2c2c2;
+  font-family: Inter, system-ui, sans-serif;
+}
+
+/* Classes utilitárias adicionais */
+.text-proper-gold { color: #D4AF37; }
+.text-proper-orange { color: #FF7A00; }
+.text-proper-teal { color: #00C2A8; }
+.text-proper-gray { color: #c2c2c2; }
+.bg-proper-black { background-color: #0a0a0a; }
+.bg-proper-darkgray { background-color: #121212; }
+.border-proper-moss { border-color: #708238; }

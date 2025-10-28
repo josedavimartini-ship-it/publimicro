@@ -1,0 +1,14 @@
+﻿{
+  "typescript.tsdk": "node_modules/typescript/lib",
+  "files.associations": {
+    ".eslintrc.cjs": "javascript",
+    "*.css": "tailwindcss"
+  },
+  "css.lint.unknownAtRules": "ignore",
+  "eslint.validate": [
+    "javascript",
+    "javascriptreact",
+    "typescript",
+    "typescriptreact"
+  ]
+}

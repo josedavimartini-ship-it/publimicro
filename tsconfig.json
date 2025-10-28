@@ -1,24 +1,40 @@
 {
   "compilerOptions": {
-    "target": "ES2017",
-    "lib": ["dom", "dom.iterable", "esnext"],
-    "allowJs": true,
+    "composite": true,
     "skipLibCheck": true,
-    "strict": true,
-    "strictNullChecks": true,
-    "noEmit": true,
-    "esModuleInterop": true,
-    "module": "esnext",
+    "module": "ESNext",
     "moduleResolution": "bundler",
-    "resolveJsonModule": true,
-    "isolatedModules": true,
-    "jsx": "preserve",
+    "allowSyntheticDefaultImports": true,
+    "esModuleInterop": true,
+    "forceConsistentCasingInFileNames": true,
     "incremental": true,
-    "plugins": [{ "name": "next" }],
-    "paths": {
-      "@/*": ["./src/*"]
-    }
+    "tsBuildInfoFile": "./.cache/tsbuildinfo.json"
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts"],
-  "exclude": ["node_modules"]
+  "files": [],
+  "references": [
+    { "path": "./packages/ui" },
+    { "path": "./apps/publimicro" },
+    { "path": "./apps/journey" },
+    { "path": "./apps/proper" },
+    { "path": "./apps/motors" },
+    { "path": "./apps/share" },
+    { "path": "./apps/global" },
+    { "path": "./apps/machina" },
+    { "path": "./apps/outdoor" },
+    { "path": "./apps/tudo" }
+  ],
+  "exclude": [
+    "node_modules",
+    ".next",
+    "dist",
+    "build",
+    "out",
+    ".turbo",
+    ".cache",
+    "**/.eslintrc.cjs",
+    "**/.eslintrc.js",
+    "**/eslint.config.*",
+    "**/*.config.js",
+    "**/*.config.ts"
+  ]
 }

@@ -1,0 +1,21 @@
+﻿{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://publimicro/schemas/forms/coisas.listing.schema.json",
+  "title": "CoisasListing",
+  "type": "object",
+  "properties": {
+    "titulo": { "type": "string", "minLength": 3, "maxLength": 140 },
+    "descricao": { "type": "string", "minLength": 20 },
+    "categoria": { "type": "string" },
+    "tags": { "type": "array", "items": { "type": "string" }, "maxItems": 12 },
+    "condicao": { "type": "string", "enum": ["novo", "seminovo", "usado", "recondicionado"] },
+    "preco": { "type": "number", "minimum": 0 },
+    "preco_sugerido_por_ia": { "type": "number", "minimum": 0 },
+    "moeda": { "type": "string", "default": "BRL" },
+    "local_retirada": { "type": "string" },
+    "opcao_envio": { "type": "string", "enum": ["retirada", "envio", "combinado"] },
+    "fotos": { "type": "array", "items": { "type": "string", "format": "uri" }, "maxItems": 12 },
+    "idioma": { "type": "string", "default": "pt" }
+  },
+  "required": ["titulo", "descricao", "categoria", "condicao", "local_retirada"]
+}

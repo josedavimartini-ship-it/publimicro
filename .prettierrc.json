@@ -1,10 +1,32 @@
-{
+﻿{
+  "$schema": "https://json.schemastore.org/prettierrc",
   "semi": true,
-  "singleQuote": true,
-  "trailingComma": "all",
+  "trailingComma": "es5",
+  "singleQuote": false,
   "printWidth": 100,
   "tabWidth": 2,
-  "bracketSpacing": true,
+  "useTabs": false,
+  "endOfLine": "lf",
   "arrowParens": "always",
-  "endOfLine": "auto"
+  "bracketSpacing": true,
+  "proseWrap": "preserve",
+  "quoteProps": "as-needed",
+  "jsxSingleQuote": false,
+  "bracketSameLine": false,
+  "plugins": [],
+  "overrides": [
+    {
+      "files": "*.json",
+      "options": {
+        "printWidth": 80
+      }
+    },
+    {
+      "files": "*.md",
+      "options": {
+        "proseWrap": "always",
+        "printWidth": 80
+      }
+    }
+  ]
 }

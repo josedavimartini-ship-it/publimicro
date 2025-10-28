@@ -1,0 +1,13 @@
+﻿@import "tailwindcss";
+
+:root {
+  --bg: #0a0a0a;
+  --fg: #c2c2c2;
+  --accent: #00C2A8;
+}
+
+body {
+  background: var(--bg);
+  color: var(--fg);
+  font-family: var(--font-geist-sans, system-ui, sans-serif);
+}

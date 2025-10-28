@@ -1,0 +1,28 @@
+﻿{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://publimicro/schemas/forms/yellow.professional.schema.json",
+  "title": "YellowProfessional",
+  "type": "object",
+  "properties": {
+    "nome_fantasia": { "type": "string", "minLength": 2 },
+    "categoria_profissional": { "type": "string" },
+    "descricao": { "type": "string", "minLength": 20 },
+    "tempo_resposta_medio": { "type": "number", "minimum": 0, "description": "minutos" },
+    "taxa_por_lead": { "type": "number", "minimum": 0 },
+    "portfolio_url": { "type": "string", "format": "uri" },
+    "seguro_profissional_validado": { "type": "boolean", "default": false },
+    "localidade": { "type": "string" },
+    "idiomas": { "type": "array", "items": { "type": "string" }, "maxItems": 8 },
+    "preco_base": { "type": "number", "minimum": 0 },
+    "disponibilidade": { "type": "string" },
+    "canais_contato": {
+      "type": "object",
+      "properties": {
+        "email": { "type": "string", "format": "email" },
+        "telefone": { "type": "string" },
+        "site": { "type": "string", "format": "uri" }
+      }
+    }
+  },
+  "required": ["nome_fantasia", "categoria_profissional", "descricao", "localidade"]
+}

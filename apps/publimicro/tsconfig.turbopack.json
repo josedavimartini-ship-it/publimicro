@@ -1,0 +1,7 @@
+// apps/publimicro/tsconfig.turbopack.json
+{
+  "extends": "../../packages/tsconfig/base.json",
+  "compilerOptions": {
+    // ... outras configurações, se necessário
+  }
+}

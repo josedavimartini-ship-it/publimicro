@@ -1,0 +1,18 @@
+﻿{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://publimicro/schemas/forms/fera.service-request.schema.json",
+  "title": "FeraServiceRequest",
+  "type": "object",
+  "properties": {
+    "titulo": { "type": "string", "minLength": 3, "maxLength": 140 },
+    "descricao": { "type": "string", "minLength": 30 },
+    "categoria_servico": { "type": "string" },
+    "prazo_desejado": { "type": "string", "format": "date" },
+    "orcamento_maximo": { "type": "number", "minimum": 0 },
+    "local_execucao": { "type": "string" },
+    "arquivos": { "type": "array", "items": { "type": "string", "format": "uri" }, "maxItems": 10 },
+    "preferencia_contato": { "type": "string", "enum": ["email", "telefone", "mensagem"] },
+    "matching_automatico": { "type": "boolean", "default": true }
+  },
+  "required": ["titulo", "descricao", "categoria_servico", "local_execucao"]
+}

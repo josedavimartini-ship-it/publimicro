@@ -1,0 +1,38 @@
+{
+  "$schema": "https://json.schemastore.org/tsconfig",
+  "compilerOptions": {
+    /* ✅ Núcleo */
+    "target": "ES2020",
+    "module": "ESNext",
+    "lib": ["DOM", "DOM.Iterable", "ESNext"],
+    "moduleResolution": "bundler",
+
+    /* ✅ JSX e React moderno */
+    "jsx": "react-jsx",
+    "allowJs": true,
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+
+    /* ✅ Checagem e segurança */
+    "strict": true,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true,
+
+    /* ✅ Output padrão — será sobrescrito por cada pacote */
+    "outDir": "dist",
+    "rootDir": "src",
+
+    /* ✅ Tipos globais */
+    "types": ["react", "react-dom", "@react-three/fiber"],
+
+    /* ✅ Suporte a importações relativas curtas (ex: "@/components/Button") */
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["src/*"]
+    }
+  },
+  "include": ["src", "global.d.ts"],
+  "exclude": ["node_modules", "dist"]
+}

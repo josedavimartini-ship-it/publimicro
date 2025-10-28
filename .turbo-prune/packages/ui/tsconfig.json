@@ -1,0 +1,21 @@
+{
+  "extends": "../../packages/tsconfig/base.json",
+  "compilerOptions": {
+    "outDir": "dist",
+    "rootDir": "src",
+    "jsx": "react-jsx",
+    "strict": true,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true,
+    "moduleResolution": "node",
+    "module": "ESNext",
+    "typeRoots": [
+      "./src", "../../node_modules/@types", // Aponta para a raiz do monorepo
+      "./node_modules/@types" // Mantém a busca local, por segurança
+    ],
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true
+  },
+  "include": ["src", "src/types.d.ts", "src/r3f.d.ts"],
+  "files": ["src/types.d.ts"]
+}

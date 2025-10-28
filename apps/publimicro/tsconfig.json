@@ -1,22 +1,29 @@
-// ...existing code...
 {
   "extends": "../../tsconfig.base.json",
   "compilerOptions": {
     "target": "ES2022",
     "lib": ["DOM", "DOM.Iterable", "ESNext"],
-    "jsx": "preserve",
-    "moduleResolution": "node",
+    "module": "esnext",
+    "jsx": "react-jsx",
+    "moduleResolution": "bundler",
     "isolatedModules": true,
     "skipLibCheck": true,
     "noEmit": true,
     "incremental": true,
     "tsBuildInfoFile": ".next/tsbuildinfo",
-    "outDir": "dist",
-    "rootDir": "src",
-    "baseUrl": "."
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["./src/*"],
+      "@publimicro/ui": ["../../packages/ui/src"]
+    },
+    "types": ["react", "react-dom", "node"],
+    "resolveJsonModule": true,
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
+    "forceConsistentCasingInFileNames": true,
+    "strict": false,
+    "noImplicitAny": false
   },
-  "include": ["src"],
-  "exclude": ["node_modules", "dist", ".next"],
-  "references": [{ "path": "../../packages/ui/tsconfig.json" }]
+  "include": ["src", "next-env.d.ts", ".next/types/**/*.ts"],
+  "exclude": ["node_modules", "dist", ".next"]
 }
-// ...existing code...
