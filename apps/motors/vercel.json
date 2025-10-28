@@ -1,1 +1,1 @@
-{"installCommand":"cd ../.. && pnpm install --no-frozen-lockfile","buildCommand":"cd ../.. && pnpm build --filter=@publimicro/motors","outputDirectory":"../../apps/motors/.next"}
+{"buildCommand":"turbo run build --filter=@publimicro/motors"}
