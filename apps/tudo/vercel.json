@@ -1,0 +1,4 @@
+﻿{
+  "installCommand": "pnpm install",
+  "buildCommand": "cd ../.. && pnpm build --filter=@publimicro/tudo"
+}
