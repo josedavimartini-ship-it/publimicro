@@ -1,1 +1,1 @@
-{"buildCommand":"turbo run build --filter=@publimicro/outdoor"}
+﻿{"buildCommand":"turbo run build --filter=@publimicro/outdoor","framework":"nextjs","installCommand":"pnpm install"}

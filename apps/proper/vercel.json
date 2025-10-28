@@ -1,1 +1,1 @@
-{"buildCommand":"turbo run build --filter=proper"}
+﻿{"buildCommand":"turbo run build --filter=proper","framework":"nextjs","installCommand":"pnpm install"}
