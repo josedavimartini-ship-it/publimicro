@@ -9,21 +9,21 @@ export const metadata: Metadata = {
   description: "Marketplace, classificados e oportunidades do campo à cidade. Imóveis, veículos, viagens e muito mais.",
   keywords: ["imóveis", "veículos", "classificados", "marketplace", "Brasil"],
   openGraph: {
-    title: "Publimicro  Ecossistema de Negócios",
+    title: "Publimicro • Ecossistema de Negócios",
     description: "O maior ecossistema de oportunidades do Brasil",
     type: "website",
   },
 }
 
 const categories = [
-  { href: "/proper",  icon: "", title: "Proper",  description: "Imóveis urbanos e rurais" },
-  { href: "/motors",  icon: "", title: "Motors",  description: "Veículos e maquinários" },
-  { href: "/journey", icon: "✈️", title: "Journey", description: "Viagens e experiências" },
-  { href: "/share",   icon: "", title: "Share",   description: "Compartilhamento" },
-  { href: "/global",  icon: "", title: "Global",  description: "Negócios internacionais" },
-  { href: "/machina", icon: "⚙️", title: "Machina", description: "Equipamentos industriais" },
-  { href: "/outdoor", icon: "🏕️", title: "Outdoor", description: "Aventura e natureza" },
-  { href: "/tudo",    icon: "🛍️", title: "Tudo",    description: "Classificados gerais" },
+  { href: "https://proper.publimicro.com.br",  icon: "🏘️", title: "Proper",  description: "Imóveis urbanos e rurais" },
+  { href: "https://motors.publimicro.com.br",  icon: "🚗", title: "Motors",  description: "Veículos e maquinários" },
+  { href: "https://journey.publimicro.com.br", icon: "✈️", title: "Journey", description: "Viagens e experiências" },
+  { href: "https://share.publimicro.com.br",   icon: "🤝", title: "Share",   description: "Compartilhamento" },
+  { href: "https://global.publimicro.com.br",  icon: "🌍", title: "Global",  description: "Negócios internacionais" },
+  { href: "https://machina.publimicro.com.br", icon: "⚙️", title: "Machina", description: "Equipamentos industriais" },
+  { href: "https://outdoor.publimicro.com.br", icon: "🏕️", title: "Outdoor", description: "Aventura e natureza" },
+  { href: "https://tudo.publimicro.com.br",    icon: "🛍️", title: "Tudo",    description: "Classificados gerais" },
 ]
 
 export default function HomePage() {
@@ -41,7 +41,7 @@ export default function HomePage() {
         </h1>
 
         <p className="text-[#e7d7a8] max-w-2xl mb-8 text-lg md:text-xl">
-          Um universo de negócios, tecnologia e oportunidades  do campo à cidade, do local ao global.
+          Um universo de negócios, tecnologia e oportunidades • do campo à cidade, do local ao global.
         </p>
 
         <form
@@ -93,17 +93,17 @@ export default function HomePage() {
         <h2 className="text-2xl font-bold text-amber-400 mb-6">Por que Publimicro?</h2>
         <div className="grid md:grid-cols-3 gap-8 text-left">
           <div>
-            <div className="text-4xl mb-3"></div>
+            <div className="text-4xl mb-3">🔒</div>
             <h3 className="font-semibold text-amber-300 mb-2">Segurança</h3>
             <p className="text-sm text-[#e7d7a8]">Anúncios verificados e transações protegidas</p>
           </div>
           <div>
-            <div className="text-4xl mb-3"></div>
+            <div className="text-4xl mb-3">⚡</div>
             <h3 className="font-semibold text-amber-300 mb-2">Rapidez</h3>
             <p className="text-sm text-[#e7d7a8]">Encontre o que procura em segundos</p>
           </div>
           <div>
-            <div className="text-4xl mb-3"></div>
+            <div className="text-4xl mb-3">⭐</div>
             <h3 className="font-semibold text-amber-300 mb-2">Qualidade</h3>
             <p className="text-sm text-[#e7d7a8]">Curadoria premium e suporte dedicado</p>
           </div>

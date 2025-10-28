@@ -1,5 +1,4 @@
-﻿// ...existing code...
-import SharedHeader from './components/SharedHeader';
+﻿import SharedHeader from './components/SharedHeader';
 import "./globals.css"
 import Link from "next/link"
 
@@ -22,9 +21,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
 
               {/* Primary nav - shows on md+ */}
               <nav aria-label="Main navigation" className="hidden md:flex items-center gap-4 text-sm">
-                <Link href="/proper" className="hover:text-amber-500">Publiproper</Link>
-                <Link href="/motors" className="hover:text-amber-500">PubliMotors</Link>
-                <Link href="/machina" className="hover:text-amber-500">PubliMachina</Link>
+                <a href="https://proper.publimicro.com.br" className="hover:text-amber-500">Publiproper</a>
+                <a href="https://motors.publimicro.com.br" className="hover:text-amber-500">PubliMotors</a>
+                <a href="https://machina.publimicro.com.br" className="hover:text-amber-500">PubliMachina</a>
                 <Link href="/business" className="hover:text-amber-500">For Businesses</Link>
                 <Link href="/catalogs" className="hover:text-amber-500">Catalogs</Link>
                 <Link href="/blog" className="hover:text-amber-500">Blog</Link>
@@ -84,9 +83,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
               <details className="md:hidden">
                 <summary className="p-2 rounded-md hover:bg-[#111]">☰</summary>
                 <div className="mt-2 p-3 bg-[#0b0b0b] rounded-md flex flex-col gap-2">
-                  <Link href="/proper" className="hover:text-amber-500">Publiproper</Link>
-                  <Link href="/motors" className="hover:text-amber-500">PubliMotors</Link>
-                  <Link href="/machina" className="hover:text-amber-500">PubliMachina</Link>
+                  <a href="https://proper.publimicro.com.br" className="hover:text-amber-500">Publiproper</a>
+                  <a href="https://motors.publimicro.com.br" className="hover:text-amber-500">PubliMotors</a>
+                  <a href="https://machina.publimicro.com.br" className="hover:text-amber-500">PubliMachina</a>
                   <Link href="/catalogs" className="hover:text-amber-500">Catalogs</Link>
                   <Link href="/blog" className="hover:text-amber-500">Blog</Link>
                   <Link href="/account/login" className="hover:text-amber-500">Entrar</Link>
@@ -178,4 +177,3 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     </html>
   )
 }
-// ...existing code...
