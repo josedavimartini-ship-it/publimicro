@@ -1,1 +1,1 @@
-﻿{"buildCommand":"turbo run build --filter=@publimicro/publimicro","framework":"nextjs","installCommand":"pnpm install"}
+﻿{"buildCommand":"turbo run build --filter=@publimicro/publimicro","installCommand":"pnpm install","framework":"nextjs"}
