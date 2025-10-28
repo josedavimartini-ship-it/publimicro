@@ -2,31 +2,31 @@ import type { Metadata } from "next"
 import Link from "next/link"
 
 export const metadata: Metadata = {
-  title: "Proper ó ImÛveis Urbanos e Rurais",
-  description: "Encontre imÛveis urbanos e rurais em todo o Brasil. Apartamentos, casas, fazendas, sÌtios e mais.",
+  title: "Proper ‚Ä¢ Im√≥veis Urbanos e Rurais",
+  description: "Encontre im√≥veis urbanos e rurais em todo o Brasil. Apartamentos, casas, fazendas, s√≠tios e mais.",
 }
 
 const categories = [
   {
     href: "/urban",
-    icon: "???",
+    icon: "üèôÔ∏è",
     title: "Proper Urban",
     description: "Apartamentos, casas, comerciais e terrenos urbanos",
-    featured: ["S„o Paulo", "Rio de Janeiro", "Belo Horizonte"],
+    featured: ["S√£o Paulo", "Rio de Janeiro", "Belo Horizonte"],
   },
   {
     href: "/rural",
-    icon: "??",
+    icon: "üåæ",
     title: "Proper Rural",
-    description: "Fazendas, sÌtios, ch·caras e propriedades rurais",
-    featured: ["Tri‚ngulo Mineiro", "Sul de Minas", "Interior SP"],
+    description: "Fazendas, s√≠tios, ch√°caras e propriedades rurais",
+    featured: ["Tri√¢ngulo Mineiro", "Sul de Minas", "Interior SP"],
   },
 ]
 
 const stats = [
-  { value: "2.500+", label: "ImÛveis Ativos" },
-  { value: "450+", label: "Vendas/MÍs" },
-  { value: "98%", label: "SatisfaÁ„o" },
+  { value: "2.500+", label: "Im√≥veis Ativos" },
+  { value: "450+", label: "Vendas/M√™s" },
+  { value: "98%", label: "Satisfa√ß√£o" },
 ]
 
 export default function ProperHomePage() {
@@ -39,7 +39,7 @@ export default function ProperHomePage() {
             href="/"
             className="text-[#cfa847] hover:text-amber-500 text-sm font-medium transition-colors"
           >
-            ? Voltar ao Publimicro
+            ‚Üê Voltar ao Publimicro
           </Link>
           <div className="flex items-center gap-6">
             <Link href="/urban" className="text-[#e6c86b] hover:text-amber-500 text-sm font-medium">
@@ -52,7 +52,7 @@ export default function ProperHomePage() {
               href="/post"
               className="px-4 py-2 bg-amber-500 hover:bg-amber-400 text-black text-sm font-semibold rounded-lg transition-all"
             >
-              Anunciar ImÛvel
+              Anunciar Im√≥vel
             </Link>
           </div>
         </div>
@@ -65,8 +65,8 @@ export default function ProperHomePage() {
         </h1>
         
         <p className="text-[#bfa97a] max-w-3xl mx-auto text-xl mb-12">
-          ImÛveis urbanos e rurais em todo o Brasil. 
-          Do apartamento na capital ‡ fazenda no interior ó encontre seu espaÁo ideal.
+          Im√≥veis urbanos e rurais em todo o Brasil. 
+          Do apartamento na capital √† fazenda no interior ‚Äì encontre seu espa√ßo ideal.
         </p>
 
         {/* Search */}
@@ -78,7 +78,7 @@ export default function ProperHomePage() {
           <input
             name="q"
             type="search"
-            placeholder="Buscar imÛveis por localizaÁ„o, tipo, caracterÌsticas..."
+            placeholder="Buscar im√≥veis por localiza√ß√£o, tipo, caracter√≠sticas..."
             className="flex-1 rounded-lg px-6 py-4 bg-[#0b0b0b] border border-[#242424] text-[#e6c86b] placeholder-[#bfa97a]/70 focus:outline-none focus:border-amber-500/50 focus:ring-2 focus:ring-amber-500/20"
           />
           <button 
@@ -146,7 +146,7 @@ export default function ProperHomePage() {
 
               <div className="mt-6 flex items-center gap-2 text-amber-500 font-semibold">
                 Explorar {category.title}
-                <span className="group-hover:translate-x-1 transition-transform">?</span>
+                <span className="group-hover:translate-x-1 transition-transform">‚Üí</span>
               </div>
             </Link>
           ))}
@@ -156,23 +156,23 @@ export default function ProperHomePage() {
       {/* CTA Section */}
       <section className="px-6 py-20 text-center bg-gradient-to-t from-[#0b0b0b] to-[#0f0f0f]">
         <h2 className="text-3xl font-bold text-[#cfa847] mb-4">
-          Tem um imÛvel para vender ou alugar?
+          Tem um im√≥vel para vender ou alugar?
         </h2>
         <p className="text-[#bfa97a] mb-8 max-w-2xl mx-auto">
-          Anuncie gratuitamente e alcance milhares de compradores e locat·rios em potencial.
+          Anuncie gratuitamente e alcance milhares de compradores e locat√°rios em potencial.
         </p>
         <Link
           href="/post"
           className="inline-block px-8 py-4 bg-amber-500 hover:bg-amber-400 text-black font-bold rounded-lg transition-all hover:scale-105 shadow-lg"
         >
-          Anunciar Agora ó … Gr·tis
+          Anunciar Agora ‚Äì √â Gr√°tis
         </Link>
       </section>
 
       {/* Footer */}
       <footer className="border-t border-[#242424] bg-[#0b0b0b] px-6 py-8">
         <div className="max-w-7xl mx-auto text-center text-sm text-[#bfa97a]">
-          <p>© 2025 Publimicro Proper. Todos os direitos reservados.</p>
+          <p>¬© 2025 Publimicro Proper. Todos os direitos reservados.</p>
         </div>
       </footer>
     </main>
