@@ -1,4 +1,4 @@
-﻿import { resolve, dirname } from "path";
+import { resolve, dirname } from "path";
 import { fileURLToPath } from "url";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
@@ -12,8 +12,18 @@ const config = {
   },
   images: {
     remotePatterns: [
-      { protocol: "https", hostname: "*.supabase.co", port: "", pathname: "/**" },
-      { protocol: "https", hostname: "images.unsplash.com", port: "", pathname: "/**" }
+      {
+        protocol: "https",
+        hostname: "*.supabase.co",
+        port: "",
+        pathname: "/**",
+      },
+      {
+        protocol: "https",
+        hostname: "images.unsplash.com",
+        port: "",
+        pathname: "/**",
+      },
     ],
   },
 };
