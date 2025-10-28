@@ -1,4 +1,5 @@
 ﻿{
+  "framework": "nextjs",
   "installCommand": "pnpm install",
-  "buildCommand": "cd ../.. && pnpm build --filter=@publimicro/machina"
+  "buildCommand": "pnpm build"
 }
