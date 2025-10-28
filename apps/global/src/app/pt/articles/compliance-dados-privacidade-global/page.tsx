@@ -1,4 +1,4 @@
-﻿import type { Metadata } from 'next';
+import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
   title: 'Compliance Global: GDPR, LGPD, CCPA e a Malha de Privacidade | PubliGlobal',

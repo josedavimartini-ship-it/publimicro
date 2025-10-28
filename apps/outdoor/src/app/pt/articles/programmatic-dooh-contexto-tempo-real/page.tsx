@@ -1,4 +1,4 @@
-﻿import type { Metadata } from 'next';
+import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
   title: 'Programmatic DOOH: Criatividade Dinâmica por Contexto em Tempo Real | PubliOutdoor',

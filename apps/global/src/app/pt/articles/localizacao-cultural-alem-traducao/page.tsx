@@ -1,4 +1,4 @@
-﻿import type { Metadata } from 'next';
+import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
   title: 'Localização Cultural: Além da Tradução, Adaptação de Jornada | PubliGlobal',

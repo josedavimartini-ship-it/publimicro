@@ -1,4 +1,4 @@
-﻿import type { Metadata } from 'next';
+import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
   title: 'Liquidez Local: Como Marketplaces de Dois Lados Escalam por Bairro | PubliShare',

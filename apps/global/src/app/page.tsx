@@ -1,4 +1,4 @@
-﻿export const metadata = {
+export const metadata = {
   title: "Publimicro Global — Negócios Internacionais",
   description: "Conectando o Brasil ao mundo",
 };

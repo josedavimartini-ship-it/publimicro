@@ -1,4 +1,4 @@
-﻿import type { Metadata } from 'next';
+import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
   title: 'Confiança em Escala: Reputação, Verificação e Seguro Nativo | PubliShare',

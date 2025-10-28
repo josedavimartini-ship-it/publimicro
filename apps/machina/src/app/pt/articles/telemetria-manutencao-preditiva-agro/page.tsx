@@ -1,4 +1,4 @@
-﻿import type { Metadata } from 'next';
+import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
   title: 'Telemetria e Manutenção Preditiva: ROI em 8-12 Meses | PubliMachina',

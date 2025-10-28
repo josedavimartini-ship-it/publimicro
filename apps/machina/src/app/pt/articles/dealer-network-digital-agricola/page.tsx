@@ -1,4 +1,4 @@
-﻿import type { Metadata } from 'next';
+import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
   title: 'Rede de Dealers Digital: Da Venda ao Pós-venda Hiperlocal | PubliMachina',
