@@ -32,20 +32,20 @@ export default function ArticlePage() {
       <div className="prose prose-lg max-w-none" style={{color:'var(--text-primary)'}}>
 <p>Cada região tem framework de privacidade único. Operar globalmente exige arquitetura de dados que acomoda opt-in/opt-out, retenção variável e direito ao esquecimento.</p>
 <h2>Principais Regimes</h2>
-<ul style="color:var(--text-primary)">
+<ul style={{color:'var(--text-primary)'}}>
   <li><strong>GDPR (UE):</strong> opt-in obrigatório, consentimento granular, multas até 4% do faturamento global</li>
   <li><strong>LGPD (Brasil):</strong> base legal clara, DPO obrigatório, titular tem 8 direitos</li>
   <li><strong>CCPA (Califórnia):</strong> opt-out, direito de saber e deletar</li>
   <li><strong>PIPL (China):</strong> localização de dados críticos, auditoria governamental</li>
 </ul>
 <h2>Arquitetura Recomendada</h2>
-<ol style="color:var(--text-primary)">
+<ol style={{color:'var(--text-primary)'}}>
   <li>Consent Management Platform (CMP) multi-região</li>
   <li>Data residency: servidores locais ou clean rooms</li>
   <li>Políticas de retenção por país</li>
   <li>Processos automatizados para DSAR (data subject access requests)</li>
 </ol>
-<div style="background:var(--bg-elevated);border:1px solid var(--border);padding:1rem;border-radius:0.5rem;margin-top:1.5rem">
+<div style={{background:'var(--bg-elevated)',border:'1px solid var(--border)',padding:'1rem',borderRadius:'0.5rem',marginTop:'1.5rem'}}>
   <strong>Custo médio:</strong> R$ 400k-1,2M setup + R$ 80k/mês operação para empresa mid-market com presença em 4+ regiões.
 </div>
       </div>

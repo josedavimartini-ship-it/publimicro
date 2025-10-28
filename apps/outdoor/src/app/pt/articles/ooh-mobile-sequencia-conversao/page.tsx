@@ -32,19 +32,19 @@ export default function ArticlePage() {
       <div className="prose prose-lg max-w-none" style={{color:'var(--text-primary)'}}>
 <p>Exposição OOH gera awareness e memorização. A sequência correta com mobile e search captura intenção no momento certo.</p>
 <h2>Sequência Otimizada</h2>
-<ol style="color:var(--text-primary)">
+<ol style={{color:'var(--text-primary)'}}>
   <li><strong>OOH com geofencing:</strong> captura mobile IDs em raio de 500m-1km de telas</li>
   <li><strong>Retarget mobile (24-48h):</strong> display/video com oferta específica</li>
   <li><strong>Search de marca + categoria:</strong> lance elevado para usuários expostos</li>
   <li><strong>Landing com geo-personalização:</strong> estoque, loja mais próxima, horário</li>
 </ol>
 <h2>Medição de Lift</h2>
-<ul style="color:var(--text-primary)">
+<ul style={{color:'var(--text-primary)'}}>
   <li>Painel de controle (expostos vs não expostos)</li>
   <li>Incremento em busca de marca: +18-34%</li>
   <li>Visitas em loja via match probabilístico: +12-19%</li>
 </ul>
-<div style="background:var(--bg-elevated);border:1px solid var(--border);padding:1rem;border-radius:0.5rem;margin-top:1.5rem">
+<div style={{background:'var(--bg-elevated)',border:'1px solid var(--border)',padding:'1rem',borderRadius:'0.5rem',marginTop:'1.5rem'}}>
   <strong>ROAS integrado:</strong> OOH + Mobile + Search atinge 4,2-6,8x vs canais isolados.
 </div>
       </div>

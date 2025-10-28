@@ -32,19 +32,19 @@ export default function ArticlePage() {
       <div className="prose prose-lg max-w-none" style={{color:'var(--text-primary)'}}>
 <p>Plataformas de compartilhamento vivem ou morrem pela liquidez local: proporção entre oferta (carros, quartos, serviços) e demanda (usuários ativos) em raio restrito.</p>
 <h2>Métricas-chave</h2>
-<ul style="color:var(--text-primary)">
+<ul style={{color:'var(--text-primary)'}}>
   <li>Densidade: ofertas ativas por km² ou CEP</li>
   <li>Matching rate: % pedidos atendidos em &lt;5min</li>
   <li>Cold-start: tempo para ativar novo bairro</li>
 </ul>
 <h2>Playbook de Lançamento</h2>
-<ol style="color:var(--text-primary)">
+<ol style={{color:'var(--text-primary)'}}>
   <li>Geo-target hiperfocado (1-3 bairros iniciais)</li>
   <li>Subsídio assimétrico: pague mais a lado escasso</li>
   <li>Gamificação com ranking local e bônus</li>
   <li>Parcerias com comércio local para ancoragem</li>
 </ol>
-<div style="background:var(--bg-elevated);border:1px solid var(--border);padding:1rem;border-radius:0.5rem;margin-top:1.5rem">
+<div style={{background:'var(--bg-elevated)',border:'1px solid var(--border)',padding:'1rem',borderRadius:'0.5rem',marginTop:'1.5rem'}}>
   <strong>Case:</strong> Rideshare atingiu liquidez em 8 bairros SP com CAC R$ 42 (vs R$ 180 sem geo-focus).
 </div>
       </div>

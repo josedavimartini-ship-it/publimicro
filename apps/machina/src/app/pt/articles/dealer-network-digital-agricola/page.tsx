@@ -32,7 +32,7 @@ export default function ArticlePage() {
       <div className="prose prose-lg max-w-none" style={{color:'var(--text-primary)'}}>
 <p>Transformar a rede de dealers em plataforma digital é prioridade. Catálogo, disponibilidade, financiamento e peças em um só fluxo elevam conversão e NPS.</p>
 <h2>Capacidades-chave</h2>
-<ol style="color:var(--text-primary)">
+<ol style={{color:'var(--text-primary)'}}>
   <li>Catálogo com especificações e comparação por cultura/terreno</li>
   <li>Agendamento de demos no campo</li>
   <li>Financiamento rural integrado (Pronaf/Pronamp)</li>
