@@ -1,52 +1,11 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import Image from "next/image";
-import { CarcaraScene } from "@/components/CarcaraScene";
-import WhatsAppButton from "@/components/WhatsAppButton";
-import { Home, Building2, Tractor, Sparkles } from "lucide-react";
+import { Building2, Tractor, Sparkles } from "lucide-react";
 
 export const metadata: Metadata = {
   title: "PubliProper — Imóveis Urbanos e Rurais",
   description: "Encontre imóveis urbanos e rurais em todo o Brasil. Apartamentos, casas, fazendas, sítios e mais.",
 };
-
-const sections = [
-  { href: "/urban", icon: "🏙️", title: "Proper Urban", tagline: "Imóveis Urbanos" },
-  { href: "/rural", icon: "🌾", title: "Proper Rural", tagline: "Imóveis Rurais" },
-  { href: "/comercial", icon: "🏢", title: "Comercial", tagline: "Imóveis Comerciais" },
-  { href: "/lancamentos", icon: "🏗️", title: "Lançamentos", tagline: "Novos Empreendimentos" },
-  { href: "/aluguel", icon: "🔑", title: "Aluguel", tagline: "Locação" },
-  { href: "/temporada", icon: "🏖️", title: "Temporada", tagline: "Férias" },
-  { href: "/permuta", icon: "🔄", title: "Permuta", tagline: "Troca" },
-  { href: "/leilao", icon: "⚖️", title: "Leilão", tagline: "Oportunidades" },
-];
-
-const featuredProperties = [
-  {
-    id: "1",
-    title: "Apartamento 3 Quartos - Centro",
-    location: "Uberlândia, MG",
-    price: "R$ 450.000",
-    image: "https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?w=800&h=600&fit=crop",
-    type: "Urbano",
-  },
-  {
-    id: "2",
-    title: "Casa com Piscina - Condomínio",
-    location: "Goiânia, GO",
-    price: "R$ 850.000",
-    image: "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=800&h=600&fit=crop",
-    type: "Urbano",
-  },
-  {
-    id: "3",
-    title: "Fazenda 50 Hectares",
-    location: "Uberaba, MG",
-    price: "R$ 2.500.000",
-    image: "https://images.unsplash.com/photo-1500382017468-9049fed747ef?w=800&h=600&fit=crop",
-    type: "Rural",
-  },
-];
 
 export default function ProperHomePage() {
   const categories = [
