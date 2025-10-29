@@ -4,7 +4,7 @@ import WorldRegionsSidebar from "@/components/WorldRegionsSidebar";
 import "./globals.css";
 
 export const metadata = {
-  title: "PubliMicro — O Ecossistema Completo de Negócios",
+  title: "PubliMicro  O Ecossistema Completo de Negócios",
   description: "Do campo à cidade, do local ao global. Imóveis, veículos, máquinas, serviços e muito mais.",
 };
 
@@ -14,7 +14,10 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <body className="min-h-screen bg-[#0a0a0a] text-[#e6c86b] antialiased">
         <TopNav brand="PubliMicro" brandHref="/" searchTarget="local" />
         <WorldRegionsSidebar />
-        {children}
+        {/* Global wrapper to keep content clear of the RIGHT fixed sidebar */}
+        <div className="relative mr-64">
+          {children}
+        </div>
         <WhatsAppButton />
       </body>
     </html>
