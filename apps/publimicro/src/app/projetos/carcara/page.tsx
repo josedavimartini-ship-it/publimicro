@@ -149,7 +149,7 @@ export default function CarcaraProjectPage() {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {sitios.map((sitio) => (
               <article
-                key={sitio.id}
+                id={sitio.id} key={sitio.id}
                 className="group bg-gradient-to-br from-[#1a1a1a] to-[#0d0d0d] border-3 border-[#2a2a1a] rounded-2xl overflow-hidden hover:border-[#FF6B35] hover:shadow-2xl hover:shadow-[#FF6B35]/30 transition-all"
               >
                 <div className="relative aspect-video">
@@ -289,3 +289,4 @@ export default function CarcaraProjectPage() {
     </main>
   );
 }
+
