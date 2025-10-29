@@ -16,10 +16,11 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <WorldRegionsSidebar />
         {/* Global wrapper to keep content clear of the RIGHT fixed sidebar */}
         <div className="relative mr-64">
-          {children}
+          <main className="relative mr-64">{children}</main>
         </div>
         <WhatsAppButton />
       </body>
     </html>
   );
 }
+
