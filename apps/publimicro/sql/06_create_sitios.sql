@@ -1,4 +1,4 @@
--- SITIOS: existing table structure (if not exists)
+﻿-- SITIOS: Carcara properties
 CREATE TABLE IF NOT EXISTS public.sitios (
   id text PRIMARY KEY,
   nome text NOT NULL,
@@ -18,7 +18,6 @@ CREATE TABLE IF NOT EXISTS public.sitios (
   updated_at timestamptz DEFAULT now()
 );
 
--- Insert Carcará sites if they don't exist
 INSERT INTO public.sitios (id, nome, localizacao, zona, preco, lance_inicial, fotos, destaque, descricao)
 VALUES 
   ('surucua', 'Surucuá', 'Margem da Represa', 'Zona da Mata', 1700000, 1050000, 
@@ -41,9 +40,9 @@ VALUES
    true, '11.5 hectares com praia privativa')
 ON CONFLICT (id) DO NOTHING;
 
--- Make sitios publicly readable
 ALTER TABLE public.sitios ENABLE ROW LEVEL SECURITY;
 
+DROP POLICY IF EXISTS "Anyone can read sitios" ON public.sitios;
 CREATE POLICY "Anyone can read sitios"
   ON public.sitios FOR SELECT
   USING (true);
