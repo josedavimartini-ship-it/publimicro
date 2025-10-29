@@ -6,7 +6,7 @@
   "description": "Publimicro monorepo - marketplace, classificados e ecossistema de negócios",
   "author": "Publimicro",
   "license": "UNLICENSED",
-  "packageManager": "pnpm@10.19.0",
+  "packageManager": "pnpm@10.20.0",
   "engines": {
     "node": ">=18.18.0",
     "pnpm": ">=8.0.0"

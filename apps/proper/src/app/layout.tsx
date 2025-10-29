@@ -1,21 +1,14 @@
+import { TopNav } from "@publimicro/ui";
 import "./globals.css";
-import type { Metadata } from "next";
-import Navbar from "./components/Navbar";
-import Footer from "./components/Footer";
 
-export const metadata: Metadata = {
-  title: "PubliProper | Negócios Imobiliários de Excelência",
-  description:
-    "PubliProper — o ecossistema imobiliário de oportunidades, co-investimentos e inovação no Brasil.",
-};
+export const metadata = { title: "PubliProper — Imóveis" };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="pt-BR">
-      <body className="bg-proper-black text-proper-gray font-sans min-h-screen flex flex-col">
-        <Navbar />
-        <main className="flex-grow">{children}</main>
-        <Footer />
+      <body className="min-h-screen bg-[#0a0a0a] text-[#e6c86b]">
+        <TopNav brand="PubliProper" brandHref="/" searchTarget="main" />
+        {children}
       </body>
     </html>
   );

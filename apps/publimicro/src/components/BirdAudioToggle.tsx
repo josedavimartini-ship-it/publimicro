@@ -1,92 +1,52 @@
 // ...existing code...
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
+import { Volume2, VolumeX } from "lucide-react";
 
 export default function BirdAudioToggle() {
-  const audioRef = useRef<HTMLAudioElement | null>(null);
-  const [playing, setPlaying] = useState(false);
+  const [isMuted, setIsMuted] = useState(true);
+  const [audio, setAudio] = useState<HTMLAudioElement | null>(null);
 
   useEffect(() => {
-    if (!audioRef.current) {
-      audioRef.current = new Audio("/sounds/carcara.mp3");
-      audioRef.current.loop = true;
-      audioRef.current.preload = "auto";
-      audioRef.current.volume = 0.35;
-    }
+    // Create audio element
+    const audioEl = new Audio("/sounds/carcara.mp3");
+    audioEl.loop = false;
+    audioEl.volume = 0.4;
+    setAudio(audioEl);
 
-    // Expose a small, safe controller on window so other client code (Carcara3D) can trigger sound.
-    // This avoids complex prop drilling / context for a simple play/pause API.
-    const controller = {
-      play: async () => {
-        if (!audioRef.current) return;
-        try {
-          await audioRef.current.play();
-          setPlaying(true);
-        } catch {
-          // play() may be blocked by browser autoplay rules until user interacts
-          setPlaying(false);
+    // Expose globally for Carcara3D to trigger
+    (window as any).__publimicroCarcaraAudio = {
+      play: () => {
+        if (!isMuted && audioEl) {
+          audioEl.currentTime = 0;
+          audioEl.play().catch(console.warn);
         }
       },
-      pause: () => {
-        if (!audioRef.current) return;
-        audioRef.current.pause();
-        setPlaying(false);
-      },
-      toggle: async () => {
-        if (!audioRef.current) return;
-        if (audioRef.current.paused) {
-          await controller.play();
-        } else {
-          controller.pause();
-        }
-      },
-      isPlaying: () => !!audioRef.current && !audioRef.current.paused,
     };
-
-    ;(window as any).__publimicroCarcaraAudio = controller;
 
     return () => {
-      audioRef.current?.pause();
-      try {
-        delete (window as any).__publimicroCarcaraAudio;
-      } catch {}
+      audioEl.pause();
+      delete (window as any).__publimicroCarcaraAudio;
     };
-  }, []);
+  }, [isMuted]);
 
-  const toggle = async () => {
-    const ctrl = (window as any).__publimicroCarcaraAudio;
-    if (ctrl?.toggle) {
-      await ctrl.toggle();
-      // playing state will be synced by controller calling setPlaying
-      return;
-    }
-
-    // Fallback if controller not present for any reason
-    if (!audioRef.current) return;
-    if (playing) {
-      audioRef.current.pause();
-      setPlaying(false);
-    } else {
-      try {
-        await audioRef.current.play();
-        setPlaying(true);
-      } catch {
-        setPlaying(false);
-      }
-    }
+  const toggleMute = () => {
+    setIsMuted(!isMuted);
   };
 
   return (
     <button
-      onClick={toggle}
-      aria-pressed={playing}
-      className="inline-flex items-center gap-2 rounded-full bg-[#111] px-3 py-2 text-sm text-[#bfa97a] hover:bg-[#161616]"
-      title="Ativar / desativar som do Carcará"
+      onClick={toggleMute}
+      className="rounded-full bg-[#1a1a1a] hover:bg-[#252525] p-2.5 transition-all border border-[#3a3a2a]"
+      title={isMuted ? "Ativar som do carcará" : "Desativar som"}
+      aria-label={isMuted ? "Ativar som" : "Desativar som"}
     >
-      <span>{playing ? "🔊" : "🔈"}</span>
-      <span className="sr-only">{playing ? "Som ligado" : "Som desligado"}</span>
-      <span className="hidden sm:inline">{playing ? "Som" : "Som"}</span>
+      {isMuted ? (
+        <VolumeX className="w-5 h-5 text-[#676767]" />
+      ) : (
+        <Volume2 className="w-5 h-5 text-[#FF6B35]" />
+      )}
     </button>
   );
 }

@@ -1,180 +1,201 @@
-import type { Metadata } from "next"
-import Link from "next/link"
+import type { Metadata } from "next";
+import Link from "next/link";
+import Image from "next/image";
+import { CarcaraScene } from "@/components/CarcaraScene";
+import WhatsAppButton from "@/components/WhatsAppButton";
 
 export const metadata: Metadata = {
-  title: "Proper • Imóveis Urbanos e Rurais",
+  title: "PubliProper — Imóveis Urbanos e Rurais",
   description: "Encontre imóveis urbanos e rurais em todo o Brasil. Apartamentos, casas, fazendas, sítios e mais.",
-}
+};
 
-const categories = [
+const sections = [
+  { href: "/urban", icon: "🏙️", title: "Proper Urban", tagline: "Imóveis Urbanos" },
+  { href: "/rural", icon: "🌾", title: "Proper Rural", tagline: "Imóveis Rurais" },
+  { href: "/comercial", icon: "🏢", title: "Comercial", tagline: "Imóveis Comerciais" },
+  { href: "/lancamentos", icon: "🏗️", title: "Lançamentos", tagline: "Novos Empreendimentos" },
+  { href: "/aluguel", icon: "🔑", title: "Aluguel", tagline: "Locação" },
+  { href: "/temporada", icon: "🏖️", title: "Temporada", tagline: "Férias" },
+  { href: "/permuta", icon: "🔄", title: "Permuta", tagline: "Troca" },
+  { href: "/leilao", icon: "⚖️", title: "Leilão", tagline: "Oportunidades" },
+];
+
+const featuredProperties = [
   {
-    href: "/urban",
-    icon: "🏙️",
-    title: "Proper Urban",
-    description: "Apartamentos, casas, comerciais e terrenos urbanos",
-    featured: ["São Paulo", "Rio de Janeiro", "Belo Horizonte"],
+    id: "1",
+    title: "Apartamento 3 Quartos - Centro",
+    location: "Uberlândia, MG",
+    price: "R$ 450.000",
+    image: "https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?w=800&h=600&fit=crop",
+    type: "Urbano",
   },
   {
-    href: "/rural",
-    icon: "🌾",
-    title: "Proper Rural",
-    description: "Fazendas, sítios, chácaras e propriedades rurais",
-    featured: ["Triângulo Mineiro", "Sul de Minas", "Interior SP"],
+    id: "2",
+    title: "Casa com Piscina - Condomínio",
+    location: "Goiânia, GO",
+    price: "R$ 850.000",
+    image: "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=800&h=600&fit=crop",
+    type: "Urbano",
   },
-]
-
-const stats = [
-  { value: "2.500+", label: "Imóveis Ativos" },
-  { value: "450+", label: "Vendas/Mês" },
-  { value: "98%", label: "Satisfação" },
-]
+  {
+    id: "3",
+    title: "Fazenda 50 Hectares",
+    location: "Uberaba, MG",
+    price: "R$ 2.500.000",
+    image: "https://images.unsplash.com/photo-1500382017468-9049fed747ef?w=800&h=600&fit=crop",
+    type: "Rural",
+  },
+];
 
 export default function ProperHomePage() {
   return (
-    <main className="min-h-screen flex flex-col bg-[#0f0f0f]">
-      {/* Navigation */}
-      <nav className="border-b border-[#242424] bg-[#0b0b0b]">
-        <div className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
-          <Link 
-            href="/"
-            className="text-[#cfa847] hover:text-amber-500 text-sm font-medium transition-colors"
-          >
-            ← Voltar ao Publimicro
-          </Link>
-          <div className="flex items-center gap-6">
-            <Link href="/urban" className="text-[#e6c86b] hover:text-amber-500 text-sm font-medium">
-              Urban
-            </Link>
-            <Link href="/rural" className="text-[#e6c86b] hover:text-amber-500 text-sm font-medium">
-              Rural
-            </Link>
-            <Link 
-              href="/post"
-              className="px-4 py-2 bg-amber-500 hover:bg-amber-400 text-black text-sm font-semibold rounded-lg transition-all"
-            >
-              Anunciar Imóvel
-            </Link>
+    <main className="min-h-screen bg-gradient-to-b from-[#0a0a0a] via-[#0d0d0d] to-[#0a0a0a]">
+      {/* SAME LAYOUT AS MAIN SITE */}
+      <section className="py-10 px-4 sm:px-6">
+        <div className="max-w-7xl mx-auto">
+          <div className="flex items-center gap-6 mb-6">
+            {/* LEFT 2 */}
+            <div className="flex flex-col gap-3 w-64">
+              {sections.slice(0, 2).map((s) => (
+                <Link
+                  key={s.title}
+                  href={s.href}
+                  className="group flex items-center gap-4 p-4 rounded-xl bg-gradient-to-br from-[#1a1a1a] to-[#0d0d0d] border-2 border-[#2a2a1a] hover:border-[#FF6B35] transition-all shadow-lg hover:shadow-[#FF6B35]/20"
+                >
+                  <span className="text-5xl flex-shrink-0">{s.icon}</span>
+                  <div className="min-w-0">
+                    <div className="text-lg font-bold text-[#B7791F] group-hover:text-[#FF6B35] truncate">{s.title}</div>
+                    <div className="text-xs text-[#676767] truncate">{s.tagline}</div>
+                  </div>
+                </Link>
+              ))}
+            </div>
+
+            {/* CENTER */}
+            <div className="flex-1 text-center px-6">
+              <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-[#B7791F] via-[#CD7F32] to-[#B87333] leading-tight mb-4">
+                PubliProper
+              </h1>
+              <p className="text-base sm:text-lg text-[#676767] leading-relaxed">
+                Imóveis Urbanos e Rurais em Todo o Brasil
+                <br />
+                <span className="text-[#FF6B35] text-2xl font-bold">•</span> Do apartamento na capital à fazenda no interior
+              </p>
+            </div>
+
+            {/* RIGHT 2 */}
+            <div className="flex flex-col gap-3 w-64">
+              {sections.slice(2, 4).map((s) => (
+                <Link
+                  key={s.title}
+                  href={s.href}
+                  className="group flex items-center gap-4 p-4 rounded-xl bg-gradient-to-br from-[#1a1a1a] to-[#0d0d0d] border-2 border-[#2a2a1a] hover:border-[#0D7377] transition-all shadow-lg hover:shadow-[#0D7377]/20"
+                >
+                  <span className="text-5xl flex-shrink-0">{s.icon}</span>
+                  <div className="min-w-0">
+                    <div className="text-lg font-bold text-[#B7791F] group-hover:text-[#0D7377] truncate">{s.title}</div>
+                    <div className="text-xs text-[#676767] truncate">{s.tagline}</div>
+                  </div>
+                </Link>
+              ))}
+            </div>
           </div>
-        </div>
-      </nav>
 
-      {/* Hero Section */}
-      <section className="px-6 py-20 text-center bg-gradient-to-b from-[#0b0b0b] to-[#0f0f0f]">
-        <h1 className="text-5xl md:text-6xl font-bold text-[#cfa847] mb-6">
-          Proper
-        </h1>
-        
-        <p className="text-[#bfa97a] max-w-3xl mx-auto text-xl mb-12">
-          Imóveis urbanos e rurais em todo o Brasil. 
-          Do apartamento na capital à fazenda no interior – encontre seu espaço ideal.
-        </p>
-
-        {/* Search */}
-        <form 
-          action="/search" 
-          method="get"
-          className="max-w-3xl mx-auto flex flex-col sm:flex-row gap-4"
-        >
-          <input
-            name="q"
-            type="search"
-            placeholder="Buscar imóveis por localização, tipo, características..."
-            className="flex-1 rounded-lg px-6 py-4 bg-[#0b0b0b] border border-[#242424] text-[#e6c86b] placeholder-[#bfa97a]/70 focus:outline-none focus:border-amber-500/50 focus:ring-2 focus:ring-amber-500/20"
-          />
-          <button 
-            type="submit"
-            className="rounded-lg bg-amber-500 hover:bg-amber-400 px-8 py-4 font-semibold text-black transition-all hover:scale-105"
-          >
-            Buscar
-          </button>
-        </form>
-      </section>
-
-      {/* Stats */}
-      <section className="border-y border-[#242424] bg-[#0b0b0b]">
-        <div className="max-w-7xl mx-auto px-6 py-12">
-          <div className="grid grid-cols-3 gap-8">
-            {stats.map((stat) => (
-              <div key={stat.label} className="text-center">
-                <div className="text-4xl font-bold text-[#cfa847] mb-2">
-                  {stat.value}
+          {/* BOTTOM 4 */}
+          <div className="grid grid-cols-4 gap-4">
+            {sections.slice(4, 8).map((s) => (
+              <Link
+                key={s.title}
+                href={s.href}
+                className="group flex flex-col items-center gap-3 p-5 rounded-xl bg-gradient-to-br from-[#1a1a1a] to-[#0d0d0d] border-2 border-[#2a2a1a] hover:border-[#5F7161] transition-all shadow-lg hover:shadow-[#5F7161]/20"
+              >
+                <span className="text-5xl">{s.icon}</span>
+                <div className="text-center">
+                  <div className="text-base font-bold text-[#B7791F] group-hover:text-[#5F7161]">{s.title}</div>
+                  <div className="text-xs text-[#676767] mt-1">{s.tagline}</div>
                 </div>
-                <div className="text-sm text-[#bfa97a]">
-                  {stat.label}
-                </div>
-              </div>
+              </Link>
             ))}
           </div>
         </div>
       </section>
 
-      {/* Categories */}
-      <section className="flex-1 max-w-7xl mx-auto px-6 py-20 w-full">
-        <h2 className="text-3xl font-bold text-center text-[#cfa847] mb-12">
-          Escolha seu Mercado
-        </h2>
-        
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-          {categories.map((category) => (
-            <Link
-              key={category.href}
-              href={category.href}
-              className="group p-8 bg-[#0b0b0b] border border-[#242424] rounded-xl hover:border-amber-500/30 transition-all hover:shadow-xl hover:shadow-amber-500/5"
-            >
-              <div className="text-6xl mb-4 group-hover:scale-110 transition-transform">
-                {category.icon}
-              </div>
-              
-              <h3 className="text-2xl font-bold text-[#e6c86b] mb-3 group-hover:text-amber-500 transition-colors">
-                {category.title}
-              </h3>
-              
-              <p className="text-[#bfa97a] mb-6">
-                {category.description}
-              </p>
-
-              <div className="flex flex-wrap gap-2">
-                {category.featured.map((location) => (
-                  <span 
-                    key={location}
-                    className="text-xs px-3 py-1 bg-[#0f0f0f] border border-[#242424] rounded-full text-[#bfa97a]"
-                  >
-                    {location}
-                  </span>
-                ))}
-              </div>
-
-              <div className="mt-6 flex items-center gap-2 text-amber-500 font-semibold">
-                Explorar {category.title}
-                <span className="group-hover:translate-x-1 transition-transform">→</span>
-              </div>
-            </Link>
-          ))}
+      {/* BIRD */}
+      <section className="py-8 px-4 sm:px-6">
+        <div className="max-w-5xl mx-auto">
+          <CarcaraScene />
         </div>
       </section>
 
-      {/* CTA Section */}
-      <section className="px-6 py-20 text-center bg-gradient-to-t from-[#0b0b0b] to-[#0f0f0f]">
-        <h2 className="text-3xl font-bold text-[#cfa847] mb-4">
-          Tem um imóvel para vender ou alugar?
-        </h2>
-        <p className="text-[#bfa97a] mb-8 max-w-2xl mx-auto">
-          Anuncie gratuitamente e alcance milhares de compradores e locatários em potencial.
-        </p>
-        <Link
-          href="/post"
-          className="inline-block px-8 py-4 bg-amber-500 hover:bg-amber-400 text-black font-bold rounded-lg transition-all hover:scale-105 shadow-lg"
-        >
-          Anunciar Agora – É Grátis
-        </Link>
+      {/* FEATURED PROPERTIES */}
+      <section className="py-10 px-4 sm:px-6">
+        <div className="max-w-7xl mx-auto">
+          <h2 className="text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-[#B7791F] to-[#CD7F32] mb-8 text-center">
+            Destaques em Imóveis
+          </h2>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            {featuredProperties.map((prop) => (
+              <article
+                key={prop.id}
+                className="group bg-gradient-to-br from-[#1a1a1a] to-[#0d0d0d] border-2 border-[#2a2a1a] rounded-2xl overflow-hidden hover:border-[#FF6B35] hover:shadow-2xl hover:shadow-[#FF6B35]/30 transition-all"
+              >
+                <div className="relative aspect-video">
+                  <Image
+                    src={prop.image}
+                    alt={prop.title}
+                    fill
+                    className="object-cover group-hover:scale-110 transition-transform duration-700"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-[#0a0a0a]/80 via-transparent to-transparent" />
+                  <div className="absolute top-3 right-3 px-3 py-1.5 bg-[#0D7377] text-[#0a0a0a] text-xs font-bold rounded-full">
+                    {prop.type}
+                  </div>
+                </div>
+                <div className="p-5">
+                  <h3 className="text-xl font-bold text-[#FF6B35] mb-2">{prop.title}</h3>
+                  <p className="text-sm text-[#676767] mb-3">📍 {prop.location}</p>
+                  <div className="flex items-center justify-between">
+                    <span className="text-2xl font-bold text-[#B7791F]">{prop.price}</span>
+                    <Link
+                      href={`/imoveis/${prop.id}`}
+                      className="px-4 py-2 bg-gradient-to-r from-[#FF6B35] to-[#FF8C42] text-[#0a0a0a] font-bold rounded-lg hover:scale-105 transition-all"
+                    >
+                      Ver →
+                    </Link>
+                  </div>
+                </div>
+              </article>
+            ))}
+          </div>
+        </div>
       </section>
 
-      {/* Footer */}
-      <footer className="border-t border-[#242424] bg-[#0b0b0b] px-6 py-8">
-        <div className="max-w-7xl mx-auto text-center text-sm text-[#bfa97a]">
-          <p>© 2025 Publimicro Proper. Todos os direitos reservados.</p>
+      {/* CARCARÁ HIGHLIGHT (on Proper page too) */}
+      <section className="py-10 px-4 sm:px-6 bg-gradient-to-b from-[#0d0d0d] to-[#0a0a0a]">
+        <div className="max-w-7xl mx-auto text-center">
+          <div className="inline-flex items-center gap-2 mb-4 px-6 py-3 bg-[#FF6B35]/20 border border-[#FF6B35] rounded-full backdrop-blur-md">
+            <span className="text-[#FF6B35] font-bold text-sm tracking-wider uppercase">🦅 Projeto Especial</span>
+          </div>
+          <h2 className="text-5xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-[#FF6B35] to-[#FF8C42] mb-4">
+            Sítios Carcará
+          </h2>
+          <p className="text-[#D4A574] text-xl mb-8 max-w-2xl mx-auto">
+            6 propriedades exclusivas na beira da represa. Lances a partir de R$ 1.050.000.
+          </p>
+          <Link
+            href="https://www.publimicro.com.br/projetos/carcara"
+            className="inline-block px-8 py-4 bg-gradient-to-r from-[#FF6B35] to-[#FF8C42] hover:from-[#FF8C42] hover:to-[#FF6B35] text-[#0a0a0a] font-bold rounded-full transition-all hover:scale-105 shadow-xl"
+          >
+            Explorar Projeto Completo →
+          </Link>
         </div>
+      </section>
+
+      <footer className="bg-[#0a0a0a] border-t-2 border-[#2a2a1a] py-8 px-4 text-center text-sm text-[#676767]">
+        © {new Date().getFullYear()} PubliProper. Todos os direitos reservados.
       </footer>
+
+      <WhatsAppButton />
     </main>
-  )
+  );
 }

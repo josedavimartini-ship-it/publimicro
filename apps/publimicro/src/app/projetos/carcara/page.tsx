@@ -1,343 +1,291 @@
-﻿import Image from "next/image";
-import Link from "next/link";
+﻿'use client';
 
-const carcaraRanches = [
-  {
-    id: "canario",
-    name: "Sítio Canário",
-    area: "12.5 hectares",
-    price: "R$ 850.000",
-    status: "Disponível",
-    features: ["Casa sede", "Acesso ao rio", "Energia elétrica", "Área para cultivo"],
-    image: "https://irrzpwzyqcubhhjeuakc.supabase.co/storage/v1/object/public/imagens-sitios/canario.jpg",
-  },
-  {
-    id: "mutum",
-    name: "Sítio Mutum",
-    area: "15 hectares",
-    price: "R$ 950.000",
-    status: "Disponível",
-    features: ["Vista privilegiada", "Nascente de água", "Mata nativa preservada", "Infraestrutura básica"],
-    image: "https://irrzpwzyqcubhhjeuakc.supabase.co/storage/v1/object/public/imagens-sitios/mutum.jpg",
-  },
-  {
-    id: "acerola",
-    name: "Sítio Acerola",
-    area: "10 hectares",
-    price: "R$ 750.000",
-    status: "Disponível",
-    features: ["Área plana", "Solo fértil", "Próximo à rodovia", "Pomar existente"],
-    image: "https://irrzpwzyqcubhhjeuakc.supabase.co/storage/v1/object/public/imagens-sitios/acerola.jpg",
-  },
-  {
-    id: "sabia",
-    name: "Sítio Sabiá",
-    area: "13 hectares",
-    price: "R$ 880.000",
-    status: "Disponível",
-    features: ["Ribeirinho", "Área de lazer", "Infraestrutura completa", "Árvores frutíferas"],
-    image: "https://irrzpwzyqcubhhjeuakc.supabase.co/storage/v1/object/public/imagens-sitios/pordosol1.jpg",
-  },
-  {
-    id: "bem-te-vi",
-    name: "Sítio Bem-te-vi",
-    area: "14 hectares",
-    price: "R$ 920.000",
-    status: "Disponível",
-    features: ["Vista panorâmica", "Topografia favorável", "Água abundante", "Potencial turístico"],
-    image: "https://irrzpwzyqcubhhjeuakc.supabase.co/storage/v1/object/public/imagens-sitios/pordosolOrange.jpg",
-  },
-  {
-    id: "tangara",
-    name: "Sítio Tangará",
-    area: "16 hectares",
-    price: "R$ 1.050.000",
-    status: "Disponível",
-    features: ["Maior área", "Casa com 3 quartos", "Curral e estábulo", "Área agrícola produtiva"],
-    image: "https://irrzpwzyqcubhhjeuakc.supabase.co/storage/v1/object/public/imagens-sitios/lindosoljaposto.jpg",
-  },
-];
+import { useState, useEffect } from 'react';
+import { supabase } from '@/lib/supabaseClient';
+import Image from 'next/image';
+import Link from 'next/link';
+import { MapPin, Home, Trees, Droplets, Zap, ShieldCheck, Calendar, TrendingUp } from 'lucide-react';
+import VisitModal from '@/components/VisitModal';
+import ProposalModal from '@/components/ProposalModal';
 
-const whatsappNumber = "5562999999999"; // Replace with your real WhatsApp number
+interface Sitio {
+  id: string;
+  nome: string;
+  zona: string;
+  preco: number;
+  lance_inicial: number;
+  fotos: string[];
+  descricao?: string;
+  area_total?: number;
+}
 
-export default function CarcaraPage(): JSX.Element {
+export default function CarcaraProjectPage() {
+  const [sitios, setSitios] = useState<Sitio[]>([]);
+  const [selectedSitio, setSelectedSitio] = useState<Sitio | null>(null);
+  const [showVisitModal, setShowVisitModal] = useState(false);
+  const [showProposalModal, setShowProposalModal] = useState(false);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    async function fetchSitios() {
+      const { data, error } = await supabase
+        .from('sitios')
+        .select('*')
+        .in('id', ['surucua', 'juriti', 'seriema', 'mergulhao', 'bigua', 'abare'])
+        .order('preco', { ascending: true });
+
+      if (!error && data) {
+        setSitios(data);
+      }
+      setLoading(false);
+    }
+    fetchSitios();
+  }, []);
+
+  const features = [
+    { icon: <Trees className="w-8 h-8" />, title: 'Natureza Preservada', desc: 'Mata nativa e biodiversidade' },
+    { icon: <Droplets className="w-8 h-8" />, title: 'Acesso à Água', desc: 'Margem da represa' },
+    { icon: <Zap className="w-8 h-8" />, title: 'Infraestrutura', desc: 'Energia e estrada' },
+    { icon: <ShieldCheck className="w-8 h-8" />, title: 'Documentação', desc: 'Regularizado' },
+  ];
+
+  const handleScheduleVisit = (sitio: Sitio) => {
+    setSelectedSitio(sitio);
+    setShowVisitModal(true);
+  };
+
+  const handleMakeProposal = (sitio: Sitio) => {
+    setSelectedSitio(sitio);
+    setShowProposalModal(true);
+  };
+
   return (
-    <main className="relative min-h-screen flex flex-col bg-[#0f0f0f]">
-      {/* Hero Section with Background Image */}
-      <section className="relative h-screen flex items-center justify-center overflow-hidden">
-        <div className="absolute inset-0 -z-10">
-          <Image
-            src="https://irrzpwzyqcubhhjeuakc.supabase.co/storage/v1/object/public/imagens-sitios/pordosol4mediumearthwide.jpg"
-            alt="Sítios Carcará"
-            fill
-            className="object-cover brightness-50"
-            priority
-          />
-          <div className="absolute inset-0 bg-gradient-to-t from-[#0f0f0f] via-transparent to-[#0f0f0f]/50" />
-        </div>
-
-        <div className="relative z-10 text-center px-6 max-w-5xl mx-auto">
-          {/* Badge */}
-          <div className="inline-flex items-center gap-2 mb-6 px-6 py-3 bg-amber-500/20 border border-amber-500/40 rounded-full backdrop-blur-md">
-            <span className="text-2xl">🌾</span>
-            <span className="text-amber-400 font-bold text-sm tracking-wider uppercase">
-              Projeto Ecológico Exclusivo
+    <main className="min-h-screen bg-gradient-to-b from-[#0a0a0a] via-[#0d0d0d] to-[#0a0a0a] pb-20">
+      {/* Hero Section */}
+      <section className="relative h-[70vh] flex items-center justify-center overflow-hidden">
+        <Image
+          src="https://irrzpwzyqcubhhjeuakc.supabase.co/storage/v1/object/public/imagens-sitios/pordosol4mediumearthwide.jpg"
+          alt="Sítios Carcará"
+          fill
+          className="object-cover"
+          priority
+          unoptimized
+        />
+        <div className="absolute inset-0 bg-gradient-to-b from-[#0a0a0a]/80 via-[#0a0a0a]/60 to-[#0a0a0a]" />
+        
+        <div className="relative z-10 text-center px-6 max-w-5xl">
+          <div className="inline-flex items-center gap-2 mb-6 px-6 py-3 bg-[#FF6B35]/30 border-2 border-[#FF6B35] rounded-full backdrop-blur-md">
+            <span className="text-[#FF6B35] font-bold text-lg tracking-widest uppercase">
+              🦅 Lançamento Exclusivo
             </span>
           </div>
-
-          <h1 className="text-5xl md:text-7xl font-bold mb-6 text-white drop-shadow-2xl">
+          
+          <h1 className="text-6xl md:text-8xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-[#FF6B35] via-[#FF8C42] to-[#B7791F] mb-6 leading-tight">
             Sítios Carcará
           </h1>
           
-          <p className="max-w-3xl mx-auto text-lg md:text-xl text-[#bfa97a] leading-relaxed mb-8 drop-shadow-lg">
-            Um projeto ecológico e exclusivo às margens do rio, com <strong className="text-amber-400">6 sítios à venda</strong>,
-            cada um com vocação natural para descanso, agrofloresta e turismo sustentável.
+          <p className="text-2xl md:text-3xl text-[#d8c68e] mb-4 leading-relaxed">
+            6 propriedades exclusivas às margens da represa
+          </p>
+          
+          <p className="text-lg text-[#676767] mb-8 max-w-3xl mx-auto">
+            Natureza preservada, infraestrutura completa e localização privilegiada. 
+            Lances a partir de <span className="text-[#FF6B35] font-bold">R$ 1.050.000</span>
           </p>
 
-          {/* CTA Buttons */}
-          <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
+          <div className="flex gap-4 justify-center flex-wrap">
             <a
-              href="#unidades"
-              className="px-8 py-4 bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-black text-lg font-bold rounded-xl transition-all hover:scale-105 shadow-2xl"
+              href="#sitios"
+              className="px-10 py-5 bg-gradient-to-r from-[#FF6B35] to-[#FF8C42] hover:from-[#FF8C42] hover:to-[#FF6B35] text-[#0a0a0a] text-lg font-bold rounded-full transition-all hover:scale-105 shadow-2xl"
             >
-              Ver 6 Unidades Disponíveis
+              🏡 Ver Propriedades
             </a>
             <a
-              href={`https://wa.me/${whatsappNumber}?text=Olá! Tenho interesse no projeto Sítios Carcará.`}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="px-8 py-4 bg-[#25D366] hover:bg-[#20BD5A] text-white text-lg font-bold rounded-xl transition-all hover:scale-105 shadow-2xl flex items-center gap-3"
+              href="#sobre"
+              className="px-10 py-5 border-3 border-[#0D7377] text-[#0D7377] hover:bg-[#0D7377]/10 text-lg font-bold rounded-full transition-all"
             >
-              <span className="text-2xl">💬</span>
-              Contato via WhatsApp
+              📋 Sobre o Projeto
             </a>
           </div>
+        </div>
+      </section>
 
-          {/* Scroll Indicator */}
-          <div className="mt-16 animate-bounce">
-            <div className="w-6 h-10 border-2 border-amber-500/50 rounded-full mx-auto flex justify-center">
-              <div className="w-1 h-3 bg-amber-500 rounded-full mt-2 animate-pulse" />
+      {/* Features */}
+      <section className="py-16 px-6 max-w-7xl mx-auto" id="sobre">
+        <h2 className="text-4xl md:text-5xl font-bold text-center text-transparent bg-clip-text bg-gradient-to-r from-[#B7791F] to-[#CD7F32] mb-12">
+          Diferenciais do Projeto
+        </h2>
+        
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+          {features.map((feature, idx) => (
+            <div
+              key={idx}
+              className="bg-gradient-to-br from-[#1a1a1a] to-[#0d0d0d] border-2 border-[#2a2a1a] rounded-2xl p-6 hover:border-[#FF6B35] transition-all hover:scale-105"
+            >
+              <div className="w-16 h-16 bg-[#FF6B35]/20 rounded-full flex items-center justify-center text-[#FF6B35] mb-4">
+                {feature.icon}
+              </div>
+              <h3 className="text-xl font-bold text-[#B7791F] mb-2">{feature.title}</h3>
+              <p className="text-[#676767]">{feature.desc}</p>
             </div>
-          </div>
+          ))}
         </div>
       </section>
 
-      {/* Project Overview */}
-      <section className="py-20 px-6 bg-gradient-to-b from-[#0f0f0f] to-[#0b0b0b]">
-        <div className="max-w-6xl mx-auto">
-          <div className="text-center mb-16">
-            <h2 className="text-4xl font-bold text-[#cfa847] mb-4">
-              O Projeto Sítios Carcará
-            </h2>
-            <p className="text-[#bfa97a] max-w-3xl mx-auto text-lg">
-              Uma oportunidade única de investimento em propriedades sustentáveis, 
-              integradas à natureza e com potencial para múltiplos usos.
-            </p>
-          </div>
+      {/* Sitios Grid */}
+      <section className="py-16 px-6 max-w-7xl mx-auto" id="sitios">
+        <h2 className="text-4xl md:text-5xl font-bold text-center text-transparent bg-clip-text bg-gradient-to-r from-[#FF6B35] to-[#B7791F] mb-4">
+          Propriedades Disponíveis
+        </h2>
+        <p className="text-center text-[#676767] mb-12 max-w-2xl mx-auto">
+          Escolha sua propriedade ideal. Agende uma visita e faça sua proposta.
+        </p>
 
-          {/* Features Grid */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-16">
-            {[
-              {
-                icon: "🌳",
-                title: "Sustentabilidade",
-                description: "Projeto de reflorestamento e conservação ambiental integrado"
-              },
-              {
-                icon: "🏞️",
-                title: "Localização Privilegiada",
-                description: "Às margens do rio, com acesso facilitado e infraestrutura"
-              },
-              {
-                icon: "💰",
-                title: "Valorização",
-                description: "Investimento com alto potencial de valorização a médio prazo"
-              },
-              {
-                icon: "🏡",
-                title: "Uso Múltiplo",
-                description: "Lazer, moradia, agricultura ou turismo sustentável"
-              },
-              {
-                icon: "⚡",
-                title: "Infraestrutura",
-                description: "Energia elétrica, água abundante e acesso por estrada"
-              },
-              {
-                icon: "🎯",
-                title: "Documentação",
-                description: "Toda documentação regularizada e pronta para transferência"
-              },
-            ].map((feature, idx) => (
-              <div
-                key={idx}
-                className="p-6 bg-[#0b0b0b] border border-[#242424] rounded-xl hover:border-amber-500/30 transition-all hover:shadow-lg hover:shadow-amber-500/5"
-              >
-                <div className="text-5xl mb-4">{feature.icon}</div>
-                <h3 className="text-xl font-bold text-[#e6c86b] mb-2">{feature.title}</h3>
-                <p className="text-sm text-[#bfa97a]">{feature.description}</p>
-              </div>
-            ))}
+        {loading ? (
+          <div className="flex justify-center py-20">
+            <div className="animate-spin rounded-full h-16 w-16 border-4 border-[#FF6B35] border-t-transparent"></div>
           </div>
-        </div>
-      </section>
-
-      {/* Gallery Section */}
-      <section id="galeria" className="py-20 px-6 bg-[#0b0b0b]">
-        <div className="max-w-6xl mx-auto">
-          <h2 className="text-4xl font-bold text-center mb-12 text-[#cfa847]">
-            Galeria — Conheça o Projeto
-          </h2>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-            {[
-              "acerola.jpg",
-              "canario.jpg",
-              "lindosoljaposto.jpg",
-              "mutum.jpg",
-              "pordosol1.jpg",
-              "pordosolOrange.jpg",
-            ].map((file) => (
-              <div key={file} className="relative h-64 rounded-xl overflow-hidden group">
-                <Image
-                  src={`https://irrzpwzyqcubhhjeuakc.supabase.co/storage/v1/object/public/imagens-sitios/${file}`}
-                  alt={`Imagem ${file.replace(".jpg", "")}`}
-                  fill
-                  className="object-cover group-hover:scale-110 transition-transform duration-500"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Units Section */}
-      <section id="unidades" className="py-20 px-6 bg-gradient-to-b from-[#0b0b0b] to-[#0f0f0f]">
-        <div className="max-w-7xl mx-auto">
-          <div className="text-center mb-16">
-            <h2 className="text-4xl font-bold text-[#cfa847] mb-4">
-              6 Unidades Disponíveis
-            </h2>
-            <p className="text-[#bfa97a] max-w-2xl mx-auto">
-              Cada sítio possui características únicas. Escolha o que melhor se adapta aos seus objetivos.
-            </p>
-          </div>
-
+        ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {carcaraRanches.map((ranch) => (
+            {sitios.map((sitio) => (
               <article
-                key={ranch.id}
-                className="group bg-gradient-to-b from-[#0b0b0b] to-[#0f0f0f] border border-[#242424] rounded-2xl overflow-hidden hover:border-amber-500/40 transition-all duration-300 hover:shadow-2xl hover:shadow-amber-500/10 hover:-translate-y-2"
+                key={sitio.id}
+                className="group bg-gradient-to-br from-[#1a1a1a] to-[#0d0d0d] border-3 border-[#2a2a1a] rounded-2xl overflow-hidden hover:border-[#FF6B35] hover:shadow-2xl hover:shadow-[#FF6B35]/30 transition-all"
               >
-                {/* Status Badge */}
-                <div className="absolute top-4 left-4 z-10 px-3 py-1.5 bg-green-500 text-black text-xs font-bold rounded-full shadow-lg">
-                  {ranch.status}
-                </div>
-
-                {/* Image */}
-                <div className="relative aspect-video overflow-hidden">
+                <div className="relative aspect-video">
                   <Image
-                    src={ranch.image}
-                    alt={ranch.name}
+                    src={sitio.fotos[0]}
+                    alt={`Sítio ${sitio.nome}`}
                     fill
-                    className="object-cover group-hover:scale-110 transition-transform duration-500"
+                    className="object-cover group-hover:scale-110 transition-transform duration-700"
+                    unoptimized
                   />
-                  <div className="absolute inset-0 bg-gradient-to-t from-[#0f0f0f] via-transparent to-transparent opacity-60" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-[#0a0a0a]/90 via-transparent to-transparent" />
+                  <div className="absolute top-3 left-3 px-4 py-2 bg-[#2a2a2a]/95 backdrop-blur-md rounded-full border border-[#3a3a2a]">
+                    <span className="text-[#5F7161] text-sm font-bold">{sitio.zona}</span>
+                  </div>
+                  <div className="absolute top-3 right-3 px-4 py-2 bg-[#0D7377] text-[#0a0a0a] text-sm font-bold rounded-full shadow-lg">
+                    Disponível
+                  </div>
                 </div>
 
-                {/* Content */}
                 <div className="p-6">
-                  <h3 className="text-2xl font-bold text-[#e6c86b] mb-2 group-hover:text-amber-500 transition-colors">
-                    {ranch.name}
-                  </h3>
+                  <h3 className="text-3xl font-bold text-[#FF6B35] mb-3">{sitio.nome}</h3>
+                  
+                  {sitio.descricao && (
+                    <p className="text-[#676767] text-sm mb-4">{sitio.descricao}</p>
+                  )}
 
-                  <div className="flex items-center justify-between mb-4 pb-4 border-b border-[#242424]">
-                    <div>
-                      <div className="text-xs text-[#bfa97a]">Área</div>
-                      <div className="text-lg font-bold text-amber-500">{ranch.area}</div>
+                  {sitio.area_total && (
+                    <div className="flex items-center gap-2 text-[#B7791F] mb-4">
+                      <Home className="w-4 h-4" />
+                      <span className="text-sm">{sitio.area_total} hectares</span>
                     </div>
-                    <div className="text-right">
-                      <div className="text-xs text-[#bfa97a]">Preço</div>
-                      <div className="text-xl font-bold text-[#cfa847]">{ranch.price}</div>
+                  )}
+
+                  <div className="grid grid-cols-2 gap-4 mb-5 p-4 bg-[#2a2a2a]/50 rounded-lg">
+                    <div>
+                      <div className="text-xs text-[#676767] mb-1">Valor estimado</div>
+                      <div className="font-semibold text-[#D4A574] text-lg">
+                        R$ {(sitio.preco / 1000000).toFixed(1).replace('.', ',')}M
+                      </div>
+                    </div>
+                    <div>
+                      <div className="text-xs text-[#676767] mb-1">Lance inicial</div>
+                      <div className="font-bold text-[#FF6B35] text-lg">
+                        R$ {(sitio.lance_inicial / 1000000).toFixed(2).replace('.', ',')}M
+                      </div>
                     </div>
                   </div>
 
-                  <ul className="space-y-2 mb-6">
-                    {ranch.features.map((feature, idx) => (
-                      <li key={idx} className="text-xs text-[#bfa97a] flex items-start gap-2">
-                        <span className="text-amber-500 mt-0.5 flex-shrink-0">✓</span>
-                        <span>{feature}</span>
-                      </li>
-                    ))}
-                  </ul>
-
-                  {/* CTAs */}
-                  <div className="space-y-2">
-                    <Link
-                      href={`/imoveis/sitios-carcara/${ranch.id}`}
-                      className="block text-center px-4 py-3 bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-black text-sm font-bold rounded-lg transition-all hover:scale-[1.02] shadow-lg"
+                  <div className="flex gap-2">
+                    <button
+                      onClick={() => handleScheduleVisit(sitio)}
+                      className="flex-1 px-4 py-3 border-2 border-[#0D7377] text-[#0D7377] hover:bg-[#0D7377]/10 font-bold rounded-lg transition-all flex items-center justify-center gap-2"
                     >
-                      Ver Detalhes + Tour 3D
-                    </Link>
-                    <a
-                      href={`https://wa.me/${whatsappNumber}?text=Olá! Tenho interesse no ${ranch.name}.`}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="block text-center px-4 py-3 bg-[#25D366] hover:bg-[#20BD5A] text-white text-sm font-bold rounded-lg transition-all hover:scale-[1.02] flex items-center justify-center gap-2"
+                      <Calendar className="w-4 h-4" />
+                      Visitar
+                    </button>
+                    <button
+                      onClick={() => handleMakeProposal(sitio)}
+                      className="flex-1 px-4 py-3 bg-gradient-to-r from-[#FF6B35] to-[#FF8C42] hover:from-[#FF8C42] hover:to-[#FF6B35] text-[#0a0a0a] font-bold rounded-lg transition-all hover:scale-105 flex items-center justify-center gap-2"
                     >
-                      <span className="text-lg">💬</span>
-                      Agendar Visita
-                    </a>
+                      <TrendingUp className="w-4 h-4" />
+                      Proposta
+                    </button>
                   </div>
                 </div>
               </article>
             ))}
           </div>
-        </div>
+        )}
       </section>
 
-      {/* Contact CTA */}
-      <section className="py-20 px-6 text-center bg-gradient-to-b from-[#0f0f0f] via-amber-500/5 to-[#0f0f0f]">
-        <div className="max-w-4xl mx-auto">
-          <div className="text-5xl mb-6">🏡</div>
-          <h2 className="text-4xl font-bold text-[#cfa847] mb-4">
-            Pronto para Conhecer Pessoalmente?
-          </h2>
-          <p className="text-[#bfa97a] mb-8 text-lg">
-            Agende uma visita presencial ou por videoconferência. 
-            Nossa equipe está pronta para apresentar cada detalhe do projeto.
-          </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Link
-              href="/schedule-visit?project=sitios-carcara"
-              className="px-8 py-4 bg-amber-500 hover:bg-amber-400 text-black font-bold rounded-xl transition-all hover:scale-105"
-            >
-              📅 Agendar Visita
-            </Link>
-            <a
-              href={`https://wa.me/${whatsappNumber}`}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="px-8 py-4 bg-[#25D366] hover:bg-[#20BD5A] text-white font-bold rounded-xl transition-all hover:scale-105 flex items-center justify-center gap-2"
-            >
-              <span className="text-2xl">💬</span>
-              WhatsApp
-            </a>
+      {/* Location & Contact */}
+      <section className="py-16 px-6 max-w-7xl mx-auto">
+        <div className="grid md:grid-cols-2 gap-8">
+          <div className="bg-gradient-to-br from-[#1a1a1a] to-[#0d0d0d] border-2 border-[#2a2a1a] rounded-2xl p-8">
+            <h3 className="text-2xl font-bold text-[#B7791F] mb-4 flex items-center gap-2">
+              <MapPin className="w-6 h-6" />
+              Localização
+            </h3>
+            <p className="text-[#676767] mb-4">
+              Zona Rural privilegiada, às margens da represa, com acesso asfaltado e próximo aos principais centros urbanos.
+            </p>
+            <ul className="space-y-2 text-sm text-[#676767]">
+              <li>• 45 min do centro da cidade</li>
+              <li>• Acesso por estrada pavimentada</li>
+              <li>• Vista panorâmica da represa</li>
+              <li>• Área de preservação ambiental</li>
+            </ul>
+          </div>
+
+          <div className="bg-gradient-to-br from-[#1a1a1a] to-[#0d0d0d] border-2 border-[#2a2a1a] rounded-2xl p-8">
+            <h3 className="text-2xl font-bold text-[#B7791F] mb-4">
+              Dúvidas? Fale Conosco
+            </h3>
+            <p className="text-[#676767] mb-6">
+              Nossa equipe está pronta para te atender e esclarecer todas as suas dúvidas sobre o projeto.
+            </p>
+            <div className="space-y-3">
+              <a
+                href="https://wa.me/5534992610004"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="block px-6 py-4 bg-[#25D366] hover:bg-[#20BD5A] text-white font-bold rounded-lg transition-all hover:scale-105 text-center"
+              >
+                📱 WhatsApp: (34) 99261-0004
+              </a>
+              <a
+                href="mailto:contato@publimicro.com.br"
+                className="block px-6 py-4 border-2 border-[#B7791F] text-[#B7791F] hover:bg-[#B7791F]/10 font-bold rounded-lg transition-all text-center"
+              >
+                ✉️ contato@publimicro.com.br
+              </a>
+            </div>
           </div>
         </div>
       </section>
 
-      {/* Footer */}
-      <footer className="border-t border-[#242424] bg-[#0b0b0b] px-6 py-8">
-        <div className="max-w-7xl mx-auto text-center">
-          <Link href="/" className="text-[#cfa847] hover:text-amber-500 transition-colors">
-            ← Voltar para Publimicro
-          </Link>
-          <p className="text-sm text-[#bfa97a] mt-4">
-            © 2025 Publimicro — Sítios Carcará. Todos os direitos reservados.
-          </p>
-        </div>
-      </footer>
+      {/* Modals */}
+      {selectedSitio && (
+        <>
+          <VisitModal
+            adId={selectedSitio.id}
+            adTitle={`Sítio ${selectedSitio.nome}`}
+            open={showVisitModal}
+            onClose={() => setShowVisitModal(false)}
+          />
+          <ProposalModal
+            adId={selectedSitio.id}
+            adTitle={`Sítio ${selectedSitio.nome}`}
+            currentBid={selectedSitio.preco}
+            minBid={selectedSitio.lance_inicial}
+            open={showProposalModal}
+            onClose={() => setShowProposalModal(false)}
+          />
+        </>
+      )}
     </main>
   );
 }

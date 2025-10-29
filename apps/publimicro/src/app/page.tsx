@@ -1,394 +1,437 @@
-﻿import type { Metadata } from "next"
-import Link from "next/link"
-import { Heart, MessageCircle, User } from "lucide-react"
-import { CarcaraScene } from "../components/CarcaraScene"
-import PropertyHighlights from "../components/home/PropertyHighlights"
-import WhatsAppButton from "../components/WhatsAppButton"
+﻿'use client';
 
-export const metadata: Metadata = {
-  title: "PubliMicro — Classificados e Negócios",
-  description: "Encontre imóveis, veículos, equipamentos e serviços. Do campo à cidade, do local ao global.",
-  keywords: ["classificados", "imóveis", "veículos", "marketplace", "Brasil"],
+import { useEffect, useState } from 'react';
+import { supabase } from '@/lib/supabaseClient';
+import { Carcara3D } from '@publimicro/ui';
+import Image from 'next/image';
+import Link from 'next/link';
+
+// Supabase Sitio interface
+interface Sitio {
+  id: string;
+  nome: string;
+  localizacao: string;
+  preco?: number;
+  fotos: string[];
+  destaque?: boolean;
+  zona?: string;
+  lance_inicial?: number;
 }
 
-const mainCategories = [
-  { 
-    href: "https://proper.publimicro.com.br", 
-    icon: "🏘️", 
-    title: "Proper", 
-    subtitle: "Imóveis Urbanos e Rurais",
-    description: "Casas, apartamentos, fazendas e terrenos"
-  },
-  { 
-    href: "https://motors.publimicro.com.br", 
-    icon: "🚗", 
-    title: "Motors", 
-    subtitle: "Veículos e Transporte",
-    description: "Carros, motos, caminhões e peças"
-  },
-  { 
-    href: "https://journey.publimicro.com.br", 
-    icon: "✈️", 
-    title: "Journey", 
-    subtitle: "Viagens e Turismo",
-    description: "Pacotes, hospedagem e experiências"
-  },
-  { 
-    href: "https://share.publimicro.com.br", 
-    icon: "🤝", 
-    title: "Share", 
-    subtitle: "Compartilhamento",
-    description: "Aluguel e economia colaborativa"
-  },
-  { 
-    href: "https://global.publimicro.com.br", 
-    icon: "🌍", 
-    title: "Global", 
-    subtitle: "Negócios Internacionais",
-    description: "Importação, exportação e comércio"
-  },
-  { 
-    href: "https://machina.publimicro.com.br", 
-    icon: "⚙️", 
-    title: "Machina", 
-    subtitle: "Máquinas e Equipamentos",
-    description: "Industrial, agrícola e construção"
-  },
-  { 
-    href: "https://outdoor.publimicro.com.br", 
-    icon: "🏕️", 
-    title: "Outdoor", 
-    subtitle: "Aventura e Natureza",
-    description: "Camping, trilhas e esportes"
-  },
-  { 
-    href: "https://tudo.publimicro.com.br", 
-    icon: "🛍️", 
-    title: "Tudo", 
-    subtitle: "Classificados Gerais",
-    description: "Eletrônicos, móveis, serviços e mais"
-  },
-]
-
 export default function HomePage() {
+  const [sitios, setSitios] = useState<Sitio[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    async function fetchSitios() {
+      try {
+        const { data, error } = await supabase
+          .from('sitios')
+          .select('*')
+          .eq('destaque', true);
+        
+        if (error) {
+          console.error('Error fetching sítios:', error);
+          // Use fallback data if Supabase fails
+          setSitios([]);
+        } else {
+          setSitios(data || []);
+        }
+      } catch (err) {
+        console.error('Exception fetching sítios:', err);
+        setSitios([]);
+      } finally {
+        setLoading(false);
+      }
+    }
+    fetchSitios();
+  }, []);
+
+  const sections = [
+    {
+      name: 'PubliProper',
+      icon: '🏘️',
+      href: '/proper',
+      bgImage: '/images/sections/publiProper-bg.jpg',
+      description: 'Imóveis Urbanos & Rurais',
+    },
+    {
+      name: 'PubliMotors',
+      icon: '🚗',
+      href: '/motors',
+      bgImage: '/images/sections/publiMotors-bg.jpg',
+      description: 'Veículos e Transporte',
+    },
+    {
+      name: 'PubliHeavyAgro',
+      icon: '🚜',
+      href: '/machina',
+      bgImage: '/images/sections/publiHeavyAgro-bg.jpg',
+      description: 'Máquinas & Agroindústria',
+    },
+    {
+      name: 'PubliMarine',
+      icon: '⛵',
+      href: '/marine',
+      bgImage: '/images/sections/publiMarine-bg.jpg',
+      description: 'Náutica, Pesca & Aventura',
+    },
+    {
+      name: 'PubliGlobal',
+      icon: '🌍',
+      href: '/global',
+      bgImage: '/images/sections/publiGlobal-bg.jpg',
+      description: 'Comércio Internacional',
+    },
+    {
+      name: 'PubliJourney',
+      icon: '✈️',
+      href: '/journey',
+      bgImage: '/images/sections/publiJourney-bg.jpg',
+      description: 'Turismo & Viagens',
+    },
+    {
+      name: 'PubliShare',
+      icon: '🤝',
+      href: '/share',
+      bgImage: '/images/sections/publiShare-bg.jpg',
+      description: 'Economia Colaborativa',
+    },
+    {
+      name: 'PubliTudo',
+      icon: '🛍️',
+      href: '/tudo',
+      bgImage: '/images/sections/publiTudo-bg.jpg',
+      description: 'Marketplace & Serviços',
+    },
+  ];
+
+  const carcaraSites = [
+    {
+      id: 'surucua',
+      nome: 'Surucuá',
+      zona: 'Zona da Mata',
+      preco: 1700000,
+      lance_inicial: 1050000,
+      fotos: ['https://irrzpwzyqcubhhjeuakc.supabase.co/storage/v1/object/public/imagens-sitios/surucua.jpg'],
+    },
+    {
+      id: 'juriti',
+      nome: 'Juriti',
+      zona: 'Zona da Mata',
+      preco: 2000000,
+      lance_inicial: 1200000,
+      fotos: ['https://irrzpwzyqcubhhjeuakc.supabase.co/storage/v1/object/public/imagens-sitios/solposto.jpg'],
+    },
+    {
+      id: 'seriema',
+      nome: 'Seriema',
+      zona: 'Zona da Mata',
+      preco: 2350000,
+      lance_inicial: 1550000,
+      fotos: ['https://irrzpwzyqcubhhjeuakc.supabase.co/storage/v1/object/public/imagens-sitios/pordosol7.jpg'],
+    },
+    {
+      id: 'mergulhao',
+      nome: 'Mergulhão',
+      zona: 'Beira-Rio',
+      preco: 2950000,
+      lance_inicial: 1950000,
+      fotos: ['https://irrzpwzyqcubhhjeuakc.supabase.co/storage/v1/object/public/imagens-sitios/mutum.jpg'],
+    },
+    {
+      id: 'bigua',
+      nome: 'Biguá',
+      zona: 'Beira-Rio',
+      preco: 3250000,
+      lance_inicial: 2250000,
+      fotos: ['https://irrzpwzyqcubhhjeuakc.supabase.co/storage/v1/object/public/imagens-sitios/pordosol1.jpg'],
+    },
+    {
+      id: 'abare',
+      nome: 'Abaré',
+      zona: 'Beira-Rio',
+      preco: 3650000,
+      lance_inicial: 2550000,
+      fotos: ['https://irrzpwzyqcubhhjeuakc.supabase.co/storage/v1/object/public/imagens-sitios/pordosolOrange.jpg'],
+    },
+  ];
+
   return (
-    <>
-      <main className="min-h-screen bg-gradient-to-b from-[#0a0a0a] to-[#0f0f0f]">
-        {/* Top Navigation Panel */}
-        <header className="sticky top-0 z-50 bg-[#0d0d0d]/95 backdrop-blur-sm border-b border-[#1f1f1f] shadow-lg">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6">
-            <div className="flex items-center justify-between h-16 gap-4">
-              
-              {/* Logo with Crosshair */}
-              <Link href="/" className="flex items-center gap-2 hover:opacity-80 transition-opacity">
-                <div className="text-2xl font-bold">
-                  <span className="text-amber-400">Publi</span>
-                  <span className="text-amber-500">Micr</span>
-                  <span className="relative inline-block">
-                    <span className="text-amber-600">o</span>
-                    <svg 
-                      className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-4 h-4 text-amber-400"
-                      viewBox="0 0 24 24" 
-                      fill="none" 
-                      stroke="currentColor" 
-                      strokeWidth="2"
-                    >
-                      <circle cx="12" cy="12" r="3"/>
-                      <line x1="12" y1="2" x2="12" y2="7"/>
-                      <line x1="12" y1="17" x2="12" y2="22"/>
-                      <line x1="2" y1="12" x2="7" y2="12"/>
-                      <line x1="17" y1="12" x2="22" y2="12"/>
-                    </svg>
-                  </span>
-                </div>
-              </Link>
+    <main className="relative min-h-screen bg-gradient-to-b from-[#0a0a0a] via-[#0d0d0d] to-[#0a0a0a]">
+      {/* Main Content - No right margin needed, sidebar is on RIGHT */}
+      <div className="relative">
+        {/* Hero Section - Ecosystem Intro */}
+        <section className="text-center pt-12 pb-8 px-6 mr-64">
+          <h1 className="text-5xl md:text-6xl lg:text-7xl font-bold mb-4 text-transparent bg-clip-text bg-gradient-to-r from-[#B7791F] via-[#CD7F32] to-[#B87333] leading-tight">
+            O Ecossistema PubliMicro
+          </h1>
+          <p className="text-[#d8c68e] text-xl md:text-2xl mb-2 leading-relaxed">
+            Um universo de negócios, tecnologia e oportunidades
+          </p>
+          <p className="text-[#676767] text-lg">
+            <span className="text-[#FF6B35] text-3xl font-bold">•</span> do campo à cidade, do local ao global <span className="text-[#FF6B35] text-3xl font-bold">•</span>
+          </p>
+        </section>
 
-              {/* Main Search Bar */}
-              <form 
-                action="/search" 
-                method="get"
-                className="flex-1 max-w-2xl hidden md:flex items-center gap-2"
+        {/* Sections Grid - 8 Full-Width Buttons with Background Images */}
+        <section className="px-6 py-8 max-w-7xl mx-auto mr-64">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
+            {sections.map((section) => (
+              <Link
+                key={section.name}
+                href={section.href}
+                className="group relative h-48 rounded-2xl overflow-hidden shadow-xl hover:shadow-2xl hover:shadow-[#FF6B35]/30 transition-all duration-500 hover:scale-105"
               >
-                <div className="relative flex-1">
-                  <input
-                    type="search"
-                    name="q"
-                    placeholder="Buscar imóveis, veículos, serviços..."
-                    className="w-full h-10 pl-4 pr-10 bg-[#1a1a1a] border border-[#2a2a2a] rounded-full text-[#e6c86b] placeholder-[#8a8a6a] focus:outline-none focus:border-amber-500/50 focus:ring-2 focus:ring-amber-500/20"
-                  />
-                  <button 
-                    type="submit"
-                    className="absolute right-1 top-1/2 -translate-y-1/2 h-8 w-8 rounded-full bg-amber-500 hover:bg-amber-400 flex items-center justify-center transition-colors"
-                    aria-label="Buscar"
-                  >
-                    <svg className="w-4 h-4 text-black" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-                    </svg>
-                  </button>
-                </div>
-                <Link 
-                  href="/search/advanced"
-                  className="text-sm text-[#bfa97a] hover:text-amber-400 whitespace-nowrap"
-                >
-                  Avançada
-                </Link>
-              </form>
-
-              {/* Right Actions */}
-              <div className="flex items-center gap-3">
-                <Link 
-                  href="/favoritos"
-                  className="p-2 hover:bg-[#1a1a1a] rounded-full transition-colors"
-                  aria-label="Favoritos"
-                >
-                  <Heart className="w-5 h-5 text-[#bfa97a]" />
-                </Link>
-                
-                <Link 
-                  href="/mensagens"
-                  className="p-2 hover:bg-[#1a1a1a] rounded-full transition-colors"
-                  aria-label="Mensagens"
-                >
-                  <MessageCircle className="w-5 h-5 text-[#bfa97a]" />
-                </Link>
-                
-                <Link 
-                  href="/conta"
-                  className="hidden sm:flex items-center gap-2 px-3 py-2 border border-[#2a2a2a] rounded-full hover:border-amber-500/50 transition-colors"
-                >
-                  <User className="w-4 h-4 text-[#bfa97a]" />
-                  <span className="text-sm text-[#bfa97a]">Conta</span>
-                </Link>
-                
-                <Link
-                  href="/anunciar"
-                  className="flex items-center gap-2 px-4 py-2 bg-amber-500 hover:bg-amber-400 text-black font-semibold rounded-full transition-all hover:scale-105"
-                >
-                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
-                  </svg>
-                  <span className="hidden sm:inline">Anunciar</span>
-                </Link>
-              </div>
-            </div>
-
-            {/* Mobile Search */}
-            <div className="md:hidden pb-3">
-              <form action="/search" method="get" className="flex items-center gap-2">
-                <input
-                  type="search"
-                  name="q"
-                  placeholder="Buscar..."
-                  className="flex-1 h-10 px-4 bg-[#1a1a1a] border border-[#2a2a2a] rounded-full text-[#e6c86b] placeholder-[#8a8a6a] focus:outline-none focus:border-amber-500/50"
+                <div
+                  className="absolute inset-0 bg-cover bg-center transition-transform duration-700 group-hover:scale-110"
+                  style={{
+                    backgroundImage: `url('${section.bgImage}')`,
+                  }}
                 />
-                <button 
-                  type="submit"
-                  className="h-10 px-4 bg-amber-500 hover:bg-amber-400 text-black font-semibold rounded-full"
+                <div className="absolute inset-0 bg-gradient-to-t from-[#0a0a0a]/95 via-[#0a0a0a]/60 to-transparent" />
+                <div className="absolute inset-0 flex flex-col items-center justify-center p-6 text-center">
+                  <span className="text-6xl mb-3 transform group-hover:scale-110 transition-transform">
+                    {section.icon}
+                  </span>
+                  <h3 className="text-xl font-bold text-[#B7791F] group-hover:text-[#FF6B35] transition-colors mb-1">
+                    {section.name}
+                  </h3>
+                  <p className="text-sm text-[#676767]">{section.description}</p>
+                </div>
+              </Link>
+            ))}
+          </div>
+        </section>
+
+        {/* SUPER HIGHLIGHT - Sítios Carcará with BIRD */}
+        <section className="px-6 py-12 max-w-7xl mx-auto mr-64">
+          <div className="relative rounded-3xl overflow-hidden shadow-2xl border-4 border-[#FF6B35]/40 min-h-[500px]">
+            <Image
+              src="https://irrzpwzyqcubhhjeuakc.supabase.co/storage/v1/object/public/imagens-sitios/pordosol4mediumearthwide.jpg"
+              alt="Sítios Carcará Background"
+              fill
+              className="object-cover"
+              priority
+              unoptimized
+            />
+            <div className="absolute inset-0 bg-gradient-to-r from-[#0a0a0a]/95 via-[#0a0a0a]/70 to-transparent" />
+            
+            {/* Bird Animation - positioned to avoid sidebar overlap */}
+            <div className="absolute top-8 right-8 w-[250px] h-[250px] z-30">
+              <Carcara3D scale={1.25} />
+            </div>
+
+            <div className="relative p-12 z-20">
+              <div className="inline-flex items-center gap-2 mb-4 px-5 py-2 bg-[#FF6B35]/30 border-2 border-[#FF6B35] rounded-full backdrop-blur-md">
+                <span className="text-[#FF6B35] font-bold text-base tracking-widest uppercase">
+                  🦅 Super Destaque
+                </span>
+              </div>
+              <h2 className="text-6xl md:text-7xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-[#FF6B35] via-[#FF8C42] to-[#B7791F] mb-6 drop-shadow-2xl max-w-3xl">
+                Sítios Carcará's Project
+              </h2>
+              <p className="text-[#d8c68e] text-2xl mb-8 max-w-2xl leading-relaxed">
+                6 propriedades exclusivas às margens da represa. Natureza preservada, infraestrutura completa e lances a partir de R$ 1.050.000.
+              </p>
+              <div className="flex gap-4 flex-wrap">
+                <Link
+                  href="/projetos/carcara"
+                  className="px-10 py-5 bg-gradient-to-r from-[#FF6B35] to-[#FF8C42] hover:from-[#FF8C42] hover:to-[#FF6B35] text-[#0a0a0a] text-lg font-bold rounded-full transition-all hover:scale-105 shadow-2xl"
                 >
-                  Buscar
-                </button>
-              </form>
+                  🏡 Explorar Projeto Completo
+                </Link>
+                <Link
+                  href="/proper/rural"
+                  className="px-10 py-5 border-3 border-[#0D7377] text-[#0D7377] hover:bg-[#0D7377]/10 text-lg font-bold rounded-full transition-all"
+                >
+                  🌾 Ver Mais Imóveis Rurais
+                </Link>
+              </div>
             </div>
           </div>
-        </header>
 
-        {/* Hero Section with Categories */}
-        <section className="relative py-12 px-4 sm:px-6">
-          <div className="max-w-7xl mx-auto">
-            
-            {/* Category Grid Around Hero Text */}
-            <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 mb-8">
-              
-              {/* Left Categories (4) */}
-              <div className="lg:col-span-3 space-y-3">
-                {mainCategories.slice(0, 4).map((cat) => (
-                  <a
-                    key={cat.href}
-                    href={cat.href}
-                    className="group block p-4 bg-[#0d0d0d] border border-[#1f1f1f] rounded-lg hover:border-amber-500/50 hover:bg-[#111] transition-all"
-                  >
-                    <div className="flex items-start gap-3">
-                      <span className="text-2xl">{cat.icon}</span>
-                      <div className="flex-1 min-w-0">
-                        <h3 className="font-semibold text-amber-400 group-hover:text-amber-300">
-                          {cat.title}
-                        </h3>
-                        <p className="text-xs text-[#8a8a6a] mt-0.5">{cat.subtitle}</p>
+          {/* 6 Sítios Showcase */}
+          <div className="mt-12 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {carcaraSites.map((site) => (
+              <article
+                key={site.id}
+                className="group bg-gradient-to-br from-[#1a1a1a] to-[#0d0d0d] border-3 border-[#2a2a1a] rounded-2xl overflow-hidden hover:border-[#FF6B35] hover:shadow-2xl hover:shadow-[#FF6B35]/30 transition-all"
+              >
+                <div className="relative aspect-video">
+                  <Image
+                    src={site.fotos[0]}
+                    alt={`Sítio ${site.nome}`}
+                    fill
+                    className="object-cover group-hover:scale-110 transition-transform duration-700"
+                    unoptimized
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-[#0a0a0a]/90 via-transparent to-transparent" />
+                  <div className="absolute top-3 left-3 px-4 py-2 bg-[#2a2a2a]/95 backdrop-blur-md rounded-full border border-[#3a3a2a]">
+                    <span className="text-[#5F7161] text-sm font-bold">{site.zona}</span>
+                  </div>
+                </div>
+                <div className="p-6">
+                  <h3 className="text-3xl font-bold text-[#FF6B35] mb-4">{site.nome}</h3>
+                  <div className="grid grid-cols-2 gap-4 mb-5">
+                    <div>
+                      <div className="text-xs text-[#676767] mb-1">Valor estimado</div>
+                      <div className="font-semibold text-[#D4A574] text-lg">
+                        R$ {(site.preco / 1000000).toFixed(1).replace('.', ',')}M
                       </div>
                     </div>
-                  </a>
-                ))}
-              </div>
-
-              {/* Center Hero Text */}
-              <div className="lg:col-span-6 text-center flex flex-col justify-center">
-                <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold text-amber-400 mb-4">
-                  O Ecossistema PubliMicro
-                </h1>
-                <p className="text-lg text-[#bfa97a] max-w-2xl mx-auto leading-relaxed">
-                  Um universo de negócios, tecnologia e oportunidades<br/>
-                  <span className="text-amber-500">•</span> Do campo à cidade, do local ao global
-                </p>
-                
-                {/* Quick Post CTA */}
-                <div className="mt-6 flex flex-col sm:flex-row items-center justify-center gap-3">
+                    <div>
+                      <div className="text-xs text-[#676767] mb-1">Lance inicial</div>
+                      <div className="font-bold text-[#FF6B35] text-lg">
+                        R$ {(site.lance_inicial / 1000000).toFixed(2).replace('.', ',')}M
+                      </div>
+                    </div>
+                  </div>
                   <Link
-                    href="/anunciar"
-                    className="px-6 py-3 bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-400 hover:to-orange-400 text-black font-bold rounded-full shadow-lg transition-all hover:scale-105"
+                    href={`/projetos/carcara/${site.id}`}
+                    className="block text-center px-6 py-4 bg-gradient-to-r from-[#FF6B35] to-[#FF8C42] hover:from-[#FF8C42] hover:to-[#FF6B35] text-[#0a0a0a] font-bold rounded-xl transition-all hover:scale-105 shadow-lg"
                   >
-                    📢 Publique seu anúncio grátis
-                  </Link>
-                  <Link
-                    href="/blog"
-                    className="px-6 py-3 border border-amber-500/50 text-amber-400 hover:bg-amber-500/10 rounded-full transition-colors"
-                  >
-                    📰 Visite nosso Blog
+                    Ver Detalhes e Fazer Lance
                   </Link>
                 </div>
-              </div>
-
-              {/* Right Categories (4) */}
-              <div className="lg:col-span-3 space-y-3">
-                {mainCategories.slice(4, 8).map((cat) => (
-                  <a
-                    key={cat.href}
-                    href={cat.href}
-                    className="group block p-4 bg-[#0d0d0d] border border-[#1f1f1f] rounded-lg hover:border-amber-500/50 hover:bg-[#111] transition-all"
-                  >
-                    <div className="flex items-start gap-3">
-                      <span className="text-2xl">{cat.icon}</span>
-                      <div className="flex-1 min-w-0">
-                        <h3 className="font-semibold text-amber-400 group-hover:text-amber-300">
-                          {cat.title}
-                        </h3>
-                        <p className="text-xs text-[#8a8a6a] mt-0.5">{cat.subtitle}</p>
-                      </div>
-                    </div>
-                  </a>
-                ))}
-              </div>
-            </div>
-
-            {/* Animated Carcará Bird (Smaller) */}
-            <div className="mb-8">
-              <CarcaraScene />
-            </div>
+              </article>
+            ))}
           </div>
         </section>
 
-        {/* Sítios Carcará Super Highlight */}
-        <section className="py-12 px-4 sm:px-6 bg-gradient-to-b from-[#0f0f0f] to-[#0d0d0d]">
-          <div className="max-w-7xl mx-auto">
-            <div className="text-center mb-8">
-              <h2 className="text-3xl font-bold text-amber-400 mb-2">
-                🦅 Sítios Carcará
-              </h2>
-              <p className="text-[#bfa97a]">
-                Projeto especial de imóveis rurais premium
-              </p>
-              <Link 
-                href="https://proper.publimicro.com.br/rural"
-                className="inline-block mt-3 text-amber-500 hover:text-amber-400 underline"
-              >
-                Ver todos os sítios disponíveis →
-              </Link>
-            </div>
-            
-            {/* Carcará properties will be loaded here */}
-            <div className="bg-[#0a0a0a] border border-amber-500/20 rounded-xl p-8 text-center">
-              <p className="text-[#8a8a6a]">
-                Propriedades rurais exclusivas carregando...
-              </p>
-            </div>
+        {/* Featured Sitios from Supabase */}
+        <section className="px-6 py-12 max-w-7xl mx-auto mr-64">
+          <div className="flex items-center justify-between mb-8 flex-wrap gap-4">
+            <h3 className="text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-[#B7791F] to-[#CD7F32]">
+              Recomendados para você
+            </h3>
+            <Link
+              href="/anunciar"
+              className="px-8 py-4 bg-gradient-to-r from-[#5F7161] to-[#0D7377] hover:from-[#0D7377] hover:to-[#5F7161] text-[#f2e6b1] font-bold rounded-full transition-all hover:scale-105 shadow-xl"
+            >
+              📢 Publicar seu anúncio grátis
+            </Link>
           </div>
-        </section>
 
-        {/* Property Highlights */}
-        <PropertyHighlights />
-
-        {/* Bottom Info Section */}
-        <section className="py-12 px-4 sm:px-6 bg-[#0a0a0a] border-t border-[#1f1f1f]">
-          <div className="max-w-7xl mx-auto">
-            <div className="grid md:grid-cols-3 gap-8 text-center">
-              <div>
-                <div className="text-4xl mb-3">🔒</div>
-                <h3 className="font-semibold text-amber-400 mb-2">Segurança</h3>
-                <p className="text-sm text-[#8a8a6a]">
-                  Anúncios verificados e transações protegidas
-                </p>
-              </div>
-              <div>
-                <div className="text-4xl mb-3">⚡</div>
-                <h3 className="font-semibold text-amber-400 mb-2">Rapidez</h3>
-                <p className="text-sm text-[#8a8a6a]">
-                  Encontre o que procura em segundos
-                </p>
-              </div>
-              <div>
-                <div className="text-4xl mb-3">⭐</div>
-                <h3 className="font-semibold text-amber-400 mb-2">Qualidade</h3>
-                <p className="text-sm text-[#8a8a6a]">
-                  Curadoria premium e suporte dedicado
-                </p>
-              </div>
+          {loading ? (
+            <div className="flex items-center justify-center py-20">
+              <div className="animate-spin rounded-full h-16 w-16 border-4 border-[#FF6B35] border-t-transparent"></div>
             </div>
-          </div>
+          ) : sitios.length > 0 ? (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+              {sitios.map((sitio) => (
+                <article
+                  key={sitio.id}
+                  className="bg-gradient-to-br from-[#1a1a1a] to-[#0d0d0d] border-2 border-[#2a2a1a] rounded-2xl overflow-hidden hover:border-[#B7791F] hover:shadow-xl hover:shadow-[#B7791F]/20 transition-all"
+                >
+                  <div className="relative aspect-video">
+                    <Image
+                      src={sitio.fotos?.[0] || '/placeholder.jpg'}
+                      alt={sitio.nome}
+                      fill
+                      className="object-cover hover:scale-105 transition-transform duration-500"
+                      unoptimized
+                    />
+                  </div>
+                  <div className="p-6">
+                    <h4 className="text-2xl font-bold text-[#B7791F] mb-2">{sitio.nome}</h4>
+                    <p className="text-[#676767] text-sm mb-3">📍 {sitio.localizacao}</p>
+                    <p className="text-[#d8c68e] text-xl font-semibold">
+                      {sitio.preco ? `R$ ${sitio.preco.toLocaleString('pt-BR')}` : 'A negociar'}
+                    </p>
+                  </div>
+                </article>
+              ))}
+            </div>
+          ) : (
+            <div className="text-center py-20">
+              <p className="text-[#676767] text-xl">Nenhum imóvel em destaque no momento.</p>
+              <p className="text-[#676767] text-sm mt-2">Verifique novamente em breve!</p>
+            </div>
+          )}
         </section>
 
         {/* Footer */}
-        <footer className="bg-[#080808] border-t border-[#1f1f1f] py-8 px-4 sm:px-6">
+        <footer className="mt-20 bg-[#0a0a0c] border-t-2 border-[#2a2a1a] py-12 px-6 mr-64">
           <div className="max-w-7xl mx-auto">
-            <div className="grid md:grid-cols-4 gap-8 mb-8">
-              <div>
-                <h3 className="font-semibold text-amber-400 mb-3">Categorias</h3>
-                <ul className="space-y-2 text-sm text-[#8a8a6a]">
-                  <li><a href="https://proper.publimicro.com.br" className="hover:text-amber-400">Imóveis</a></li>
-                  <li><a href="https://motors.publimicro.com.br" className="hover:text-amber-400">Veículos</a></li>
-                  <li><a href="https://machina.publimicro.com.br" className="hover:text-amber-400">Máquinas</a></li>
-                  <li><a href="https://tudo.publimicro.com.br" className="hover:text-amber-400">Ver todas</a></li>
-                </ul>
-              </div>
-              
-              <div>
-                <h3 className="font-semibold text-amber-400 mb-3">Suporte</h3>
-                <ul className="space-y-2 text-sm text-[#8a8a6a]">
-                  <li><Link href="/ajuda" className="hover:text-amber-400">Central de Ajuda</Link></li>
-                  <li><Link href="/como-anunciar" className="hover:text-amber-400">Como Anunciar</Link></li>
-                  <li><Link href="/seguranca" className="hover:text-amber-400">Segurança</Link></li>
-                  <li><Link href="/faq" className="hover:text-amber-400">FAQ</Link></li>
-                </ul>
-              </div>
-              
-              <div>
-                <h3 className="font-semibold text-amber-400 mb-3">Empresa</h3>
-                <ul className="space-y-2 text-sm text-[#8a8a6a]">
-                  <li><Link href="/sobre" className="hover:text-amber-400">Sobre Nós</Link></li>
-                  <li><Link href="/blog" className="hover:text-amber-400">Blog</Link></li>
-                  <li><Link href="/contato" className="hover:text-amber-400">Contato</Link></li>
-                  <li><Link href="/trabalhe-conosco" className="hover:text-amber-400">Trabalhe Conosco</Link></li>
-                </ul>
-              </div>
-              
-              <div>
-                <h3 className="font-semibold text-amber-400 mb-3">Legal</h3>
-                <ul className="space-y-2 text-sm text-[#8a8a6a]">
-                  <li><Link href="/termos" className="hover:text-amber-400">Termos de Uso</Link></li>
-                  <li><Link href="/privacidade" className="hover:text-amber-400">Privacidade</Link></li>
-                  <li><Link href="/cookies" className="hover:text-amber-400">Cookies</Link></li>
-                  <li><Link href="/lgpd" className="hover:text-amber-400">LGPD</Link></li>
-                </ul>
-              </div>
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-10 mb-10">
+              <CategoryList
+                title="PubliProper"
+                items={[
+                  { label: 'Urban', href: '/proper/urban' },
+                  { label: 'Rural', href: '/proper/rural' },
+                ]}
+              />
+              <CategoryList
+                title="PubliMotors"
+                items={[
+                  { label: 'Auto', href: '/motors/auto' },
+                  { label: 'Cargo', href: '/motors/cargo' },
+                  { label: 'Moto', href: '/motors/moto' },
+                ]}
+              />
+              <CategoryList
+                title="PubliHeavyAgro"
+                items={[
+                  { label: 'Máquinas', href: '/machina' },
+                  { label: 'Agroindústria', href: '/machina/agroindustry' },
+                ]}
+              />
+              <CategoryList
+                title="PubliTudo"
+                items={[
+                  { label: 'Marketplace', href: '/tudo' },
+                  { label: 'PubliYellow', href: '/tudo/yellow' },
+                  { label: 'PubliFera', href: '/tudo/coisas' },
+                ]}
+              />
             </div>
-            
-            <div className="pt-6 border-t border-[#1f1f1f] text-center text-sm text-[#6a6a6a]">
-              <p>© {new Date().getFullYear()} PubliMicro. Todos os direitos reservados.</p>
+            <div className="pt-8 border-t border-[#2a2a1a] text-center text-sm text-[#676767]">
+              <p>© {new Date().getFullYear()} PubliMicro – Todos os direitos reservados.</p>
+              <p className="mt-2">
+                <Link href="/termos" className="hover:text-[#FF6B35] transition-colors">
+                  Termos de Uso
+                </Link>
+                {' • '}
+                <Link href="/privacidade" className="hover:text-[#FF6B35] transition-colors">
+                  Privacidade
+                </Link>
+                {' • '}
+                <Link href="/contato" className="hover:text-[#FF6B35] transition-colors">
+                  Contato
+                </Link>
+              </p>
             </div>
           </div>
         </footer>
-      </main>
+      </div>
+    </main>
+  );
+}
 
-      {/* WhatsApp Floating Button (appears on all pages) */}
-      <WhatsAppButton />
-    </>
-  )
+// Helper Components
+function CategoryList({
+  title,
+  items,
+}: {
+  title: string;
+  items: { label: string; href: string }[];
+}) {
+  return (
+    <div>
+      <h4 className="font-bold text-[#B7791F] mb-4 text-lg">{title}</h4>
+      <ul className="space-y-2">
+        {items.map((item) => (
+          <li key={item.label}>
+            <Link
+              href={item.href}
+              className="text-[#cfcfcf] hover:text-[#FF6B35] transition-colors text-sm"
+            >
+              {item.label}
+            </Link>
+          </li>
+        ))}
+      </ul>
+    </div>
+  );
 }

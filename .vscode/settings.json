@@ -1,4 +1,4 @@
-﻿{
+{
   "typescript.tsdk": "node_modules/typescript/lib",
   "files.associations": {
     ".eslintrc.cjs": "javascript",

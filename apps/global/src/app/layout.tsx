@@ -1,11 +1,13 @@
+import { TopNav } from "@publimicro/ui";
 import "./globals.css";
 
-export const metadata = { title: "Publimicro — global" };
+export const metadata = { title: "PubliGlobal — Comércio Internacional" };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="pt-BR">
-      <body className="min-h-screen bg-black text-gray-100">
+      <body className="min-h-screen bg-[#0a0a0a] text-[#e6c86b]">
+        <TopNav brand="PubliGlobal" brandHref="/" searchTarget="main" />
         {children}
       </body>
     </html>
