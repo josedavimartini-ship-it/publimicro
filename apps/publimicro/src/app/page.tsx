@@ -162,7 +162,7 @@ export default function HomePage() {
       {/* Main Content - No right margin needed, sidebar is on RIGHT */}
       <div className="relative">
         {/* Hero Section - Ecosystem Intro */}
-        <section className="text-center pt-12 pb-8 px-6 mr-64">
+        <section className="text-center pt-12 pb-8 px-6">
           <h1 className="text-5xl md:text-6xl lg:text-7xl font-bold mb-4 text-transparent bg-clip-text bg-gradient-to-r from-[#B7791F] via-[#CD7F32] to-[#B87333] leading-tight">
             O Ecossistema PubliMicro
           </h1>
@@ -175,7 +175,7 @@ export default function HomePage() {
         </section>
 
         {/* Sections Grid - 8 Full-Width Buttons with Background Images */}
-        <section className="px-6 py-8 max-w-7xl mx-auto mr-64">
+        <section className="px-6 py-8 max-w-7xl mx-auto">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
             {sections.map((section) => (
               <Link
@@ -205,7 +205,7 @@ export default function HomePage() {
         </section>
 
         {/* SUPER HIGHLIGHT - Sítios Carcará with BIRD */}
-        <section className="px-6 py-12 max-w-7xl mx-auto mr-64">
+        <section className="px-6 py-12 max-w-7xl mx-auto">
           <div className="relative rounded-3xl overflow-hidden shadow-2xl border-4 border-[#FF6B35]/40 min-h-[500px]">
             <Image
               src="https://irrzpwzyqcubhhjeuakc.supabase.co/storage/v1/object/public/imagens-sitios/pordosol4mediumearthwide.jpg"
@@ -218,7 +218,7 @@ export default function HomePage() {
             <div className="absolute inset-0 bg-gradient-to-r from-[#0a0a0a]/95 via-[#0a0a0a]/70 to-transparent" />
             
             {/* Bird Animation - positioned to avoid sidebar overlap */}
-            <div className="absolute top-8 right-8 w-[250px] h-[250px] z-30">
+            <div className="absolute top-8 left-8 w-[200px] h-[250px] z-30">
               <Carcara3D scale={1.25} />
             </div>
 
@@ -300,7 +300,7 @@ export default function HomePage() {
         </section>
 
         {/* Featured Sitios from Supabase */}
-        <section className="px-6 py-12 max-w-7xl mx-auto mr-64">
+        <section className="px-6 py-12 max-w-7xl mx-auto">
           <div className="flex items-center justify-between mb-8 flex-wrap gap-4">
             <h3 className="text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-[#B7791F] to-[#CD7F32]">
               Recomendados para você
@@ -352,7 +352,7 @@ export default function HomePage() {
         </section>
 
         {/* Footer */}
-        <footer className="mt-20 bg-[#0a0a0c] border-t-2 border-[#2a2a1a] py-12 px-6 mr-64">
+        <footer className="mt-20 bg-[#0a0a0c] border-t-2 border-[#2a2a1a] py-12 px-6">
           <div className="max-w-7xl mx-auto">
             <div className="grid grid-cols-2 md:grid-cols-4 gap-10 mb-10">
               <CategoryList
@@ -435,3 +435,4 @@ function CategoryList({
     </div>
   );
 }
+
