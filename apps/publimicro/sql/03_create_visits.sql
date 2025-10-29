@@ -1,4 +1,4 @@
--- VISITS: scheduling for property visits or video meetings
+﻿-- VISITS: scheduling for property visits or video meetings
 CREATE TABLE IF NOT EXISTS public.visits (
   id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
   ad_id uuid NOT NULL REFERENCES public.ads(id) ON DELETE CASCADE,
@@ -6,9 +6,9 @@ CREATE TABLE IF NOT EXISTS public.visits (
   guest_name text,
   guest_email text,
   guest_phone text,
-  visit_type text DEFAULT 'in_person', -- in_person | video
+  visit_type text DEFAULT 'in_person',
   scheduled_at timestamptz,
-  status text DEFAULT 'requested', -- requested | confirmed | completed | cancelled
+  status text DEFAULT 'requested',
   verification_passed boolean DEFAULT false,
   notes text,
   created_at timestamptz DEFAULT now(),
@@ -17,15 +17,16 @@ CREATE TABLE IF NOT EXISTS public.visits (
 
 ALTER TABLE public.visits ENABLE ROW LEVEL SECURITY;
 
+DROP POLICY IF EXISTS "Users can read own visits" ON public.visits;
 CREATE POLICY "Users can read own visits"
   ON public.visits FOR SELECT
   USING (auth.uid() = user_id);
 
+DROP POLICY IF EXISTS "Users can insert own visits" ON public.visits;
 CREATE POLICY "Users can insert own visits"
   ON public.visits FOR INSERT
   WITH CHECK (auth.uid() = user_id);
 
--- Auto-confirm verified visits
 CREATE OR REPLACE FUNCTION public.auto_confirm_visits()
 RETURNS trigger AS $$
 BEGIN
@@ -44,7 +45,6 @@ CREATE TRIGGER trg_auto_confirm_visits
   AFTER INSERT ON public.visits
   FOR EACH ROW EXECUTE PROCEDURE public.auto_confirm_visits();
 
--- Notify new visits
 CREATE OR REPLACE FUNCTION public.notify_new_visit()
 RETURNS trigger AS $$
 BEGIN

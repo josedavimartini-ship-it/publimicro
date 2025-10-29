@@ -1,4 +1,4 @@
--- BIDS: accepted proposals / bid history
+﻿-- BIDS: accepted proposals / bid history
 CREATE TABLE IF NOT EXISTS public.bids (
   id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
   ad_id uuid NOT NULL REFERENCES public.ads(id) ON DELETE CASCADE,
@@ -8,7 +8,6 @@ CREATE TABLE IF NOT EXISTS public.bids (
   created_at timestamptz DEFAULT now()
 );
 
--- Trigger to auto-update ad.current_bid when a bid is inserted
 CREATE OR REPLACE FUNCTION public.update_current_bid()
 RETURNS trigger AS $$
 BEGIN
@@ -25,6 +24,5 @@ CREATE TRIGGER trg_update_bid
   AFTER INSERT ON public.bids
   FOR EACH ROW EXECUTE PROCEDURE public.update_current_bid();
 
--- Index for bid history
-CREATE INDEX idx_bids_ad ON public.bids(ad_id);
-CREATE INDEX idx_bids_user ON public.bids(user_id);
+CREATE INDEX IF NOT EXISTS idx_bids_ad ON public.bids(ad_id);
+CREATE INDEX IF NOT EXISTS idx_bids_user ON public.bids(user_id);

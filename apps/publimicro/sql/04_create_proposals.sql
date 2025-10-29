@@ -1,26 +1,27 @@
--- PROPOSALS: purchase/bid offers
+﻿-- PROPOSALS: purchase/bid offers
 CREATE TABLE IF NOT EXISTS public.proposals (
   id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
   ad_id uuid NOT NULL REFERENCES public.ads(id) ON DELETE CASCADE,
   user_id uuid NOT NULL REFERENCES public.profiles(id) ON DELETE CASCADE,
   visit_id uuid REFERENCES public.visits(id) ON DELETE SET NULL,
   amount numeric NOT NULL CHECK (amount > 0),
-  status text DEFAULT 'pending', -- pending | accepted | rejected | cancelled
+  status text DEFAULT 'pending',
   message text,
   created_at timestamptz DEFAULT now()
 );
 
 ALTER TABLE public.proposals ENABLE ROW LEVEL SECURITY;
 
+DROP POLICY IF EXISTS "User can read own proposals" ON public.proposals;
 CREATE POLICY "User can read own proposals"
   ON public.proposals FOR SELECT
   USING (auth.uid() = user_id);
 
+DROP POLICY IF EXISTS "User can insert proposals" ON public.proposals;
 CREATE POLICY "User can insert proposals"
   ON public.proposals FOR INSERT
   WITH CHECK (auth.uid() = user_id);
 
--- Auto-accept proposals above threshold
 CREATE OR REPLACE FUNCTION public.auto_accept_proposals()
 RETURNS trigger AS $$
 DECLARE
@@ -30,7 +31,7 @@ BEGIN
   SELECT COALESCE(current_bid, price, 0) INTO current_price 
   FROM public.ads WHERE id = new.ad_id;
   
-  threshold := current_price * 1.10; -- accept if >=10% higher
+  threshold := current_price * 1.10;
 
   IF new.amount >= threshold THEN
     UPDATE public.proposals SET status = 'accepted' WHERE id = new.id;
