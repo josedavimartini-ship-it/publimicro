@@ -23,7 +23,7 @@ const worldRegions = [
 
 export default function WorldRegionsSidebar() {
   return (
-<aside className="fixed left-0 top-20 h-[calc(100vh-5rem)] w-64 bg-[#0c0c0f]/95 backdrop-blur-md border-r-2 border-[#2a2a1a] p-5 overflow-y-auto z-40 shadow-2xl">      {/* Language Dropdown */}
+<aside className="fixed right-0 top-20 h-[calc(100vh-5rem)] w-64 bg-[#0c0c0f]/95 backdrop-blur-md border-l-2 border-[#2a2a1a] p-5 overflow-y-auto z-40 shadow-2xl">      {/* Language Dropdown */}
             <select
         className="w-full mb-6 px-4 py-3 bg-[#1a1a1a] border-2 border-[#3a3a2a] text-[#f2e6b1] rounded-lg focus:border-[#00e6cc] focus:outline-none transition-all"
         defaultValue="pt-BR" onChange={(e) => alert(`Troca de idioma para ${e.target.value} - Em breve!`)}
@@ -87,3 +87,4 @@ export default function WorldRegionsSidebar() {
     </aside>
   );
 }
+
