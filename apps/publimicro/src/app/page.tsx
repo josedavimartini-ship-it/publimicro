@@ -87,7 +87,7 @@ export default function HomePage() {
               >
                 <div
                   className="absolute inset-0 bg-cover bg-center transition-transform duration-700 group-hover:scale-110"
-                  style={{ backgroundImage: url(`"${section.bgImage}`") }}
+                  style={{ backgroundImage: [url(${section.bgImage})](http://_vscodecontentref_/2) }}
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-[#0a0a0a]/95 via-[#0a0a0a]/60 to-transparent" />
                 <div className="absolute inset-0 flex flex-col items-center justify-center p-6 text-center">
