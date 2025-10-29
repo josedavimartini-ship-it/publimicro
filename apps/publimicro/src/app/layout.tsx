@@ -14,13 +14,10 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <body className="min-h-screen bg-[#0a0a0a] text-[#e6c86b] antialiased">
         <TopNav brand="PubliMicro" brandHref="/" searchTarget="local" />
         <WorldRegionsSidebar />
-        {/* Global wrapper to keep content clear of the RIGHT fixed sidebar */}
-        <div className="relative mr-64">
-          <main className="relative mr-64">{children}</main>
-        </div>
+        {/* Global wrapper: reserve space for RIGHT fixed sidebar (w-64 = 256px) */}
+        <main className="relative mr-64">{children}</main>
         <WhatsAppButton />
       </body>
     </html>
   );
 }
-
