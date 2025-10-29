@@ -6,7 +6,7 @@ export default function MarinePage() {
     <main className="min-h-screen bg-gradient-to-b from-[#0a0a0a] via-[#0d0d0d] to-[#0a0a0a] py-20 px-6 ml-64">
       <div className="max-w-7xl mx-auto text-center">
         <h1 className="text-6xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-[#0D7377] via-[#14FFEC] to-[#0D7377] mb-6">
-          ⛵ PubliMarine
+           PubliMarine
         </h1>
         <p className="text-2xl text-[#d8c68e] mb-8">Náutica, Pesca & Aventura</p>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mt-12">
