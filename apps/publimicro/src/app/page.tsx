@@ -61,7 +61,7 @@ export default function HomePage() {
   return (
     <main className="relative min-h-screen bg-gradient-to-b from-[#0a0a0a] via-[#0d0d0d] to-[#0a0a0a]">
       {/* Reserve space on the RIGHT for the fixed sidebar */}
-      <div className="relative mr-64">
+      <div className="relative">
         {/* Hero Section */}
         <section className="text-center pt-12 pb-8 px-6">
           <h1 className="text-5xl md:text-6xl lg:text-7xl font-bold mb-4 text-transparent bg-clip-text bg-gradient-to-r from-[#B7791F] via-[#CD7F32] to-[#B87333] leading-tight">
