@@ -7,7 +7,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { 
   Home, Car, Tractor, Ship, Globe, 
-  Plane, Share2, ShoppingBag 
+  Plane, Share2, ShoppingBag, Sparkles
 } from "lucide-react";
 
 interface Sitio {
@@ -24,43 +24,24 @@ interface Sitio {
 export default function HomePage() {
   const [sitios, setSitios] = useState<Sitio[]>([]);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     async function fetchSitios() {
       try {
-        console.log(" Fetching featured sítios from Supabase...");
-        
-        // Try to fetch WITH destaque filter first
-        let { data, error: fetchError } = await supabase
+        let { data, error } = await supabase
           .from("sitios")
           .select("*")
           .eq("destaque", true)
           .limit(6);
 
-        // If no results or error, try without filter (show ANY sitios)
-        if (!data || data.length === 0 || fetchError) {
-          console.warn(" No featured sitios found, fetching all...");
-          const fallback = await supabase
-            .from("sitios")
-            .select("*")
-            .limit(6);
-          
+        if (!data || data.length === 0 || error) {
+          const fallback = await supabase.from("sitios").select("*").limit(6);
           data = fallback.data;
-          fetchError = fallback.error;
         }
 
-        if (fetchError) {
-          console.error("❌ Supabase error:", fetchError);
-          setError(fetchError.message);
-          setSitios([]);
-        } else {
-          console.log("✅ Fetched sitios:", data?.length || 0);
-          setSitios(data || []);
-        }
-      } catch (err: any) {
-        console.error(" Exception fetching sítios:", err);
-        setError(err.message);
+        setSitios(data || []);
+      } catch (err) {
+        console.error(err);
         setSitios([]);
       } finally {
         setLoading(false);
@@ -69,118 +50,120 @@ export default function HomePage() {
     fetchSitios();
   }, []);
 
-  const sections = [
-    { 
-      name: "PubliProper", 
-      icon: Home, 
-      href: "/proper", 
-      bgImage: "/images/sections/publiProper-bg.jpg", 
-      description: "Imóveis Urbanos & Rurais" 
-    },
-    { 
-      name: "PubliMotors", 
-      icon: Car, 
-      href: "/motors", 
-      bgImage: "/images/sections/publiMotors-bg.jpg", 
-      description: "Veículos e Transporte" 
-    },
-    { 
-      name: "PubliHeavyAgro", 
-      icon: Tractor, 
-      href: "/machina", 
-      bgImage: "/images/sections/publiHeavyAgro-bg.jpg", 
-      description: "Máquinas & Agroindústria" 
-    },
-    { 
-      name: "PubliMarine", 
-      icon: Ship, 
-      href: "/marine", 
-      bgImage: "/images/sections/publiMarine-bg.jpg", 
-      description: "Náutica, Pesca & Aventura" 
-    },
-    { 
-      name: "PubliGlobal", 
-      icon: Globe, 
-      href: "/global", 
-      bgImage: "/images/sections/publiGlobal-bg.jpg", 
-      description: "Comércio Internacional" 
-    },
-    { 
-      name: "PubliJourney", 
-      icon: Plane, 
-      href: "/journey", 
-      bgImage: "/images/sections/publiJourney-bg.jpg", 
-      description: "Turismo & Viagens" 
-    },
-    { 
-      name: "PubliShare", 
-      icon: Share2, 
-      href: "/share", 
-      bgImage: "/images/sections/publiShare-bg.jpg", 
-      description: "Economia Colaborativa" 
-    },
-    { 
-      name: "PubliTudo", 
-      icon: ShoppingBag, 
-      href: "/tudo", 
-      bgImage: "/images/sections/publiTudo-bg.jpg", 
-      description: "Marketplace & Serviços" 
-    },
+  // Split sections: 2 left, 2 right, 4 bottom
+  const leftSections = [
+    { name: "PubliProper", icon: Home, href: "/proper", bgImage: "/images/sections/publiProper-bg.jpg" },
+    { name: "PubliMotors", icon: Car, href: "/motors", bgImage: "/images/sections/publiMotors-bg.jpg" },
   ];
 
-  const displaySitios = Array.isArray(sitios) ? sitios.slice(0, 6) : [];
+  const rightSections = [
+    { name: "PubliMachina", icon: Tractor, href: "/machina", bgImage: "/images/sections/publiHeavyAgro-bg.jpg" },
+    { name: "PubliMarine", icon: Ship, href: "/marine", bgImage: "/images/sections/publiMarine-bg.jpg" },
+  ];
+
+  const bottomSections = [
+    { name: "PubliGlobal", icon: Globe, href: "/global", bgImage: "/images/sections/publiGlobal-bg.jpg" },
+    { name: "PubliJourney", icon: Plane, href: "/journey", bgImage: "/images/sections/publiJourney-bg.jpg" },
+    { name: "PubliShare", icon: Share2, href: "/share", bgImage: "/images/sections/publiShare-bg.jpg" },
+    { name: "PubliTudo", icon: ShoppingBag, href: "/tudo", bgImage: "/images/sections/publiTudo-bg.jpg" },
+  ];
 
   return (
-    <main className="relative min-h-screen bg-gradient-to-b from-[#0a0a0a] via-[#0d0d0d] to-[#0a0a0a]">
-      <div className="relative max-w-7xl mx-auto">
-        {/* Hero Section */}
-        <section className="text-center pt-12 pb-8 px-6">
-          <h1 className="text-5xl md:text-6xl lg:text-7xl font-bold mb-4 text-transparent bg-clip-text bg-gradient-to-r from-[#B7791F] via-[#CD7F32] to-[#B87333] leading-tight">
-            O Ecossistema PubliMicro
-          </h1>
-          <p className="text-[#d8c68e] text-xl md:text-2xl mb-2 leading-relaxed">
-            Um universo de negócios, tecnologia e oportunidades
-          </p>
-          <p className="text-[#676767] text-lg">
-            <span className="text-[#FF6B35] text-3xl font-bold"></span> do campo à cidade, do local ao global{" "}
-            <span className="text-[#FF6B35] text-3xl font-bold"></span>
-          </p>
-        </section>
+    <main className="min-h-screen bg-gradient-to-b from-[#0a0a0a] via-[#0d0d0d] to-[#0a0a0a]">
+      <div className="max-w-7xl mx-auto px-6">
+        
+        {/* HERO SECTION WITH PROPER LAYOUT */}
+        <section className="py-16">
+          <div className="grid grid-cols-12 gap-6 items-center">
+            
+            {/* LEFT 2 BUTTONS */}
+            <div className="col-span-12 md:col-span-3 grid grid-cols-1 gap-4">
+              {leftSections.map((section) => {
+                const IconComponent = section.icon;
+                return (
+                  <Link
+                    key={section.name}
+                    href={section.href}
+                    className="group relative h-32 rounded-2xl overflow-hidden shadow-xl hover:shadow-2xl hover:shadow-[#FF6B35]/30 transition-all duration-500 hover:scale-105"
+                  >
+                    <div
+                      className="absolute inset-0 bg-cover bg-center transition-transform duration-700 group-hover:scale-110"
+                      style={{ backgroundImage: `url(${section.bgImage})` }}
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-[#0a0a0a]/95 via-[#0a0a0a]/70 to-transparent" />
+                    <div className="absolute inset-0 flex flex-col items-center justify-center p-4 text-center">
+                      <IconComponent className="w-10 h-10 text-[#FF6B35] mb-2 group-hover:scale-110 transition-transform" strokeWidth={1.5} />
+                      <h3 className="text-base font-bold text-[#B7791F] group-hover:text-[#FF6B35] transition-colors">
+                        {section.name}
+                      </h3>
+                    </div>
+                  </Link>
+                );
+              })}
+            </div>
 
-        {/* Sections Grid - WITH ICONS */}
-        <section className="px-6 py-8">
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
-            {sections.map((section) => {
+            {/* CENTER TITLE */}
+            <div className="col-span-12 md:col-span-6 text-center py-8">
+              <h1 className="text-5xl md:text-6xl lg:text-7xl font-bold mb-4 text-transparent bg-clip-text bg-gradient-to-r from-[#B7791F] via-[#CD7F32] to-[#B87333] leading-tight">
+                O Ecossistema PubliMicro
+              </h1>
+              <p className="text-[#d8c68e] text-xl md:text-2xl mb-3 leading-relaxed">
+                Um universo de negócios, tecnologia e oportunidades
+              </p>
+              <div className="flex items-center justify-center gap-3 text-[#676767] text-lg">
+                <Sparkles className="w-5 h-5 text-[#FF6B35]" />
+                <p>do campo à cidade, do local ao global</p>
+                <Sparkles className="w-5 h-5 text-[#FF6B35]" />
+              </div>
+            </div>
+
+            {/* RIGHT 2 BUTTONS */}
+            <div className="col-span-12 md:col-span-3 grid grid-cols-1 gap-4">
+              {rightSections.map((section) => {
+                const IconComponent = section.icon;
+                return (
+                  <Link
+                    key={section.name}
+                    href={section.href}
+                    className="group relative h-32 rounded-2xl overflow-hidden shadow-xl hover:shadow-2xl hover:shadow-[#FF6B35]/30 transition-all duration-500 hover:scale-105"
+                  >
+                    <div
+                      className="absolute inset-0 bg-cover bg-center transition-transform duration-700 group-hover:scale-110"
+                      style={{ backgroundImage: `url(${section.bgImage})` }}
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-[#0a0a0a]/95 via-[#0a0a0a]/70 to-transparent" />
+                    <div className="absolute inset-0 flex flex-col items-center justify-center p-4 text-center">
+                      <IconComponent className="w-10 h-10 text-[#FF6B35] mb-2 group-hover:scale-110 transition-transform" strokeWidth={1.5} />
+                      <h3 className="text-base font-bold text-[#B7791F] group-hover:text-[#FF6B35] transition-colors">
+                        {section.name}
+                      </h3>
+                    </div>
+                  </Link>
+                );
+              })}
+            </div>
+          </div>
+
+          {/* BOTTOM 4 BUTTONS - FULL WIDTH */}
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-6 mt-8">
+            {bottomSections.map((section) => {
               const IconComponent = section.icon;
               return (
                 <Link
                   key={section.name}
                   href={section.href}
-                  className="group relative h-48 rounded-2xl overflow-hidden shadow-xl hover:shadow-2xl hover:shadow-[#FF6B35]/30 transition-all duration-500 hover:scale-105"
+                  className="group relative h-40 rounded-2xl overflow-hidden shadow-xl hover:shadow-2xl hover:shadow-[#FF6B35]/30 transition-all duration-500 hover:scale-105"
                 >
-                  {/* Background Image */}
                   <div
                     className="absolute inset-0 bg-cover bg-center transition-transform duration-700 group-hover:scale-110"
                     style={{ backgroundImage: `url(${section.bgImage})` }}
                   />
-                  
-                  {/* Dark Overlay */}
-                  <div className="absolute inset-0 bg-gradient-to-t from-[#0a0a0a]/95 via-[#0a0a0a]/60 to-transparent" />
-                  
-                  {/* Content */}
-                  <div className="absolute inset-0 flex flex-col items-center justify-center p-6 text-center">
-                    {/* Icon */}
-                    <div className="mb-3 text-[#FF6B35] transform group-hover:scale-110 transition-transform">
-                      <IconComponent className="w-16 h-16" strokeWidth={1.5} />
-                    </div>
-                    
-                    {/* Title */}
-                    <h3 className="text-xl font-bold text-[#B7791F] group-hover:text-[#FF6B35] transition-colors mb-1">
+                  <div className="absolute inset-0 bg-gradient-to-t from-[#0a0a0a]/95 via-[#0a0a0a]/70 to-transparent" />
+                  <div className="absolute inset-0 flex flex-col items-center justify-center p-4 text-center">
+                    <IconComponent className="w-12 h-12 text-[#FF6B35] mb-3 group-hover:scale-110 transition-transform" strokeWidth={1.5} />
+                    <h3 className="text-lg font-bold text-[#B7791F] group-hover:text-[#FF6B35] transition-colors">
                       {section.name}
                     </h3>
-                    
-                    {/* Description */}
-                    <p className="text-sm text-[#676767]">{section.description}</p>
                   </div>
                 </Link>
               );
@@ -188,34 +171,40 @@ export default function HomePage() {
           </div>
         </section>
 
-        {/* SUPER HIGHLIGHT - Sítios Carcará with BIRD */}
-        <section className="px-6 py-12">
-          <div className="relative rounded-3xl overflow-hidden shadow-2xl border-4 border-[#FF6B35]/40 min-h-[500px]">
+        {/* SUPER HIGHLIGHT - Sítios Carcará */}
+        <section className="py-16">
+          <div className="relative rounded-3xl overflow-hidden shadow-2xl border-4 border-[#FF6B35]/40 min-h-[600px] group">
             <Image
               src="https://irrzpwzyqcubhhjeuakc.supabase.co/storage/v1/object/public/imagens-sitios/pordosol4mediumearthwide.jpg"
-              alt="Sítios Carcará Background"
+              alt="Sítios Carcará"
               fill
-              className="object-cover"
+              className="object-cover group-hover:scale-105 transition-transform duration-700"
               priority
               unoptimized
             />
-            <div className="absolute inset-0 bg-gradient-to-r from-[#0a0a0a]/95 via-[#0a0a0a]/70 to-transparent" />
+            <div className="absolute inset-0 bg-gradient-to-r from-[#0a0a0a]/95 via-[#0a0a0a]/80 to-transparent" />
 
-            {/* Bird on LEFT */}
-            <div className="absolute top-8 left-8 w-[200px] h-[200px] z-30 hidden md:block">
-              <Carcara3D scale={1} />
+            {/* Bird */}
+            <div className="absolute top-8 left-8 w-[220px] h-[220px] z-30 hidden lg:block">
+              <Carcara3D scale={1.1} />
             </div>
 
-            <div className="relative p-12 md:pl-56 z-20">
-              <div className="inline-flex items-center gap-2 mb-4 px-5 py-2 bg-[#FF6B35]/30 border-2 border-[#FF6B35] rounded-full backdrop-blur-md">
-                <span className="text-[#FF6B35] font-bold text-base tracking-widest uppercase"> Super Destaque</span>
+            <div className="relative p-12 lg:pl-64 z-20">
+              <div className="inline-flex items-center gap-2 mb-6 px-6 py-3 bg-[#FF6B35]/30 border-2 border-[#FF6B35] rounded-full backdrop-blur-md">
+                <Sparkles className="w-5 h-5 text-[#FF6B35] animate-pulse" />
+                <span className="text-[#FF6B35] font-bold text-lg tracking-widest uppercase">Super Destaque</span>
               </div>
-              <h2 className="text-5xl md:text-7xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-[#FF6B35] via-[#FF8C42] to-[#B7791F] mb-6 drop-shadow-2xl max-w-3xl">
-                Sítios Carcará Project
+              
+              <h2 className="text-5xl md:text-7xl lg:text-8xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-[#FF6B35] via-[#FF8C42] to-[#B7791F] mb-6 drop-shadow-2xl leading-tight">
+                Sítios Carcará
               </h2>
+              
               <p className="text-[#d8c68e] text-xl md:text-2xl mb-8 max-w-2xl leading-relaxed">
-                6 propriedades exclusivas às margens da represa. Natureza preservada, infraestrutura completa e lances a partir de R$ 1.050.000.
+                6 propriedades exclusivas às margens da represa de Corumbaíba, GO. 
+                Natureza preservada, infraestrutura completa. 
+                Lances a partir de <span className="text-[#FF6B35] font-bold">R$ 1.050.000</span>
               </p>
+              
               <div className="flex gap-4 flex-wrap">
                 <Link
                   href="/projetos/carcara"
@@ -234,38 +223,14 @@ export default function HomePage() {
           </div>
         </section>
 
-        {/* Featured properties from DB */}
-        <section className="px-6 py-12">
-          <h2 className="text-4xl font-bold text-[#B7791F] mb-8 text-center">Propriedades em Destaque</h2>
-          
-          {loading && (
-            <div className="flex justify-center py-20">
-              <div className="animate-spin rounded-full h-16 w-16 border-4 border-[#FF6B35] border-t-transparent"></div>
-            </div>
-          )}
-
-          {error && !loading && (
-            <div className="text-center py-12 px-6 bg-red-900/20 border-2 border-red-500/50 rounded-xl">
-              <p className="text-red-400 mb-2"> Erro ao carregar propriedades</p>
-              <p className="text-sm text-gray-400">{error}</p>
-            </div>
-          )}
-
-          {!loading && !error && displaySitios.length === 0 && (
-            <div className="text-center py-12 px-6 bg-[#2a2a1a] rounded-xl">
-              <p className="text-[#676767] mb-4">Nenhuma propriedade em destaque no momento.</p>
-              <Link 
-                href="/projetos/carcara"
-                className="inline-block px-6 py-3 bg-[#FF6B35] hover:bg-[#FF8C42] text-[#0a0a0a] font-bold rounded-lg transition-all"
-              >
-                Ver Projeto Sítios Carcará
-              </Link>
-            </div>
-          )}
-
-          {!loading && displaySitios.length > 0 && (
+        {/* Featured Properties */}
+        {!loading && sitios.length > 0 && (
+          <section className="py-16">
+            <h2 className="text-4xl font-bold text-[#B7791F] mb-12 text-center">
+              Propriedades em Destaque
+            </h2>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-              {displaySitios.map((sitio) => (
+              {sitios.slice(0, 6).map((sitio) => (
                 <Link
                   key={sitio.id}
                   href={`/projetos/carcara#${sitio.id}`}
@@ -294,27 +259,20 @@ export default function HomePage() {
                   <div className="p-6">
                     <h3 className="text-2xl font-bold text-[#B7791F] mb-2">{sitio.nome}</h3>
                     {sitio.localizacao && <p className="text-[#676767] mb-4">{sitio.localizacao}</p>}
-                    {typeof sitio.preco === "number" && (
-                      <div className="mb-2">
-                        <span className="text-[#d8c68e]">Preço: </span>
-                        <span className="text-[#FF6B35] font-bold text-xl">R$ {sitio.preco.toLocaleString("pt-BR")}</span>
-                      </div>
-                    )}
                     {typeof sitio.lance_inicial === "number" && (
-                      <div>
-                        <span className="text-[#676767]">Lance inicial: </span>
-                        <span className="text-[#0D7377] font-semibold">R$ {sitio.lance_inicial.toLocaleString("pt-BR")}</span>
+                      <div className="text-[#FF6B35] font-bold text-xl">
+                        Lance: R$ {sitio.lance_inicial.toLocaleString("pt-BR")}
                       </div>
                     )}
                   </div>
                 </Link>
               ))}
             </div>
-          )}
-        </section>
+          </section>
+        )}
 
         {/* Footer */}
-        <footer className="px-6 py-12 mt-20 border-t-2 border-[#2a2a1a]">
+        <footer className="py-12 mt-20 border-t-2 border-[#2a2a1a]">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-8 mb-8">
             <div>
               <h4 className="font-bold text-[#B7791F] mb-4">Imóveis</h4>
