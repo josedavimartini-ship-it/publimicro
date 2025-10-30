@@ -5,6 +5,10 @@ import { supabase } from "@/lib/supabaseClient";
 import { Carcara3D } from "@publimicro/ui";
 import Image from "next/image";
 import Link from "next/link";
+import { 
+  Home, Car, Tractor, Ship, Globe, 
+  Plane, Share2, ShoppingBag 
+} from "lucide-react";
 
 interface Sitio {
   id: string;
@@ -20,23 +24,43 @@ interface Sitio {
 export default function HomePage() {
   const [sitios, setSitios] = useState<Sitio[]>([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     async function fetchSitios() {
       try {
-        const { data, error } = await supabase
+        console.log(" Fetching featured sítios from Supabase...");
+        
+        // Try to fetch WITH destaque filter first
+        let { data, error: fetchError } = await supabase
           .from("sitios")
           .select("*")
-          .eq("destaque", true);
+          .eq("destaque", true)
+          .limit(6);
 
-        if (error) {
-          console.error("Error fetching sítios:", error);
+        // If no results or error, try without filter (show ANY sitios)
+        if (!data || data.length === 0 || fetchError) {
+          console.warn(" No featured sitios found, fetching all...");
+          const fallback = await supabase
+            .from("sitios")
+            .select("*")
+            .limit(6);
+          
+          data = fallback.data;
+          fetchError = fallback.error;
+        }
+
+        if (fetchError) {
+          console.error("❌ Supabase error:", fetchError);
+          setError(fetchError.message);
           setSitios([]);
         } else {
+          console.log("✅ Fetched sitios:", data?.length || 0);
           setSitios(data || []);
         }
-      } catch (err) {
-        console.error("Exception fetching sítios:", err);
+      } catch (err: any) {
+        console.error(" Exception fetching sítios:", err);
+        setError(err.message);
         setSitios([]);
       } finally {
         setLoading(false);
@@ -46,22 +70,69 @@ export default function HomePage() {
   }, []);
 
   const sections = [
-    { name: "PubliProper", icon: "", href: "/proper", bgImage: "/images/sections/publiProper-bg.jpg", description: "Imóveis Urbanos & Rurais" },
-    { name: "PubliMotors", icon: "", href: "/motors", bgImage: "/images/sections/publiMotors-bg.jpg", description: "Veículos e Transporte" },
-    { name: "PubliHeavyAgro", icon: "", href: "/machina", bgImage: "/images/sections/publiHeavyAgro-bg.jpg", description: "Máquinas & Agroindústria" },
-    { name: "PubliMarine", icon: "", href: "/marine", bgImage: "/images/sections/publiMarine-bg.jpg", description: "Náutica, Pesca & Aventura" },
-    { name: "PubliGlobal", icon: "", href: "/global", bgImage: "/images/sections/publiGlobal-bg.jpg", description: "Comércio Internacional" },
-    { name: "PubliJourney", icon: "", href: "/journey", bgImage: "/images/sections/publiJourney-bg.jpg", description: "Turismo & Viagens" },
-    { name: "PubliShare", icon: "", href: "/share", bgImage: "/images/sections/publiShare-bg.jpg", description: "Economia Colaborativa" },
-    { name: "PubliTudo", icon: "", href: "/tudo", bgImage: "/images/sections/publiTudo-bg.jpg", description: "Marketplace & Serviços" },
+    { 
+      name: "PubliProper", 
+      icon: Home, 
+      href: "/proper", 
+      bgImage: "/images/sections/publiProper-bg.jpg", 
+      description: "Imóveis Urbanos & Rurais" 
+    },
+    { 
+      name: "PubliMotors", 
+      icon: Car, 
+      href: "/motors", 
+      bgImage: "/images/sections/publiMotors-bg.jpg", 
+      description: "Veículos e Transporte" 
+    },
+    { 
+      name: "PubliHeavyAgro", 
+      icon: Tractor, 
+      href: "/machina", 
+      bgImage: "/images/sections/publiHeavyAgro-bg.jpg", 
+      description: "Máquinas & Agroindústria" 
+    },
+    { 
+      name: "PubliMarine", 
+      icon: Ship, 
+      href: "/marine", 
+      bgImage: "/images/sections/publiMarine-bg.jpg", 
+      description: "Náutica, Pesca & Aventura" 
+    },
+    { 
+      name: "PubliGlobal", 
+      icon: Globe, 
+      href: "/global", 
+      bgImage: "/images/sections/publiGlobal-bg.jpg", 
+      description: "Comércio Internacional" 
+    },
+    { 
+      name: "PubliJourney", 
+      icon: Plane, 
+      href: "/journey", 
+      bgImage: "/images/sections/publiJourney-bg.jpg", 
+      description: "Turismo & Viagens" 
+    },
+    { 
+      name: "PubliShare", 
+      icon: Share2, 
+      href: "/share", 
+      bgImage: "/images/sections/publiShare-bg.jpg", 
+      description: "Economia Colaborativa" 
+    },
+    { 
+      name: "PubliTudo", 
+      icon: ShoppingBag, 
+      href: "/tudo", 
+      bgImage: "/images/sections/publiTudo-bg.jpg", 
+      description: "Marketplace & Serviços" 
+    },
   ];
 
   const displaySitios = Array.isArray(sitios) ? sitios.slice(0, 6) : [];
 
   return (
     <main className="relative min-h-screen bg-gradient-to-b from-[#0a0a0a] via-[#0d0d0d] to-[#0a0a0a]">
-      {/* No mr-64 here; layout.tsx now handles it globally */}
-      <div className="relative">
+      <div className="relative max-w-7xl mx-auto">
         {/* Hero Section */}
         <section className="text-center pt-12 pb-8 px-6">
           <h1 className="text-5xl md:text-6xl lg:text-7xl font-bold mb-4 text-transparent bg-clip-text bg-gradient-to-r from-[#B7791F] via-[#CD7F32] to-[#B87333] leading-tight">
@@ -76,36 +147,49 @@ export default function HomePage() {
           </p>
         </section>
 
-        {/* Sections Grid */}
-        <section className="px-6 py-8 max-w-7xl mx-auto">
+        {/* Sections Grid - WITH ICONS */}
+        <section className="px-6 py-8">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
-            {sections.map((section) => (
-              <Link
-                key={section.name}
-                href={section.href}
-                className="group relative h-48 rounded-2xl overflow-hidden shadow-xl hover:shadow-2xl hover:shadow-[#FF6B35]/30 transition-all duration-500 hover:scale-105"
-              >
-                <div
-                  className="absolute inset-0 bg-cover bg-center transition-transform duration-700 group-hover:scale-110"
-                  style={{ backgroundImage: `url(${section.bgImage})` }}
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-[#0a0a0a]/95 via-[#0a0a0a]/60 to-transparent" />
-                <div className="absolute inset-0 flex flex-col items-center justify-center p-6 text-center">
-                  <span className="text-6xl mb-3 transform group-hover:scale-110 transition-transform">
-                    {section.icon}
-                  </span>
-                  <h3 className="text-xl font-bold text-[#B7791F] group-hover:text-[#FF6B35] transition-colors mb-1">
-                    {section.name}
-                  </h3>
-                  <p className="text-sm text-[#676767]">{section.description}</p>
-                </div>
-              </Link>
-            ))}
+            {sections.map((section) => {
+              const IconComponent = section.icon;
+              return (
+                <Link
+                  key={section.name}
+                  href={section.href}
+                  className="group relative h-48 rounded-2xl overflow-hidden shadow-xl hover:shadow-2xl hover:shadow-[#FF6B35]/30 transition-all duration-500 hover:scale-105"
+                >
+                  {/* Background Image */}
+                  <div
+                    className="absolute inset-0 bg-cover bg-center transition-transform duration-700 group-hover:scale-110"
+                    style={{ backgroundImage: `url(${section.bgImage})` }}
+                  />
+                  
+                  {/* Dark Overlay */}
+                  <div className="absolute inset-0 bg-gradient-to-t from-[#0a0a0a]/95 via-[#0a0a0a]/60 to-transparent" />
+                  
+                  {/* Content */}
+                  <div className="absolute inset-0 flex flex-col items-center justify-center p-6 text-center">
+                    {/* Icon */}
+                    <div className="mb-3 text-[#FF6B35] transform group-hover:scale-110 transition-transform">
+                      <IconComponent className="w-16 h-16" strokeWidth={1.5} />
+                    </div>
+                    
+                    {/* Title */}
+                    <h3 className="text-xl font-bold text-[#B7791F] group-hover:text-[#FF6B35] transition-colors mb-1">
+                      {section.name}
+                    </h3>
+                    
+                    {/* Description */}
+                    <p className="text-sm text-[#676767]">{section.description}</p>
+                  </div>
+                </Link>
+              );
+            })}
           </div>
         </section>
 
         {/* SUPER HIGHLIGHT - Sítios Carcará with BIRD */}
-        <section className="px-6 py-12 max-w-7xl mx-auto">
+        <section className="px-6 py-12">
           <div className="relative rounded-3xl overflow-hidden shadow-2xl border-4 border-[#FF6B35]/40 min-h-[500px]">
             <Image
               src="https://irrzpwzyqcubhhjeuakc.supabase.co/storage/v1/object/public/imagens-sitios/pordosol4mediumearthwide.jpg"
@@ -117,19 +201,19 @@ export default function HomePage() {
             />
             <div className="absolute inset-0 bg-gradient-to-r from-[#0a0a0a]/95 via-[#0a0a0a]/70 to-transparent" />
 
-            {/* Bird on LEFT so it doesn't overlap the RIGHT sidebar */}
-            <div className="absolute top-8 left-8 w-[200px] h-[200px] z-30">
+            {/* Bird on LEFT */}
+            <div className="absolute top-8 left-8 w-[200px] h-[200px] z-30 hidden md:block">
               <Carcara3D scale={1} />
             </div>
 
-            <div className="relative p-12 pl-56 z-20">
+            <div className="relative p-12 md:pl-56 z-20">
               <div className="inline-flex items-center gap-2 mb-4 px-5 py-2 bg-[#FF6B35]/30 border-2 border-[#FF6B35] rounded-full backdrop-blur-md">
                 <span className="text-[#FF6B35] font-bold text-base tracking-widest uppercase"> Super Destaque</span>
               </div>
-              <h2 className="text-6xl md:text-7xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-[#FF6B35] via-[#FF8C42] to-[#B7791F] mb-6 drop-shadow-2xl max-w-3xl">
+              <h2 className="text-5xl md:text-7xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-[#FF6B35] via-[#FF8C42] to-[#B7791F] mb-6 drop-shadow-2xl max-w-3xl">
                 Sítios Carcará Project
               </h2>
-              <p className="text-[#d8c68e] text-2xl mb-8 max-w-2xl leading-relaxed">
+              <p className="text-[#d8c68e] text-xl md:text-2xl mb-8 max-w-2xl leading-relaxed">
                 6 propriedades exclusivas às margens da represa. Natureza preservada, infraestrutura completa e lances a partir de R$ 1.050.000.
               </p>
               <div className="flex gap-4 flex-wrap">
@@ -151,9 +235,35 @@ export default function HomePage() {
         </section>
 
         {/* Featured properties from DB */}
-        {!loading && displaySitios.length > 0 && (
-          <section className="px-6 py-12 max-w-7xl mx-auto">
-            <h2 className="text-4xl font-bold text-[#B7791F] mb-8 text-center">Propriedades em Destaque</h2>
+        <section className="px-6 py-12">
+          <h2 className="text-4xl font-bold text-[#B7791F] mb-8 text-center">Propriedades em Destaque</h2>
+          
+          {loading && (
+            <div className="flex justify-center py-20">
+              <div className="animate-spin rounded-full h-16 w-16 border-4 border-[#FF6B35] border-t-transparent"></div>
+            </div>
+          )}
+
+          {error && !loading && (
+            <div className="text-center py-12 px-6 bg-red-900/20 border-2 border-red-500/50 rounded-xl">
+              <p className="text-red-400 mb-2"> Erro ao carregar propriedades</p>
+              <p className="text-sm text-gray-400">{error}</p>
+            </div>
+          )}
+
+          {!loading && !error && displaySitios.length === 0 && (
+            <div className="text-center py-12 px-6 bg-[#2a2a1a] rounded-xl">
+              <p className="text-[#676767] mb-4">Nenhuma propriedade em destaque no momento.</p>
+              <Link 
+                href="/projetos/carcara"
+                className="inline-block px-6 py-3 bg-[#FF6B35] hover:bg-[#FF8C42] text-[#0a0a0a] font-bold rounded-lg transition-all"
+              >
+                Ver Projeto Sítios Carcará
+              </Link>
+            </div>
+          )}
+
+          {!loading && displaySitios.length > 0 && (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
               {displaySitios.map((sitio) => (
                 <Link
@@ -162,7 +272,7 @@ export default function HomePage() {
                   className="group bg-gradient-to-br from-[#1a1a1a] to-[#0d0d0d] border-2 border-[#2a2a1a] rounded-2xl overflow-hidden hover:border-[#FF6B35] transition-all hover:scale-105 shadow-xl"
                 >
                   <div className="relative h-56 overflow-hidden">
-                    {sitio.fotos?.[0] && (
+                    {sitio.fotos?.[0] ? (
                       <Image
                         src={sitio.fotos[0]}
                         alt={sitio.nome}
@@ -170,6 +280,10 @@ export default function HomePage() {
                         className="object-cover group-hover:scale-110 transition-transform duration-500"
                         unoptimized
                       />
+                    ) : (
+                      <div className="absolute inset-0 bg-gradient-to-br from-[#2a2a1a] to-[#1a1a1a] flex items-center justify-center">
+                        <Home className="w-16 h-16 text-[#676767]" />
+                      </div>
                     )}
                     {sitio.zona && (
                       <div className="absolute top-4 right-4 px-3 py-1 bg-[#FF6B35] text-[#0a0a0a] font-bold rounded-full text-sm">
@@ -196,11 +310,11 @@ export default function HomePage() {
                 </Link>
               ))}
             </div>
-          </section>
-        )}
+          )}
+        </section>
 
         {/* Footer */}
-        <footer className="px-6 py-12 mt-20 border-t-2 border-[#2a2a1a] max-w-7xl mx-auto">
+        <footer className="px-6 py-12 mt-20 border-t-2 border-[#2a2a1a]">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-8 mb-8">
             <div>
               <h4 className="font-bold text-[#B7791F] mb-4">Imóveis</h4>
