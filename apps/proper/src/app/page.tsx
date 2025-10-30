@@ -1,86 +1,161 @@
-import type { Metadata } from "next";
+﻿"use client";
+
 import Link from "next/link";
-import { Building2, Tractor, Sparkles } from "lucide-react";
+import Image from "next/image";
+import { Building2, Trees, MapPin, TrendingUp, Home, Phone } from "lucide-react";
+import { motion } from "framer-motion";
 
-export const metadata: Metadata = {
-  title: "PubliProper — Imóveis Urbanos e Rurais",
-  description: "Encontre imóveis urbanos e rurais em todo o Brasil. Apartamentos, casas, fazendas, sítios e mais.",
-};
-
-export default function ProperHomePage() {
+export default function ProperPage() {
   const categories = [
     {
-      title: "Proper Urban",
-      icon: <Building2 className="w-12 h-12" />,
+      name: "Imóveis Urbanos",
       href: "/proper/urban",
-      description: "Apartamentos, casas e imóveis urbanos",
-      color: "from-[#FF6B35] to-[#FF8C42]",
+      icon: Building2,
+      description: "Apartamentos, casas, salas comerciais",
+      image: "/images/sections/publiProper-bg.jpg",
+      stats: "120+ imóveis"
     },
     {
-      title: "Proper Rural",
-      icon: <Tractor className="w-12 h-12" />,
+      name: "Imóveis Rurais",
       href: "/proper/rural",
-      description: "Sítios, fazendas e chácaras",
-      color: "from-[#5F7161] to-[#0D7377]",
-    },
-    {
-      title: "Comercial",
-      icon: <Building2 className="w-12 h-12" />,
-      href: "/proper/comercial",
-      description: "Salas, galpões e pontos comerciais",
-      color: "from-[#B7791F] to-[#CD7F32]",
-    },
-    {
-      title: "Lançamentos",
-      icon: <Sparkles className="w-12 h-12" />,
-      href: "/proper/lancamentos",
-      description: "Novos empreendimentos",
-      color: "from-[#FF6B35] to-[#B7791F]",
-    },
+      icon: Trees,
+      description: "Sítios, fazendas, chácaras e terrenos",
+      image: "/images/sections/publiProper-bg.jpg",
+      stats: "45+ propriedades",
+      featured: true
+    }
   ];
 
   return (
-    <main className="min-h-screen bg-gradient-to-b from-[#0a0a0a] via-[#0d0d0d] to-[#0a0a0a] py-20 px-6">
-      <div className="max-w-7xl mx-auto">
-        <div className="text-center mb-16">
+    <main className="min-h-screen bg-gradient-to-b from-[#0a0a0a] via-[#0d0d0d] to-[#0a0a0a]">
+      <div className="max-w-7xl mx-auto px-6 py-16">
+        {/* Header */}
+        <motion.div 
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="text-center mb-16"
+        >
+          <div className="inline-flex items-center gap-2 mb-6 px-6 py-3 bg-[#B7791F]/20 border-2 border-[#B7791F] rounded-full">
+            <Home className="w-5 h-5 text-[#B7791F]" />
+            <span className="text-[#B7791F] font-bold tracking-wider">PUBLIMICRO PROPER</span>
+          </div>
+          
           <h1 className="text-6xl md:text-7xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-[#B7791F] via-[#CD7F32] to-[#B87333] mb-6">
-            PubliProper
+            Seu Imóvel Ideal
           </h1>
-          <p className="text-2xl text-[#d8c68e] mb-4">Seu imóvel ideal está aqui</p>
-          <p className="text-lg text-[#676767] max-w-2xl mx-auto">
-            Do campo à cidade, encontre apartamentos, casas, sítios, fazendas e muito mais.
+          
+          <p className="text-[#d8c68e] text-xl md:text-2xl mb-4 max-w-3xl mx-auto">
+            Do apartamento na cidade ao sítio no campo. Encontre oportunidades exclusivas de investimento imobiliário.
           </p>
+        </motion.div>
+
+        {/* Category Cards */}
+        <div className="grid md:grid-cols-2 gap-8 mb-16">
+          {categories.map((cat) => {
+            const IconComponent = cat.icon;
+            return (
+              <Link
+                key={cat.name}
+                href={cat.href}
+                className="group relative bg-gradient-to-br from-[#1a1a1a] to-[#0d0d0d] border-2 border-[#2a2a1a] hover:border-[#B7791F] rounded-3xl overflow-hidden transition-all hover:scale-[1.02] shadow-xl hover:shadow-2xl"
+              >
+                <div className="relative h-80 overflow-hidden">
+                  <div className="absolute inset-0 bg-gradient-to-t from-[#0a0a0a] via-[#0a0a0a]/60 to-transparent z-10" />
+                  <Image
+                    src={cat.image}
+                    alt={cat.name}
+                    fill
+                    className="object-cover group-hover:scale-110 transition-transform duration-700"
+                    unoptimized
+                  />
+                  {cat.featured && (
+                    <div className="absolute top-4 right-4 px-4 py-2 bg-[#FF6B35] text-[#0a0a0a] font-bold rounded-full text-sm z-20">
+                      ⭐ Destaque
+                    </div>
+                  )}
+                </div>
+
+                <div className="relative p-8 z-20">
+                  <div className="flex items-start gap-4 mb-4">
+                    <div className="p-3 bg-[#B7791F]/20 rounded-xl">
+                      <IconComponent className="w-8 h-8 text-[#B7791F]" />
+                    </div>
+                    <div className="flex-1">
+                      <h3 className="text-2xl font-bold text-[#B7791F] group-hover:text-[#FF6B35] transition-colors mb-2">
+                        {cat.name}
+                      </h3>
+                      <p className="text-[#676767] mb-3">{cat.description}</p>
+                      <div className="flex items-center gap-2 text-sm text-[#d8c68e]">
+                        <TrendingUp className="w-4 h-4" />
+                        <span>{cat.stats}</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </Link>
+            );
+          })}
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-16">
-          {categories.map((category) => (
-            <Link
-              key={category.title}
-              href={category.href}
-              className="group bg-gradient-to-br from-[#1a1a1a] to-[#0d0d0d] border-2 border-[#2a2a1a] rounded-2xl p-8 hover:border-[#FF6B35] transition-all hover:scale-105"
-            >
-              <div className={`w-20 h-20 bg-gradient-to-r ${category.color} rounded-full flex items-center justify-center text-[#0a0a0a] mb-6`}>
-                {category.icon}
+        {/* Sítios Carcará Highlight */}
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          className="relative bg-gradient-to-r from-[#FF6B35]/20 to-[#B7791F]/20 border-2 border-[#FF6B35] rounded-3xl p-8 md:p-12"
+        >
+          <div className="flex flex-col md:flex-row items-center gap-8">
+            <div className="flex-1">
+              <div className="inline-flex items-center gap-2 mb-4 px-4 py-2 bg-[#FF6B35]/30 rounded-full">
+                <span className="text-[#FF6B35] font-bold text-sm"> LANÇAMENTO EXCLUSIVO</span>
               </div>
-              <h2 className="text-3xl font-bold text-[#B7791F] group-hover:text-[#FF6B35] transition-colors mb-3">
-                {category.title}
+              <h2 className="text-4xl md:text-5xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-[#FF6B35] to-[#B7791F] mb-4">
+                Sítios Carcará
               </h2>
-              <p className="text-[#676767]">{category.description}</p>
-              <div className="mt-6 text-[#FF6B35] group-hover:translate-x-2 transition-transform">
-                Ver anúncios →
+              <p className="text-[#d8c68e] text-lg mb-6">
+                6 propriedades exclusivas às margens da Represa de Corumbaíba, GO. 
+                Lances a partir de R$ 1.050.000.
+              </p>
+              <div className="flex flex-wrap gap-4">
+                <Link
+                  href="/projetos/carcara"
+                  className="px-8 py-4 bg-gradient-to-r from-[#FF6B35] to-[#FF8C42] hover:from-[#FF8C42] hover:to-[#FF6B35] text-[#0a0a0a] font-bold rounded-full transition-all hover:scale-105"
+                >
+                  Ver Propriedades
+                </Link>
+                <a
+                  href="https://wa.me/5534992610004?text=Olá! Gostaria de saber mais sobre os Sítios Carcará"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="px-8 py-4 border-2 border-[#25D366] text-[#25D366] hover:bg-[#25D366]/10 font-bold rounded-full transition-all flex items-center gap-2"
+                >
+                  <Phone className="w-5 h-5" />
+                  WhatsApp
+                </a>
               </div>
-            </Link>
-          ))}
-        </div>
+            </div>
+            <div className="w-full md:w-auto">
+              <div className="grid grid-cols-2 gap-4">
+                <div className="text-center p-4 bg-[#1a1a1a]/80 rounded-xl">
+                  <div className="text-3xl font-bold text-[#FF6B35]">6</div>
+                  <div className="text-sm text-[#676767]">Propriedades</div>
+                </div>
+                <div className="text-center p-4 bg-[#1a1a1a]/80 rounded-xl">
+                  <div className="text-3xl font-bold text-[#0D7377]">15km²</div>
+                  <div className="text-sm text-[#676767]">Área Total</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </motion.div>
 
-        <div className="bg-gradient-to-br from-[#1a1a1a] to-[#0d0d0d] border-2 border-[#2a2a1a] rounded-2xl p-8 text-center">
-          <h3 className="text-2xl font-bold text-[#B7791F] mb-4">Quer anunciar seu imóvel?</h3>
-          <p className="text-[#676767] mb-6">Publique grátis e alcance milhares de compradores</p>
+        {/* Back to Home */}
+        <div className="text-center mt-16">
           <Link
-            href="/anunciar"
-            className="inline-block px-10 py-4 bg-gradient-to-r from-[#FF6B35] to-[#FF8C42] hover:from-[#FF8C42] hover:to-[#FF6B35] text-[#0a0a0a] font-bold rounded-full transition-all hover:scale-105"
+            href="/"
+            className="inline-flex items-center gap-2 text-[#676767] hover:text-[#B7791F] transition-colors"
           >
-            📢 Publicar Anúncio Grátis
+             Voltar para a página inicial
           </Link>
         </div>
       </div>
