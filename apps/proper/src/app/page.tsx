@@ -28,6 +28,16 @@ export default function ProperPage() {
 
   return (
     <main className="min-h-screen bg-gradient-to-b from-[#0a0a0a] via-[#0d0d0d] to-[#0a0a0a]">
+      <div className="flex justify-end items-center max-w-7xl mx-auto px-6 pt-8">
+        <a
+          href="/anunciar"
+          className="inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-[#FF6B35] to-[#FF8C42] text-black font-bold rounded-full shadow-lg hover:scale-105 transition-all"
+          aria-label="Anunciar propriedade"
+        >
+          <svg className="w-6 h-6" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path d="M12 4v16m8-8H4" /></svg>
+          Anunciar
+        </a>
+      </div>
       <div className="max-w-7xl mx-auto px-6 py-16">
         {/* Header */}
         <motion.div 

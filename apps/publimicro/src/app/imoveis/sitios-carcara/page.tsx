@@ -33,7 +33,7 @@ export default async function Page(): Promise<JSX.Element> {
       <div className="relative w-full h-72">
         <Image
           src="https://irrzpwzyqcubhhjeuakc.supabase.co/storage/v1/object/public/imagens-sitios/pordosol4mediumearthwide.jpg"
-          alt="Sítios Carcará"
+          alt="Foto de destaque dos Sítios Carcará"
           fill
           className="object-cover brightness-75"
           priority
@@ -68,7 +68,7 @@ export default async function Page(): Promise<JSX.Element> {
             <div key={i} className="relative h-48 rounded-lg overflow-hidden">
               <Image
                 src={img}
-                alt={`Foto ${i + 1}`}
+                alt={`Foto do sítio Carcará ${i + 1}`}
                 fill
                 className="object-cover"
               />
