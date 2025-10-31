@@ -1,4 +1,5 @@
 {
+  "extends": "../tsconfig/base.json",
   "compilerOptions": {
     "composite": true,
     "target": "ES2020",
@@ -17,8 +18,8 @@
     "esModuleInterop": true,
     "allowSyntheticDefaultImports": true,
     "noEmitOnError": true,
-    "types": ["node"],
-    "typeRoots": ["./node_modules/@types", "../../node_modules/@types"]
+  "types": ["node"],
+  "typeRoots": ["./node_modules/@types", "../../node_modules/@types"]
   },
   "include": ["src", "src/**/*.d.ts", "src/types.d.ts", "src/r3f.d.ts"],
   "exclude": ["dist", "node_modules", "build", "scripts"]

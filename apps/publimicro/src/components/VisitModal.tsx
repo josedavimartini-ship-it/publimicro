@@ -50,7 +50,7 @@ export default function VisitModal({ adId, adTitle, open, onClose }: VisitModalP
         });
       }, 2000);
     } catch (err: any) {
-      setError(err.message);
+      setError(err?.message || 'Erro ao agendar visita. Tente novamente mais tarde.');
     } finally {
       setLoading(false);
     }
@@ -95,7 +95,7 @@ export default function VisitModal({ adId, adTitle, open, onClose }: VisitModalP
               </p>
             </div>
           ) : (
-            <form onSubmit={handleSubmit} className="space-y-4">
+            <form onSubmit={handleSubmit} className="space-y-4" aria-label="Formulário de agendamento de visita">
               <div>
                 <label className="block text-sm font-medium text-[#B7791F] mb-2">
                   Nome Completo *
@@ -106,8 +106,10 @@ export default function VisitModal({ adId, adTitle, open, onClose }: VisitModalP
                   placeholder="Seu nome completo"
                   value={form.guest_name}
                   onChange={handleChange}
-                  className="w-full px-4 py-3 bg-[#2a2a2a] border border-[#3a3a2a] rounded-lg text-[#f2e6b1] placeholder-[#676767] focus:outline-none focus:border-[#0D7377] transition-colors"
+                  className="w-full px-4 py-3 bg-[#232323] border border-[#0D7377] rounded-lg text-[#f2e6b1] placeholder-[#676767] focus:outline-none focus:border-[#0D7377] transition-colors"
                   required
+                  aria-required="true"
+                  aria-label="Nome Completo"
                 />
               </div>
 
@@ -121,8 +123,10 @@ export default function VisitModal({ adId, adTitle, open, onClose }: VisitModalP
                   placeholder="seu@email.com"
                   value={form.guest_email}
                   onChange={handleChange}
-                  className="w-full px-4 py-3 bg-[#2a2a2a] border border-[#3a3a2a] rounded-lg text-[#f2e6b1] placeholder-[#676767] focus:outline-none focus:border-[#0D7377] transition-colors"
+                  className="w-full px-4 py-3 bg-[#232323] border border-[#0D7377] rounded-lg text-[#f2e6b1] placeholder-[#676767] focus:outline-none focus:border-[#0D7377] transition-colors"
                   required
+                  aria-required="true"
+                  aria-label="Email"
                 />
               </div>
 
@@ -136,8 +140,10 @@ export default function VisitModal({ adId, adTitle, open, onClose }: VisitModalP
                   placeholder="(00) 00000-0000"
                   value={form.guest_phone}
                   onChange={handleChange}
-                  className="w-full px-4 py-3 bg-[#2a2a2a] border border-[#3a3a2a] rounded-lg text-[#f2e6b1] placeholder-[#676767] focus:outline-none focus:border-[#0D7377] transition-colors"
+                  className="w-full px-4 py-3 bg-[#232323] border border-[#0D7377] rounded-lg text-[#f2e6b1] placeholder-[#676767] focus:outline-none focus:border-[#0D7377] transition-colors"
                   required
+                  aria-required="true"
+                  aria-label="WhatsApp"
                 />
               </div>
 
@@ -183,8 +189,10 @@ export default function VisitModal({ adId, adTitle, open, onClose }: VisitModalP
                   value={form.scheduled_at}
                   onChange={handleChange}
                   min={new Date().toISOString().slice(0, 16)}
-                  className="w-full px-4 py-3 bg-[#2a2a2a] border border-[#3a3a2a] rounded-lg text-[#f2e6b1] focus:outline-none focus:border-[#0D7377] transition-colors"
+                  className="w-full px-4 py-3 bg-[#232323] border border-[#0D7377] rounded-lg text-[#f2e6b1] focus:outline-none focus:border-[#0D7377] transition-colors"
                   required
+                  aria-required="true"
+                  aria-label="Data e Hora Preferencial"
                 />
               </div>
 
@@ -198,7 +206,8 @@ export default function VisitModal({ adId, adTitle, open, onClose }: VisitModalP
                   value={form.notes}
                   onChange={handleChange}
                   rows={3}
-                  className="w-full px-4 py-3 bg-[#2a2a2a] border border-[#3a3a2a] rounded-lg text-[#f2e6b1] placeholder-[#676767] focus:outline-none focus:border-[#0D7377] transition-colors resize-none"
+                  className="w-full px-4 py-3 bg-[#232323] border border-[#0D7377] rounded-lg text-[#f2e6b1] placeholder-[#676767] focus:outline-none focus:border-[#0D7377] transition-colors resize-none"
+                  aria-label="Observações"
                 />
               </div>
 
@@ -221,7 +230,8 @@ export default function VisitModal({ adId, adTitle, open, onClose }: VisitModalP
               <button
                 type="submit"
                 disabled={loading}
-                className="w-full px-6 py-4 bg-gradient-to-r from-[#0D7377] to-[#5F7161] hover:from-[#5F7161] hover:to-[#0D7377] text-white font-bold rounded-lg transition-all hover:scale-105 disabled:opacity-50 disabled:hover:scale-100 shadow-lg"
+                className="w-full px-6 py-4 bg-gradient-to-r from-[#0D7377] to-[#5F7161] hover:from-[#5F7161] hover:to-[#0D7377] text-white font-bold rounded-lg transition-all hover:scale-105 disabled:opacity-50 disabled:hover:scale-100 shadow-lg focus:outline-none focus:ring-2 focus:ring-[#0D7377]"
+                aria-label="Agendar Visita"
               >
                 {loading ? (
                   <span className="flex items-center justify-center gap-2">

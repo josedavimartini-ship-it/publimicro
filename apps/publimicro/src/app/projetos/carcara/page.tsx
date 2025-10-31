@@ -7,6 +7,7 @@ import Link from 'next/link';
 import { MapPin, Home, Trees, Droplets, Zap, ShieldCheck, Calendar, TrendingUp, Phone, Mail, ArrowLeft } from 'lucide-react';
 import VisitModal from '@/components/VisitModal';
 import ProposalModal from '@/components/ProposalModal';
+import FavoritesButton from '@/components/FavoritesButton';
 
 interface Sitio {
   id: string;
@@ -25,6 +26,7 @@ export default function CarcaraProjectPage() {
   const [showVisitModal, setShowVisitModal] = useState(false);
   const [showProposalModal, setShowProposalModal] = useState(false);
   const [loading, setLoading] = useState(true);
+  const [userId, setUserId] = useState<string | null>(null);
 
   useEffect(() => {
     async function fetchSitios() {
@@ -40,6 +42,10 @@ export default function CarcaraProjectPage() {
       setLoading(false);
     }
     fetchSitios();
+    // Get current user from Supabase auth
+    supabase.auth.getUser().then(({ data }) => {
+      if (data?.user?.id) setUserId(data.user.id);
+    });
   }, []);
 
   const features = [
@@ -60,12 +66,15 @@ export default function CarcaraProjectPage() {
   };
 
   return (
-    <main className="min-h-screen bg-gradient-to-b from-[#0a0a0a] via-[#0d0d0d] to-[#0a0a0a]">
+  <main className="min-h-screen bg-gradient-to-b from-[#0a0a0a] via-[#0d0d0d] to-[#0a0a0a]" role="main" aria-label="Página Sítios Carcará">
       {/* Back to Home Button */}
       <div className="max-w-7xl mx-auto px-6 pt-6">
         <Link 
           href="/"
-          className="inline-flex items-center gap-2 text-[#676767] hover:text-[#FF6B35] transition-colors"
+          className="inline-flex items-center gap-2 text-[#676767] hover:text-[#FF6B35] transition-colors focus:outline-none focus:ring-4 focus:ring-[#FF6B35]"
+          aria-label="Voltar para página inicial"
+          tabIndex={0}
+          role="button"
         >
           <ArrowLeft className="w-5 h-5" />
           Voltar para página inicial
@@ -83,8 +92,23 @@ export default function CarcaraProjectPage() {
           unoptimized
         />
         <div className="absolute inset-0 bg-gradient-to-b from-[#0a0a0a]/90 via-[#0a0a0a]/70 to-[#0a0a0a]" />
-        
-        <div className="relative z-10 text-center px-6 max-w-6xl">
+        {/* Animated birds and nature effects */}
+        <div className="absolute inset-0 pointer-events-none z-20">
+          {/* Example: 3 animated SVG birds, can be replaced with 3D or Lottie later */}
+          <svg className="absolute left-10 top-20 animate-bird-fly" width="60" height="40" viewBox="0 0 60 40"><path d="M10 20 Q30 0 50 20 Q30 40 10 20" stroke="#FF6B35" strokeWidth="2" fill="none"/></svg>
+          <svg className="absolute right-20 top-32 animate-bird-fly" width="40" height="30" viewBox="0 0 40 30"><path d="M5 15 Q20 0 35 15 Q20 30 5 15" stroke="#B7791F" strokeWidth="2" fill="none"/></svg>
+          <svg className="absolute left-1/2 top-10 animate-bird-fly" width="50" height="35" viewBox="0 0 50 35"><path d="M8 17 Q25 2 42 17 Q25 32 8 17" stroke="#0D7377" strokeWidth="2" fill="none"/></svg>
+          {/* Add more effects as needed */}
+        </div>
+        <style jsx>{`
+          @keyframes bird-fly {
+            0% { transform: translateY(0) scale(1); opacity: 0.7; }
+            50% { transform: translateY(-20px) scale(1.1); opacity: 1; }
+            100% { transform: translateY(0) scale(1); opacity: 0.7; }
+          }
+          .animate-bird-fly { animation: bird-fly 6s infinite ease-in-out; }
+        `}</style>
+        <div className="relative z-30 text-center px-6 max-w-6xl">
           <div className="inline-flex items-center gap-2 mb-6 px-8 py-4 bg-[#FF6B35]/30 border-2 border-[#FF6B35] rounded-full backdrop-blur-md animate-pulse">
             <span className="text-[#FF6B35] font-bold text-xl tracking-widest uppercase">
                LANÇAMENTO EXCLUSIVO
@@ -118,7 +142,10 @@ export default function CarcaraProjectPage() {
           <div className="flex gap-6 justify-center flex-wrap">
             <a
               href="#sitios"
-              className="px-12 py-6 bg-gradient-to-r from-[#FF6B35] to-[#FF8C42] hover:from-[#FF8C42] hover:to-[#FF6B35] text-[#0a0a0a] text-xl font-bold rounded-full transition-all hover:scale-110 shadow-2xl"
+              className="px-12 py-6 bg-gradient-to-r from-[#FF6B35] to-[#FF8C42] hover:from-[#FF8C42] hover:to-[#FF6B35] text-black text-xl font-bold rounded-full transition-all hover:scale-110 shadow-2xl focus:outline-none focus:ring-4 focus:ring-[#FF6B35]"
+              aria-label="Ver propriedades disponíveis"
+              tabIndex={0}
+              role="button"
             >
                Ver Propriedades
             </a>
@@ -126,11 +153,34 @@ export default function CarcaraProjectPage() {
               href="https://wa.me/5534992610004?text=Olá! Gostaria de conhecer os Sítios Carcará"
               target="_blank"
               rel="noopener noreferrer"
-              className="px-12 py-6 border-4 border-[#25D366] text-[#25D366] hover:bg-[#25D366]/10 text-xl font-bold rounded-full transition-all hover:scale-110 flex items-center gap-3"
+              className="px-12 py-6 border-4 border-[#25D366] text-[#25D366] hover:bg-[#25D366]/10 text-xl font-bold rounded-full transition-all hover:scale-110 flex items-center gap-3 focus:outline-none focus:ring-4 focus:ring-[#25D366]"
+              aria-label="Fale conosco no WhatsApp"
+              tabIndex={0}
+              role="button"
             >
               <Phone className="w-6 h-6" />
               Contato WhatsApp
             </a>
+            <button
+              type="button"
+              className="px-12 py-6 bg-gradient-to-r from-[#0D7377] to-[#5F7161] text-white font-bold rounded-full shadow-lg transition-all hover:scale-110 flex items-center gap-3 focus:outline-none focus:ring-4 focus:ring-[#0D7377]"
+              aria-label="Solicitar mais informações"
+              onClick={() => window.location.href = '/contato'}
+              tabIndex={0}
+            >
+              <Mail className="w-6 h-6" />
+              Procurando mais informações
+            </button>
+            <button
+              type="button"
+              className="px-12 py-6 border-2 border-[#0D7377] text-[#0D7377] hover:bg-[#0D7377]/10 font-bold rounded-full transition-all flex items-center gap-3 focus:outline-none focus:ring-4 focus:ring-[#0D7377]"
+              aria-label="Agendar visita"
+              onClick={() => window.location.href = '/schedule-visit'}
+              tabIndex={0}
+            >
+              <Calendar className="w-6 h-6" />
+              Agendar Visita
+            </button>
           </div>
         </div>
       </section>
@@ -203,7 +253,10 @@ export default function CarcaraProjectPage() {
               <article
                 id={sitio.id}
                 key={sitio.id}
-                className="group bg-gradient-to-br from-[#1a1a1a] to-[#0d0d0d] border-3 border-[#2a2a1a] rounded-3xl overflow-hidden hover:border-[#FF6B35] hover:shadow-2xl hover:shadow-[#FF6B35]/40 transition-all"
+                className="group bg-gradient-to-br from-[#1a1a1a] to-[#0d0d0d] border-3 border-[#2a2a1a] rounded-3xl overflow-hidden hover:border-[#FF6B35] hover:shadow-2xl hover:shadow-[#FF6B35]/40 transition-all focus:outline-none focus:ring-4 focus:ring-[#FF6B35]"
+                tabIndex={0}
+                role="button"
+                aria-label={`Ver detalhes do sítio ${sitio.nome}`}
               >
                 <div className="relative aspect-video">
                   <Image
@@ -217,14 +270,18 @@ export default function CarcaraProjectPage() {
                   <div className="absolute top-4 left-4 px-5 py-2 bg-[#2a2a2a]/95 backdrop-blur-md rounded-full border border-[#3a3a2a]">
                     <span className="text-[#0D7377] text-sm font-bold">{sitio.zona}</span>
                   </div>
-                  <div className="absolute top-4 right-4 px-5 py-2 bg-[#0D7377] text-[#0a0a0a] text-sm font-bold rounded-full shadow-lg">
+                  <div className="absolute top-4 right-4 px-5 py-2 bg-[#0D7377] text-black text-sm font-bold rounded-full shadow-lg">
                      Disponível
                   </div>
                 </div>
 
                 <div className="p-8">
                   <h3 className="text-4xl font-bold text-[#FF6B35] mb-4">Sítio {sitio.nome}</h3>
-                  
+                  {userId && (
+                    <div className="mb-4">
+                      <FavoritesButton propertyId={sitio.id} userId={userId} />
+                    </div>
+                  )}
                   {sitio.descricao && (
                     <p className="text-[#676767] mb-6 leading-relaxed">{sitio.descricao}</p>
                   )}

@@ -6,6 +6,18 @@ import { Trees, MapPin, Droplets, Home } from "lucide-react";
 export default function RuralPage() {
   return (
     <main className="min-h-screen bg-gradient-to-b from-[#0a0a0a] via-[#0d0d0d] to-[#0a0a0a] py-20">
+      <div className="flex justify-end items-center max-w-7xl mx-auto px-6 mb-4">
+        <a
+          href="/anunciar"
+          className="inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-[#FF6B35] to-[#FF8C42] text-black font-bold rounded-full shadow-lg hover:scale-105 transition-all focus:outline-none focus:ring-4 focus:ring-[#FF6B35]"
+          aria-label="Anunciar propriedade"
+          tabIndex={0}
+          role="button"
+        >
+          <svg className="w-6 h-6" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path d="M12 4v16m8-8H4" /></svg>
+          Anunciar
+        </a>
+      </div>
       <div className="max-w-7xl mx-auto px-6">
         <div className="text-center mb-12">
           <Trees className="w-16 h-16 text-[#0D7377] mx-auto mb-4" />
@@ -19,24 +31,19 @@ export default function RuralPage() {
         <div className="bg-gradient-to-r from-[#FF6B35]/20 to-[#0D7377]/20 border-2 border-[#FF6B35] rounded-3xl p-8 mb-12">
           <div className="flex items-start gap-4 mb-6">
             <div className="flex-1">
-              <div className="inline-block px-4 py-2 bg-[#FF6B35] text-[#0a0a0a] font-bold rounded-full text-sm mb-4">
-                 DESTAQUE
-              </div>
+              <div className="inline-block px-4 py-2 bg-[#FF6B35] text-black font-bold rounded-full text-sm mb-4">DESTAQUE</div>
               <h2 className="text-4xl font-bold text-[#FF6B35] mb-3">Sítios Carcará</h2>
-              <p className="text-[#d8c68e] mb-4">
-                6 propriedades exclusivas em Corumbaíba, GO - Às margens da represa. 
-                Perfeito para descanso, agricultura sustentável e investimento.
-              </p>
+              <p className="text-[#d8c68e] mb-4">6 propriedades exclusivas em Corumbaíba, GO - Às margens da represa. Perfeito para descanso, agricultura sustentável e investimento.</p>
               <div className="flex flex-wrap gap-4 text-sm text-[#676767] mb-6">
-                <div className="flex items-center gap-2">
+                <div className="flex items-center gap-2" tabIndex={0} role="listitem" aria-label="Localização: Corumbaíba, GO">
                   <MapPin className="w-4 h-4" />
                   Corumbaíba, GO
                 </div>
-                <div className="flex items-center gap-2">
+                <div className="flex items-center gap-2" tabIndex={0} role="listitem" aria-label="Acesso à represa">
                   <Droplets className="w-4 h-4" />
                   Acesso à represa
                 </div>
-                <div className="flex items-center gap-2">
+                <div className="flex items-center gap-2" tabIndex={0} role="listitem" aria-label="6 unidades disponíveis">
                   <Home className="w-4 h-4" />
                   6 unidades disponíveis
                 </div>
@@ -44,7 +51,10 @@ export default function RuralPage() {
               <div className="flex gap-4">
                 <Link
                   href="/projetos/carcara"
-                  className="px-8 py-3 bg-gradient-to-r from-[#FF6B35] to-[#FF8C42] text-[#0a0a0a] font-bold rounded-full hover:scale-105 transition-all"
+                  className="px-8 py-3 bg-gradient-to-r from-[#FF6B35] to-[#FF8C42] text-black font-bold rounded-full hover:scale-105 transition-all focus:outline-none focus:ring-4 focus:ring-[#FF6B35]"
+                  aria-label="Ver detalhes dos Sítios Carcará"
+                  tabIndex={0}
+                  role="button"
                 >
                   Ver Detalhes
                 </Link>
