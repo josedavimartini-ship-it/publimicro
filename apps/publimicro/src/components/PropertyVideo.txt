@@ -1,0 +1,22 @@
+import React from 'react';
+
+interface PropertyVideoProps {
+  videoUrl: string;
+  title?: string;
+}
+
+const PropertyVideo: React.FC<PropertyVideoProps> = ({ videoUrl, title }) => (
+  <div className="property-video-container">
+    {title && <h2 className="property-video-title">{title}</h2>}
+    <video
+      className="property-video-player"
+      src={videoUrl}
+      controls
+      width="100%"
+      style={{ borderRadius: '12px', boxShadow: '0 2px 8px rgba(0,0,0,0.15)' }}
+      aria-label={title || 'Property Fantasy Video'}
+    />
+  </div>
+);
+
+export default PropertyVideo;

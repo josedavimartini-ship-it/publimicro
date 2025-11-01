@@ -1,86 +1,758 @@
+"use client";
+
+import { useEffect, useState, useRef } from "react";
+import { useParams, useRouter } from "next/navigation";
 import { supabase } from "@/lib/supabaseClient";
+import Image from "next/image";
 import Link from "next/link";
-import PropertyDetails from "@/components/listings/PropertyDetails";
-import ContactForm from "@/components/listings/ContactForm";
+import dynamic from "next/dynamic";
+import { ArrowLeft, MapPin, Ruler, Bed, Bath, Car, Phone, ExternalLink, Video, Leaf, TreePine, Ship, Heart, Calendar } from "lucide-react";
+import { getKMLForProperty, fetchKMLContent } from "@/lib/kmlMapping";
+import FavoritesButton from "@/components/FavoritesButton";
+import Breadcrumbs from "@/components/Breadcrumbs";
+import { addToRecentlyViewed } from "@/components/RecentlyViewed";
+import { useToast } from "@/components/ToastNotification";
+import VisitScheduler from "@/components/scheduling/VisitScheduler";
+import FocusLock from "react-focus-lock";
 
-// Define os parâmetros da rota
-type PageParams = {
-  id: string;
-};
+// Dynamic import to avoid SSR issues with Leaflet
+const LeafletMapKML = dynamic(() => import("@/components/LeafletMapKML"), {
+  ssr: false,
+  loading: () => (
+    <div className="w-full h-[500px] bg-[#1a1a1a] rounded-2xl flex items-center justify-center">
+      <div className="text-[#D4A574] text-xl">Carregando mapa interativo...</div>
+    </div>
+  ),
+});
 
-// Define o tipo de item vindo do Supabase
-interface Item {
+// Fallback KML data for all Sitios Carcara properties (if individual file not found)
+const KML_DATA_FALLBACK = `<?xml version="1.0" encoding="UTF-8"?>
+<kml xmlns="http://www.opengis.net/kml/2.2" xmlns:gx="http://www.google.com/kml/ext/2.2">
+<Document>
+<Style id="yellowLineGreenPoly"><LineStyle><color>ff00ffff</color><width>3</width></LineStyle><PolyStyle><fill>0</fill></PolyStyle></Style>
+<Placemark><name>Sítio 1</name><description>Área atualizada 07/10/2025</description><styleUrl>#yellowLineGreenPoly</styleUrl><Polygon><outerBoundaryIs><LinearRing><coordinates>-48.8309658761111,-18.2791310466666,0.0000 -48.8311521866667,-18.2789991091667,0.0000 -48.8316000280556,-18.2784205472222,0.0000 -48.8318697491667,-18.2778220261111,0.0000 -48.8318225852778,-18.2770297208333,0.0000 -48.8313982461111,-18.2768524644444,0.0000 -48.8310029291667,-18.2768355133334,0.0000 -48.8305601961111,-18.2769513525,0.0000 -48.8306879502778,-18.2770874866667,0.0000 -48.8308773930556,-18.2773574691666,0.0000 -48.8309702280556,-18.2776251811111,0.0000 -48.8310171208334,-18.2779679788889,0.0000 -48.8310052302778,-18.2783083030556,0.0000 -48.8309207216667,-18.2786332597222,0.0000 -48.8306829322222,-18.2790877283333,0.0000 -48.8306690877778,-18.2791136769444,0.0000 -48.8308164294444,-18.2790967411111,0.0000 -48.8308902525,-18.2790988436111,0.0000 -48.8309658761111,-18.2791310466666,0.0000</coordinates></LinearRing></outerBoundaryIs></Polygon></Placemark>
+<Placemark><name>Sítio 2</name><description>Área atualizada 07/10/2025</description><styleUrl>#yellowLineGreenPoly</styleUrl><Polygon><outerBoundaryIs><LinearRing><coordinates>-48.8327465708333,-18.2775029677778,0.0000 -48.8322471186111,-18.2772066172222,0.0000 -48.8318225852778,-18.2770297208333,0.0000 -48.8318697491667,-18.2778220261111,0.0000 -48.8316000280556,-18.2784205472222,0.0000 -48.8311521866667,-18.2789991091667,0.0000 -48.8309658761111,-18.2791310466666,0.0000 -48.8310930494445,-18.2791936430556,0.0000 -48.8312266816666,-18.2792817886111,0.0000 -48.83210991,-18.2788152086111,0.0000 -48.8325389336111,-18.2783794794445,0.0000 -48.8329451138889,-18.2776876883333,0.0000 -48.8327657183333,-18.2775143858333,0.0000 -48.8327465708333,-18.2775029677778,0.0000</coordinates></LinearRing></outerBoundaryIs></Polygon></Placemark>
+<Placemark><name>Sítio 3</name><description>Área atualizada 07/10/2025</description><styleUrl>#yellowLineGreenPoly</styleUrl><Polygon><outerBoundaryIs><LinearRing><coordinates>-48.8325552202778,-18.2793276161111,0.0000 -48.8330399102778,-18.2791414813889,0.0000 -48.8337399583333,-18.2786697497222,0.0000 -48.8336174313889,-18.278576855,0.0000 -48.8333424019445,-18.2783683236111,0.0000 -48.8329888416667,-18.2777299172222,0.0000 -48.8329451138889,-18.2776876883333,0.0000 -48.8325389336111,-18.2783794794445,0.0000 -48.83210991,-18.2788152086111,0.0000 -48.8312266816666,-18.2792817886111,0.0000 -48.8312863683333,-18.2793257344444,0.0000 -48.8313740388889,-18.2794917647222,0.0000 -48.8314057625,-18.2795184111111,0.0000 -48.8325552202778,-18.2793276161111,0.0000</coordinates></LinearRing></outerBoundaryIs></Polygon></Placemark>
+<Placemark><name>Sítio 4</name><description>Área atualizada 07/10/2025</description><styleUrl>#yellowLineGreenPoly</styleUrl><Polygon><outerBoundaryIs><LinearRing><coordinates>-48.8317861494444,-18.2800180394444,0.0000 -48.8317851827778,-18.2799931619445,0.0000 -48.8316496055556,-18.2797482711111,0.0000 -48.8328965380556,-18.2797281341667,0.0000 -48.8339221247222,-18.2797241766667,0.0000 -48.8346095472222,-18.2796946594444,0.0000 -48.8347149680556,-18.2798935897222,0.0000 -48.8349791241667,-18.2802851886111,0.0000 -48.8350143791667,-18.2804463783334,0.0000 -48.8350354855556,-18.2805438141667,0.0000 -48.8350226908333,-18.2807669830556,0.0000 -48.8342720736111,-18.2805717286111,0.0000 -48.8341638780555,-18.2804835255555,0.0000 -48.8335170183334,-18.2802813402778,0.0000 -48.832784795,-18.2801206688889,0.0000 -48.8317861494444,-18.2800180394444,0.0000</coordinates></LinearRing></outerBoundaryIs></Polygon></Placemark>
+<Placemark><name>Sítio 5</name><description>Área atualizada 07/10/2025</description><styleUrl>#yellowLineGreenPoly</styleUrl><Polygon><outerBoundaryIs><LinearRing><coordinates>-48.8341412847223,-18.2814622908333,0.0000 -48.8333120561111,-18.2807681288889,0.0000 -48.8325418397222,-18.2804750411111,0.0000 -48.8316138744445,-18.2802721494444,0.0000 -48.8317257563889,-18.2802324986111,0.0000 -48.8317912708334,-18.2801499561111,0.0000 -48.8317861494444,-18.2800180394444,0.0000 -48.832784795,-18.2801206688889,0.0000 -48.8335170183334,-18.2802813402778,0.0000 -48.8341638780555,-18.2804835255555,0.0000 -48.8342720736111,-18.2805717286111,0.0000 -48.8350226908333,-18.2807669830556,0.0000 -48.8350154511111,-18.2808932608333,0.0000 -48.8349961972222,-18.2809284527778,0.0000 -48.8349165680556,-18.2810740683333,0.0000 -48.8347674525,-18.2812185355555,0.0000 -48.8346321658333,-18.2812849322222,0.0000 -48.8344365627778,-18.2813808158333,0.0000 -48.8341412847223,-18.2814622908333,0.0000</coordinates></LinearRing></outerBoundaryIs></Polygon></Placemark>
+<Placemark><name>Sítio 6</name><description>Área atualizada 07/10/2025</description><styleUrl>#yellowLineGreenPoly</styleUrl><Polygon><outerBoundaryIs><LinearRing><coordinates>-48.8319018936111,-18.2810795708333,0.0000 -48.8325154361111,-18.2814857719445,0.0000 -48.8326001802778,-18.2814233202778,0.0000 -48.8328860472222,-18.2813763377778,0.0000 -48.8332779916666,-18.2813916216667,0.0000 -48.833742715,-18.2815007713889,0.0000 -48.8340632902778,-18.2814838091667,0.0000 -48.8341412847223,-18.2814622908333,0.0000 -48.8333120561111,-18.2807681288889,0.0000 -48.8325418397222,-18.2804750411111,0.0000 -48.8316138744445,-18.2802721494444,0.0000 -48.8315430208334,-18.2802973608334,0.0000 -48.8312603930556,-18.2803273055556,0.0000 -48.8319018936111,-18.2810795708333,0.0000</coordinates></LinearRing></outerBoundaryIs></Polygon></Placemark>
+</Document>
+</kml>`;
+
+interface Sitio {
   id: string;
-  titulo: string;
+  nome: string;
   descricao?: string;
-  preco?: number;
-  imagem?: string;
-  imagens?: string;
   localizacao?: string;
-  status?: string;
-  created_at?: string;
+  preco?: number;
+  fotos: string[];
+  lance_inicial?: number;
+  zona?: string;
+  area_total?: number;
+  area_construida?: number;
+  quartos?: number;
+  banheiros?: number;
+  vagas?: number;
+  coordenadas?: any;
 }
 
-export default async function Page({
-  params,
-}: {
-  params: Promise<PageParams>;
-}): Promise<JSX.Element> {
-  const { id } = await params;
+export default function PropertyPage() {
+  const params = useParams();
+  const router = useRouter();
+  const { showToast } = useToast();
+  const [sitio, setSitio] = useState<Sitio | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [currentImageIndex, setCurrentImageIndex] = useState(0);
+  const [bidValue, setBidValue] = useState("");
+  const [bidMessage, setBidMessage] = useState("");
+  const [bidSubmitting, setBidSubmitting] = useState(false);
+  const [bidSuccess, setBidSuccess] = useState(false);
+  const [bidError, setBidError] = useState("");
+  const [currentHighestBid, setCurrentHighestBid] = useState<number | null>(null);
+  const [kmlData, setKmlData] = useState<string>(KML_DATA_FALLBACK);
+  const [visitModalOpen, setVisitModalOpen] = useState(false);
+  const previouslyFocusedElement = useRef<HTMLElement | null>(null);
 
-  // Busca o item no Supabase
-  const { data: item, error } = await supabase
-    .from("items")
-    .select("*")
-    .eq("id", id)
-    .single<Item>();
+  // Handle Escape key to close modal
+  useEffect(() => {
+    const handleEscape = (e: KeyboardEvent) => {
+      if (e.key === "Escape" && visitModalOpen) {
+        setVisitModalOpen(false);
+        if (previouslyFocusedElement.current) {
+          previouslyFocusedElement.current.focus();
+        }
+      }
+    };
 
-  // Caso o item não exista ou haja erro
-  if (error || !item) {
-    console.error("Erro ao carregar o imóvel:", error);
+    if (visitModalOpen) {
+      document.addEventListener("keydown", handleEscape);
+    }
+
+    return () => {
+      document.removeEventListener("keydown", handleEscape);
+    };
+  }, [visitModalOpen]);
+
+  useEffect(() => {
+    if (!params?.id) return;
+
+    async function fetchSitio() {
+      try {
+        const { data, error } = await supabase
+          .from("sitios")
+          .select("*")
+          .eq("id", params.id)
+          .single();
+
+        if (error) {
+          console.error("Error fetching sitio:", error);
+          return;
+        }
+
+        console.log("Sitio data loaded:", data);
+        console.log("Photos array:", data?.fotos);
+        setSitio(data);
+        if (data?.lance_inicial) {
+          setBidValue(data.lance_inicial.toString());
+        }
+
+        // Add to recently viewed
+        addToRecentlyViewed({
+          id: data.id,
+          nome: data.nome,
+          localizacao: data.localizacao || "",
+          preco: data.preco || 0,
+          area_total: data.area_total || 0,
+          fotos: data.fotos || []
+        });
+
+        // Load individual KML file for this property
+        if (data?.nome || data?.id) {
+          const kmlPath = getKMLForProperty(data.nome || data.id);
+          if (kmlPath) {
+            const kmlContent = await fetchKMLContent(kmlPath);
+            if (kmlContent) {
+              console.log(`Loaded individual KML for ${data.nome}`);
+              setKmlData(kmlContent);
+            } else {
+              console.log('Using fallback KML (all properties)');
+            }
+          }
+        }
+
+        // Fetch current highest bid
+        const { data: bidsData } = await supabase
+          .from("bids")
+          .select("bid_amount")
+          .eq("property_id", params.id)
+          .neq("status", "rejected")
+          .order("bid_amount", { ascending: false })
+          .limit(1);
+
+        if (bidsData && bidsData.length > 0) {
+          setCurrentHighestBid(bidsData[0].bid_amount);
+        }
+      } catch (err) {
+        console.error("Unexpected error:", err);
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    fetchSitio();
+  }, [params?.id]);
+
+  const handleSubmitBid = async () => {
+    setBidError("");
+    setBidSuccess(false);
+    
+    // Check authentication
+    const { data: { user } } = await supabase.auth.getUser();
+    if (!user) {
+      setBidError("Por favor, faça login para enviar um lance.");
+      setTimeout(() => router.push("/entrar"), 2000);
+      return;
+    }
+
+    const bidAmount = parseFloat(bidValue);
+    const minBid = currentHighestBid || sitio?.lance_inicial || 0;
+
+    // Validation
+    if (isNaN(bidAmount) || bidAmount <= 0) {
+      setBidError("Digite um valor válido para o lance.");
+      return;
+    }
+
+    if (bidAmount < minBid) {
+      setBidError(`Seu lance deve ser maior ou igual a R$ ${minBid.toLocaleString("pt-BR")}`);
+      return;
+    }
+
+    setBidSubmitting(true);
+
+    try {
+      const { error } = await supabase
+        .from("bids")
+        .insert({
+          property_id: params.id,
+          user_id: user.id,
+          bid_amount: bidAmount,
+          message: bidMessage || null,
+          status: "pending",
+        });
+
+      if (error) throw error;
+
+      setBidSuccess(true);
+      setBidMessage("");
+      
+      // Show success toast
+      showToast({
+        type: "success",
+        title: "Lance enviado com sucesso!",
+        message: `Seu lance de R$ ${bidAmount.toLocaleString("pt-BR")} foi registrado.`
+      });
+      
+      // Update highest bid display
+      setCurrentHighestBid(bidAmount);
+      
+      // Optionally reload the property to get updated lance_inicial
+      const { data } = await supabase
+        .from("sitios")
+        .select("lance_inicial")
+        .eq("id", params.id)
+        .single();
+      
+      if (data) {
+        setSitio(prev => prev ? { ...prev, lance_inicial: data.lance_inicial } : null);
+      }
+
+      setTimeout(() => {
+        setBidSuccess(false);
+      }, 5000);
+    } catch (error: any) {
+      console.error("Error submitting bid:", error);
+      setBidError(error.message || "Erro ao enviar lance. Tente novamente.");
+      
+      // Show error toast
+      showToast({
+        type: "error",
+        title: "Erro ao enviar lance",
+        message: error.message || "Tente novamente mais tarde."
+      });
+    } finally {
+      setBidSubmitting(false);
+    }
+  };
+
+  if (loading) {
     return (
-      <main className="py-16 text-center text-gray-500">
-        <h1 className="text-2xl font-semibold mb-2">Anúncio não encontrado</h1>
-        <Link href="/" className="text-blue-600 hover:underline">
-          Voltar para a página inicial
-        </Link>
+      <main className="min-h-screen bg-gradient-to-b from-[#0a0a0a] via-[#0d0d0d] to-[#0a0a0a] flex items-center justify-center">
+        <div className="text-[#D4A574] text-xl">Carregando propriedade...</div>
       </main>
     );
   }
 
-  // Página com os detalhes do imóvel
-  return (
-    <main className="min-h-screen bg-gray-50 py-12">
-      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 space-y-10">
-        {/* Componente de detalhes do imóvel */}
-        <PropertyDetails item={item} />
-
-        {/* Ações principais */}
-        <div className="flex gap-4 flex-wrap">
-          <Link href={`/contato?propId=${item.id}`}>
-            <button
-              type="button"
-              className="bg-green-700 text-white px-5 py-3 rounded-lg hover:bg-green-800 transition"
-            >
-              Contato / Agendar Visita
-            </button>
-          </Link>
-
-          <Link href={`/proposta?propId=${item.id}`}>
-            <button
-              type="button"
-              className="bg-emerald-950 text-yellow-400 px-5 py-3 rounded-lg hover:bg-emerald-900 transition"
-            >
-              Fazer Proposta (sob autorização)
-            </button>
+  if (!sitio) {
+    return (
+      <main className="min-h-screen bg-gradient-to-b from-[#0a0a0a] via-[#0d0d0d] to-[#0a0a0a] flex items-center justify-center">
+        <div className="text-center">
+          <h1 className="text-2xl font-bold text-[#D4A574] mb-4">Propriedade não encontrada</h1>
+          <Link href="/" className="text-[#FF6B35] hover:underline">
+            Voltar para a página inicial
           </Link>
         </div>
+      </main>
+    );
+  }
 
-        {/* Formulário de contato */}
-        <div className="mt-12">
-          <ContactForm itemTitle={item.titulo} />
+  const photos = sitio.fotos && sitio.fotos.length > 0 ? sitio.fotos : ["/images/fallback-rancho.jpg"];
+  const currentPhoto = photos[currentImageIndex];
+
+  return (
+    <main className="min-h-screen bg-gradient-to-b from-[#0a0a0a] via-[#0d0d0d] to-[#0a0a0a]">
+      <div className="max-w-7xl mx-auto px-6 py-8">
+        {/* Breadcrumbs */}
+        <Breadcrumbs />
+        
+        {/* Back Button */}
+        <Link 
+          href="/" 
+          className="inline-flex items-center gap-2 text-[#D4A574] hover:text-[#FF6B35] mb-8 transition-colors"
+        >
+          <ArrowLeft className="w-5 h-5" />
+          Voltar para início
+        </Link>
+
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+          {/* Left Column - Images and Details */}
+          <div className="lg:col-span-2 space-y-6">
+            {/* Main Image with Favorite */}
+            <div className="relative aspect-video rounded-2xl overflow-hidden shadow-2xl group">
+              <Image
+                src={currentPhoto}
+                alt={sitio.nome}
+                fill
+                className="object-cover"
+                unoptimized
+                onError={(e) => {
+                  const target = e.target as HTMLImageElement;
+                  target.src = "/images/fallback-rancho.jpg";
+                }}
+              />
+              {/* Heart Favorite on Main Image */}
+              <div className="absolute top-4 left-4 z-10 opacity-0 group-hover:opacity-100 transition-opacity">
+                <FavoritesButton propertyId={sitio.id} size="lg" />
+              </div>
+            </div>
+
+            {/* Thumbnail Gallery with Hearts */}
+            {photos.length > 1 && (
+              <div className="grid grid-cols-4 md:grid-cols-6 gap-3">
+                {photos.map((photo, index) => (
+                  <div
+                    key={index}
+                    className="relative group"
+                  >
+                    <button
+                      onClick={() => setCurrentImageIndex(index)}
+                      className={`relative aspect-video rounded-lg overflow-hidden border-2 transition-all w-full ${
+                        index === currentImageIndex
+                          ? "border-[#FF6B35] scale-105"
+                          : "border-[#2a2a1a] hover:border-[#D4A574]"
+                      }`}
+                    >
+                      <Image
+                        src={photo}
+                        alt={`${sitio.nome} - ${index + 1}`}
+                        fill
+                        className="object-cover"
+                        unoptimized
+                      />
+                    </button>
+                    {/* Heart on each thumbnail */}
+                    <div className="absolute top-1 right-1 z-10 opacity-0 group-hover:opacity-100 transition-opacity">
+                      <FavoritesButton propertyId={`${sitio.id}-photo-${index}`} size="sm" />
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
+
+            {/* Property Info */}
+            <div className="bg-gradient-to-br from-[#1a1a1a] to-[#0d0d0d] border-2 border-[#2a2a1a] rounded-2xl p-8">
+              <h1 className="text-4xl font-bold text-[#D4A574] mb-4">{sitio.nome}</h1>
+              
+              {sitio.localizacao && (
+                <div className="flex items-center gap-2 text-[#8B9B6E] mb-6">
+                  <MapPin className="w-5 h-5 text-[#FF6B35]" />
+                  <span className="text-lg">{sitio.localizacao}</span>
+                </div>
+              )}
+
+              {sitio.zona && (
+                <div className="inline-block px-4 py-2 bg-[#FF6B35] text-[#0a0a0a] font-bold rounded-full mb-6">
+                  {sitio.zona}
+                </div>
+              )}
+
+              {/* Characteristics Grid */}
+              <div className="grid grid-cols-2 md:grid-cols-3 gap-4 mb-8">
+                {sitio.area_total && (
+                  <div className="flex items-center gap-3 bg-[#0a0a0a] rounded-lg p-4 border border-[#2a2a1a]">
+                    <Ruler className="w-6 h-6 text-[#FF6B35]" />
+                    <div>
+                      <div className="text-[#8B9B6E] text-xs">Área Total</div>
+                      <div className="text-[#D4A574] font-bold">{sitio.area_total} m²</div>
+                    </div>
+                  </div>
+                )}
+                {sitio.area_construida && (
+                  <div className="flex items-center gap-3 bg-[#0a0a0a] rounded-lg p-4 border border-[#2a2a1a]">
+                    <Ruler className="w-6 h-6 text-[#FF6B35]" />
+                    <div>
+                      <div className="text-[#8B9B6E] text-xs">Área Construída</div>
+                      <div className="text-[#D4A574] font-bold">{sitio.area_construida} m²</div>
+                    </div>
+                  </div>
+                )}
+                {sitio.quartos && (
+                  <div className="flex items-center gap-3 bg-[#0a0a0a] rounded-lg p-4 border border-[#2a2a1a]">
+                    <Bed className="w-6 h-6 text-[#FF6B35]" />
+                    <div>
+                      <div className="text-[#8B9B6E] text-xs">Quartos</div>
+                      <div className="text-[#D4A574] font-bold">{sitio.quartos}</div>
+                    </div>
+                  </div>
+                )}
+                {sitio.banheiros && (
+                  <div className="flex items-center gap-3 bg-[#0a0a0a] rounded-lg p-4 border border-[#2a2a1a]">
+                    <Bath className="w-6 h-6 text-[#FF6B35]" />
+                    <div>
+                      <div className="text-[#8B9B6E] text-xs">Banheiros</div>
+                      <div className="text-[#D4A574] font-bold">{sitio.banheiros}</div>
+                    </div>
+                  </div>
+                )}
+                {sitio.vagas && (
+                  <div className="flex items-center gap-3 bg-[#0a0a0a] rounded-lg p-4 border border-[#2a2a1a]">
+                    <Car className="w-6 h-6 text-[#FF6B35]" />
+                    <div>
+                      <div className="text-[#8B9B6E] text-xs">Vagas</div>
+                      <div className="text-[#D4A574] font-bold">{sitio.vagas}</div>
+                    </div>
+                  </div>
+                )}
+              </div>
+
+              {/* Description */}
+              {sitio.descricao && (
+                <div>
+                  <h2 className="text-2xl font-bold text-[#D4A574] mb-4">Descrição</h2>
+                  <p className="text-[#8B9B6E] leading-relaxed whitespace-pre-line">
+                    {sitio.descricao}
+                  </p>
+                </div>
+              )}
+            </div>
+
+            {/* Videos Section */}
+            <div className="bg-gradient-to-br from-[#1a1a1a] to-[#0d0d0d] border-2 border-[#2a2a1a] rounded-2xl p-8">
+              <div className="flex items-center gap-3 mb-6">
+                <Video className="w-8 h-8 text-[#FF6B35]" />
+                <h2 className="text-2xl font-bold text-[#D4A574]">Vídeos da Propriedade</h2>
+              </div>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div className="rounded-xl overflow-hidden bg-[#0a0a0a] border border-[#2a2a1a] aspect-video flex items-center justify-center">
+                  <div className="text-center p-6">
+                    <Video className="w-12 h-12 text-[#D4A574] mx-auto mb-3" />
+                    <p className="text-[#8B9B6E] text-sm">Vídeo Drone - Navegação Aérea</p>
+                    <p className="text-[#D4A574]/50 text-xs mt-2">(Em breve)</p>
+                  </div>
+                </div>
+                <div className="rounded-xl overflow-hidden bg-[#0a0a0a] border border-[#2a2a1a] aspect-video flex items-center justify-center">
+                  <div className="text-center p-6">
+                    <Video className="w-12 h-12 text-[#D4A574] mx-auto mb-3" />
+                    <p className="text-[#8B9B6E] text-sm">Tour Virtual - Caminhos e Trilhas</p>
+                    <p className="text-[#D4A574]/50 text-xs mt-2">(Em breve)</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Eco-Building Tips */}
+            <div className="bg-gradient-to-br from-[#1a1a1a] to-[#0d0d0d] border-2 border-[#8B9B6E]/30 rounded-2xl p-8">
+              <div className="flex items-center gap-3 mb-6">
+                <TreePine className="w-8 h-8 text-[#8B9B6E]" />
+                <h2 className="text-2xl font-bold text-[#D4A574]">Construção Ecológica</h2>
+              </div>
+              <div className="space-y-4">
+                <div className="flex items-start gap-4 p-4 bg-[#0a0a0a]/50 rounded-lg border border-[#8B9B6E]/20">
+                  <div className="w-2 h-2 rounded-full bg-[#8B9B6E] mt-2 flex-shrink-0" />
+                  <div>
+                    <h3 className="text-[#D4A574] font-semibold mb-1">Materiais Sustentáveis</h3>
+                    <p className="text-[#8B9B6E] text-sm">Madeira de reflorestamento, bambu, adobe e tijolo ecológico para construções de baixo impacto ambiental.</p>
+                  </div>
+                </div>
+                <div className="flex items-start gap-4 p-4 bg-[#0a0a0a]/50 rounded-lg border border-[#8B9B6E]/20">
+                  <div className="w-2 h-2 rounded-full bg-[#8B9B6E] mt-2 flex-shrink-0" />
+                  <div>
+                    <h3 className="text-[#D4A574] font-semibold mb-1">Energia Solar e Eólica</h3>
+                    <p className="text-[#8B9B6E] text-sm">Sistemas de captação de energia renovável para independência energética e economia a longo prazo.</p>
+                  </div>
+                </div>
+                <div className="flex items-start gap-4 p-4 bg-[#0a0a0a]/50 rounded-lg border border-[#8B9B6E]/20">
+                  <div className="w-2 h-2 rounded-full bg-[#8B9B6E] mt-2 flex-shrink-0" />
+                  <div>
+                    <h3 className="text-[#D4A574] font-semibold mb-1">Captação de Água da Chuva</h3>
+                    <p className="text-[#8B9B6E] text-sm">Sistemas de armazenamento e tratamento de água pluvial para uso doméstico e irrigação.</p>
+                  </div>
+                </div>
+                <div className="flex items-start gap-4 p-4 bg-[#0a0a0a]/50 rounded-lg border border-[#8B9B6E]/20">
+                  <div className="w-2 h-2 rounded-full bg-[#8B9B6E] mt-2 flex-shrink-0" />
+                  <div>
+                    <h3 className="text-[#D4A574] font-semibold mb-1">Bioarquitetura</h3>
+                    <p className="text-[#8B9B6E] text-sm">Aproveitamento da iluminação e ventilação natural, reduzindo consumo energético e integrando com o ambiente.</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Agroforestry Ideas */}
+            <div className="bg-gradient-to-br from-[#1a1a1a] to-[#0d0d0d] border-2 border-[#B7791F]/30 rounded-2xl p-8">
+              <div className="flex items-center gap-3 mb-6">
+                <Leaf className="w-8 h-8 text-[#B7791F]" />
+                <h2 className="text-2xl font-bold text-[#D4A574]">Agrofloresta e Produção Sustentável</h2>
+              </div>
+              <div className="space-y-4">
+                <div className="flex items-start gap-4 p-4 bg-[#0a0a0a]/50 rounded-lg border border-[#B7791F]/20">
+                  <div className="w-2 h-2 rounded-full bg-[#B7791F] mt-2 flex-shrink-0" />
+                  <div>
+                    <h3 className="text-[#D4A574] font-semibold mb-1">Sistema Agroflorestal (SAF)</h3>
+                    <p className="text-[#8B9B6E] text-sm">Consórcio de árvores nativas, frutíferas, hortaliças e plantas medicinais, criando um ecossistema produtivo e autossustentável.</p>
+                  </div>
+                </div>
+                <div className="flex items-start gap-4 p-4 bg-[#0a0a0a]/50 rounded-lg border border-[#B7791F]/20">
+                  <div className="w-2 h-2 rounded-full bg-[#B7791F] mt-2 flex-shrink-0" />
+                  <div>
+                    <h3 className="text-[#D4A574] font-semibold mb-1">Pomar Diversificado</h3>
+                    <p className="text-[#8B9B6E] text-sm">Cultivo de frutas nativas e exóticas: manga, jabuticaba, pequi, cagaita, pitanga, acerola, banana, maracujá.</p>
+                  </div>
+                </div>
+                <div className="flex items-start gap-4 p-4 bg-[#0a0a0a]/50 rounded-lg border border-[#B7791F]/20">
+                  <div className="w-2 h-2 rounded-full bg-[#B7791F] mt-2 flex-shrink-0" />
+                  <div>
+                    <h3 className="text-[#D4A574] font-semibold mb-1">Horta Orgânica e Mandala</h3>
+                    <p className="text-[#8B9B6E] text-sm">Cultivo de hortaliças, ervas aromáticas e plantas medicinais em sistemas permaculturais de alta produtividade.</p>
+                  </div>
+                </div>
+                <div className="flex items-start gap-4 p-4 bg-[#0a0a0a]/50 rounded-lg border border-[#B7791F]/20">
+                  <div className="w-2 h-2 rounded-full bg-[#B7791F] mt-2 flex-shrink-0" />
+                  <div>
+                    <h3 className="text-[#D4A574] font-semibold mb-1">Criação Animal Integrada</h3>
+                    <p className="text-[#8B9B6E] text-sm">Galinhas caipiras, peixes em tanques, abelhas nativas (meliponicultura) e outros animais em sistemas integrados.</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Boat Structures */}
+            <div className="bg-gradient-to-br from-[#1a1a1a] to-[#0d0d0d] border-2 border-[#FF6B35]/30 rounded-2xl p-8">
+              <div className="flex items-center gap-3 mb-6">
+                <Ship className="w-8 h-8 text-[#FF6B35]" />
+                <h2 className="text-2xl font-bold text-[#D4A574]">Infraestrutura Náutica</h2>
+              </div>
+              <div className="space-y-4">
+                <div className="flex items-start gap-4 p-4 bg-[#0a0a0a]/50 rounded-lg border border-[#FF6B35]/20">
+                  <div className="w-2 h-2 rounded-full bg-[#FF6B35] mt-2 flex-shrink-0" />
+                  <div>
+                    <h3 className="text-[#D4A574] font-semibold mb-1">Pier e Atracadouro</h3>
+                    <p className="text-[#8B9B6E] text-sm">Estrutura de madeira ou concreto para atraque de lanchas, barcos e jet skis, com segurança e estabilidade.</p>
+                  </div>
+                </div>
+                <div className="flex items-start gap-4 p-4 bg-[#0a0a0a]/50 rounded-lg border border-[#FF6B35]/20">
+                  <div className="w-2 h-2 rounded-full bg-[#FF6B35] mt-2 flex-shrink-0" />
+                  <div>
+                    <h3 className="text-[#D4A574] font-semibold mb-1">Garagem Náutica Coberta</h3>
+                    <p className="text-[#8B9B6E] text-sm">Área coberta para armazenamento e manutenção de embarcações, protegendo do sol e chuva.</p>
+                  </div>
+                </div>
+                <div className="flex items-start gap-4 p-4 bg-[#0a0a0a]/50 rounded-lg border border-[#FF6B35]/20">
+                  <div className="w-2 h-2 rounded-full bg-[#FF6B35] mt-2 flex-shrink-0" />
+                  <div>
+                    <h3 className="text-[#D4A574] font-semibold mb-1">Rampas de Acesso</h3>
+                    <p className="text-[#8B9B6E] text-sm">Rampas facilitadas para lançamento de jet skis e caiaques diretamente na represa.</p>
+                  </div>
+                </div>
+                <div className="flex items-start gap-4 p-4 bg-[#0a0a0a]/50 rounded-lg border border-[#FF6B35]/20">
+                  <div className="w-2 h-2 rounded-full bg-[#FF6B35] mt-2 flex-shrink-0" />
+                  <div>
+                    <h3 className="text-[#D4A574] font-semibold mb-1">Área de Lazer Aquático</h3>
+                    <p className="text-[#8B9B6E] text-sm">Deck flutuante, boia de ancoragem e área delimitada para banho seguro na represa.</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Nature Preservation & Reforestation */}
+            <div className="bg-gradient-to-br from-[#1a1a1a] to-[#0d0d0d] border-2 border-[#8B9B6E]/30 rounded-2xl p-8">
+              <div className="flex items-center gap-3 mb-6">
+                <TreePine className="w-8 h-8 text-[#8B9B6E]" />
+                <h2 className="text-2xl font-bold text-[#D4A574]">Preservação e Reflorestamento</h2>
+              </div>
+              <div className="space-y-4">
+                <div className="flex items-start gap-4 p-4 bg-[#0a0a0a]/50 rounded-lg border border-[#8B9B6E]/20">
+                  <div className="w-2 h-2 rounded-full bg-[#8B9B6E] mt-2 flex-shrink-0" />
+                  <div>
+                    <h3 className="text-[#D4A574] font-semibold mb-1">Área de Preservação Permanente (APP)</h3>
+                    <p className="text-[#8B9B6E] text-sm">Manutenção e recuperação das matas ciliares ao redor da represa, protegendo a qualidade da água e biodiversidade.</p>
+                  </div>
+                </div>
+                <div className="flex items-start gap-4 p-4 bg-[#0a0a0a]/50 rounded-lg border border-[#8B9B6E]/20">
+                  <div className="w-2 h-2 rounded-full bg-[#8B9B6E] mt-2 flex-shrink-0" />
+                  <div>
+                    <h3 className="text-[#D4A574] font-semibold mb-1">Reflorestamento com Nativas do Cerrado</h3>
+                    <p className="text-[#8B9B6E] text-sm">Plantio de espécies nativas: ipê, jatobá, aroeira, pequi, baru, sucupira, garantindo a preservação do bioma.</p>
+                  </div>
+                </div>
+                <div className="flex items-start gap-4 p-4 bg-[#0a0a0a]/50 rounded-lg border border-[#8B9B6E]/20">
+                  <div className="w-2 h-2 rounded-full bg-[#8B9B6E] mt-2 flex-shrink-0" />
+                  <div>
+                    <h3 className="text-[#D4A574] font-semibold mb-1">Corredores Ecológicos</h3>
+                    <p className="text-[#8B9B6E] text-sm">Criação de corredores verdes para trânsito da fauna local: tatus, capivaras, seriemas, tucanos e aves aquáticas.</p>
+                  </div>
+                </div>
+                <div className="flex items-start gap-4 p-4 bg-[#0a0a0a]/50 rounded-lg border border-[#8B9B6E]/20">
+                  <div className="w-2 h-2 rounded-full bg-[#8B9B6E] mt-2 flex-shrink-0" />
+                  <div>
+                    <h3 className="text-[#D4A574] font-semibold mb-1">Programa de Educação Ambiental</h3>
+                    <p className="text-[#8B9B6E] text-sm">Desenvolvimento de trilhas ecológicas e programas educativos sobre a flora e fauna local.</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* 3D Interactive Map */}
+            <div className="bg-gradient-to-br from-[#1a1a1a] to-[#0d0d0d] border-2 border-[#2a2a1a] rounded-2xl p-8">
+              <h2 className="text-2xl font-bold text-[#D4A574] mb-4">Mapa Interativo 3D</h2>
+              <p className="text-[#8B9B6E] mb-6">
+                Visualize a localização exata desta propriedade em mapa de satélite. Clique nas áreas para mais detalhes.
+              </p>
+              <div className="h-[500px] rounded-xl overflow-hidden">
+                <LeafletMapKML kmlData={kmlData} />
+              </div>
+            </div>
+          </div>
+
+          {/* Right Column - Bidding Box (Sticky) */}
+          <div className="lg:col-span-1">
+            <div className="sticky top-24 bg-gradient-to-br from-[#1a1a1a] to-[#0d0d0d] border-2 border-[#FF6B35]/40 rounded-2xl p-6 space-y-6">
+              <div>
+                <h3 className="text-[#D4A574] font-semibold mb-2">Lance Inicial</h3>
+                <div className="text-[#FF6B35] font-bold text-3xl">
+                  R$ {sitio.lance_inicial?.toLocaleString("pt-BR") || "N/A"}
+                </div>
+                {sitio.preco && (
+                  <div className="text-[#8B9B6E] text-sm mt-1">
+                    Valor de referência: R$ {sitio.preco.toLocaleString("pt-BR")}
+                  </div>
+                )}
+              </div>
+
+              {/* Current Highest Bid */}
+              {currentHighestBid && currentHighestBid > (sitio.lance_inicial || 0) && (
+                <div className="pt-3 border-t border-[#2a2a1a]">
+                  <h4 className="text-[#8B9B6E] text-sm mb-1">🔥 Lance Mais Alto</h4>
+                  <p className="text-2xl font-bold text-[#FF6B35]">
+                    R$ {currentHighestBid.toLocaleString("pt-BR")}
+                  </p>
+                </div>
+              )}
+
+              {/* Bidding Form */}
+              <div id="fazer-lance" className="space-y-4">
+                <h3 className="text-[#D4A574] font-bold text-xl">Fazer Lance</h3>
+                
+                {bidSuccess && (
+                  <div className="bg-green-900/20 border border-green-500/50 rounded-lg p-4 animate-pulse">
+                    <p className="text-green-400 text-sm font-semibold">
+                      ✓ Lance enviado com sucesso!
+                    </p>
+                  </div>
+                )}
+
+                {bidError && (
+                  <div className="bg-red-900/20 border border-red-500/50 rounded-lg p-4">
+                    <p className="text-red-400 text-sm">{bidError}</p>
+                  </div>
+                )}
+
+                <div>
+                  <label className="text-[#8B9B6E] text-sm mb-2 block">
+                    Seu Lance (R$) {currentHighestBid && (
+                      <span className="text-xs text-[#676767]">
+                        (mínimo: R$ {currentHighestBid.toLocaleString("pt-BR")})
+                      </span>
+                    )}
+                  </label>
+                  <input
+                    type="number"
+                    value={bidValue}
+                    onChange={(e) => setBidValue(e.target.value)}
+                    min={currentHighestBid || sitio.lance_inicial || 0}
+                    step="1000"
+                    className="w-full px-4 py-3 bg-[#0a0a0a] border-2 border-[#2a2a1a] rounded-lg text-[#D4A574] focus:border-[#FF6B35] focus:outline-none"
+                  />
+                </div>
+
+                <div>
+                  <label className="text-[#8B9B6E] text-sm mb-2 block">
+                    Mensagem (opcional)
+                  </label>
+                  <textarea
+                    value={bidMessage}
+                    onChange={(e) => setBidMessage(e.target.value)}
+                    rows={3}
+                    placeholder="Adicione detalhes sobre sua proposta..."
+                    className="w-full px-4 py-3 bg-[#0a0a0a] border-2 border-[#2a2a1a] rounded-lg text-[#D4A574] placeholder-[#676767] focus:border-[#FF6B35] focus:outline-none resize-none"
+                  />
+                </div>
+
+                <button
+                  onClick={handleSubmitBid}
+                  disabled={bidSubmitting}
+                  className="w-full px-6 py-4 bg-gradient-to-r from-[#FF6B35] to-[#FF8C42] text-[#0a0a0a] font-bold rounded-full shadow-xl hover:from-[#FF8C42] hover:to-[#FF6B35] transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+                >
+                  {bidSubmitting ? "Enviando..." : "💰 Enviar Lance"}
+                </button>
+              </div>
+
+              {/* Action Buttons */}
+              <div className="pt-6 border-t border-[#2a2a1a] space-y-3">
+                {/* Details Button */}
+                <a
+                  href="https://www.sitioscarcara.com.br"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-center justify-center gap-2 w-full px-6 py-3 bg-[#D4A574]/20 border-2 border-[#D4A574] text-[#D4A574] font-bold rounded-full hover:bg-[#D4A574]/30 transition-all"
+                >
+                  <ExternalLink className="w-5 h-5" />
+                  Ver Detalhes Completos
+                </a>
+
+                {/* WhatsApp Contact */}
+                <a
+                  href="https://wa.me/5534992610004"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-center justify-center gap-2 w-full px-6 py-3 border-2 border-[#25D366] text-[#25D366] font-bold rounded-full hover:bg-[#25D366]/10 transition-all"
+                >
+                  <Phone className="w-5 h-5" />
+                  Contato WhatsApp
+                </a>
+
+                {/* Schedule Visit */}
+                <button
+                  onClick={() => {
+                    previouslyFocusedElement.current = document.activeElement as HTMLElement;
+                    setVisitModalOpen(true);
+                  }}
+                  className="flex items-center justify-center gap-2 w-full px-6 py-3 bg-[#8B9B6E]/20 border-2 border-[#8B9B6E] text-[#8B9B6E] font-bold rounded-full hover:bg-[#8B9B6E]/30 transition-all"
+                >
+                  <Calendar className="w-5 h-5" />
+                  Agendar Visita
+                </button>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
+
+      {/* Visit Scheduler Modal */}
+      {visitModalOpen && (
+        <div className="fixed inset-0 bg-black/80 z-50 flex items-center justify-center p-4 overflow-y-auto">
+          <FocusLock returnFocus>
+            <div className="relative max-w-3xl w-full my-8">
+              <button
+                onClick={() => {
+                  setVisitModalOpen(false);
+                  if (previouslyFocusedElement.current) {
+                    previouslyFocusedElement.current.focus();
+                  }
+                }}
+                className="absolute -top-12 right-0 text-white hover:text-[#FF6B35] text-2xl font-bold"
+                aria-label="Fechar modal de agendamento"
+              >
+                ✕ Fechar
+              </button>
+              <VisitScheduler 
+                propertyId={sitio.id}
+                propertyTitle={sitio.nome}
+              />
+            </div>
+          </FocusLock>
+        </div>
+      )}
     </main>
   );
 }

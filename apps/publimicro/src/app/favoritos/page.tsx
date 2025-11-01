@@ -1,18 +1,49 @@
+"use client";
+
+import { useState, useEffect } from "react";
+import { supabase } from "@/lib/supabaseClient";
+import Link from "next/link";
+import { ArrowLeft } from "lucide-react";
+import FavoritesFolders from "@/components/FavoritesFolders";
+import Breadcrumbs from "@/components/Breadcrumbs";
+
 export default function FavoritosPage() {
+  const [userId, setUserId] = useState<string | null>(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    supabase.auth.getUser().then(({ data }) => {
+      if (!data?.user) {
+        window.location.href = "/entrar";
+      } else {
+        setUserId(data.user.id);
+        setLoading(false);
+      }
+    });
+  }, []);
+
+  if (loading) {
+    return (
+      <main className="min-h-screen bg-gradient-to-b from-[#0a0a0a] via-[#0d0d0d] to-[#0a0a0a] flex items-center justify-center">
+        <div className="text-[#D4A574] text-xl">Carregando favoritos...</div>
+      </main>
+    );
+  }
+
   return (
-    <main className="min-h-screen bg-gradient-to-b from-[#0a0a0a] via-[#0d0d0d] to-[#0a0a0a] py-20 px-6">
-      <div className="max-w-7xl mx-auto text-center">
-        <h1 className="text-5xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-[#FF6B35] to-[#B7791F] mb-6">
-          ❤️ Favoritos
-        </h1>
-        <div className="bg-gradient-to-br from-[#1a1a1a] to-[#0d0d0d] border-2 border-[#2a2a1a] rounded-2xl p-12">
-          <p className="text-xl text-[#676767] mb-6">
-            Você ainda não tem anúncios favoritos.
-          </p>
-          <p className="text-[#676767] mb-8">
-            Explore nossos anúncios e salve seus favoritos clicando no ícone de coração.
-          </p>
-        </div>
+    <main className="min-h-screen bg-gradient-to-b from-[#0a0a0a] via-[#0d0d0d] to-[#0a0a0a]">
+      <div className="max-w-7xl mx-auto px-6 py-8">
+        <Breadcrumbs />
+        
+        <Link
+          href="/"
+          className="inline-flex items-center gap-2 text-[#D4A574] hover:text-[#FF6B35] mb-8 transition-colors"
+        >
+          <ArrowLeft className="w-5 h-5" />
+          Voltar
+        </Link>
+
+        <FavoritesFolders />
       </div>
     </main>
   );

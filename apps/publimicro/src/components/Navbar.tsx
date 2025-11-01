@@ -2,8 +2,9 @@
 
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { Scale, TrendingUp } from "lucide-react";
 
-export default function Navbar(): JSX.Element {
+export default function Navbar() {
   const router = useRouter();
 
   function handlePostar(): void {
@@ -19,7 +20,7 @@ export default function Navbar(): JSX.Element {
     <nav className="flex items-center gap-4">
       <Link
         href="/buscar"
-        className="flex flex-col items-center text-xs text-gray-700 hover:text-emerald-800"
+        className="flex flex-col items-center text-xs text-[#8B9B6E] hover:text-[#FF6B35] transition-colors"
       >
         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" className="mb-1">
           <path
@@ -33,8 +34,26 @@ export default function Navbar(): JSX.Element {
       </Link>
 
       <Link
+        href="/comparar"
+        className="flex flex-col items-center text-xs text-[#8B9B6E] hover:text-[#FF6B35] transition-colors"
+        title="Comparar Propriedades"
+      >
+        <Scale className="w-5 h-5 mb-1" />
+        <span>Comparar</span>
+      </Link>
+
+      <Link
+        href="/lances"
+        className="flex flex-col items-center text-xs text-[#8B9B6E] hover:text-[#FF6B35] transition-colors"
+        title="Meus Lances"
+      >
+        <TrendingUp className="w-5 h-5 mb-1" />
+        <span>Lances</span>
+      </Link>
+
+      <Link
         href="/favoritos"
-        className="flex flex-col items-center text-xs text-gray-700 hover:text-amber-600"
+        className="flex flex-col items-center text-xs text-[#8B9B6E] hover:text-[#FF6B35] transition-colors"
       >
         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" className="mb-1">
           <path
@@ -49,7 +68,7 @@ export default function Navbar(): JSX.Element {
       <button
         onClick={handlePostar}
         type="button"
-        className="flex flex-col items-center text-xs text-gray-700 hover:text-blue-600"
+        className="flex flex-col items-center text-xs text-[#8B9B6E] hover:text-[#FF6B35] transition-colors"
       >
         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" className="mb-1">
           <path
@@ -64,7 +83,7 @@ export default function Navbar(): JSX.Element {
 
       <Link
         href="/conta"
-        className="flex flex-col items-center text-xs text-gray-700 hover:text-gray-900"
+        className="flex flex-col items-center text-xs text-[#8B9B6E] hover:text-[#FF6B35] transition-colors"
       >
         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" className="mb-1">
           <path
