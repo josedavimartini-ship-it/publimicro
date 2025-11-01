@@ -1,4 +1,3 @@
 ﻿{
-   "buildCommand": "turbo run build --filter=@publimicro/publimicro",
   "installCommand": "pnpm install"
 }
