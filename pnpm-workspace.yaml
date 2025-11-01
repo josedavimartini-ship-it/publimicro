@@ -1,42 +1,38 @@
-# pnpm workspace configuration for the Publimicro monorepo
-
 packages:
-  - 'apps/*'
-  - 'packages/*'
+  - apps/*
+  - packages/*
 
-# Catalog for shared dependency versions across workspace
 catalog:
-  react: ^19.0.0
-  react-dom: ^19.0.0
-  next: ^16.0.0
-  typescript: ^5.9.3
-  tailwindcss: ^4.1.16
   '@tailwindcss/postcss': ^4.1.16
   autoprefixer: ^10.4.21
+  next: ^16.0.0
   postcss: ^8.5.6
+  react: ^19.0.0
+  react-dom: ^19.0.0
+  tailwindcss: ^4.1.16
+  typescript: ^5.9.3
 
-# Only allow these packages to be built from source (not use pre-built binaries)
+ignoredBuiltDependencies:
+  - unrs-resolver
+
+nohoist:
+  - '**/eslint'
+  - '**/eslint-*'
+
 onlyBuiltDependencies:
   - sharp
   - esbuild
   - turbo
 
-# Prevent hoisting of these packages to root node_modules
-nohoist:
-  - '**/eslint'
-  - '**/eslint-*'
-
-# Shared configuration for all packages
 packageExtensions:
-  # Add peer dependencies that packages forgot to declare
+  '@react-three/drei':
+    peerDependencies:
+      '@react-three/fiber': '*'
+      react: '*'
+      react-dom: '*'
+      three: '*'
   '@react-three/fiber':
     peerDependencies:
       react: '*'
       react-dom: '*'
       three: '*'
-  '@react-three/drei':
-    peerDependencies:
-      react: '*'
-      react-dom: '*'
-      three: '*'
-      '@react-three/fiber': '*'
