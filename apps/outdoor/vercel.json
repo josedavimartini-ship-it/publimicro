@@ -1,4 +1,5 @@
 {
-  "buildCommand": "turbo run build --filter=@publimicro/outdoor",
-  "installCommand": "pnpm install"
+  "buildCommand": "cd ../.. && npx pnpm@9.12.3 run build --filter=@publimicro/outdoor",
+  "installCommand": "cd ../.. && npx pnpm@9.12.3 install --no-frozen-lockfile",
+  "framework": "nextjs"
 }
