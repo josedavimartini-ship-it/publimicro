@@ -16,7 +16,7 @@
     "dev:publimicro": "turbo run dev --filter=@publimicro/publimicro",
     "dev:journey": "turbo run dev --filter=@publimicro/journey",
     "build": "turbo run build",
-    "build:ui": "turbo run build --filter=@publimicro/ui",
+    "build:ui": "rimraf dist && tsc -p tsconfig.json --outDir dist",
     "lint": "turbo run lint",
     "format": "prettier --write \"**/*.{js,jsx,ts,tsx,json,css,md}\"",
     "format:check": "prettier --check \"**/*.{js,jsx,ts,tsx,json,css,md}\"",

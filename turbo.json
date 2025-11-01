@@ -17,7 +17,11 @@
     },
     "build": {
       "dependsOn": ["^build"],
-      "outputs": [".next/**", "dist/**", "!.next/cache/**"],
+      "outputs": [
+        ".next/**",
+        "dist/**",
+        "!.next/cache/**"
+      ],
       "env": [
         "NEXT_PUBLIC_*",
         "DATABASE_URL",
@@ -25,6 +29,9 @@
         "STRIPE_PUBLISHABLE_KEY"
       ]
     },
+    "ui#build": {
+  "outputs": ["packages/ui/dist/**"]
+},
     "lint": {
       "dependsOn": ["^build"],
       "outputs": [],
