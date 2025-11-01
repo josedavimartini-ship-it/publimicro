@@ -9,8 +9,8 @@ interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
 export function Button({ children, variant = "default", ...props }: ButtonProps) {
   const base = "px-4 py-2 rounded-md font-medium transition";
   const variants = {
-    default: "bg-blue-600 text-white hover:bg-blue-700",
-    outline: "border border-gray-400 text-gray-700 hover:bg-gray-100"
+    default: "bg-gradient-to-r from-[#FF6B35] to-[#FF8C42] text-[#0a0a0a] hover:from-[#FF8C42] hover:to-[#FF6B35]",
+    outline: "border-2 border-[#D4A574] text-[#D4A574] hover:bg-[#D4A574]/10"
   };
 
   return (

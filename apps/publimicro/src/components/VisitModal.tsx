@@ -1,8 +1,9 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { apiPost } from '@/lib/api';
 import { X, Calendar, Clock, Video, MapPin } from 'lucide-react';
+import FocusLock from 'react-focus-lock';
 
 interface VisitModalProps {
   adId: string;
@@ -23,6 +24,38 @@ export default function VisitModal({ adId, adTitle, open, onClose }: VisitModalP
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
   const [error, setError] = useState('');
+  const previouslyFocusedElement = useRef<HTMLElement | null>(null);
+
+  // Store focused element when modal opens
+  useEffect(() => {
+    if (open) {
+      previouslyFocusedElement.current = document.activeElement as HTMLElement;
+    }
+  }, [open]);
+
+  // Handle Escape key
+  useEffect(() => {
+    const handleEscape = (e: KeyboardEvent) => {
+      if (e.key === 'Escape' && open) {
+        handleClose();
+      }
+    };
+
+    if (open) {
+      document.addEventListener('keydown', handleEscape);
+    }
+
+    return () => {
+      document.removeEventListener('keydown', handleEscape);
+    };
+  }, [open]);
+
+  const handleClose = () => {
+    onClose();
+    if (previouslyFocusedElement.current) {
+      previouslyFocusedElement.current.focus();
+    }
+  };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
     setForm({ ...form, [e.target.name]: e.target.value });
@@ -60,16 +93,17 @@ export default function VisitModal({ adId, adTitle, open, onClose }: VisitModalP
 
   return (
     <div className="fixed inset-0 bg-black/70 backdrop-blur-sm flex items-center justify-center z-50 p-4">
-      <div className="bg-gradient-to-br from-[#1a1a1a] to-[#0d0d0d] border-2 border-[#2a2a1a] rounded-2xl w-full max-w-lg relative shadow-2xl max-h-[90vh] overflow-y-auto">
-        <button
-          onClick={onClose}
-          className="absolute top-4 right-4 text-[#676767] hover:text-[#FF6B35] transition-colors z-10"
-          aria-label="Close"
-        >
-          <X className="w-6 h-6" />
-        </button>
+      <FocusLock returnFocus>
+        <div className="bg-gradient-to-br from-[#1a1a1a] to-[#0d0d0d] border-2 border-[#2a2a1a] rounded-2xl w-full max-w-lg relative shadow-2xl max-h-[90vh] overflow-y-auto">
+          <button
+            onClick={handleClose}
+            className="absolute top-4 right-4 text-[#959595] hover:text-[#FF6B35] transition-colors z-10"
+            aria-label="Fechar modal de agendamento"
+          >
+            <X className="w-6 h-6" />
+          </button>
 
-        <div className="p-8">
+          <div className="p-8">
           <div className="mb-6">
             <h2 className="text-3xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-[#0D7377] to-[#5F7161] mb-2">
               Agendar Visita
@@ -252,6 +286,7 @@ export default function VisitModal({ adId, adTitle, open, onClose }: VisitModalP
           )}
         </div>
       </div>
+      </FocusLock>
     </div>
   );
 }

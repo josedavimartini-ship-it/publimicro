@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<kml xmlns="http://www.opengis.net/kml/2.2" xmlns:gx="http://www.google.com/kml/ext/2.2">
+<Document>
+<name>Sítio Juriti</name>
+<description>Propriedade exclusiva às margens da Represa de Corumbaíba</description>
+<Style id="yellowLineGreenPoly">
+  <LineStyle>
+    <color>ff00ffff</color>
+    <width>3</width>
+  </LineStyle>
+  <PolyStyle>
+    <fill>0</fill>
+  </PolyStyle>
+</Style>
+<Placemark>
+  <name>Sítio Juriti</name>
+  <description>Área atualizada 07/10/2025</description>
+  <styleUrl>#yellowLineGreenPoly</styleUrl>
+  <Polygon>
+    <outerBoundaryIs>
+      <LinearRing>
+        <coordinates>-48.8327465708333,-18.2775029677778,0.0000 -48.8322471186111,-18.2772066172222,0.0000 -48.8318225852778,-18.2770297208333,0.0000 -48.8318697491667,-18.2778220261111,0.0000 -48.8316000280556,-18.2784205472222,0.0000 -48.8311521866667,-18.2789991091667,0.0000 -48.8309658761111,-18.2791310466666,0.0000 -48.8310930494445,-18.2791936430556,0.0000 -48.8312266816666,-18.2792817886111,0.0000 -48.83210991,-18.2788152086111,0.0000 -48.8325389336111,-18.2783794794445,0.0000 -48.8329451138889,-18.2776876883333,0.0000 -48.8327657183333,-18.2775143858333,0.0000 -48.8327465708333,-18.2775029677778,0.0000</coordinates>
+      </LinearRing>
+    </outerBoundaryIs>
+  </Polygon>
+</Placemark>
+</Document>
+</kml>

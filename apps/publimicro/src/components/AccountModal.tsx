@@ -102,10 +102,10 @@ export default function AccountModal({ open, onClose }: AccountModalProps) {
         </button>
 
         <div className="p-8">
-          <h2 className="text-3xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-[#B7791F] to-[#CD7F32] mb-2">
+          <h2 className="text-3xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-[#D4A574] to-[#FF6B35] mb-2">
             {mode === 'login' ? 'Entrar' : 'Cadastrar'}
           </h2>
-          <p className="text-[#676767] mb-6">
+          <p className="text-[#8B9B6E] mb-6">
             {mode === 'login'
               ? 'Acesse sua conta para continuar'
               : 'Crie sua conta e ganhe 2 anúncios grátis!'}

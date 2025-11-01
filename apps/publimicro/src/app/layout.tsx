@@ -2,45 +2,83 @@
 import WhatsAppButton from "@/components/WhatsAppButton";
 import Navbar from "@/components/Navbar";
 import UserQuickPanel from "@/components/UserQuickPanel";
+import BackToTop from "@/components/BackToTop";
+import MobileBottomNav from "@/components/MobileBottomNav";
+import { ToastProvider } from "@/components/ToastNotification";
+import PWAInstallPrompt from "@/components/PWAInstallPrompt";
+import ErrorBoundaryWrapper from "@/components/ErrorBoundary";
 import "./globals.css";
 
 export const metadata = {
-  title: "PubliMicro – O Ecossistema Completo de Negócios",
-  description: "Do campo à cidade, do local ao global. Imóveis, veículos, máquinas, serviços e muito mais.",
+  title: "PubliMicro – Leilões de Propriedades Rurais e Urbanas | Sítios Carcará",
+  description: "Plataforma oficial de leilões online de propriedades rurais e urbanas. Encontre sítios, fazendas, chácaras e terrenos em Goiás. Lance agora e realize seu sonho!",
+  keywords: "leilão de propriedades, sítios à venda, fazendas Goiás, terrenos rurais, leilão online, Sítios Carcará, propriedades rurais",
+  authors: [{ name: "PubliMicro" }],
+  creator: "PubliMicro",
+  publisher: "PubliMicro",
+  robots: "index, follow",
+  openGraph: {
+    type: "website",
+    locale: "pt_BR",
+    url: "https://publimicro.com.br",
+    title: "PubliMicro – Leilões de Propriedades Rurais e Urbanas",
+    description: "Plataforma de leilões online de propriedades. Encontre sítios, fazendas e terrenos em Goiás. Sistema seguro de lances em tempo real.",
+    siteName: "PubliMicro",
+    images: [
+      {
+        url: "/og-image.jpg",
+        width: 1200,
+        height: 630,
+        alt: "PubliMicro - Leilões de Propriedades"
+      }
+    ]
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "PubliMicro – Leilões de Propriedades",
+    description: "Encontre propriedades rurais e urbanas em leilão. Sistema seguro e transparente.",
+    images: ["/og-image.jpg"],
+    creator: "@publimicro"
+  },
+  viewport: {
+    width: "device-width",
+    initialScale: 1,
+    maximumScale: 5
+  },
+  verification: {
+    google: "your-google-verification-code",
+    yandex: "your-yandex-verification-code"
+  },
+  alternates: {
+    canonical: "https://publimicro.com.br"
+  }
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
-  // Hide 'Anunciar' button on Sítios Carcará landing page
-  const isCarcaraLanding = typeof window !== 'undefined' && window.location.pathname.startsWith('/projetos/carcara');
   return (
     <html lang="pt-BR">
-      <body className="min-h-screen bg-[#0a0a0a] text-[#e6c86b] antialiased" aria-label="PubliMicro Ecossistema" role="document">
-        <a href="#main-content" className="skip-to-content absolute left-2 top-2 z-50 bg-[#FF6B35] text-black font-bold px-4 py-2 rounded focus:outline-none focus:ring-2 focus:ring-[#B7791F]" tabIndex={0} aria-label="Pular para o conteúdo principal">Pular para o conteúdo</a>
-        <nav aria-label="Navegação principal" role="navigation">
-          <div className="flex items-center justify-between w-full">
+      <head>
+        <link rel="manifest" href="/manifest.json" />
+        <meta name="theme-color" content="#FF6B35" />
+        <link rel="apple-touch-icon" href="/icons/icon-192x192.png" />
+        <script src="/register-sw.js" defer></script>
+      </head>
+      <body className="min-h-screen bg-[#0a0a0a] text-[#D4A574] antialiased" aria-label="PubliMicro Ecossistema" role="document">
+        <ErrorBoundaryWrapper>
+          <ToastProvider>
+            <a href="#main-content" className="skip-to-content sr-only focus:not-sr-only focus:absolute focus:left-2 focus:top-2 z-50 bg-[#FF6B35] text-black font-bold px-4 py-2 rounded focus:outline-none focus:ring-2 focus:ring-[#B7791F]" tabIndex={0} aria-label="Pular para o conteúdo principal">Pular para o conteúdo</a>
             <TopNav brand="PubliMicro" brandHref="/" searchTarget="local" />
-            {!isCarcaraLanding && (
-              <a
-                href="/anunciar"
-                className="inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-[#FF6B35] to-[#FF8C42] text-black font-bold rounded-full shadow-lg hover:scale-105 transition-all mr-6 mt-4 focus:outline-none focus:ring-4 focus:ring-[#FF6B35]"
-                aria-label="Anunciar propriedade"
-                style={{ position: 'absolute', right: 0, top: 0, zIndex: 100 }}
-                tabIndex={0}
-                role="button"
-              >
-                <svg className="w-6 h-6" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path d="M12 4v16m8-8H4" /></svg>
-                Anunciar
-              </a>
-            )}
-          </div>
-          <Navbar />
-        </nav>
-        {/* Sidebar removed - will implement as dropdown menu later */}
-        <main id="main-content" role="main">
-          {children}
-        </main>
-        <UserQuickPanel />
-        <WhatsAppButton />
+            {/* Sidebar removed - will implement as dropdown menu later */}
+            <main id="main-content" role="main">
+              {children}
+            </main>
+            <UserQuickPanel />
+            <WhatsAppButton />
+            <BackToTop />
+            <MobileBottomNav />
+            <PWAInstallPrompt />
+          </ToastProvider>
+        </ErrorBoundaryWrapper>
       </body>
     </html>
   );

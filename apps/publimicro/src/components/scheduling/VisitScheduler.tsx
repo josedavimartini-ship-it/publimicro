@@ -1,6 +1,7 @@
 ﻿"use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import FocusLock from "react-focus-lock";
 
 interface VisitSchedulerProps {
   propertyId?: string;
@@ -12,7 +13,7 @@ type VisitType = "presencial" | "video";
 export default function VisitScheduler({ 
   propertyId, 
   propertyTitle 
-}: VisitSchedulerProps): JSX.Element {
+}: VisitSchedulerProps) {
   const [visitType, setVisitType] = useState<VisitType>("presencial");
   const [formData, setFormData] = useState({
     nome: "",

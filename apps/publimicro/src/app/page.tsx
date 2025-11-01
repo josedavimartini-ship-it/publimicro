@@ -1,14 +1,57 @@
-﻿"use client";
+"use client";
 
 import { useEffect, useState } from "react";
 import { supabase } from "@/lib/supabaseClient";
 import { Carcara3D } from "@publimicro/ui";
 import Image from "next/image";
 import Link from "next/link";
+import dynamic from "next/dynamic";
+import VisitModal from "@/components/VisitModal";
+import FavoritesButton from "@/components/FavoritesButton";
+import SearchBar from "@/components/SearchBar";
+import WelcomeModal from "@/components/WelcomeModal";
+import RecentlyViewed from "@/components/RecentlyViewed";
+import { LiveCounter, ActivityFeed, Testimonials, TrustBadges } from "@/components/SocialProof";
 import { 
   Home, Car, Tractor, Ship, Globe, 
-  Plane, Share2, ShoppingBag, Sparkles, Calendar
+  Plane, Share2, ShoppingBag, Sparkles, Calendar, Info
 } from "lucide-react";
+
+// Dynamic import to avoid SSR issues with Leaflet
+const LeafletMapKML = dynamic(() => import("@/components/LeafletMapKML"), {
+  ssr: false,
+  loading: () => (
+    <div className="w-full h-[600px] bg-[#1a1a1a] rounded-2xl flex items-center justify-center">
+      <div className="text-[#D4A574] text-xl">Carregando mapa gratuito...</div>
+    </div>
+  ),
+});
+
+// Sections with concept phrases
+const sections = [
+  { name: "PubliProper", icon: Home, href: "/proper", unsplashQuery: "luxury-real-estate", concept: "Seu lar dos sonhos" },
+  { name: "PubliMotors", icon: Car, href: "/motors", unsplashQuery: "luxury-cars", concept: "Mobilidade com estilo" },
+  { name: "PubliMachina", icon: Tractor, href: "/machina", unsplashQuery: "agricultural-machinery", concept: "Força para produzir" },
+  { name: "PubliMarine", icon: Ship, href: "/marine", unsplashQuery: "luxury-yacht", concept: "Navegue seus sonhos" },
+  { name: "PubliGlobal", icon: Globe, href: "/global", unsplashQuery: "international-business", concept: "Negócios sem fronteiras" },
+  { name: "PubliJourney", icon: Plane, href: "/journey", unsplashQuery: "travel-adventure", concept: "Viva experiências únicas" },
+  { name: "PubliShare", icon: Share2, href: "/share", unsplashQuery: "sharing-economy", concept: "Compartilhe e economize" },
+  { name: "PubliTudo", icon: ShoppingBag, href: "/tudo", unsplashQuery: "marketplace", concept: "Tudo em um só lugar" },
+];
+
+// KML data from the attached file (Sítios Carcará property boundaries)
+const KML_DATA = `<?xml version="1.0" encoding="UTF-8"?>
+<kml xmlns="http://www.opengis.net/kml/2.2" xmlns:gx="http://www.google.com/kml/ext/2.2">
+<Document>
+<Style id="yellowLineGreenPoly"><LineStyle><color>ff00ffff</color><width>3</width></LineStyle><PolyStyle><fill>0</fill></PolyStyle></Style>
+<Placemark><name>Sítio 1</name><description>Área atualizada 07/10/2025</description><styleUrl>#yellowLineGreenPoly</styleUrl><Polygon><outerBoundaryIs><LinearRing><coordinates>-48.8309658761111,-18.2791310466666,0.0000 -48.8311521866667,-18.2789991091667,0.0000 -48.8316000280556,-18.2784205472222,0.0000 -48.8318697491667,-18.2778220261111,0.0000 -48.8318225852778,-18.2770297208333,0.0000 -48.8313982461111,-18.2768524644444,0.0000 -48.8310029291667,-18.2768355133334,0.0000 -48.8305601961111,-18.2769513525,0.0000 -48.8306879502778,-18.2770874866667,0.0000 -48.8308773930556,-18.2773574691666,0.0000 -48.8309702280556,-18.2776251811111,0.0000 -48.8310171208334,-18.2779679788889,0.0000 -48.8310052302778,-18.2783083030556,0.0000 -48.8309207216667,-18.2786332597222,0.0000 -48.8306829322222,-18.2790877283333,0.0000 -48.8306690877778,-18.2791136769444,0.0000 -48.8308164294444,-18.2790967411111,0.0000 -48.8308902525,-18.2790988436111,0.0000 -48.8309658761111,-18.2791310466666,0.0000</coordinates></LinearRing></outerBoundaryIs></Polygon></Placemark>
+<Placemark><name>Sítio 2</name><description>Área atualizada 07/10/2025</description><styleUrl>#yellowLineGreenPoly</styleUrl><Polygon><outerBoundaryIs><LinearRing><coordinates>-48.8327465708333,-18.2775029677778,0.0000 -48.8322471186111,-18.2772066172222,0.0000 -48.8318225852778,-18.2770297208333,0.0000 -48.8318697491667,-18.2778220261111,0.0000 -48.8316000280556,-18.2784205472222,0.0000 -48.8311521866667,-18.2789991091667,0.0000 -48.8309658761111,-18.2791310466666,0.0000 -48.8310930494445,-18.2791936430556,0.0000 -48.8312266816666,-18.2792817886111,0.0000 -48.83210991,-18.2788152086111,0.0000 -48.8325389336111,-18.2783794794445,0.0000 -48.8329451138889,-18.2776876883333,0.0000 -48.8327657183333,-18.2775143858333,0.0000 -48.8327465708333,-18.2775029677778,0.0000</coordinates></LinearRing></outerBoundaryIs></Polygon></Placemark>
+<Placemark><name>Sítio 3</name><description>Área atualizada 07/10/2025</description><styleUrl>#yellowLineGreenPoly</styleUrl><Polygon><outerBoundaryIs><LinearRing><coordinates>-48.8325552202778,-18.2793276161111,0.0000 -48.8330399102778,-18.2791414813889,0.0000 -48.8337399583333,-18.2786697497222,0.0000 -48.8336174313889,-18.278576855,0.0000 -48.8333424019445,-18.2783683236111,0.0000 -48.8329888416667,-18.2777299172222,0.0000 -48.8329451138889,-18.2776876883333,0.0000 -48.8325389336111,-18.2783794794445,0.0000 -48.83210991,-18.2788152086111,0.0000 -48.8312266816666,-18.2792817886111,0.0000 -48.8312863683333,-18.2793257344444,0.0000 -48.8313740388889,-18.2794917647222,0.0000 -48.8314057625,-18.2795184111111,0.0000 -48.8325552202778,-18.2793276161111,0.0000</coordinates></LinearRing></outerBoundaryIs></Polygon></Placemark>
+<Placemark><name>Sítio 4</name><description>Área atualizada 07/10/2025</description><styleUrl>#yellowLineGreenPoly</styleUrl><Polygon><outerBoundaryIs><LinearRing><coordinates>-48.8317861494444,-18.2800180394444,0.0000 -48.8317851827778,-18.2799931619445,0.0000 -48.8316496055556,-18.2797482711111,0.0000 -48.8328965380556,-18.2797281341667,0.0000 -48.8339221247222,-18.2797241766667,0.0000 -48.8346095472222,-18.2796946594444,0.0000 -48.8347149680556,-18.2798935897222,0.0000 -48.8349791241667,-18.2802851886111,0.0000 -48.8350143791667,-18.2804463783334,0.0000 -48.8350354855556,-18.2805438141667,0.0000 -48.8350226908333,-18.2807669830556,0.0000 -48.8342720736111,-18.2805717286111,0.0000 -48.8341638780555,-18.2804835255555,0.0000 -48.8335170183334,-18.2802813402778,0.0000 -48.832784795,-18.2801206688889,0.0000 -48.8317861494444,-18.2800180394444,0.0000</coordinates></LinearRing></outerBoundaryIs></Polygon></Placemark>
+<Placemark><name>Sítio 5</name><description>Área atualizada 07/10/2025</description><styleUrl>#yellowLineGreenPoly</styleUrl><Polygon><outerBoundaryIs><LinearRing><coordinates>-48.8341412847223,-18.2814622908333,0.0000 -48.8333120561111,-18.2807681288889,0.0000 -48.8325418397222,-18.2804750411111,0.0000 -48.8316138744445,-18.2802721494444,0.0000 -48.8317257563889,-18.2802324986111,0.0000 -48.8317912708334,-18.2801499561111,0.0000 -48.8317861494444,-18.2800180394444,0.0000 -48.832784795,-18.2801206688889,0.0000 -48.8335170183334,-18.2802813402778,0.0000 -48.8341638780555,-18.2804835255555,0.0000 -48.8342720736111,-18.2805717286111,0.0000 -48.8350226908333,-18.2807669830556,0.0000 -48.8350154511111,-18.2808932608333,0.0000 -48.8349961972222,-18.2809284527778,0.0000 -48.8349165680556,-18.2810740683333,0.0000 -48.8347674525,-18.2812185355555,0.0000 -48.8346321658333,-18.2812849322222,0.0000 -48.8344365627778,-18.2813808158333,0.0000 -48.8341412847223,-18.2814622908333,0.0000</coordinates></LinearRing></outerBoundaryIs></Polygon></Placemark>
+<Placemark><name>Sítio 6</name><description>Área atualizada 07/10/2025</description><styleUrl>#yellowLineGreenPoly</styleUrl><Polygon><outerBoundaryIs><LinearRing><coordinates>-48.8319018936111,-18.2810795708333,0.0000 -48.8325154361111,-18.2814857719445,0.0000 -48.8326001802778,-18.2814233202778,0.0000 -48.8328860472222,-18.2813763377778,0.0000 -48.8332779916666,-18.2813916216667,0.0000 -48.833742715,-18.2815007713889,0.0000 -48.8340632902778,-18.2814838091667,0.0000 -48.8341412847223,-18.2814622908333,0.0000 -48.8333120561111,-18.2807681288889,0.0000 -48.8325418397222,-18.2804750411111,0.0000 -48.8316138744445,-18.2802721494444,0.0000 -48.8315430208334,-18.2802973608334,0.0000 -48.8312603930556,-18.2803273055556,0.0000 -48.8319018936111,-18.2810795708333,0.0000</coordinates></LinearRing></outerBoundaryIs></Polygon></Placemark>
+</Document>
+</kml>`;
 
 interface Sitio {
   id: string;
@@ -24,9 +67,17 @@ interface Sitio {
 export default function HomePage() {
   const [sitios, setSitios] = useState<Sitio[]>([]);
   const [loading, setLoading] = useState(true);
-
   const [errorMsg, setErrorMsg] = useState<string>("");
+  const [visitModalOpen, setVisitModalOpen] = useState(false);
+  const [selectedProperty, setSelectedProperty] = useState<{ id: string; title: string } | null>(null);
+  const [userId, setUserId] = useState<string | null>(null);
+
   useEffect(() => {
+    // Get current user
+    supabase.auth.getUser().then(({ data }) => {
+      setUserId(data?.user?.id || null);
+    });
+
     async function fetchSitios() {
       try {
         let { data, error } = await supabase
@@ -36,17 +87,18 @@ export default function HomePage() {
           .limit(6);
 
         if (error) {
-          setErrorMsg("Erro ao buscar propriedades em destaque. Tente novamente mais tarde.");
+          console.error("Supabase error:", error);
+          setErrorMsg("Erro ao buscar propriedades em destaque.");
         }
         if (!data || data.length === 0) {
           const fallback = await supabase.from("sitios").select("*").limit(6);
-          if (!fallback.data || fallback.data.length === 0) {
-            setErrorMsg("Nenhuma propriedade encontrada.");
-          }
           data = fallback.data;
         }
+        console.log("Sitios loaded:", data);
+        console.log("First sitio photos:", data?.[0]?.fotos);
         setSitios(data || []);
       } catch (err) {
+        console.error("Error fetching sitios:", err);
         setErrorMsg("Erro inesperado ao buscar propriedades.");
         setSitios([]);
       } finally {
@@ -56,201 +108,23 @@ export default function HomePage() {
     fetchSitios();
   }, []);
 
-  // Split sections: 2 left, 2 right, 4 bottom
-  const leftSections = [
-    { name: "PubliProper", icon: Home, href: "/proper", bgImage: "/images/sections/publiProper-bg.jpg" },
-    { name: "PubliMotors", icon: Car, href: "/motors", bgImage: "/images/sections/publiMotors-bg.jpg" },
-  ];
-
-  const rightSections = [
-    { name: "PubliMachina", icon: Tractor, href: "/machina", bgImage: "/images/sections/publiHeavyAgro-bg.jpg" },
-    { name: "PubliMarine", icon: Ship, href: "/marine", bgImage: "/images/sections/publiMarine-bg.jpg" },
-  ];
-
-  const bottomSections = [
-    { name: "PubliGlobal", icon: Globe, href: "/global", bgImage: "/images/sections/publiGlobal-bg.jpg" },
-    { name: "PubliJourney", icon: Plane, href: "/journey", bgImage: "/images/sections/publiJourney-bg.jpg" },
-    { name: "PubliShare", icon: Share2, href: "/share", bgImage: "/images/sections/publiShare-bg.jpg" },
-    { name: "PubliTudo", icon: ShoppingBag, href: "/tudo", bgImage: "/images/sections/publiTudo-bg.jpg" },
-  ];
-
   return (
-    <>
-      <a href="#main-content" className="skip-to-content absolute left-2 top-2 z-50 bg-[#FF6B35] text-black font-bold px-4 py-2 rounded focus:outline-none focus:ring-2 focus:ring-[#B7791F]" tabIndex={0} aria-label="Pular para o conteúdo principal">Pular para o conteúdo</a>
-      <main id="main-content" className="min-h-screen bg-gradient-to-b from-[#0a0a0a] via-[#0d0d0d] to-[#0a0a0a]" role="main">
-        <div className="max-w-7xl mx-auto px-6">
-        {/* Autonomous Properties Business Section */}
-        <section className="py-16">
-          <div className="relative rounded-3xl overflow-hidden shadow-2xl border-4 border-[#0D7377]/40 min-h-[320px] group bg-gradient-to-r from-[#0D7377]/10 to-[#B7791F]/10 mb-16">
-            <div className="absolute inset-0 bg-gradient-to-r from-[#0D7377]/30 via-transparent to-[#B7791F]/30" />
-            <div className="relative p-10 z-20 flex flex-col md:flex-row items-center gap-10">
-              <div className="flex-1">
-                <div className="inline-flex items-center gap-2 mb-4 px-4 py-2 bg-[#0D7377]/30 border-2 border-[#0D7377] rounded-full backdrop-blur-md">
-                  <span className="text-[#0D7377] font-bold text-sm tracking-widest uppercase">Negócios de Imóveis</span>
-                </div>
-                <h2 className="text-4xl md:text-5xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-[#0D7377] via-[#B7791F] to-[#FF6B35] mb-4">
-                  Propriedades à Venda
-                </h2>
-                <p className="text-[#d8c68e] text-lg mb-6 max-w-2xl">
-                  Veja oportunidades de compra, venda e investimento em imóveis urbanos e rurais. Listagem completa, filtros avançados e favoritos em breve!
-                </p>
-                <div className="flex gap-4 flex-wrap">
-                  <Link
-                    href="/imoveis"
-                    className="px-8 py-4 bg-gradient-to-r from-[#0D7377] to-[#B7791F] hover:from-[#B7791F] hover:to-[#0D7377] text-white font-bold rounded-full transition-all hover:scale-105 shadow-lg"
-                  >
-                    Ver Todos os Imóveis
-                  </Link>
-                  <Link
-                    href="/anunciar"
-                    className="px-8 py-4 border-2 border-[#FF6B35] text-[#FF6B35] hover:bg-[#FF6B35]/10 font-bold rounded-full transition-all"
-                  >
-                    Anunciar Propriedade
-                  </Link>
-                </div>
-              </div>
-              <div className="w-full md:w-auto flex justify-center items-center">
-                <Image
-                  src="/images/sections/publiProper-bg.jpg"
-                  alt="Propriedades à venda"
-                  width={320}
-                  height={200}
-                  className="rounded-2xl shadow-xl object-cover"
-                  unoptimized
-                />
-              </div>
-            </div>
-          </div>
-        </section>
-        {/* HERO SECTION WITH PROPER LAYOUT */}
-        <section className="py-16">
-          <div className="grid grid-cols-12 gap-6 items-center">
-            {/* LEFT 2 BUTTONS */}
-            <div className="col-span-12 md:col-span-3 grid grid-cols-1 gap-4">
-              {leftSections.map((section) => {
-                const IconComponent = section.icon;
-                return (
-                  <Link
-                    key={section.name}
-                    href={section.href}
-                    className="group relative h-32 rounded-2xl overflow-hidden shadow-xl hover:shadow-2xl hover:shadow-[#FF6B35]/30 transition-all duration-500 hover:scale-105 focus:outline-none focus:ring-4 focus:ring-[#FF6B35]"
-                    aria-label={`Ir para seção ${section.name}`}
-                    tabIndex={0}
-                    role="button"
-                  >
-                    <div
-                      className="absolute inset-0 bg-cover bg-center transition-transform duration-700 group-hover:scale-110"
-                      style={{ backgroundImage: `url(${section.bgImage})` }}
-                    />
-                    <div className="absolute inset-0 bg-gradient-to-t from-[#0a0a0a]/95 via-[#0a0a0a]/70 to-transparent" />
-                    <div className="absolute inset-0 flex flex-col items-center justify-center p-4 text-center">
-                      <IconComponent className="w-10 h-10 text-[#FF6B35] mb-2 group-hover:scale-110 transition-transform" strokeWidth={1.5} />
-                      <h3 className="text-base font-bold text-[#B7791F] group-hover:text-[#FF6B35] transition-colors">
-                        {section.name}
-                      </h3>
-                    </div>
-                  </Link>
-                );
-              })}
-            </div>
-
-            {/* CENTER TITLE */}
-            <div className="col-span-12 md:col-span-6 text-center py-8">
-              <h1 className="text-5xl md:text-6xl lg:text-7xl font-bold mb-4 text-transparent bg-clip-text bg-gradient-to-r from-[#B7791F] via-[#CD7F32] to-[#B87333] leading-tight">
-                O Ecossistema PubliMicro
-              </h1>
-              <p className="text-[#d8c68e] text-xl md:text-2xl mb-3 leading-relaxed">
-                Um universo de negócios, tecnologia e oportunidades
+    <main id="main-content" className="min-h-screen bg-gradient-to-b from-[#0a0a0a] via-[#0d0d0d] to-[#0a0a0a]" role="main">
+      <div className="max-w-7xl mx-auto px-6">
+        {/* SEARCH SECTION */}
+        <section className="py-12">
+          <div className="bg-gradient-to-br from-[#1a1a1a] to-[#0d0d0d] border-2 border-[#2a2a1a] rounded-3xl p-8 shadow-2xl">
+            <div className="flex flex-col items-center mb-6">
+              <h2 className="text-3xl md:text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-[#D4A574] to-[#FF6B35] mb-3">
+                Encontre sua Propriedade Ideal
+              </h2>
+              <p className="text-[#8B9B6E] text-center max-w-2xl">
+                Use filtros avançados para buscar por preço, área, localização e muito mais
               </p>
-              <div className="flex items-center justify-center gap-3 text-[#676767] text-lg">
-                <Sparkles className="w-5 h-5 text-[#FF6B35]" />
-                <p>do campo à cidade, do local ao global</p>
-                <Sparkles className="w-5 h-5 text-[#FF6B35]" />
-              </div>
-              {/* WhatsApp, Info, and Schedule Visit Buttons */}
-              <div className="flex flex-wrap gap-4 justify-center mt-8">
-                <a
-                  href="https://wa.me/5534992610004?text=Olá! Gostaria de mais informações sobre o Publimicro."
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-flex items-center gap-2 px-6 py-3 bg-[#25D366] hover:bg-[#20BD5A] text-black font-bold rounded-full shadow-lg transition-all hover:scale-105"
-                  aria-label="Fale conosco no WhatsApp"
-                >
-                  <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.612-1.04 3.117 0 1.504.797 2.965 1.142 3.177.345.212.682.205.93.199.238-.005.765-.031 1.17-.031.405 0 .833.026 1.17.031.248.006.585.013.93-.199.345-.212 1.142-1.673 1.142-3.177 0-1.505-.768-2.82-1.04-3.117-.272-.298-.594-.372-.792-.372-.199 0-.397.002-.57.01-.182.01-.427-.069-.669.51-.247.595-.841 2.058-.916 2.207-.075.149-.124.322-.025.52.1.199.149.323.298.497.148.173.312.387.446.52.148.148.303.309.13.606-.173.298-.77 1.271-1.653 2.059-1.135 1.012-2.093 1.325-2.39 1.475-.297.148-.471.124-.644-.075-.173-.198-.743-.867-.94-1.164-.199-.298-.397-.249-.67-.15-.272.1-1.733.818-2.03.967-.297.149-.471.124-.644-.075-.173-.198-.743-.867-.94-1.164-.199-.298-.397-.249-.67-.15-.272.1-1.733.818-2.03.967-.297.149-.471.124-.644-.075-.173-.198-.743-.867-.94-1.164-.199-.298-.397-.249-.67-.15-.272.1-1.733.818-2.03.967-.297.149-.471.124-.644-.075-.173-.198-.743-.867-.94-1.164-.199-.298-.397-.249-.67-.15-.272.1-1.733.818-2.03.967-.297.149-.471.124-.644-.075-.173-.198-.743-.867-.94-1.164-.199-.298-.397-.249-.67-.15-.272.1-1.733.818-2.03.967z"/></svg>
-                  WhatsApp
-                </a>
-                <button
-                  type="button"
-                  className="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-[#FF6B35] to-[#FF8C42] text-black font-bold rounded-full shadow-lg transition-all hover:scale-105"
-                  aria-label="Solicitar mais informações"
-                  onClick={() => window.location.href = '/contato'}
-                >
-                  <Sparkles className="w-5 h-5 text-[#FF6B35]" />
-                  Procurando mais informações
-                </button>
-                <button
-                  type="button"
-                  className="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-[#0D7377] to-[#5F7161] text-white font-bold rounded-full shadow-lg transition-all hover:scale-105"
-                  aria-label="Agendar visita"
-                  onClick={() => window.location.href = '/schedule-visit'}
-                >
-                  <Calendar className="w-5 h-5" />
-                  Agendar Visita
-                </button>
-              </div>
             </div>
-            {/* RIGHT 2 BUTTONS */}
-            <div className="col-span-12 md:col-span-3 grid grid-cols-1 gap-4">
-              {rightSections.map((section) => {
-                const IconComponent = section.icon;
-                return (
-                  <Link
-                    key={section.name}
-                    href={section.href}
-                    className="group relative h-32 rounded-2xl overflow-hidden shadow-xl hover:shadow-2xl hover:shadow-[#FF6B35]/30 transition-all duration-500 hover:scale-105"
-                    aria-label={`Ir para seção ${section.name}`}
-                  >
-                    <div
-                      className="absolute inset-0 bg-cover bg-center transition-transform duration-700 group-hover:scale-110"
-                      style={{ backgroundImage: `url(${section.bgImage})` }}
-                    />
-                    <div className="absolute inset-0 bg-gradient-to-t from-[#0a0a0a]/95 via-[#0a0a0a]/70 to-transparent" />
-                    <div className="absolute inset-0 flex flex-col items-center justify-center p-4 text-center">
-                      <IconComponent className="w-10 h-10 text-[#FF6B35] mb-2 group-hover:scale-110 transition-transform" strokeWidth={1.5} />
-                      <h3 className="text-base font-bold text-[#B7791F] group-hover:text-[#FF6B35] transition-colors">
-                        {section.name}
-                      </h3>
-                    </div>
-                  </Link>
-                );
-              })}
+            <div className="flex justify-center">
+              <SearchBar />
             </div>
-          </div>
-          {/* BOTTOM 4 BUTTONS - FULL WIDTH */}
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-6 mt-8">
-            {bottomSections.map((section) => {
-              const IconComponent = section.icon;
-              return (
-                <Link
-                  key={section.name}
-                  href={section.href}
-                  className="group relative h-40 rounded-2xl overflow-hidden shadow-xl hover:shadow-2xl hover:shadow-[#FF6B35]/30 transition-all duration-500 hover:scale-105"
-                  aria-label={`Ir para seção ${section.name}`}
-                >
-                  <div
-                    className="absolute inset-0 bg-cover bg-center transition-transform duration-700 group-hover:scale-110"
-                    style={{ backgroundImage: `url(${section.bgImage})` }}
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-[#0a0a0a]/95 via-[#0a0a0a]/70 to-transparent" />
-                  <div className="absolute inset-0 flex flex-col items-center justify-center p-4 text-center">
-                    <IconComponent className="w-12 h-12 text-[#FF6B35] mb-3 group-hover:scale-110 transition-transform" strokeWidth={1.5} />
-                    <h3 className="text-lg font-bold text-[#B7791F] group-hover:text-[#FF6B35] transition-colors">
-                      {section.name}
-                    </h3>
-                  </div>
-                </Link>
-              );
-            })}
           </div>
         </section>
 
@@ -266,154 +140,362 @@ export default function HomePage() {
               unoptimized
             />
             <div className="absolute inset-0 bg-gradient-to-r from-[#0a0a0a]/95 via-[#0a0a0a]/80 to-transparent" />
-
             {/* Bird */}
             <div className="absolute top-8 left-8 w-[220px] h-[220px] z-30 hidden lg:block">
               <Carcara3D scale={1.1} />
             </div>
-
             <div className="relative p-12 lg:pl-64 z-20">
               <div className="inline-flex items-center gap-2 mb-6 px-6 py-3 bg-[#FF6B35]/30 border-2 border-[#FF6B35] rounded-full backdrop-blur-md">
                 <Sparkles className="w-5 h-5 text-[#FF6B35] animate-pulse" />
                 <span className="text-[#FF6B35] font-bold text-lg tracking-widest uppercase">Super Destaque</span>
               </div>
-              
               <h2 className="text-5xl md:text-7xl lg:text-8xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-[#FF6B35] via-[#FF8C42] to-[#B7791F] mb-6 drop-shadow-2xl leading-tight">
                 Sítios Carcará
               </h2>
-              
               <p className="text-[#d8c68e] text-xl md:text-2xl mb-8 max-w-2xl leading-relaxed">
                 6 propriedades exclusivas às margens da represa de Corumbaíba, GO. 
                 Natureza preservada, infraestrutura completa. 
                 Lances a partir de <span className="text-[#FF6B35] font-bold">R$ 1.050.000</span>
               </p>
-              
               <div className="flex gap-4 flex-wrap">
                 <Link
                   href="/projetos/carcara"
-                  className="px-10 py-5 bg-gradient-to-r from-[#FF6B35] to-[#FF8C42] hover:from-[#FF8C42] hover:to-[#FF6B35] text-black text-lg font-bold rounded-full transition-all hover:scale-105 shadow-2xl focus:outline-none focus:ring-4 focus:ring-[#FF6B35]"
-                  aria-label="Explorar Projeto Completo"
-                  tabIndex={0}
-                  role="button"
+                  className="px-10 py-5 bg-gradient-to-r from-[#FF6B35] to-[#FF8C42] hover:from-[#FF8C42] hover:to-[#FF6B35] text-[#0a0a0a] text-lg font-bold rounded-full transition-all hover:scale-105 shadow-2xl"
                 >
-                   Explorar Projeto Completo
+                  Explorar Projeto Completo
                 </Link>
-                <Link
-                  href="/proper/rural"
-                  className="px-10 py-5 border-3 border-[#0D7377] text-[#0D7377] hover:bg-[#0D7377]/10 text-lg font-bold rounded-full transition-all focus:outline-none focus:ring-4 focus:ring-[#0D7377]"
-                  aria-label="Ver Mais Imóveis Rurais"
-                  tabIndex={0}
-                  role="button"
+                <a
+                  href="https://www.sitioscarcara.com.br"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="px-10 py-5 border-3 border-[#D4A574] text-[#D4A574] hover:bg-[#D4A574]/10 text-lg font-bold rounded-full transition-all hover:scale-105 flex items-center gap-2"
                 >
-                   Ver Mais Imóveis Rurais
-                </Link>
+                  <Info className="w-6 h-6" />
+                  Mais Informações
+                </a>
               </div>
             </div>
           </div>
         </section>
 
-        {/* Featured Properties */}
+        {/* CENTRAL PUBLIMICRO TITLE WITH SECTIONS - 3 PER ROW LAYOUT */}
+        <section className="py-20">
+          {/* Top Row: PubliProper + Title + PubliJourney */}
+          <div className="grid grid-cols-1 lg:grid-cols-[1fr_auto_1fr] gap-6 items-center mb-6">
+            {/* LEFT - PubliProper */}
+            <div className="flex justify-end">
+              <Link
+                href="/proper"
+                className="group relative w-full max-w-sm h-48 rounded-xl overflow-hidden shadow-xl hover:shadow-[#FF6B35]/50 transition-all duration-300 hover:scale-105 block border-2 border-[#2a2a1a] hover:border-[#FF6B35]"
+              >
+                <Image
+                  src="https://source.unsplash.com/random/600x400/?luxury-real-estate"
+                  alt="PubliProper"
+                  fill
+                  className="object-cover transition-transform duration-700 group-hover:scale-110"
+                  unoptimized
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-[#0a0a0a]/95 via-[#0a0a0a]/80 to-[#0a0a0a]/30" />
+                <div className="relative z-10 flex flex-col items-center justify-center h-full p-6 text-center">
+                  <Home className="w-16 h-16 text-[#FF6B35] mb-3 group-hover:scale-125 transition-all duration-300" strokeWidth={1.5} />
+                  <h3 className="text-2xl font-bold text-[#D4A574] group-hover:text-[#FF6B35] transition-colors mb-2">
+                    PubliProper
+                  </h3>
+                  <p className="text-sm text-[#8B9B6E] font-medium italic">
+                    Seu lar dos sonhos
+                  </p>
+                </div>
+              </Link>
+            </div>
+
+            {/* CENTER - PubliMicro Title */}
+            <div className="flex items-center justify-center px-4 lg:px-12">
+              <div className="text-center">
+                <h1 className="text-5xl md:text-6xl lg:text-7xl font-bold mb-4 leading-tight">
+                  <span className="text-[#B7791F]">Publi</span>
+                  <span className="text-[#CD7F32]">Micr</span>
+                  <span className="relative inline-block">
+                    <span className="text-[#B87333]">o</span>
+                    <svg
+                      className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[35px] h-[35px] md:w-[40px] md:h-[40px] text-[#FF6B35]"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="2.5"
+                    >
+                      <circle cx="12" cy="12" r="3" />
+                      <line x1="12" y1="2" x2="12" y2="7" />
+                      <line x1="12" y1="17" x2="12" y2="22" />
+                      <line x1="2" y1="12" x2="7" y2="12" />
+                      <line x1="17" y1="12" x2="22" y2="12" />
+                    </svg>
+                  </span>
+                </h1>
+                <p className="text-lg md:text-xl text-[#8B9B6E] font-light tracking-wide mb-6">
+                  Conectando pessoas, negócios e oportunidades
+                </p>
+                <div className="bg-gradient-to-r from-[#FF6B35]/20 to-[#D4A574]/20 border-2 border-[#FF6B35]/40 rounded-xl p-5 backdrop-blur-sm max-w-md">
+                  <p className="text-[#D4A574] text-base font-medium leading-relaxed">
+                    Do campo à cidade, do local ao global. Sua plataforma completa de negócios.
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            {/* RIGHT - PubliJourney */}
+            <div className="flex justify-start">
+              <Link
+                href="/journey"
+                className="group relative w-full max-w-sm h-48 rounded-xl overflow-hidden shadow-xl hover:shadow-[#FF6B35]/50 transition-all duration-300 hover:scale-105 block border-2 border-[#2a2a1a] hover:border-[#FF6B35]"
+              >
+                <Image
+                  src="https://source.unsplash.com/random/600x400/?travel-adventure"
+                  alt="PubliJourney"
+                  fill
+                  className="object-cover transition-transform duration-700 group-hover:scale-110"
+                  unoptimized
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-[#0a0a0a]/95 via-[#0a0a0a]/80 to-[#0a0a0a]/30" />
+                <div className="relative z-10 flex flex-col items-center justify-center h-full p-6 text-center">
+                  <Plane className="w-16 h-16 text-[#FF6B35] mb-3 group-hover:scale-125 transition-all duration-300" strokeWidth={1.5} />
+                  <h3 className="text-2xl font-bold text-[#D4A574] group-hover:text-[#FF6B35] transition-colors mb-2">
+                    PubliJourney
+                  </h3>
+                  <p className="text-sm text-[#8B9B6E] font-medium italic">
+                    Viva experiências únicas
+                  </p>
+                </div>
+              </Link>
+            </div>
+          </div>
+
+          {/* Row 1: 3 Sections */}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
+            {sections.slice(1, 4).map((section) => {
+              const IconComponent = section.icon;
+              return (
+                <Link
+                  key={section.name}
+                  href={section.href}
+                  className="group relative h-44 rounded-xl overflow-hidden shadow-xl hover:shadow-[#FF6B35]/50 transition-all duration-300 hover:scale-105 block border-2 border-[#2a2a1a] hover:border-[#FF6B35]"
+                >
+                  <Image
+                    src={`https://source.unsplash.com/random/600x400/?${section.unsplashQuery}`}
+                    alt={section.name}
+                    fill
+                    className="object-cover transition-transform duration-700 group-hover:scale-110"
+                    unoptimized
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-[#0a0a0a]/95 via-[#0a0a0a]/80 to-[#0a0a0a]/30" />
+                  <div className="relative z-10 flex flex-col items-center justify-center h-full p-4 text-center">
+                    <IconComponent className="w-14 h-14 text-[#FF6B35] mb-2 group-hover:scale-125 transition-all duration-300" strokeWidth={1.5} />
+                    <h3 className="text-xl font-bold text-[#D4A574] group-hover:text-[#FF6B35] transition-colors mb-1">
+                      {section.name}
+                    </h3>
+                    <p className="text-xs text-[#8B9B6E] font-medium italic">
+                      {section.concept}
+                    </p>
+                  </div>
+                </Link>
+              );
+            })}
+          </div>
+
+          {/* Row 2: 3 Sections */}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            {sections.slice(4, 7).map((section) => {
+              const IconComponent = section.icon;
+              return (
+                <Link
+                  key={section.name}
+                  href={section.href}
+                  className="group relative h-44 rounded-xl overflow-hidden shadow-xl hover:shadow-[#FF6B35]/50 transition-all duration-300 hover:scale-105 block border-2 border-[#2a2a1a] hover:border-[#FF6B35]"
+                >
+                  <Image
+                    src={`https://source.unsplash.com/random/600x400/?${section.unsplashQuery}`}
+                    alt={section.name}
+                    fill
+                    className="object-cover transition-transform duration-700 group-hover:scale-110"
+                    unoptimized
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-[#0a0a0a]/95 via-[#0a0a0a]/80 to-[#0a0a0a]/30" />
+                  <div className="relative z-10 flex flex-col items-center justify-center h-full p-4 text-center">
+                    <IconComponent className="w-14 h-14 text-[#FF6B35] mb-2 group-hover:scale-125 transition-all duration-300" strokeWidth={1.5} />
+                    <h3 className="text-xl font-bold text-[#D4A574] group-hover:text-[#FF6B35] transition-colors mb-1">
+                      {section.name}
+                    </h3>
+                    <p className="text-xs text-[#8B9B6E] font-medium italic">
+                      {section.concept}
+                    </p>
+                  </div>
+                </Link>
+              );
+            })}
+          </div>
+        </section>
+
+        {/* Featured Properties with Bidding Schema */}
         {!loading && sitios.length > 0 && (
           <section className="py-16">
-            <h2 className="text-4xl font-bold text-[#B7791F] mb-12 text-center">
-              Propriedades em Destaque
+            <h2 className="text-4xl font-bold text-[#D4A574] mb-12 text-center">
+              Sítios Disponíveis - Lances Abertos
             </h2>
             {errorMsg && (
-              <div className="text-center text-red-500 font-semibold mb-8">
+              <div className="text-center text-[#FF6B35] font-semibold mb-8">
                 {errorMsg}
               </div>
             )}
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-              {sitios.slice(0, 6).map((sitio) => (
-                <Link
-                  key={sitio.id}
-                  href={`/projetos/carcara#${sitio.id}`}
-                  className="group bg-gradient-to-br from-[#1a1a1a] to-[#0d0d0d] border-2 border-[#2a2a1a] rounded-2xl overflow-hidden hover:border-[#FF6B35] transition-all hover:scale-105 shadow-xl focus:outline-none focus:ring-4 focus:ring-[#FF6B35]"
-                  aria-label={`Ver detalhes do sítio ${sitio.nome}`}
-                  tabIndex={0}
-                  role="button"
-                >
-                  <div className="relative h-56 overflow-hidden">
-                    {sitio.fotos?.[0] ? (
+            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-6">
+              {sitios.map((sitio) => {
+                const fotoUrl = sitio.fotos && sitio.fotos.length > 0 ? sitio.fotos[0] : "/images/fallback-rancho.jpg";
+                console.log(`Sitio ${sitio.nome} photo URL:`, fotoUrl);
+                return (
+                  <Link 
+                    key={sitio.id} 
+                    href={`/imoveis/${sitio.id}`}
+                    className="group bg-gradient-to-br from-[#1a1a1a] to-[#0d0d0d] border-2 border-[#2a2a1a] rounded-2xl overflow-hidden hover:border-[#FF6B35] transition-all hover:scale-105 shadow-xl cursor-pointer block"
+                  >
+                    <div className="relative aspect-square overflow-hidden">
                       <Image
-                        src={sitio.fotos[0]}
-                        alt={sitio.nome ? `Foto do sítio ${sitio.nome}` : "Foto do sítio"}
+                        src={fotoUrl}
+                        alt={sitio.nome || "Sítio"}
                         fill
                         className="object-cover group-hover:scale-110 transition-transform duration-500"
                         unoptimized
                         onError={(e) => {
-                          // @ts-ignore
-                          e.target.src = "/images/fallback-rancho.jpg";
+                          const target = e.target as HTMLImageElement;
+                          target.src = "/images/fallback-rancho.jpg";
                         }}
                       />
-                    ) : (
-                      <Image
-                        src="/images/fallback-rancho.jpg"
-                        alt="Imagem padrão do sítio"
-                        fill
-                        className="object-cover"
-                        unoptimized
-                      />
-                    )}
-                    {sitio.zona && (
-                      <div className="absolute top-4 right-4 px-3 py-1 bg-[#FF6B35] text-black font-bold rounded-full text-sm">
-                        {sitio.zona}
+                      {sitio.zona && (
+                        <div className="absolute top-3 right-3 px-2 py-1 bg-[#FF6B35] text-[#0a0a0a] font-bold rounded-full text-xs">
+                          {sitio.zona}
+                        </div>
+                      )}
+                      {/* Favorites Heart Button */}
+                      <div className="absolute top-3 left-3">
+                        <FavoritesButton propertyId={sitio.id} userId={userId} size="md" />
                       </div>
-                    )}
-                  </div>
-                  <div className="p-6">
-                    <h3 className="text-2xl font-bold text-[#B7791F] mb-2">{sitio.nome}</h3>
-                    {sitio.localizacao && <p className="text-[#676767] mb-4">{sitio.localizacao}</p>}
-                    {typeof sitio.lance_inicial === "number" && (
-                      <div className="text-[#FF6B35] font-bold text-xl">
-                        Lance: R$ {sitio.lance_inicial.toLocaleString("pt-BR")}
-                      </div>
-                    )}
-                  </div>
-                </Link>
-              ))}
+                    </div>
+                    
+                    <div className="p-4 flex flex-col gap-2">
+                      <h3 className="text-lg font-bold text-[#D4A574] line-clamp-1">{sitio.nome}</h3>
+                      {sitio.localizacao && <p className="text-[#8B9B6E] text-xs line-clamp-1">{sitio.localizacao}</p>}
+                      
+                      {/* Bidding Schema Box */}
+                      {typeof sitio.lance_inicial === "number" && (
+                        <div className="bg-[#0a0a0a] rounded-lg p-3 border border-[#FF6B35]/40">
+                          <div className="text-[#D4A574] text-xs font-semibold mb-1">Lance Inicial</div>
+                          <div className="text-[#FF6B35] font-bold text-xl">
+                            R$ {sitio.lance_inicial.toLocaleString("pt-BR")}
+                          </div>
+                        </div>
+                      )}
+                    </div>
+                  </Link>
+                );
+              })}
             </div>
           </section>
         )}
+
+        {/* Free Leaflet Map with KML Property Boundaries */}
+        <section className="py-16">
+          <h2 className="text-4xl font-bold text-[#D4A574] mb-8 text-center">
+            Mapa Interativo das Propriedades
+          </h2>
+          <p className="text-[#8B9B6E] text-center mb-12 max-w-3xl mx-auto text-lg">
+            Visualize em mapa de satélite a localização exata dos 6 sítios Carcará às margens da represa de Corumbaíba, GO. 
+            Clique nas áreas coloridas para ver informações detalhadas de cada propriedade.
+          </p>
+          <div className="h-[700px]">
+            <LeafletMapKML kmlData={KML_DATA} />
+          </div>
+        </section>
+
+        {/* Recently Viewed Properties */}
+        <RecentlyViewed />
+
+        {/* Social Proof Section */}
+        <section className="py-16">
+          <div className="max-w-7xl mx-auto px-6">
+            {/* Live Activity */}
+            <div className="flex flex-col md:flex-row items-center justify-center gap-6 mb-12">
+              <LiveCounter />
+              <ActivityFeed />
+            </div>
+
+            {/* Trust Badges */}
+            <div className="mb-16">
+              <h2 className="text-3xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-[#D4A574] to-[#FF6B35] text-center mb-8">
+                Por que confiar no PubliMicro?
+              </h2>
+              <TrustBadges />
+            </div>
+
+            {/* Testimonials */}
+            <div className="max-w-4xl mx-auto">
+              <h2 className="text-3xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-[#D4A574] to-[#FF6B35] text-center mb-8">
+                O que nossos clientes dizem
+              </h2>
+              <Testimonials />
+            </div>
+          </div>
+        </section>
 
         {/* Footer */}
         <footer className="py-12 mt-20 border-t-2 border-[#2a2a1a]">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-8 mb-8">
             <div>
-              <h4 className="font-bold text-[#B7791F] mb-4">Imóveis</h4>
-              <ul className="space-y-2 text-[#676767]">
+              <h4 className="font-bold text-[#D4A574] mb-4">Imóveis</h4>
+              <ul className="space-y-2 text-[#8B9B6E]">
                 <li><Link href="/proper/urban" className="hover:text-[#FF6B35]">Urbanos</Link></li>
                 <li><Link href="/proper/rural" className="hover:text-[#FF6B35]">Rurais</Link></li>
               </ul>
             </div>
             <div>
-              <h4 className="font-bold text-[#B7791F] mb-4">Veículos</h4>
-              <ul className="space-y-2 text-[#676767]">
+              <h4 className="font-bold text-[#D4A574] mb-4">Veículos</h4>
+              <ul className="space-y-2 text-[#8B9B6E]">
                 <li><Link href="/motors" className="hover:text-[#FF6B35]">Carros</Link></li>
                 <li><Link href="/motors" className="hover:text-[#FF6B35]">Motos</Link></li>
               </ul>
             </div>
             <div>
-              <h4 className="font-bold text-[#B7791F] mb-4">Serviços</h4>
-              <ul className="space-y-2 text-[#676767]">
+              <h4 className="font-bold text-[#D4A574] mb-4">Serviços</h4>
+              <ul className="space-y-2 text-[#8B9B6E]">
                 <li><Link href="/tudo" className="hover:text-[#FF6B35]">Marketplace</Link></li>
                 <li><Link href="/share" className="hover:text-[#FF6B35]">Compartilhado</Link></li>
               </ul>
             </div>
             <div>
-              <h4 className="font-bold text-[#B7791F] mb-4">Conta</h4>
-              <ul className="space-y-2 text-[#676767]">
+              <h4 className="font-bold text-[#D4A574] mb-4">Conta</h4>
+              <ul className="space-y-2 text-[#8B9B6E]">
                 <li><Link href="/entrar" className="hover:text-[#FF6B35]">Entrar</Link></li>
-                <li><Link href="/anunciar" className="hover:text-[#FF6B35]">Anunciar</Link></li>
+                <li><Link href="/postar" className="hover:text-[#FF6B35]">Postar</Link></li>
               </ul>
             </div>
           </div>
-          <div className="text-center text-[#676767] text-sm pt-8 border-t border-[#2a2a1a]">
-             2025 PubliMicro Ecosystem. Todos os direitos reservados.
+          <div className="text-center text-[#8B9B6E] text-sm pt-8 border-t border-[#2a2a1a]">
+            2025 PubliMicro Ecosystem. Todos os direitos reservados.
           </div>
         </footer>
       </div>
+
+      {/* Visit Modal */}
+      {selectedProperty && (
+        <VisitModal
+          adId={selectedProperty.id}
+          adTitle={selectedProperty.title}
+          open={visitModalOpen}
+          onClose={() => {
+            setVisitModalOpen(false);
+            setSelectedProperty(null);
+          }}
+        />
+      )}
+
+      {/* Welcome Modal for First-Time Users */}
+      <WelcomeModal />
     </main>
-    </>
   );
 }

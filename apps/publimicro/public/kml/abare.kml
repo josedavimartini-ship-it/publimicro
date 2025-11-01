@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<kml xmlns="http://www.opengis.net/kml/2.2" xmlns:gx="http://www.google.com/kml/ext/2.2">
+<Document>
+<name>Sítio Abaré</name>
+<description>Propriedade exclusiva às margens da Represa de Corumbaíba</description>
+<Style id="yellowLineGreenPoly">
+  <LineStyle>
+    <color>ff00ffff</color>
+    <width>3</width>
+  </LineStyle>
+  <PolyStyle>
+    <fill>0</fill>
+  </PolyStyle>
+</Style>
+<Placemark>
+  <name>Sítio Abaré</name>
+  <description>Área atualizada 07/10/2025</description>
+  <styleUrl>#yellowLineGreenPoly</styleUrl>
+  <Polygon>
+    <outerBoundaryIs>
+      <LinearRing>
+        <coordinates>-48.8319018936111,-18.2810795708333,0.0000 -48.8325154361111,-18.2814857719445,0.0000 -48.8326001802778,-18.2814233202778,0.0000 -48.8328860472222,-18.2813763377778,0.0000 -48.8332779916666,-18.2813916216667,0.0000 -48.833742715,-18.2815007713889,0.0000 -48.8340632902778,-18.2814838091667,0.0000 -48.8341412847223,-18.2814622908333,0.0000 -48.8333120561111,-18.2807681288889,0.0000 -48.8325418397222,-18.2804750411111,0.0000 -48.8316138744445,-18.2802721494444,0.0000 -48.8315430208334,-18.2802973608334,0.0000 -48.8312603930556,-18.2803273055556,0.0000 -48.8319018936111,-18.2810795708333,0.0000</coordinates>
+      </LinearRing>
+    </outerBoundaryIs>
+  </Polygon>
+</Placemark>
+</Document>
+</kml>

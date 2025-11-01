@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<kml xmlns="http://www.opengis.net/kml/2.2" xmlns:gx="http://www.google.com/kml/ext/2.2">
+<Document>
+<name>Sítio Biguá</name>
+<description>Propriedade exclusiva às margens da Represa de Corumbaíba</description>
+<Style id="yellowLineGreenPoly">
+  <LineStyle>
+    <color>ff00ffff</color>
+    <width>3</width>
+  </LineStyle>
+  <PolyStyle>
+    <fill>0</fill>
+  </PolyStyle>
+</Style>
+<Placemark>
+  <name>Sítio Biguá</name>
+  <description>Área atualizada 07/10/2025</description>
+  <styleUrl>#yellowLineGreenPoly</styleUrl>
+  <Polygon>
+    <outerBoundaryIs>
+      <LinearRing>
+        <coordinates>-48.8341412847223,-18.2814622908333,0.0000 -48.8333120561111,-18.2807681288889,0.0000 -48.8325418397222,-18.2804750411111,0.0000 -48.8316138744445,-18.2802721494444,0.0000 -48.8317257563889,-18.2802324986111,0.0000 -48.8317912708334,-18.2801499561111,0.0000 -48.8317861494444,-18.2800180394444,0.0000 -48.832784795,-18.2801206688889,0.0000 -48.8335170183334,-18.2802813402778,0.0000 -48.8341638780555,-18.2804835255555,0.0000 -48.8342720736111,-18.2805717286111,0.0000 -48.8350226908333,-18.2807669830556,0.0000 -48.8350154511111,-18.2808932608333,0.0000 -48.8349961972222,-18.2809284527778,0.0000 -48.8349165680556,-18.2810740683333,0.0000 -48.8347674525,-18.2812185355555,0.0000 -48.8346321658333,-18.2812849322222,0.0000 -48.8344365627778,-18.2813808158333,0.0000 -48.8341412847223,-18.2814622908333,0.0000</coordinates>
+      </LinearRing>
+    </outerBoundaryIs>
+  </Polygon>
+</Placemark>
+</Document>
+</kml>

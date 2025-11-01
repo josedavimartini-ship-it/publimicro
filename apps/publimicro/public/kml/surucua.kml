@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<kml xmlns="http://www.opengis.net/kml/2.2" xmlns:gx="http://www.google.com/kml/ext/2.2">
+<Document>
+<name>Sítio Surucuá</name>
+<description>Propriedade exclusiva às margens da Represa de Corumbaíba</description>
+<Style id="yellowLineGreenPoly">
+  <LineStyle>
+    <color>ff00ffff</color>
+    <width>3</width>
+  </LineStyle>
+  <PolyStyle>
+    <fill>0</fill>
+  </PolyStyle>
+</Style>
+<Placemark>
+  <name>Sítio Surucuá</name>
+  <description>Área atualizada 07/10/2025</description>
+  <styleUrl>#yellowLineGreenPoly</styleUrl>
+  <Polygon>
+    <outerBoundaryIs>
+      <LinearRing>
+        <coordinates>-48.8309658761111,-18.2791310466666,0.0000 -48.8311521866667,-18.2789991091667,0.0000 -48.8316000280556,-18.2784205472222,0.0000 -48.8318697491667,-18.2778220261111,0.0000 -48.8318225852778,-18.2770297208333,0.0000 -48.8313982461111,-18.2768524644444,0.0000 -48.8310029291667,-18.2768355133334,0.0000 -48.8305601961111,-18.2769513525,0.0000 -48.8306879502778,-18.2770874866667,0.0000 -48.8308773930556,-18.2773574691666,0.0000 -48.8309702280556,-18.2776251811111,0.0000 -48.8310171208334,-18.2779679788889,0.0000 -48.8310052302778,-18.2783083030556,0.0000 -48.8309207216667,-18.2786332597222,0.0000 -48.8306829322222,-18.2790877283333,0.0000 -48.8306690877778,-18.2791136769444,0.0000 -48.8308164294444,-18.2790967411111,0.0000 -48.8308902525,-18.2790988436111,0.0000 -48.8309658761111,-18.2791310466666,0.0000</coordinates>
+      </LinearRing>
+    </outerBoundaryIs>
+  </Polygon>
+</Placemark>
+</Document>
+</kml>
