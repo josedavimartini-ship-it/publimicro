@@ -10,7 +10,7 @@ export default function MotorsPage() {
         <h1 className="text-5xl font-bold text-[#B7791F] mb-4">PubliMotors</h1>
         <p className="text-[#d8c68e] text-xl mb-8">Veículos, motos e transporte comercial.</p>
         <p className="text-[#676767] mb-8">Em desenvolvimento</p>
-        <Link href="/" className="text-[#B7791F] hover:text-[#FF6B35]"> Voltar ao início</Link>
+        <Link href="/" className="text-[#B7791F] hover:text-[#A8C97F]">← Voltar ao início</Link>
       </div>
     </main>
   );
