@@ -89,7 +89,7 @@ export default function ComparePage() {
     return (
       <div className="min-h-screen bg-[#0a0a0a] flex items-center justify-center">
         <div className="text-center">
-          <div className="animate-spin w-16 h-16 border-4 border-[#FF6B35] border-t-transparent rounded-full mx-auto mb-4"></div>
+          <div className="animate-spin w-16 h-16 border-4 border-[#A8C97F] border-t-transparent rounded-full mx-auto mb-4"></div>
           <p className="text-[#8B9B6E]">Carregando comparação...</p>
         </div>
       </div>
@@ -102,7 +102,7 @@ export default function ComparePage() {
         <div className="max-w-7xl mx-auto px-4 py-8">
           <Link
             href="/imoveis"
-            className="inline-flex items-center gap-2 text-[#8B9B6E] hover:text-[#FF6B35] transition-colors mb-6"
+            className="inline-flex items-center gap-2 text-[#8B9B6E] hover:text-[#A8C97F] transition-colors mb-6"
           >
             <ArrowLeft className="w-5 h-5" />
             Voltar para Propriedades
@@ -112,7 +112,7 @@ export default function ComparePage() {
             <div className="w-32 h-32 mx-auto mb-6 bg-[#2a2a1a] rounded-full flex items-center justify-center">
               <MapPin className="w-16 h-16 text-[#676767]" />
             </div>
-            <h2 className="text-2xl font-bold text-[#D4A574] mb-3">
+            <h2 className="text-2xl font-bold text-[#E6C98B] mb-3">
               Nenhuma propriedade selecionada
             </h2>
             <p className="text-[#8B9B6E] mb-6">
@@ -120,7 +120,7 @@ export default function ComparePage() {
             </p>
             <Link
               href="/imoveis"
-              className="inline-block px-6 py-3 bg-gradient-to-r from-[#FF6B35] to-[#FF8C42] text-[#0a0a0a] font-bold rounded-full hover:scale-105 transition-all"
+              className="inline-block px-6 py-3 bg-gradient-to-r from-[#A8C97F] to-[#0D7377] text-[#0a0a0a] font-bold rounded-full hover:scale-105 transition-all"
             >
               Buscar Propriedades
             </Link>
@@ -149,7 +149,7 @@ export default function ComparePage() {
         {/* Header */}
         <div className="flex items-center justify-between mb-8 flex-wrap gap-4">
           <div>
-            <h1 className="text-3xl md:text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-[#D4A574] to-[#FF6B35] mb-2">
+            <h1 className="text-3xl md:text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-[#E6C98B] to-[#A8C97F] mb-2">
               Comparar Propriedades
             </h1>
             <p className="text-[#8B9B6E]">
@@ -168,7 +168,7 @@ export default function ComparePage() {
             </button>
             <button
               onClick={downloadPDF}
-              className="flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-[#FF6B35] to-[#FF8C42] text-[#0a0a0a] font-bold rounded-lg hover:scale-105 transition-all"
+              className="flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-[#A8C97F] to-[#0D7377] text-[#0a0a0a] font-bold rounded-lg hover:scale-105 transition-all"
               aria-label="Baixar comparação em PDF"
             >
               <Download className="w-5 h-5" />
@@ -215,7 +215,7 @@ export default function ComparePage() {
                       
                       <Link
                         href={`/imoveis/${property.id}`}
-                        className="text-[#D4A574] font-bold hover:text-[#FF6B35] transition-colors"
+                        className="text-[#E6C98B] font-bold hover:text-[#A8C97F] transition-colors"
                       >
                         {property.nome}
                       </Link>
@@ -239,7 +239,7 @@ export default function ComparePage() {
                       </div>
                     </td>
                     {properties.map((property) => (
-                      <td key={property.id} className="p-4 text-[#D4A574] border-b border-[#2a2a1a]">
+                      <td key={property.id} className="p-4 text-[#E6C98B] border-b border-[#2a2a1a]">
                         {row.format
                           ? typeof row.format === "function" && row.key === "preco_ha"
                             ? row.format(property)
@@ -272,7 +272,7 @@ export default function ComparePage() {
                   <td key={property.id} className="p-4">
                     <Link
                       href={`/imoveis/${property.id}`}
-                      className="block w-full text-center px-4 py-3 bg-gradient-to-r from-[#FF6B35] to-[#FF8C42] text-[#0a0a0a] font-bold rounded-lg hover:scale-105 transition-all"
+                      className="block w-full text-center px-4 py-3 bg-gradient-to-r from-[#A8C97F] to-[#0D7377] text-[#0a0a0a] font-bold rounded-lg hover:scale-105 transition-all"
                     >
                       Ver Detalhes
                     </Link>
@@ -291,7 +291,7 @@ export default function ComparePage() {
             </p>
             <Link
               href="/imoveis"
-              className="inline-block px-6 py-3 border-2 border-[#D4A574] text-[#D4A574] font-semibold rounded-full hover:bg-[#D4A574]/10 transition-all"
+              className="inline-block px-6 py-3 border-2 border-[#E6C98B] text-[#E6C98B] font-semibold rounded-full hover:bg-[#E6C98B]/10 transition-all"
             >
               + Adicionar Propriedade
             </Link>

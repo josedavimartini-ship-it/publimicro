@@ -43,8 +43,8 @@ export default function LeafletMapKML({ kmlData }: LeafletMapKMLProps) {
       const placemarks = xmlDoc.getElementsByTagName("Placemark");
 
       const colors = [
-        "#FF6B35", "#4A90E2", "#50E3C2", "#F5A623", "#BD10E0", 
-        "#B8E986", "#E94B3C", "#417505", "#9013FE", "#00D084",
+        "#A8C97F", "#4A90E2", "#0D7377", "#F5A623", "#B7791F", 
+        "#B8E986", "#E94B3C", "#417505", "#E6C98B", "#00D084",
         "#FFD700", "#FF69B4"
       ];
 
@@ -188,7 +188,7 @@ export default function LeafletMapKML({ kmlData }: LeafletMapKMLProps) {
         <FitBounds bounds={bounds} />
       </MapContainer>
 
-      <div className="absolute bottom-4 left-4 bg-[#0a0a0a]/90 backdrop-blur-md text-[#D4A574] px-4 py-3 rounded-lg border-2 border-[#FF6B35]/40 z-[1000]">
+      <div className="absolute bottom-4 left-4 bg-[#0a0a0a]/90 backdrop-blur-md text-[#E6C98B] px-4 py-3 rounded-lg border-2 border-[#B7791F]/40 z-[1000]">
         <div className="font-bold mb-1">Mapa Gratuito - Sítios Carcará</div>
         <div className="text-sm text-[#8B9B6E]">
           Clique nas áreas coloridas para ver detalhes • {polygons.length} propriedades

@@ -65,7 +65,7 @@ export default function WelcomeModal() {
 
   const steps = [
     {
-      icon: <Home className="w-16 h-16 text-[#FF6B35]" />,
+      icon: <Home className="w-16 h-16 text-[#A8C97F]" />,
       title: "Bem-vindo ao PubliMicro! 🎉",
       description: "Sua plataforma completa para encontrar e negociar propriedades rurais e urbanas. Vamos fazer um tour rápido?",
       highlight: "Marketplace confiável desde 2024"
@@ -89,7 +89,7 @@ export default function WelcomeModal() {
       highlight: "Lances transparentes e seguros"
     },
     {
-      icon: <Heart className="w-16 h-16 text-[#FF6B35]" />,
+      icon: <Heart className="w-16 h-16 text-[#B7791F]" />,
       title: "Organize seus Favoritos",
       description: "Salve propriedades favoritas, compare até 3 ao mesmo tempo e organize em pastas personalizadas.",
       highlight: "Sincronizado em todos os dispositivos"
@@ -113,7 +113,7 @@ export default function WelcomeModal() {
           {/* Close Button */}
           <button
             onClick={handleClose}
-            className="absolute top-4 right-4 p-2 text-[#959595] hover:text-[#FF6B35] transition-colors rounded-full hover:bg-[#2a2a1a]"
+            className="absolute top-4 right-4 p-2 text-[#959595] hover:text-[#A8C97F] transition-colors rounded-full hover:bg-[#2a2a1a]"
             aria-label="Fechar tour de boas-vindas"
           >
             <X className="w-6 h-6" />
@@ -129,7 +129,7 @@ export default function WelcomeModal() {
           </div>
 
           {/* Title */}
-          <h2 className="text-3xl md:text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-[#D4A574] to-[#FF6B35] mb-4">
+          <h2 className="text-3xl md:text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-[#E6C98B] to-[#B7791F] mb-4">
             {step.title}
           </h2>
 
@@ -139,8 +139,8 @@ export default function WelcomeModal() {
           </p>
 
           {/* Highlight */}
-          <div className="inline-block px-6 py-2 bg-[#FF6B35]/20 border border-[#FF6B35] rounded-full mb-8">
-            <span className="text-[#FF6B35] font-semibold text-sm">
+          <div className="inline-block px-6 py-2 bg-[#B7791F]/20 border border-[#B7791F] rounded-full mb-8">
+            <span className="text-[#E6C98B] font-semibold text-sm">
               ✨ {step.highlight}
             </span>
           </div>
@@ -153,9 +153,9 @@ export default function WelcomeModal() {
                 onClick={() => setCurrentStep(index)}
                 className={`w-3 h-3 rounded-full transition-all ${
                   index === currentStep
-                    ? "bg-[#FF6B35] w-8"
+                    ? "bg-[#A8C97F] w-8"
                     : index < currentStep
-                    ? "bg-[#8B9B6E]"
+                    ? "bg-[#B7791F]"
                     : "bg-[#2a2a1a]"
                 }`}
                 aria-label={`Ir para passo ${index + 1}`}
@@ -177,7 +177,7 @@ export default function WelcomeModal() {
             
             <button
               onClick={handleNext}
-              className="px-8 py-3 bg-gradient-to-r from-[#FF6B35] to-[#FF8C42] text-[#0a0a0a] font-bold rounded-full hover:scale-105 transition-all shadow-lg"
+              className="px-8 py-3 bg-gradient-to-r from-[#A8C97F] to-[#0D7377] text-white font-bold rounded-full hover:scale-105 transition-all shadow-lg"
               aria-label={currentStep === steps.length - 1 ? "Finalizar tour" : "Ir para próximo passo"}
             >
               {currentStep === steps.length - 1 ? "Começar!" : "Próximo"}
@@ -196,8 +196,8 @@ export default function WelcomeModal() {
         </div>
 
         {/* Decorative Elements */}
-        <div className="absolute -z-10 top-0 right-0 w-64 h-64 bg-[#FF6B35]/10 rounded-full blur-3xl" />
-        <div className="absolute -z-10 bottom-0 left-0 w-64 h-64 bg-[#6A1B9A]/10 rounded-full blur-3xl" />
+        <div className="absolute -z-10 top-0 right-0 w-64 h-64 bg-[#A8C97F]/10 rounded-full blur-3xl" />
+        <div className="absolute -z-10 bottom-0 left-0 w-64 h-64 bg-[#0D7377]/10 rounded-full blur-3xl" />
       </div>
       </FocusLock>
 

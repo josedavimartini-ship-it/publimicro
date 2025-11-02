@@ -257,8 +257,8 @@ export default function PropertyPage() {
     return (
       <main className="min-h-screen bg-gradient-to-b from-[#0a0a0a] via-[#0d0d0d] to-[#0a0a0a] flex items-center justify-center">
         <div className="text-center">
-          <h1 className="text-2xl font-bold text-[#D4A574] mb-4">Propriedade não encontrada</h1>
-          <Link href="/" className="text-[#FF6B35] hover:underline">
+          <h1 className="text-2xl font-bold text-[#E6C98B] mb-4">Propriedade não encontrada</h1>
+          <Link href="/" className="text-[#A8C97F] hover:underline">
             Voltar para a página inicial
           </Link>
         </div>
@@ -278,7 +278,7 @@ export default function PropertyPage() {
         {/* Back Button */}
         <Link 
           href="/" 
-          className="inline-flex items-center gap-2 text-[#D4A574] hover:text-[#FF6B35] mb-8 transition-colors"
+          className="inline-flex items-center gap-2 text-[#E6C98B] hover:text-[#A8C97F] mb-8 transition-colors"
         >
           <ArrowLeft className="w-5 h-5" />
           Voltar para início

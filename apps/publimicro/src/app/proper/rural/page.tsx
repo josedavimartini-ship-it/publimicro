@@ -14,13 +14,13 @@ export default function ProperRuralPage() {
         </div>
 
         {/* Featured: Sítios Carcará */}
-        <div className="bg-gradient-to-br from-[#1a1a1a] to-[#0d0d0d] border-4 border-[#FF6B35] rounded-2xl p-12 mb-12">
-          <div className="inline-flex items-center gap-2 mb-4 px-5 py-2 bg-[#FF6B35]/30 border-2 border-[#FF6B35] rounded-full">
-            <span className="text-[#FF6B35] font-bold uppercase tracking-wider">
+        <div className="bg-gradient-to-br from-[#1a1a1a] to-[#0d0d0d] border-4 border-[#B7791F] rounded-2xl p-12 mb-12">
+          <div className="inline-flex items-center gap-2 mb-4 px-5 py-2 bg-[#E6C98B]/30 border-2 border-[#B7791F] rounded-full">
+            <span className="text-[#B7791F] font-bold uppercase tracking-wider">
               🦅 Destaque Especial
             </span>
           </div>
-          <h2 className="text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-[#FF6B35] to-[#B7791F] mb-4">
+          <h2 className="text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-[#B7791F] to-[#0D7377] mb-4">
             Sítios Carcará's Project
           </h2>
           <p className="text-[#d8c68e] text-lg mb-6">
@@ -28,7 +28,7 @@ export default function ProperRuralPage() {
           </p>
           <Link
             href="/projetos/carcara"
-            className="inline-block px-10 py-4 bg-gradient-to-r from-[#FF6B35] to-[#FF8C42] hover:from-[#FF8C42] hover:to-[#FF6B35] text-[#0a0a0a] font-bold rounded-full transition-all hover:scale-105"
+            className="inline-block px-10 py-4 bg-gradient-to-r from-[#A8C97F] to-[#0D7377] hover:from-[#0D7377] hover:to-[#A8C97F] text-white font-bold rounded-full transition-all hover:scale-105"
           >
             🏡 Explorar Projeto Completo
           </Link>

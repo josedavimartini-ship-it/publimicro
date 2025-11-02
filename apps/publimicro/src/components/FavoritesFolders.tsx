@@ -58,9 +58,9 @@ export default function FavoritesFolders() {
       } else {
         // Create default folders
         const defaultFolders: FavoriteFolder[] = [
-          { id: "urgent", name: "Urgente", color: "#FF6B35", propertyIds: [], createdAt: Date.now() },
-          { id: "maybe", name: "Talvez", color: "#D4A574", propertyIds: [], createdAt: Date.now() },
-          { id: "family", name: "Para a Família", color: "#8B9B6E", propertyIds: [], createdAt: Date.now() }
+          { id: "urgent", name: "Urgente", color: "#B7791F", propertyIds: [], createdAt: Date.now() },
+          { id: "maybe", name: "Talvez", color: "#E6C98B", propertyIds: [], createdAt: Date.now() },
+          { id: "family", name: "Para a Família", color: "#A8C97F", propertyIds: [], createdAt: Date.now() }
         ];
         setFolders(defaultFolders);
         setSelectedFolder("urgent");
@@ -99,7 +99,7 @@ export default function FavoritesFolders() {
   const createFolder = () => {
     if (!newFolderName.trim()) return;
 
-    const colors = ["#FF6B35", "#D4A574", "#8B9B6E", "#6A1B9A"];
+    const colors = ["#A8C97F", "#E6C98B", "#B7791F", "#0D7377"];
     const newFolder: FavoriteFolder = {
       id: Math.random().toString(36).substring(7),
       name: newFolderName,
@@ -189,8 +189,8 @@ export default function FavoritesFolders() {
       <div className="max-w-7xl mx-auto px-6">
         <div className="flex items-center justify-between mb-8">
           <div className="flex items-center gap-3">
-            <Heart className="w-8 h-8 text-[#FF6B35] fill-current" />
-            <h2 className="text-3xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-[#D4A574] to-[#FF6B35]">
+            <Heart className="w-8 h-8 text-[#B7791F] fill-current" />
+            <h2 className="text-3xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-[#E6C98B] to-[#B7791F]">
               Meus Favoritos
             </h2>
           </div>
@@ -202,7 +202,7 @@ export default function FavoritesFolders() {
             {folders.map((folder) => (
               <div key={folder.id}>
                 {editingId === folder.id ? (
-                  <div className="flex items-center gap-2 px-4 py-3 bg-[#1a1a1a] border-2 border-[#FF6B35] rounded-xl">
+                  <div className="flex items-center gap-2 px-4 py-3 bg-[#1a1a1a] border-2 border-[#A8C97F] rounded-xl">
                     <input
                       type="text"
                       defaultValue={folder.name}
@@ -235,8 +235,8 @@ export default function FavoritesFolders() {
                   <div
                     className={`flex items-center justify-between px-4 py-3 border-2 rounded-xl cursor-pointer transition-all group ${
                       selectedFolder === folder.id
-                        ? "bg-gradient-to-r from-[#1a1a1a] to-[#0d0d0d] border-[#FF6B35]"
-                        : "bg-[#1a1a1a] border-[#2a2a1a] hover:border-[#D4A574]"
+                        ? "bg-gradient-to-r from-[#1a1a1a] to-[#0d0d0d] border-[#A8C97F]"
+                        : "bg-[#1a1a1a] border-[#2a2a1a] hover:border-[#E6C98B]"
                     }`}
                     onClick={() => setSelectedFolder(folder.id)}
                   >
@@ -282,7 +282,7 @@ export default function FavoritesFolders() {
 
             {/* Create New Folder */}
             {isCreating ? (
-              <div className="flex items-center gap-2 px-4 py-3 bg-[#1a1a1a] border-2 border-[#FF6B35] rounded-xl">
+              <div className="flex items-center gap-2 px-4 py-3 bg-[#1a1a1a] border-2 border-[#A8C97F] rounded-xl">
                 <input
                   type="text"
                   value={newFolderName}
@@ -311,10 +311,10 @@ export default function FavoritesFolders() {
             ) : (
               <button
                 onClick={() => setIsCreating(true)}
-                className="w-full flex items-center justify-center gap-2 px-4 py-3 bg-[#1a1a1a] border-2 border-dashed border-[#2a2a1a] rounded-xl hover:border-[#FF6B35] transition-all group"
+                className="w-full flex items-center justify-center gap-2 px-4 py-3 bg-[#1a1a1a] border-2 border-dashed border-[#2a2a1a] rounded-xl hover:border-[#A8C97F] transition-all group"
               >
-                <Plus className="w-5 h-5 text-[#676767] group-hover:text-[#FF6B35]" />
-                <span className="text-[#676767] group-hover:text-[#D4A574]">Nova Pasta</span>
+                <Plus className="w-5 h-5 text-[#676767] group-hover:text-[#A8C97F]" />
+                <span className="text-[#676767] group-hover:text-[#E6C98B]">Nova Pasta</span>
               </button>
             )}
           </div>
@@ -323,7 +323,7 @@ export default function FavoritesFolders() {
           <div>
             {currentFolder && (
               <div className="mb-6">
-                <h3 className="text-2xl font-bold text-[#D4A574]">
+                <h3 className="text-2xl font-bold text-[#E6C98B]">
                   {currentFolder.name}
                 </h3>
                 <p className="text-[#8B9B6E]">
@@ -345,7 +345,7 @@ export default function FavoritesFolders() {
                 {properties.map((property) => (
                   <div
                     key={property.id}
-                    className="bg-gradient-to-br from-[#1a1a1a] to-[#0d0d0d] border-2 border-[#2a2a1a] rounded-2xl overflow-hidden hover:border-[#FF6B35] transition-all group"
+                    className="bg-gradient-to-br from-[#1a1a1a] to-[#0d0d0d] border-2 border-[#2a2a1a] rounded-2xl overflow-hidden hover:border-[#A8C97F] transition-all group"
                   >
                     <Link href={`/imoveis/${property.id}`}>
                       <div className="relative w-full h-48 bg-[#2a2a1a]">
@@ -368,7 +368,7 @@ export default function FavoritesFolders() {
 
                     <div className="p-6">
                       <Link href={`/imoveis/${property.id}`}>
-                        <h4 className="text-xl font-bold text-[#D4A574] mb-2 group-hover:text-[#FF6B35] transition-colors">
+                        <h4 className="text-xl font-bold text-[#E6C98B] mb-2 group-hover:text-[#A8C97F] transition-colors">
                           {property.nome}
                         </h4>
                       </Link>
@@ -377,7 +377,7 @@ export default function FavoritesFolders() {
                       <div className="flex items-center justify-between">
                         <div>
                           {property.preco && (
-                            <p className="text-[#FF6B35] font-bold text-lg">
+                            <p className="text-[#B7791F] font-bold text-lg">
                               R$ {property.preco.toLocaleString("pt-BR")}
                             </p>
                           )}

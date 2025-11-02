@@ -46,7 +46,7 @@ export default function WhatsAppButton() {
         </svg>
         
         {/* Pulsing indicator */}
-        <span className="absolute -top-1 -right-1 w-4 h-4 bg-[#FF6B35] rounded-full animate-ping" />
+        <span className="absolute -top-1 -right-1 w-4 h-4 bg-[#B7791F] rounded-full animate-ping" />
         
         {/* Tooltip on hover */}
         <span className="absolute right-full mr-3 px-4 py-2 bg-[#0a0a0a] border-2 border-[#25D366] text-[#25D366] text-sm font-bold rounded-lg opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none shadow-xl">

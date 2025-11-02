@@ -33,7 +33,7 @@ export default function UserQuickPanel() {
     <div className="fixed bottom-6 left-6 z-50 bg-[#1a1a1a]/95 border border-[#2a2a1a] rounded-2xl shadow-2xl p-4 w-80">
       <div className="mb-3 text-lg font-bold text-amber-400">Olá, {user.email}</div>
       <div className="mb-4 flex gap-4">
-        <Link href="/favoritos" className="flex items-center gap-2 text-[#FF6B35] hover:underline">
+        <Link href="/favoritos" className="flex items-center gap-2 text-[#B7791F] hover:underline">
           <Heart className="w-5 h-5" /> Favoritos ({favorites.length})
         </Link>
         <Link href="/propostas" className="flex items-center gap-2 text-[#0D7377] hover:underline">
@@ -57,7 +57,7 @@ export default function UserQuickPanel() {
           {favorites.length === 0 && <li>Nenhum favorito.</li>}
           {favorites.map((f) => (
             <li key={f.property_id}>
-              <Link href={`/imoveis/${f.property_id}`} className="hover:underline text-[#FF6B35]">{f.property_id}</Link>
+              <Link href={`/imoveis/${f.property_id}`} className="hover:underline text-[#B7791F]">{f.property_id}</Link>
             </li>
           ))}
         </ul>

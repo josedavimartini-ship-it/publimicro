@@ -38,14 +38,14 @@ export class ErrorBoundary extends React.Component<
 
       return (
         <div className="min-h-screen bg-gradient-to-b from-[#0a0a0a] via-[#0d0d0d] to-[#0a0a0a] flex items-center justify-center p-6">
-          <div className="max-w-2xl w-full bg-gradient-to-br from-[#1a1a1a] to-[#0d0d0d] border-2 border-[#FF6B35]/40 rounded-2xl p-8 text-center">
+          <div className="max-w-2xl w-full bg-gradient-to-br from-[#1a1a1a] to-[#0d0d0d] border-2 border-[#B7791F]/40 rounded-2xl p-8 text-center">
             <div className="flex justify-center mb-6">
-              <div className="p-4 bg-[#FF6B35]/20 rounded-full">
-                <AlertTriangle className="w-16 h-16 text-[#FF6B35]" />
+              <div className="p-4 bg-[#B7791F]/20 rounded-full">
+                <AlertTriangle className="w-16 h-16 text-[#B7791F]" />
               </div>
             </div>
 
-            <h1 className="text-3xl font-bold text-[#D4A574] mb-4">
+            <h1 className="text-3xl font-bold text-[#E6C98B] mb-4">
               Ops! Algo deu errado
             </h1>
 
@@ -68,7 +68,7 @@ export class ErrorBoundary extends React.Component<
             <div className="flex gap-4 justify-center">
               <button
                 onClick={() => window.location.reload()}
-                className="flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-[#FF6B35] to-[#FF8C42] text-[#0a0a0a] font-bold rounded-full hover:from-[#FF8C42] hover:to-[#FF6B35] transition-all"
+                className="flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-[#A8C97F] to-[#0D7377] text-white font-bold rounded-full hover:from-[#0D7377] hover:to-[#A8C97F] transition-all"
               >
                 <RefreshCw className="w-5 h-5" />
                 Recarregar Página
@@ -76,7 +76,7 @@ export class ErrorBoundary extends React.Component<
 
               <a
                 href="/"
-                className="flex items-center gap-2 px-6 py-3 border-2 border-[#D4A574] text-[#D4A574] font-bold rounded-full hover:bg-[#D4A574]/10 transition-all"
+                className="flex items-center gap-2 px-6 py-3 border-2 border-[#E6C98B] text-[#E6C98B] font-bold rounded-full hover:bg-[#E6C98B]/10 transition-all"
               >
                 <Home className="w-5 h-5" />
                 Voltar ao Início
@@ -90,7 +90,7 @@ export class ErrorBoundary extends React.Component<
                   href="https://wa.me/5534992610004"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-[#FF6B35] hover:underline"
+                  className="text-[#A8C97F] hover:underline"
                 >
                   Entre em contato conosco
                 </a>

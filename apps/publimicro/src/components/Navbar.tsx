@@ -20,7 +20,7 @@ export default function Navbar() {
     <nav className="flex items-center gap-4">
       <Link
         href="/buscar"
-        className="flex flex-col items-center text-xs text-[#8B9B6E] hover:text-[#FF6B35] transition-colors"
+        className="flex flex-col items-center text-xs text-[#8B9B6E] hover:text-[#A8C97F] transition-colors"
       >
         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" className="mb-1">
           <path
@@ -35,7 +35,7 @@ export default function Navbar() {
 
       <Link
         href="/comparar"
-        className="flex flex-col items-center text-xs text-[#8B9B6E] hover:text-[#FF6B35] transition-colors"
+        className="flex flex-col items-center text-xs text-[#8B9B6E] hover:text-[#A8C97F] transition-colors"
         title="Comparar Propriedades"
       >
         <Scale className="w-5 h-5 mb-1" />
@@ -44,7 +44,7 @@ export default function Navbar() {
 
       <Link
         href="/lances"
-        className="flex flex-col items-center text-xs text-[#8B9B6E] hover:text-[#FF6B35] transition-colors"
+        className="flex flex-col items-center text-xs text-[#8B9B6E] hover:text-[#A8C97F] transition-colors"
         title="Meus Lances"
       >
         <TrendingUp className="w-5 h-5 mb-1" />
@@ -53,7 +53,7 @@ export default function Navbar() {
 
       <Link
         href="/favoritos"
-        className="flex flex-col items-center text-xs text-[#8B9B6E] hover:text-[#FF6B35] transition-colors"
+        className="flex flex-col items-center text-xs text-[#8B9B6E] hover:text-[#A8C97F] transition-colors"
       >
         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" className="mb-1">
           <path
@@ -68,7 +68,7 @@ export default function Navbar() {
       <button
         onClick={handlePostar}
         type="button"
-        className="flex flex-col items-center text-xs text-[#8B9B6E] hover:text-[#FF6B35] transition-colors"
+        className="flex flex-col items-center text-xs text-[#8B9B6E] hover:text-[#A8C97F] transition-colors"
       >
         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" className="mb-1">
           <path
@@ -83,7 +83,7 @@ export default function Navbar() {
 
       <Link
         href="/conta"
-        className="flex flex-col items-center text-xs text-[#8B9B6E] hover:text-[#FF6B35] transition-colors"
+        className="flex flex-col items-center text-xs text-[#8B9B6E] hover:text-[#A8C97F] transition-colors"
       >
         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" className="mb-1">
           <path

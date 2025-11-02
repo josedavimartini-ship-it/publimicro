@@ -116,7 +116,7 @@ export default function LancesPage() {
   const getStatusIcon = (status: string) => {
     switch (status) {
       case "pending":
-        return <Clock className="w-5 h-5 text-[#FF6B35]" />;
+        return <Clock className="w-5 h-5 text-[#B7791F]" />;
       case "accepted":
         return <CheckCircle className="w-5 h-5 text-[#8B9B6E]" />;
       case "rejected":
@@ -140,8 +140,8 @@ export default function LancesPage() {
 
   const getStatusColor = (status: string) => {
     const colors = {
-      pending: "bg-[#FF6B35]/20 text-[#FF6B35] border-[#FF6B35]",
-      accepted: "bg-[#8B9B6E]/20 text-[#8B9B6E] border-[#8B9B6E]",
+      pending: "bg-[#B7791F]/20 text-[#B7791F] border-[#B7791F]",
+      accepted: "bg-[#A8C97F]/20 text-[#A8C97F] border-[#A8C97F]",
       rejected: "bg-red-500/20 text-red-400 border-red-500",
       counter: "bg-[#6A1B9A]/20 text-[#6A1B9A] border-[#6A1B9A]"
     };
@@ -163,7 +163,7 @@ export default function LancesPage() {
 
         {/* Header */}
         <div className="mb-8">
-          <h1 className="text-3xl md:text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-[#D4A574] to-[#FF6B35] mb-2">
+          <h1 className="text-3xl md:text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-[#E6C98B] to-[#B7791F] mb-2">
             Meus Lances
           </h1>
           <p className="text-[#8B9B6E]">
@@ -174,28 +174,28 @@ export default function LancesPage() {
         {/* Stats Cards */}
         <div className="grid grid-cols-2 md:grid-cols-5 gap-4 mb-8">
           <div className="bg-gradient-to-br from-[#1a1a1a] to-[#0d0d0d] border-2 border-[#2a2a1a] rounded-xl p-4">
-            <p className="text-[#8B9B6E] text-sm mb-1">Total de Lances</p>
-            <p className="text-2xl font-bold text-[#D4A574]">{stats.total}</p>
+            <p className="text-[#A8C97F] text-sm mb-1">Total de Lances</p>
+            <p className="text-2xl font-bold text-[#E6C98B]">{stats.total}</p>
           </div>
           
-          <div className="bg-gradient-to-br from-[#1a1a1a] to-[#0d0d0d] border-2 border-[#FF6B35]/30 rounded-xl p-4">
-            <p className="text-[#8B9B6E] text-sm mb-1">Aguardando</p>
-            <p className="text-2xl font-bold text-[#FF6B35]">{stats.pending}</p>
+          <div className="bg-gradient-to-br from-[#1a1a1a] to-[#0d0d0d] border-2 border-[#B7791F]/30 rounded-xl p-4">
+            <p className="text-[#A8C97F] text-sm mb-1">Aguardando</p>
+            <p className="text-2xl font-bold text-[#B7791F]">{stats.pending}</p>
           </div>
           
-          <div className="bg-gradient-to-br from-[#1a1a1a] to-[#0d0d0d] border-2 border-[#8B9B6E]/30 rounded-xl p-4">
-            <p className="text-[#8B9B6E] text-sm mb-1">Aceitos</p>
-            <p className="text-2xl font-bold text-[#8B9B6E]">{stats.accepted}</p>
+          <div className="bg-gradient-to-br from-[#1a1a1a] to-[#0d0d0d] border-2 border-[#A8C97F]/30 rounded-xl p-4">
+            <p className="text-[#A8C97F] text-sm mb-1">Aceitos</p>
+            <p className="text-2xl font-bold text-[#A8C97F]">{stats.accepted}</p>
           </div>
           
           <div className="bg-gradient-to-br from-[#1a1a1a] to-[#0d0d0d] border-2 border-red-500/30 rounded-xl p-4">
-            <p className="text-[#8B9B6E] text-sm mb-1">Recusados</p>
+            <p className="text-[#A8C97F] text-sm mb-1">Recusados</p>
             <p className="text-2xl font-bold text-red-400">{stats.rejected}</p>
           </div>
           
-          <div className="bg-gradient-to-br from-[#1a1a1a] to-[#0d0d0d] border-2 border-[#6A1B9A]/30 rounded-xl p-4">
-            <p className="text-[#8B9B6E] text-sm mb-1">Valor Total</p>
-            <p className="text-lg font-bold text-[#6A1B9A]">R$ {stats.totalAmount.toLocaleString("pt-BR")}</p>
+          <div className="bg-gradient-to-br from-[#1a1a1a] to-[#0d0d0d] border-2 border-[#0D7377]/30 rounded-xl p-4">
+            <p className="text-[#A8C97F] text-sm mb-1">Valor Total</p>
+            <p className="text-lg font-bold text-[#0D7377]">R$ {stats.totalAmount.toLocaleString("pt-BR")}</p>
           </div>
         </div>
 
@@ -212,8 +212,8 @@ export default function LancesPage() {
               onClick={() => setFilter(filterOption.value as any)}
               className={`px-6 py-2 rounded-full font-semibold transition-all whitespace-nowrap ${
                 filter === filterOption.value
-                  ? "bg-gradient-to-r from-[#FF6B35] to-[#FF8C42] text-[#0a0a0a]"
-                  : "bg-[#2a2a1a] text-[#8B9B6E] hover:bg-[#3a3a2a]"
+                  ? "bg-gradient-to-r from-[#A8C97F] to-[#0D7377] text-white"
+                  : "bg-[#2a2a1a] text-[#A8C97F] hover:bg-[#3a3a2a]"
               }`}
             >
               {filterOption.label}
@@ -233,7 +233,7 @@ export default function LancesPage() {
             {bids.map((bid) => (
               <div
                 key={bid.id}
-                className="bg-gradient-to-br from-[#1a1a1a] to-[#0d0d0d] border-2 border-[#2a2a1a] rounded-2xl overflow-hidden hover:border-[#FF6B35] transition-all"
+                className="bg-gradient-to-br from-[#1a1a1a] to-[#0d0d0d] border-2 border-[#2a2a1a] rounded-2xl overflow-hidden hover:border-[#A8C97F] transition-all"
               >
                 <div className="p-6">
                   <div className="flex flex-col md:flex-row gap-6">
@@ -261,11 +261,11 @@ export default function LancesPage() {
                         <div>
                           <Link
                             href={`/imoveis/${bid.property_id}`}
-                            className="text-xl font-bold text-[#D4A574] hover:text-[#FF6B35] transition-colors"
+                            className="text-xl font-bold text-[#E6C98B] hover:text-[#A8C97F] transition-colors"
                           >
                             {bid.sitios?.nome || "Propriedade"}
                           </Link>
-                          <p className="text-[#8B9B6E] text-sm mt-1">
+                          <p className="text-[#A8C97F] text-sm mt-1">
                             {bid.sitios?.localizacao || "Localização não disponível"}
                           </p>
                         </div>
@@ -280,14 +280,14 @@ export default function LancesPage() {
                       <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-4">
                         <div>
                           <p className="text-[#676767] text-xs mb-1">Seu Lance</p>
-                          <p className="text-[#FF6B35] font-bold text-lg">
+                          <p className="text-[#B7791F] font-bold text-lg">
                             R$ {bid.bid_amount.toLocaleString("pt-BR")}
                           </p>
                         </div>
 
                         <div>
                           <p className="text-[#676767] text-xs mb-1">Lance Mais Alto</p>
-                          <p className="text-[#D4A574] font-bold text-lg">
+                          <p className="text-[#E6C98B] font-bold text-lg">
                             R$ {bid.highest_bid?.toLocaleString("pt-BR") || "-"}
                           </p>
                           {bid.highest_bid && bid.highest_bid > bid.bid_amount && (
@@ -297,7 +297,7 @@ export default function LancesPage() {
 
                         <div>
                           <p className="text-[#676767] text-xs mb-1">Lances Concorrentes</p>
-                          <p className="text-[#8B9B6E] font-bold text-lg">
+                          <p className="text-[#A8C97F] font-bold text-lg">
                             {bid.competing_bids || 0}
                           </p>
                         </div>
@@ -321,7 +321,7 @@ export default function LancesPage() {
                       <div className="flex gap-3">
                         <Link
                           href={`/imoveis/${bid.property_id}`}
-                          className="flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-[#FF6B35] to-[#FF8C42] text-[#0a0a0a] font-semibold rounded-lg hover:scale-105 transition-all"
+                          className="flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-[#A8C97F] to-[#0D7377] text-white font-semibold rounded-lg hover:scale-105 transition-all"
                         >
                           <Eye className="w-4 h-4" />
                           Ver Propriedade
@@ -330,7 +330,7 @@ export default function LancesPage() {
                         {bid.status === "pending" && bid.highest_bid && bid.highest_bid > bid.bid_amount && (
                           <Link
                             href={`/imoveis/${bid.property_id}#bid`}
-                            className="flex items-center gap-2 px-4 py-2 border-2 border-[#D4A574] text-[#D4A574] font-semibold rounded-lg hover:bg-[#D4A574]/10 transition-all"
+                            className="flex items-center gap-2 px-4 py-2 border-2 border-[#E6C98B] text-[#E6C98B] font-semibold rounded-lg hover:bg-[#E6C98B]/10 transition-all"
                           >
                             <DollarSign className="w-4 h-4" />
                             Aumentar Lance
@@ -348,17 +348,17 @@ export default function LancesPage() {
             <div className="w-32 h-32 mx-auto mb-6 bg-[#2a2a1a] rounded-full flex items-center justify-center">
               <TrendingUp className="w-16 h-16 text-[#676767]" />
             </div>
-            <h2 className="text-2xl font-bold text-[#D4A574] mb-3">
+            <h2 className="text-2xl font-bold text-[#E6C98B] mb-3">
               Nenhum lance encontrado
             </h2>
-            <p className="text-[#8B9B6E] mb-6">
+            <p className="text-[#A8C97F] mb-6">
               {filter === "all"
                 ? "Você ainda não fez nenhum lance em propriedades"
                 : `Nenhum lance com status "${getStatusLabel(filter)}"`}
             </p>
             <Link
               href="/imoveis"
-              className="inline-block px-6 py-3 bg-gradient-to-r from-[#FF6B35] to-[#FF8C42] text-[#0a0a0a] font-bold rounded-full hover:scale-105 transition-all"
+              className="inline-block px-6 py-3 bg-gradient-to-r from-[#A8C97F] to-[#0D7377] text-white font-bold rounded-full hover:scale-105 transition-all"
             >
               Explorar Propriedades
             </Link>

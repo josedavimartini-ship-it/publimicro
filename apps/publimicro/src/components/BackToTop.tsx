@@ -27,7 +27,7 @@ export default function BackToTop() {
   return (
     <button
       onClick={scrollToTop}
-      className="fixed bottom-24 right-6 z-50 p-4 bg-gradient-to-r from-[#FF6B35] to-[#FF8C42] text-[#0a0a0a] rounded-full shadow-2xl hover:scale-110 transition-all hover:from-[#FF8C42] hover:to-[#FF6B35] focus:outline-none focus:ring-4 focus:ring-[#FF6B35]/50"
+      className="fixed bottom-24 right-6 z-50 p-4 bg-gradient-to-r from-[#A8C97F] to-[#0D7377] text-white rounded-full shadow-2xl hover:scale-110 transition-all hover:from-[#0D7377] hover:to-[#A8C97F] focus:outline-none focus:ring-4 focus:ring-[#A8C97F]/50"
       aria-label="Voltar ao topo"
       title="Voltar ao topo"
     >

@@ -19,20 +19,20 @@ export default function BiddingPage({
         <div className="mb-8">
           <Link
             href="/"
-            className="text-[#676767] hover:text-[#FF6B35] transition-colors inline-flex items-center gap-2"
+            className="text-[#676767] hover:text-[#A8C97F] transition-colors inline-flex items-center gap-2"
           >
             ← Voltar
           </Link>
         </div>
 
         <div className="bg-gradient-to-br from-[#1a1a1a] to-[#0d0d0d] border-2 border-[#2a2a1a] rounded-2xl p-8 shadow-2xl">
-          <h1 className="text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-[#FF6B35] to-[#FF8C42] mb-6">
+          <h1 className="text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-[#A8C97F] to-[#0D7377] mb-6">
             Sistema de Lances
           </h1>
 
-          <div className="mb-8 p-6 bg-[#FF6B35]/10 border border-[#FF6B35]/30 rounded-xl">
-            <h2 className="text-xl font-bold text-[#FF6B35] mb-3">Como Funciona</h2>
-            <ol className="space-y-2 text-[#D4A574] text-sm">
+          <div className="mb-8 p-6 bg-[#A8C97F]/10 border border-[#A8C97F]/30 rounded-xl">
+            <h2 className="text-xl font-bold text-[#A8C97F] mb-3">Como Funciona</h2>
+            <ol className="space-y-2 text-[#E6C98B] text-sm">
               <li>1️⃣ Faça login ou cadastre-se</li>
               <li>2️⃣ Envie sua proposta de lance</li>
               <li>3️⃣ Aguarde aprovação para visita presencial ou virtual</li>
@@ -44,7 +44,7 @@ export default function BiddingPage({
           {sitioId && (
             <div className="mb-6 p-4 bg-[#0D7377]/10 border border-[#0D7377] rounded-lg">
               <p className="text-sm text-[#0D7377]">
-                Propriedade selecionada: <strong className="text-[#D4A574]">{sitioId.toUpperCase()}</strong>
+                Propriedade selecionada: <strong className="text-[#E6C98B]">{sitioId.toUpperCase()}</strong>
               </p>
             </div>
           )}
@@ -58,7 +58,7 @@ export default function BiddingPage({
                 type="number"
                 placeholder="Ex: 1.050.000"
                 required
-                className="w-full px-4 py-3 bg-[#0a0a0a] border border-[#3a3a2a] rounded-lg text-[#D4A574] placeholder-[#676767] focus:outline-none focus:border-[#FF6B35]"
+                className="w-full px-4 py-3 bg-[#0a0a0a] border border-[#3a3a2a] rounded-lg text-[#E6C98B] placeholder-[#676767] focus:outline-none focus:border-[#A8C97F]"
               />
             </div>
 
@@ -69,7 +69,7 @@ export default function BiddingPage({
               <input
                 type="text"
                 required
-                className="w-full px-4 py-3 bg-[#0a0a0a] border border-[#3a3a2a] rounded-lg text-[#D4A574] focus:outline-none focus:border-[#FF6B35]"
+                className="w-full px-4 py-3 bg-[#0a0a0a] border border-[#3a3a2a] rounded-lg text-[#E6C98B] focus:outline-none focus:border-[#A8C97F]"
               />
             </div>
 
@@ -80,7 +80,7 @@ export default function BiddingPage({
               <input
                 type="email"
                 required
-                className="w-full px-4 py-3 bg-[#0a0a0a] border border-[#3a3a2a] rounded-lg text-[#D4A574] focus:outline-none focus:border-[#FF6B35]"
+                className="w-full px-4 py-3 bg-[#0a0a0a] border border-[#3a3a2a] rounded-lg text-[#E6C98B] focus:outline-none focus:border-[#A8C97F]"
               />
             </div>
 
@@ -92,7 +92,7 @@ export default function BiddingPage({
                 type="tel"
                 required
                 placeholder="(00) 00000-0000"
-                className="w-full px-4 py-3 bg-[#0a0a0a] border border-[#3a3a2a] rounded-lg text-[#D4A574] placeholder-[#676767] focus:outline-none focus:border-[#FF6B35]"
+                className="w-full px-4 py-3 bg-[#0a0a0a] border border-[#3a3a2a] rounded-lg text-[#E6C98B] placeholder-[#676767] focus:outline-none focus:border-[#A8C97F]"
               />
             </div>
 
@@ -103,14 +103,14 @@ export default function BiddingPage({
               <textarea
                 rows={4}
                 placeholder="Conte-nos mais sobre seu interesse..."
-                className="w-full px-4 py-3 bg-[#0a0a0a] border border-[#3a3a2a] rounded-lg text-[#D4A574] placeholder-[#676767] focus:outline-none focus:border-[#FF6B35]"
+                className="w-full px-4 py-3 bg-[#0a0a0a] border border-[#3a3a2a] rounded-lg text-[#E6C98B] placeholder-[#676767] focus:outline-none focus:border-[#A8C97F]"
               />
             </div>
 
             <div className="flex gap-4">
               <button
                 type="submit"
-                className="flex-1 px-6 py-4 bg-gradient-to-r from-[#FF6B35] to-[#FF8C42] hover:from-[#FF8C42] hover:to-[#FF6B35] text-[#0a0a0a] font-bold rounded-lg transition-all hover:scale-105 shadow-xl"
+                className="flex-1 px-6 py-4 bg-gradient-to-r from-[#A8C97F] to-[#0D7377] hover:from-[#0D7377] hover:to-[#A8C97F] text-[#0a0a0a] font-bold rounded-lg transition-all hover:scale-105 shadow-xl"
               >
                 💰 Enviar Lance
               </button>
@@ -125,7 +125,7 @@ export default function BiddingPage({
 
           <div className="mt-8 p-6 bg-[#0D7377]/10 border border-[#0D7377]/30 rounded-xl">
             <h3 className="text-lg font-bold text-[#0D7377] mb-3">Outras Formas de Contato</h3>
-            <div className="space-y-2 text-sm text-[#D4A574]">
+            <div className="space-y-2 text-sm text-[#E6C98B]">
               <p>📞 <strong>Telefone:</strong> (34) 99261-0004</p>
               <p>📧 <strong>E-mail:</strong> contato@publimicro.com.br</p>
               <p>💬 <strong>WhatsApp:</strong> Clique no ícone flutuante</p>

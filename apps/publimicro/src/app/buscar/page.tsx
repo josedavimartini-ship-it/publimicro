@@ -125,7 +125,7 @@ function SearchPageContent() {
               <ArrowLeft className="w-5 h-5 text-[#8B9B6E]" />
               <span className="text-[#8B9B6E] font-semibold">Voltar</span>
             </Link>
-            <h1 className="text-3xl font-bold text-[#D4A574]">Buscar Propriedades</h1>
+            <h1 className="text-3xl font-bold text-[#E6C98B]">Buscar Propriedades</h1>
           </div>
           
           <SearchBar onFilterChange={setFilters} />
@@ -137,11 +137,11 @@ function SearchPageContent() {
                 "Buscando..."
               ) : (
                 <>
-                  <span className="font-bold text-[#FF6B35]">{totalResults}</span>{" "}
+                  <span className="font-bold text-[#A8C97F]">{totalResults}</span>{" "}
                   {totalResults === 1 ? "propriedade encontrada" : "propriedades encontradas"}
                   {filters.query && (
                     <>
-                      {" "}para "<span className="text-[#D4A574]">{filters.query}</span>"
+                      {" "}para "<span className="text-[#E6C98B]">{filters.query}</span>"
                     </>
                   )}
                 </>
@@ -175,7 +175,7 @@ function SearchPageContent() {
               <Link
                 key={property.id}
                 href={`/imoveis/${property.id}`}
-                className="bg-gradient-to-br from-[#1a1a1a] to-[#0d0d0d] border-2 border-[#2a2a1a] rounded-2xl overflow-hidden hover:border-[#FF6B35] transition-all hover:scale-105 shadow-lg hover:shadow-2xl group"
+                className="bg-gradient-to-br from-[#1a1a1a] to-[#0d0d0d] border-2 border-[#2a2a1a] rounded-2xl overflow-hidden hover:border-[#A8C97F] transition-all hover:scale-105 shadow-lg hover:shadow-2xl group"
               >
                 {/* Image */}
                 <div className="relative w-full h-64 bg-[#2a2a1a] overflow-hidden">
@@ -200,7 +200,7 @@ function SearchPageContent() {
                       e.preventDefault();
                       // Handle favorite toggle
                     }}
-                    className="absolute top-4 right-4 p-2 bg-[#0a0a0a]/80 hover:bg-[#FF6B35] rounded-full transition-all group/fav"
+                    className="absolute top-4 right-4 p-2 bg-[#0a0a0a]/80 hover:bg-[#A8C97F] rounded-full transition-all group/fav"
                     aria-label="Adicionar aos favoritos"
                   >
                     <Heart className="w-5 h-5 text-[#E6C98B] group-hover/fav:fill-current" />
@@ -209,7 +209,7 @@ function SearchPageContent() {
 
                 {/* Content */}
                 <div className="p-6">
-                  <h3 className="text-xl font-bold text-[#D4A574] mb-3 group-hover:text-[#FF6B35] transition-colors">
+                  <h3 className="text-xl font-bold text-[#E6C98B] mb-3 group-hover:text-[#A8C97F] transition-colors">
                     {property.nome}
                   </h3>
 
@@ -232,8 +232,8 @@ function SearchPageContent() {
                     {property.preco ? (
                       <div>
                         <div className="flex items-center gap-2">
-                          <DollarSign className="w-5 h-5 text-[#FF6B35]" />
-                          <span className="text-2xl font-bold text-[#FF6B35]">
+                          <DollarSign className="w-5 h-5 text-[#A8C97F]" />
+                          <span className="text-2xl font-bold text-[#A8C97F]">
                             R$ {property.preco.toLocaleString("pt-BR")}
                           </span>
                         </div>
@@ -263,7 +263,7 @@ function SearchPageContent() {
             <div className="w-32 h-32 mx-auto mb-6 bg-[#2a2a1a] rounded-full flex items-center justify-center">
               <MapPin className="w-16 h-16 text-[#676767]" />
             </div>
-            <h2 className="text-2xl font-bold text-[#D4A574] mb-3">
+            <h2 className="text-2xl font-bold text-[#E6C98B] mb-3">
               Nenhuma propriedade encontrada
             </h2>
             <p className="text-[#8B9B6E] mb-6">
@@ -281,7 +281,7 @@ function SearchPageContent() {
                   sortBy: "relevance",
                 });
               }}
-              className="px-6 py-3 bg-gradient-to-r from-[#FF6B35] to-[#FF8C42] text-[#0a0a0a] font-bold rounded-full hover:scale-105 transition-all"
+              className="px-6 py-3 bg-gradient-to-r from-[#A8C97F] to-[#0D7377] text-[#0a0a0a] font-bold rounded-full hover:scale-105 transition-all"
             >
               Limpar Filtros
             </button>

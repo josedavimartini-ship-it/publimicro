@@ -81,7 +81,7 @@ export default function ProposalModal({
       <div className="bg-gradient-to-br from-[#1a1a1a] to-[#0d0d0d] border-2 border-[#2a2a1a] rounded-2xl w-full max-w-lg relative shadow-2xl">
         <button
           onClick={onClose}
-          className="absolute top-4 right-4 text-[#676767] hover:text-[#FF6B35] transition-colors z-10"
+          className="absolute top-4 right-4 text-[#676767] hover:text-[#A8C97F] transition-colors z-10"
           aria-label="Close"
         >
           <X className="w-6 h-6" />
@@ -89,7 +89,7 @@ export default function ProposalModal({
 
         <div className="p-8">
           <div className="mb-6">
-            <h2 className="text-3xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-[#FF6B35] to-[#B7791F] mb-2">
+            <h2 className="text-3xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-[#E6C98B] to-[#B7791F] mb-2">
               Fazer Proposta
             </h2>
             {adTitle && (
@@ -97,7 +97,7 @@ export default function ProposalModal({
             )}
             {currentBid && (
               <p className="text-[#676767] text-sm mt-2">
-                Lance atual: <span className="text-[#FF6B35] font-bold">R$ {currentBid.toLocaleString('pt-BR')}</span>
+                Lance atual: <span className="text-[#B7791F] font-bold">R$ {currentBid.toLocaleString('pt-BR')}</span>
               </p>
             )}
           </div>
@@ -136,7 +136,7 @@ export default function ProposalModal({
                     placeholder="R$ 0,00"
                     value={amount}
                     onChange={handleAmountChange}
-                    className="w-full pl-12 pr-4 py-4 bg-[#2a2a2a] border-2 border-[#3a3a2a] rounded-lg text-[#f2e6b1] text-2xl font-bold placeholder-[#676767] focus:outline-none focus:border-[#FF6B35] transition-colors"
+                    className="w-full pl-12 pr-4 py-4 bg-[#2a2a2a] border-2 border-[#3a3a2a] rounded-lg text-[#f2e6b1] text-2xl font-bold placeholder-[#676767] focus:outline-none focus:border-[#A8C97F] transition-colors"
                     required
                   />
                 </div>
@@ -157,7 +157,7 @@ export default function ProposalModal({
                   value={message}
                   onChange={(e) => setMessage(e.target.value)}
                   rows={4}
-                  className="w-full px-4 py-3 bg-[#2a2a2a] border border-[#3a3a2a] rounded-lg text-[#f2e6b1] placeholder-[#676767] focus:outline-none focus:border-[#FF6B35] transition-colors resize-none"
+                  className="w-full px-4 py-3 bg-[#2a2a2a] border border-[#3a3a2a] rounded-lg text-[#f2e6b1] placeholder-[#676767] focus:outline-none focus:border-[#A8C97F] transition-colors resize-none"
                 />
               </div>
 
@@ -180,7 +180,7 @@ export default function ProposalModal({
               <button
                 type="submit"
                 disabled={loading || (minBid ? parseFloat(amount.replace(/[^\d]/g, '')) / 100 < minBid : false)}
-                className="w-full px-6 py-4 bg-gradient-to-r from-[#FF6B35] to-[#FF8C42] hover:from-[#FF8C42] hover:to-[#FF6B35] text-[#0a0a0a] font-bold rounded-lg transition-all hover:scale-105 disabled:opacity-50 disabled:hover:scale-100 shadow-lg"
+                className="w-full px-6 py-4 bg-gradient-to-r from-[#A8C97F] to-[#0D7377] hover:from-[#0D7377] hover:to-[#A8C97F] text-white font-bold rounded-lg transition-all hover:scale-105 disabled:opacity-50 disabled:hover:scale-100 shadow-lg"
               >
                 {loading ? (
                   <span className="flex items-center justify-center gap-2">

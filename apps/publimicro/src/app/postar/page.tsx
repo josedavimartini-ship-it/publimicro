@@ -35,7 +35,7 @@ export default function PostarPage() {
         {[0, 1].map((idx) => (
           <button
             key={idx}
-            className={`px-4 py-2 rounded-full font-bold border-2 ${activePost === idx ? "bg-[#FF6B35] text-black border-[#FF6B35]" : "bg-[#0D7377]/10 text-[#0D7377] border-[#0D7377]"}`}
+            className={`px-4 py-2 rounded-full font-bold border-2 ${activePost === idx ? "bg-[#A8C97F] text-black border-[#A8C97F]" : "bg-[#0D7377]/10 text-[#0D7377] border-[#0D7377]"}`}
             onClick={() => setActivePost(idx)}
           >
             {`Postagem ${idx + 1}`}
@@ -94,7 +94,7 @@ export default function PostarPage() {
         </div>
         <button
           type="submit"
-          className="px-6 py-3 bg-gradient-to-r from-[#FF6B35] to-[#B7791F] text-white font-bold rounded-full shadow-lg hover:scale-105 transition-all"
+          className="px-6 py-3 bg-gradient-to-r from-[#A8C97F] to-[#B7791F] text-white font-bold rounded-full shadow-lg hover:scale-105 transition-all"
         >
           Publicar anúncio
         </button>

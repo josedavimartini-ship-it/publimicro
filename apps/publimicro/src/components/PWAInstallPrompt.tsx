@@ -60,14 +60,14 @@ export default function PWAInstallPrompt() {
 
   return (
     <div className="fixed bottom-20 md:bottom-6 left-6 right-6 md:left-auto md:right-6 md:max-w-md z-50 animate-slide-up">
-      <div className="bg-gradient-to-br from-[#1a1a1a] to-[#0d0d0d] border-2 border-[#FF6B35] rounded-2xl p-6 shadow-2xl backdrop-blur-md">
+      <div className="bg-gradient-to-br from-[#1a1a1a] to-[#0d0d0d] border-2 border-[#A8C97F] rounded-2xl p-6 shadow-2xl backdrop-blur-md">
         <div className="flex items-start gap-4">
-          <div className="p-3 bg-[#FF6B35]/20 rounded-xl flex-shrink-0">
-            <Download className="w-6 h-6 text-[#FF6B35]" />
+          <div className="p-3 bg-[#A8C97F]/20 rounded-xl flex-shrink-0">
+            <Download className="w-6 h-6 text-[#A8C97F]" />
           </div>
 
           <div className="flex-1 min-w-0">
-            <h3 className="text-[#D4A574] font-bold text-lg mb-2">
+            <h3 className="text-[#E6C98B] font-bold text-lg mb-2">
               Instalar PubliMicro
             </h3>
             <p className="text-[#8B9B6E] text-sm mb-4">
@@ -77,13 +77,13 @@ export default function PWAInstallPrompt() {
             <div className="flex gap-3">
               <button
                 onClick={handleInstall}
-                className="flex-1 px-4 py-2 bg-gradient-to-r from-[#FF6B35] to-[#FF8C42] text-white font-bold rounded-xl hover:scale-105 transition-transform"
+                className="flex-1 px-4 py-2 bg-gradient-to-r from-[#A8C97F] to-[#0D7377] text-white font-bold rounded-xl hover:scale-105 transition-transform"
               >
                 Instalar
               </button>
               <button
                 onClick={handleDismiss}
-                className="px-4 py-2 text-[#676767] hover:text-[#D4A574] transition-colors"
+                className="px-4 py-2 text-[#676767] hover:text-[#E6C98B] transition-colors"
               >
                 Agora não
               </button>
@@ -92,7 +92,7 @@ export default function PWAInstallPrompt() {
 
           <button
             onClick={handleDismiss}
-            className="text-[#676767] hover:text-[#D4A574] transition-colors flex-shrink-0"
+            className="text-[#676767] hover:text-[#E6C98B] transition-colors flex-shrink-0"
             aria-label="Fechar"
           >
             <X className="w-5 h-5" />
