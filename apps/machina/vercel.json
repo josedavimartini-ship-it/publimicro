@@ -1,6 +1,5 @@
 {
   "buildCommand": "pnpm turbo run build --filter=@publimicro/machina",
   "installCommand": "pnpm install --no-frozen-lockfile",
-  "framework": "nextjs",
-  "outputDirectory": "apps/machina/.next"
+  "framework": "nextjs"
 }
