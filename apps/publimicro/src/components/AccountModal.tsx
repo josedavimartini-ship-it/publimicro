@@ -10,13 +10,15 @@ interface AccountModalProps {
 }
 
 export default function AccountModal({ open, onClose }: AccountModalProps) {
-  const [mode, setMode] = useState<'login' | 'register'>('login');
+  const [mode, setMode] = useState<'login' | 'register' | 'phone'>('login');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [fullName, setFullName] = useState('');
   const [phone, setPhone] = useState('');
+  const [otp, setOtp] = useState('');
+  const [otpSent, setOtpSent] = useState(false);
 
   const signInWithProvider = async (provider: 'google' | 'azure' | 'apple') => {
     setLoading(true);
@@ -87,6 +89,40 @@ export default function AccountModal({ open, onClose }: AccountModalProps) {
     }
   };
 
+  const handlePhoneSignIn = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setLoading(true);
+    setError('');
+
+    try {
+      if (!otpSent) {
+        // Send OTP
+        const { error } = await supabase.auth.signInWithOtp({
+          phone: phone.startsWith('+') ? phone : `+55${phone.replace(/\D/g, '')}`,
+        });
+        
+        if (error) throw error;
+        setOtpSent(true);
+        setError('Código enviado! Verifique seu WhatsApp/SMS.');
+      } else {
+        // Verify OTP
+        const { error } = await supabase.auth.verifyOtp({
+          phone: phone.startsWith('+') ? phone : `+55${phone.replace(/\D/g, '')}`,
+          token: otp,
+          type: 'sms',
+        });
+        
+        if (error) throw error;
+        onClose();
+      }
+    } catch (err: any) {
+      setError(err.message);
+      setOtpSent(false);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   if (!open) return null;
 
   return (
@@ -103,16 +139,20 @@ export default function AccountModal({ open, onClose }: AccountModalProps) {
 
         <div className="p-8">
           <h2 className="text-3xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-[#E6C98B] to-[#A8C97F] mb-2">
-            {mode === 'login' ? 'Entrar' : 'Cadastrar'}
+            {mode === 'login' ? 'Entrar' : mode === 'register' ? 'Cadastrar' : 'Login com Telefone'}
           </h2>
           <p className="text-[#A8C97F] mb-6">
             {mode === 'login'
               ? 'Acesse sua conta para continuar'
-              : 'Crie sua conta e ganhe 2 anúncios grátis!'}
+              : mode === 'register'
+              ? 'Crie sua conta e ganhe 2 anúncios grátis!'
+              : 'Entre usando seu número de telefone'}
           </p>
 
-          {/* OAuth Buttons */}
-          <div className="space-y-3 mb-6">
+          {mode !== 'phone' && (
+            <>
+              {/* OAuth Buttons */}
+              <div className="space-y-3 mb-6">
             <button
               onClick={() => signInWithProvider('google')}
               disabled={loading}
@@ -175,7 +215,80 @@ export default function AccountModal({ open, onClose }: AccountModalProps) {
             </div>
           </div>
 
-          {/* Email Form */}
+          {/* Phone Login Option Button */}
+          <button
+            onClick={() => {
+              setMode('phone');
+              setError('');
+              setOtpSent(false);
+            }}
+            className="w-full flex items-center justify-center gap-3 px-6 py-4 bg-[#0D7377] text-white rounded-lg hover:bg-[#0D7377]/80 hover:scale-105 transition-all font-medium mb-6 text-base"
+          >
+            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z" />
+            </svg>
+            Entrar com Telefone/WhatsApp
+          </button>
+          </>
+          )}
+
+          {mode === 'phone' ? (
+            /* Phone Login Form */
+            <form onSubmit={handlePhoneSignIn} className="space-y-4">
+              <input
+                type="tel"
+                placeholder="(00) 00000-0000"
+                value={phone}
+                onChange={(e) => setPhone(e.target.value)}
+                className="w-full px-4 py-3 bg-[#2a2a2a] border border-[#3a3a2a] rounded-lg text-[#E6C98B] placeholder-[#676767] focus:outline-none focus:border-[#A8C97F] transition-colors"
+                required
+                disabled={otpSent}
+              />
+
+              {otpSent && (
+                <input
+                  type="text"
+                  placeholder="Código de 6 dígitos"
+                  value={otp}
+                  onChange={(e) => setOtp(e.target.value)}
+                  className="w-full px-4 py-3 bg-[#2a2a2a] border border-[#3a3a2a] rounded-lg text-[#E6C98B] placeholder-[#676767] focus:outline-none focus:border-[#A8C97F] transition-colors text-center text-2xl tracking-widest"
+                  required
+                  maxLength={6}
+                  autoFocus
+                />
+              )}
+
+              {error && (
+                <div className={`text-sm p-3 rounded-lg ${error.includes('enviado') ? 'bg-green-900/20 text-green-400' : 'bg-red-900/20 text-red-400'}`}>
+                  {error}
+                </div>
+              )}
+
+              <button
+                type="submit"
+                disabled={loading}
+                className="w-full px-6 py-4 bg-gradient-to-r from-[#0D7377] to-[#A8C97F] hover:from-[#A8C97F] hover:to-[#0D7377] text-white font-bold rounded-lg transition-all hover:scale-105 disabled:opacity-50 disabled:hover:scale-100 text-base"
+              >
+                {loading ? 'Processando...' : otpSent ? 'Verificar Código' : 'Enviar Código'}
+              </button>
+
+              <button
+                type="button"
+                onClick={() => {
+                  setMode('login');
+                  setOtpSent(false);
+                  setError('');
+                  setPhone('');
+                  setOtp('');
+                }}
+                className="w-full text-[#E6C98B] hover:text-[#A8C97F] transition-colors text-sm"
+              >
+                ← Voltar para outras opções
+              </button>
+            </form>
+          ) : (
+          /* Email Form */
+          <div>
           <form onSubmit={mode === 'login' ? handleEmailSignIn : handleEmailSignUp} className="space-y-4">
             {mode === 'register' && (
               <>
@@ -242,6 +355,8 @@ export default function AccountModal({ open, onClose }: AccountModalProps) {
               {mode === 'login' ? 'Não tem conta? Cadastre-se' : 'Já tem conta? Faça login'}
             </button>
           </div>
+          </div>
+          )}
         </div>
       </div>
     </div>

@@ -28,15 +28,18 @@ const LeafletMapKML = dynamic(() => import("@/components/LeafletMapKML"), {
 });
 
 // Sections with concept phrases
+// Index 0: PubliProper (displayed separately)
+// Index 1-3: Row 1 (Motors, Machina, Marine)
+// Index 4-6: Row 2 (Global, Share, Tudo)
+// PubliJourney displayed separately on top
 const sections = [
-  { name: "PubliProper", icon: Home, href: "/proper", unsplashQuery: "luxury-real-estate", concept: "Seu lar dos sonhos" },
-  { name: "PubliMotors", icon: Car, href: "/motors", unsplashQuery: "luxury-cars", concept: "Mobilidade com estilo" },
-  { name: "PubliMachina", icon: Tractor, href: "/machina", unsplashQuery: "agricultural-machinery", concept: "Força para produzir" },
-  { name: "PubliMarine", icon: Ship, href: "/marine", unsplashQuery: "luxury-yacht", concept: "Navegue seus sonhos" },
-  { name: "PubliGlobal", icon: Globe, href: "/global", unsplashQuery: "international-business", concept: "Negócios sem fronteiras" },
-  { name: "PubliJourney", icon: Plane, href: "/journey", unsplashQuery: "travel-adventure", concept: "Viva experiências únicas" },
-  { name: "PubliShare", icon: Share2, href: "/share", unsplashQuery: "sharing-economy", concept: "Compartilhe e economize" },
-  { name: "PubliTudo", icon: ShoppingBag, href: "/tudo", unsplashQuery: "marketplace", concept: "Tudo em um só lugar" },
+  { name: "PubliProper", icon: Home, href: "/proper", unsplashQuery: "modern+luxury+house+exterior", concept: "Seu lar dos sonhos" },
+  { name: "PubliMotors", icon: Car, href: "/motors", unsplashQuery: "luxury+sports+car+dealership", concept: "Mobilidade com estilo" },
+  { name: "PubliMachina", icon: Tractor, href: "/machina", unsplashQuery: "john+deere+tractor+farm+equipment", concept: "Força para produzir" },
+  { name: "PubliMarine", icon: Ship, href: "/marine", unsplashQuery: "luxury+yacht+marina+boat", concept: "Navegue seus sonhos" },
+  { name: "PubliGlobal", icon: Globe, href: "/global", unsplashQuery: "world+map+global+business+airport", concept: "Negócios sem fronteiras" },
+  { name: "PubliShare", icon: Share2, href: "/share", unsplashQuery: "car+sharing+bike+sharing+community", concept: "Compartilhe e economize" },
+  { name: "PubliTudo", icon: ShoppingBag, href: "/tudo", unsplashQuery: "shopping+mall+retail+marketplace", concept: "Tudo em um só lugar" },
 ];
 
 // KML data from the attached file (Sítios Carcará property boundaries)
@@ -145,9 +148,9 @@ export default function HomePage() {
               <Carcara3D scale={1.1} />
             </div>
             <div className="relative p-12 lg:pl-64 z-20">
-              <div className="inline-flex items-center gap-2 mb-6 px-6 py-3 bg-[#A8C97F]/20 border-2 border-[#A8C97F] rounded-full backdrop-blur-md">
-                <Sparkles className="w-5 h-5 text-[#A8C97F] animate-pulse" />
-                <span className="text-[#A8C97F] font-bold text-lg tracking-widest uppercase">Super Destaque</span>
+              <div className="inline-flex items-center gap-2 mb-6 px-6 py-3 bg-[#78350f]/90 border-2 border-[#92400e] rounded-full backdrop-blur-md shadow-lg">
+                <Sparkles className="w-5 h-5 text-[#fbbf24] animate-pulse" />
+                <span className="text-[#fbbf24] font-bold text-lg tracking-widest uppercase drop-shadow-[0_2px_8px_rgba(0,0,0,0.8)]">Super Destaque</span>
               </div>
               <h2 className="text-5xl md:text-7xl lg:text-8xl font-bold text-[#1a1a1a] mb-6 drop-shadow-[0_2px_4px_rgba(255,255,255,0.5)] leading-tight">
                 Sítios Carcará
@@ -180,7 +183,7 @@ export default function HomePage() {
                 className="group relative w-full max-w-sm h-48 rounded-xl overflow-hidden shadow-xl hover:shadow-[#A8C97F]/50 transition-all duration-300 hover:scale-105 block border-2 border-[#2a2a1a] hover:border-[#A8C97F]"
               >
                 <Image
-                  src="https://source.unsplash.com/random/600x400/?luxury-real-estate"
+                  src="https://source.unsplash.com/random/600x400/?modern+luxury+house+exterior"
                   alt="PubliProper"
                   fill
                   className="object-cover transition-transform duration-700 group-hover:scale-110"
@@ -240,7 +243,7 @@ export default function HomePage() {
                 className="group relative w-full max-w-sm h-48 rounded-xl overflow-hidden shadow-xl hover:shadow-[#E6C98B]/50 transition-all duration-300 hover:scale-105 block border-2 border-[#2a2a1a] hover:border-[#E6C98B]"
               >
                 <Image
-                  src="https://source.unsplash.com/random/600x400/?travel-adventure"
+                  src="https://source.unsplash.com/random/600x400/?travel+adventure+vacation+destination"
                   alt="PubliJourney"
                   fill
                   className="object-cover transition-transform duration-700 group-hover:scale-110"
