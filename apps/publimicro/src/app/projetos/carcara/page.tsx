@@ -200,7 +200,7 @@ export default function CarcaraProjectPage() {
               type="button"
               className="px-12 py-6 border-2 border-[#0D7377] text-[#0D7377] hover:bg-[#0D7377]/10 font-bold rounded-full transition-all flex items-center gap-3 focus:outline-none focus:ring-4 focus:ring-[#0D7377]"
               aria-label="Agendar visita"
-              onClick={() => window.location.href = '/schedule-visit'}
+              onClick={() => setShowVisitModal(true)}
               tabIndex={0}
             >
               <Calendar className="w-6 h-6" />

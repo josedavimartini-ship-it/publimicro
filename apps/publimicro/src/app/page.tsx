@@ -149,7 +149,7 @@ export default function HomePage() {
                 <Sparkles className="w-5 h-5 text-[#A8C97F] animate-pulse" />
                 <span className="text-[#A8C97F] font-bold text-lg tracking-widest uppercase">Super Destaque</span>
               </div>
-              <h2 className="text-5xl md:text-7xl lg:text-8xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-[#2a2a1a] via-[#1a1a1a] to-[#0a0a0a] mb-6 drop-shadow-[0_2px_4px_rgba(255,255,255,0.5)] leading-tight">
+              <h2 className="text-5xl md:text-7xl lg:text-8xl font-bold text-[#1a1a1a] mb-6 drop-shadow-[0_2px_4px_rgba(255,255,255,0.5)] leading-tight">
                 Sítios Carcará
               </h2>
               <p className="text-[#1a1a1a] text-xl md:text-2xl mb-8 max-w-2xl leading-relaxed font-semibold drop-shadow-[0_1px_2px_rgba(255,255,255,0.3)]">
@@ -208,7 +208,7 @@ export default function HomePage() {
                   <span className="relative inline-block">
                     <span className="text-[#B87333]">o</span>
                     <svg
-                      className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[35px] h-[35px] md:w-[40px] md:h-[40px] text-[#FF6B35]"
+                      className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[35px] h-[35px] md:w-[40px] md:h-[40px] text-[#A8C97F]"
                       viewBox="0 0 24 24"
                       fill="none"
                       stroke="currentColor"
@@ -332,7 +332,7 @@ export default function HomePage() {
               Sítios Disponíveis - Lances Abertos
             </h2>
             {errorMsg && (
-              <div className="text-center text-[#FF6B35] font-semibold mb-8">
+              <div className="text-center text-[#E6C98B] font-semibold mb-8">
                 {errorMsg}
               </div>
             )}
