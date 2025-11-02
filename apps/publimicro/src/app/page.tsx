@@ -115,10 +115,10 @@ export default function HomePage() {
         <section className="py-12">
           <div className="bg-gradient-to-br from-[#1a1a1a] to-[#0d0d0d] border-2 border-[#2a2a1a] rounded-3xl p-8 shadow-2xl">
             <div className="flex flex-col items-center mb-6">
-              <h2 className="text-3xl md:text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-[#D4A574] to-[#FF6B35] mb-3">
+              <h2 className="text-3xl md:text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-[#E6C98B] to-[#B7791F] mb-3">
                 Encontre sua Propriedade Ideal
               </h2>
-              <p className="text-[#8B9B6E] text-center max-w-2xl">
+              <p className="text-[#A8C97F] text-center max-w-2xl">
                 Use filtros avançados para buscar por preço, área, localização e muito mais
               </p>
             </div>
@@ -130,7 +130,7 @@ export default function HomePage() {
 
         {/* SUPER HIGHLIGHT - Sítios Carcará */}
         <section className="py-16">
-          <div className="relative rounded-3xl overflow-hidden shadow-2xl border-4 border-[#FF6B35]/40 min-h-[600px] group">
+          <div className="relative rounded-3xl overflow-hidden shadow-2xl border-4 border-[#A8C97F]/40 min-h-[600px] group">
             <Image
               src="https://irrzpwzyqcubhhjeuakc.supabase.co/storage/v1/object/public/imagens-sitios/pordosol4mediumearthwide.jpg"
               alt="Sítios Carcará"
@@ -145,34 +145,25 @@ export default function HomePage() {
               <Carcara3D scale={1.1} />
             </div>
             <div className="relative p-12 lg:pl-64 z-20">
-              <div className="inline-flex items-center gap-2 mb-6 px-6 py-3 bg-[#FF6B35]/30 border-2 border-[#FF6B35] rounded-full backdrop-blur-md">
-                <Sparkles className="w-5 h-5 text-[#FF6B35] animate-pulse" />
-                <span className="text-[#FF6B35] font-bold text-lg tracking-widest uppercase">Super Destaque</span>
+              <div className="inline-flex items-center gap-2 mb-6 px-6 py-3 bg-[#A8C97F]/20 border-2 border-[#A8C97F] rounded-full backdrop-blur-md">
+                <Sparkles className="w-5 h-5 text-[#A8C97F] animate-pulse" />
+                <span className="text-[#A8C97F] font-bold text-lg tracking-widest uppercase">Super Destaque</span>
               </div>
-              <h2 className="text-5xl md:text-7xl lg:text-8xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-[#FF6B35] via-[#FF8C42] to-[#B7791F] mb-6 drop-shadow-2xl leading-tight">
+              <h2 className="text-5xl md:text-7xl lg:text-8xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-[#2a2a1a] via-[#1a1a1a] to-[#0a0a0a] mb-6 drop-shadow-[0_2px_4px_rgba(255,255,255,0.5)] leading-tight">
                 Sítios Carcará
               </h2>
-              <p className="text-[#d8c68e] text-xl md:text-2xl mb-8 max-w-2xl leading-relaxed">
+              <p className="text-[#1a1a1a] text-xl md:text-2xl mb-8 max-w-2xl leading-relaxed font-semibold drop-shadow-[0_1px_2px_rgba(255,255,255,0.3)]">
                 6 propriedades exclusivas às margens da represa de Corumbaíba, GO. 
                 Natureza preservada, infraestrutura completa. 
-                Lances a partir de <span className="text-[#FF6B35] font-bold">R$ 1.050.000</span>
+                Lances a partir de <span className="text-[#B7791F] font-bold">R$ 1.050.000</span>
               </p>
               <div className="flex gap-4 flex-wrap">
                 <Link
                   href="/projetos/carcara"
-                  className="px-10 py-5 bg-gradient-to-r from-[#FF6B35] to-[#FF8C42] hover:from-[#FF8C42] hover:to-[#FF6B35] text-[#0a0a0a] text-lg font-bold rounded-full transition-all hover:scale-105 shadow-2xl"
+                  className="px-10 py-5 bg-gradient-to-r from-[#A8C97F] to-[#8B9B6E] hover:from-[#8B9B6E] hover:to-[#A8C97F] text-[#0a0a0a] text-lg font-bold rounded-full transition-all hover:scale-105 shadow-2xl"
                 >
-                  Explorar Projeto Completo
+                  Conhecer
                 </Link>
-                <a
-                  href="https://www.sitioscarcara.com.br"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="px-10 py-5 border-3 border-[#D4A574] text-[#D4A574] hover:bg-[#D4A574]/10 text-lg font-bold rounded-full transition-all hover:scale-105 flex items-center gap-2"
-                >
-                  <Info className="w-6 h-6" />
-                  Mais Informações
-                </a>
               </div>
             </div>
           </div>
@@ -186,7 +177,7 @@ export default function HomePage() {
             <div className="flex justify-end">
               <Link
                 href="/proper"
-                className="group relative w-full max-w-sm h-48 rounded-xl overflow-hidden shadow-xl hover:shadow-[#FF6B35]/50 transition-all duration-300 hover:scale-105 block border-2 border-[#2a2a1a] hover:border-[#FF6B35]"
+                className="group relative w-full max-w-sm h-48 rounded-xl overflow-hidden shadow-xl hover:shadow-[#A8C97F]/50 transition-all duration-300 hover:scale-105 block border-2 border-[#2a2a1a] hover:border-[#A8C97F]"
               >
                 <Image
                   src="https://source.unsplash.com/random/600x400/?luxury-real-estate"
@@ -197,11 +188,11 @@ export default function HomePage() {
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-[#0a0a0a]/95 via-[#0a0a0a]/80 to-[#0a0a0a]/30" />
                 <div className="relative z-10 flex flex-col items-center justify-center h-full p-6 text-center">
-                  <Home className="w-16 h-16 text-[#FF6B35] mb-3 group-hover:scale-125 transition-all duration-300" strokeWidth={1.5} />
-                  <h3 className="text-2xl font-bold text-[#D4A574] group-hover:text-[#FF6B35] transition-colors mb-2">
+                  <Home className="w-16 h-16 text-[#A8C97F] mb-3 group-hover:scale-125 transition-all duration-300" strokeWidth={1.5} />
+                  <h3 className="text-2xl font-bold text-[#E6C98B] group-hover:text-[#A8C97F] transition-colors mb-2">
                     PubliProper
                   </h3>
-                  <p className="text-sm text-[#8B9B6E] font-medium italic">
+                  <p className="text-sm text-[#A8C97F] font-medium italic">
                     Seu lar dos sonhos
                   </p>
                 </div>
@@ -231,11 +222,11 @@ export default function HomePage() {
                     </svg>
                   </span>
                 </h1>
-                <p className="text-lg md:text-xl text-[#8B9B6E] font-light tracking-wide mb-6">
+                <p className="text-lg md:text-xl text-[#A8C97F] font-light tracking-wide mb-6">
                   Conectando pessoas, negócios e oportunidades
                 </p>
-                <div className="bg-gradient-to-r from-[#FF6B35]/20 to-[#D4A574]/20 border-2 border-[#FF6B35]/40 rounded-xl p-5 backdrop-blur-sm max-w-md">
-                  <p className="text-[#D4A574] text-base font-medium leading-relaxed">
+                <div className="bg-gradient-to-r from-[#A8C97F]/20 to-[#E6C98B]/20 border-2 border-[#A8C97F]/40 rounded-xl p-5 backdrop-blur-sm max-w-md">
+                  <p className="text-[#E6C98B] text-base font-medium leading-relaxed">
                     Do campo à cidade, do local ao global. Sua plataforma completa de negócios.
                   </p>
                 </div>
@@ -246,7 +237,7 @@ export default function HomePage() {
             <div className="flex justify-start">
               <Link
                 href="/journey"
-                className="group relative w-full max-w-sm h-48 rounded-xl overflow-hidden shadow-xl hover:shadow-[#FF6B35]/50 transition-all duration-300 hover:scale-105 block border-2 border-[#2a2a1a] hover:border-[#FF6B35]"
+                className="group relative w-full max-w-sm h-48 rounded-xl overflow-hidden shadow-xl hover:shadow-[#E6C98B]/50 transition-all duration-300 hover:scale-105 block border-2 border-[#2a2a1a] hover:border-[#E6C98B]"
               >
                 <Image
                   src="https://source.unsplash.com/random/600x400/?travel-adventure"
@@ -257,11 +248,11 @@ export default function HomePage() {
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-[#0a0a0a]/95 via-[#0a0a0a]/80 to-[#0a0a0a]/30" />
                 <div className="relative z-10 flex flex-col items-center justify-center h-full p-6 text-center">
-                  <Plane className="w-16 h-16 text-[#FF6B35] mb-3 group-hover:scale-125 transition-all duration-300" strokeWidth={1.5} />
-                  <h3 className="text-2xl font-bold text-[#D4A574] group-hover:text-[#FF6B35] transition-colors mb-2">
+                  <Plane className="w-16 h-16 text-[#E6C98B] mb-3 group-hover:scale-125 transition-all duration-300" strokeWidth={1.5} />
+                  <h3 className="text-2xl font-bold text-[#E6C98B] group-hover:text-[#B7791F] transition-colors mb-2">
                     PubliJourney
                   </h3>
-                  <p className="text-sm text-[#8B9B6E] font-medium italic">
+                  <p className="text-sm text-[#A8C97F] font-medium italic">
                     Viva experiências únicas
                   </p>
                 </div>
@@ -277,7 +268,7 @@ export default function HomePage() {
                 <Link
                   key={section.name}
                   href={section.href}
-                  className="group relative h-44 rounded-xl overflow-hidden shadow-xl hover:shadow-[#FF6B35]/50 transition-all duration-300 hover:scale-105 block border-2 border-[#2a2a1a] hover:border-[#FF6B35]"
+                  className="group relative h-44 rounded-xl overflow-hidden shadow-xl hover:shadow-[#A8C97F]/50 transition-all duration-300 hover:scale-105 block border-2 border-[#2a2a1a] hover:border-[#A8C97F]"
                 >
                   <Image
                     src={`https://source.unsplash.com/random/600x400/?${section.unsplashQuery}`}
@@ -288,11 +279,11 @@ export default function HomePage() {
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-[#0a0a0a]/95 via-[#0a0a0a]/80 to-[#0a0a0a]/30" />
                   <div className="relative z-10 flex flex-col items-center justify-center h-full p-4 text-center">
-                    <IconComponent className="w-14 h-14 text-[#FF6B35] mb-2 group-hover:scale-125 transition-all duration-300" strokeWidth={1.5} />
-                    <h3 className="text-xl font-bold text-[#D4A574] group-hover:text-[#FF6B35] transition-colors mb-1">
+                    <IconComponent className="w-14 h-14 text-[#E6C98B] mb-2 group-hover:scale-125 transition-all duration-300" strokeWidth={1.5} />
+                    <h3 className="text-xl font-bold text-[#E6C98B] group-hover:text-[#A8C97F] transition-colors mb-1">
                       {section.name}
                     </h3>
-                    <p className="text-xs text-[#8B9B6E] font-medium italic">
+                    <p className="text-xs text-[#A8C97F] font-medium italic">
                       {section.concept}
                     </p>
                   </div>
@@ -309,7 +300,7 @@ export default function HomePage() {
                 <Link
                   key={section.name}
                   href={section.href}
-                  className="group relative h-44 rounded-xl overflow-hidden shadow-xl hover:shadow-[#FF6B35]/50 transition-all duration-300 hover:scale-105 block border-2 border-[#2a2a1a] hover:border-[#FF6B35]"
+                  className="group relative h-44 rounded-xl overflow-hidden shadow-xl hover:shadow-[#E6C98B]/50 transition-all duration-300 hover:scale-105 block border-2 border-[#2a2a1a] hover:border-[#E6C98B]"
                 >
                   <Image
                     src={`https://source.unsplash.com/random/600x400/?${section.unsplashQuery}`}
@@ -320,11 +311,11 @@ export default function HomePage() {
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-[#0a0a0a]/95 via-[#0a0a0a]/80 to-[#0a0a0a]/30" />
                   <div className="relative z-10 flex flex-col items-center justify-center h-full p-4 text-center">
-                    <IconComponent className="w-14 h-14 text-[#FF6B35] mb-2 group-hover:scale-125 transition-all duration-300" strokeWidth={1.5} />
-                    <h3 className="text-xl font-bold text-[#D4A574] group-hover:text-[#FF6B35] transition-colors mb-1">
+                    <IconComponent className="w-14 h-14 text-[#B7791F] mb-2 group-hover:scale-125 transition-all duration-300" strokeWidth={1.5} />
+                    <h3 className="text-xl font-bold text-[#E6C98B] group-hover:text-[#B7791F] transition-colors mb-1">
                       {section.name}
                     </h3>
-                    <p className="text-xs text-[#8B9B6E] font-medium italic">
+                    <p className="text-xs text-[#A8C97F] font-medium italic">
                       {section.concept}
                     </p>
                   </div>
@@ -337,7 +328,7 @@ export default function HomePage() {
         {/* Featured Properties with Bidding Schema */}
         {!loading && sitios.length > 0 && (
           <section className="py-16">
-            <h2 className="text-4xl font-bold text-[#D4A574] mb-12 text-center">
+            <h2 className="text-4xl font-bold text-[#E6C98B] mb-12 text-center">
               Sítios Disponíveis - Lances Abertos
             </h2>
             {errorMsg && (
@@ -353,7 +344,7 @@ export default function HomePage() {
                   <Link 
                     key={sitio.id} 
                     href={`/imoveis/${sitio.id}`}
-                    className="group bg-gradient-to-br from-[#1a1a1a] to-[#0d0d0d] border-2 border-[#2a2a1a] rounded-2xl overflow-hidden hover:border-[#FF6B35] transition-all hover:scale-105 shadow-xl cursor-pointer block"
+                    className="group bg-gradient-to-br from-[#1a1a1a] to-[#0d0d0d] border-2 border-[#2a2a1a] rounded-2xl overflow-hidden hover:border-[#A8C97F] transition-all hover:scale-105 shadow-xl cursor-pointer block"
                   >
                     <div className="relative aspect-square overflow-hidden">
                       <Image
@@ -368,12 +359,12 @@ export default function HomePage() {
                         }}
                       />
                       {sitio.zona && (
-                        <div className="absolute top-3 right-3 px-2 py-1 bg-[#FF6B35] text-[#0a0a0a] font-bold rounded-full text-xs">
+                        <div className="absolute top-3 left-3 px-3 py-1 bg-[#1a1a1a]/90 text-[#A8C97F] font-bold rounded-lg text-sm border border-[#A8C97F]/30">
                           {sitio.zona}
                         </div>
                       )}
-                      {/* Favorites Heart Button */}
-                      <div className="absolute top-3 left-3">
+                      {/* Favorites Heart Button - Moved to top right */}
+                      <div className="absolute top-3 right-3">
                         <FavoritesButton propertyId={sitio.id} userId={userId} size="md" />
                       </div>
                     </div>
@@ -384,9 +375,9 @@ export default function HomePage() {
                       
                       {/* Bidding Schema Box */}
                       {typeof sitio.lance_inicial === "number" && (
-                        <div className="bg-[#0a0a0a] rounded-lg p-3 border border-[#FF6B35]/40">
-                          <div className="text-[#D4A574] text-xs font-semibold mb-1">Lance Inicial</div>
-                          <div className="text-[#FF6B35] font-bold text-xl">
+                        <div className="bg-[#0a0a0a] rounded-lg p-3 border border-[#A8C97F]/40">
+                          <div className="text-[#E6C98B] text-xs font-semibold mb-1">Lance Inicial</div>
+                          <div className="text-[#A8C97F] font-bold text-xl">
                             R$ {sitio.lance_inicial.toLocaleString("pt-BR")}
                           </div>
                         </div>
@@ -401,10 +392,10 @@ export default function HomePage() {
 
         {/* Free Leaflet Map with KML Property Boundaries */}
         <section className="py-16">
-          <h2 className="text-4xl font-bold text-[#D4A574] mb-8 text-center">
+          <h2 className="text-4xl font-bold text-[#E6C98B] mb-8 text-center">
             Mapa Interativo das Propriedades
           </h2>
-          <p className="text-[#8B9B6E] text-center mb-12 max-w-3xl mx-auto text-lg">
+          <p className="text-[#A8C97F] text-center mb-12 max-w-3xl mx-auto text-lg">
             Visualize em mapa de satélite a localização exata dos 6 sítios Carcará às margens da represa de Corumbaíba, GO. 
             Clique nas áreas coloridas para ver informações detalhadas de cada propriedade.
           </p>
@@ -427,7 +418,7 @@ export default function HomePage() {
 
             {/* Trust Badges */}
             <div className="mb-16">
-              <h2 className="text-3xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-[#D4A574] to-[#FF6B35] text-center mb-8">
+              <h2 className="text-3xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-[#E6C98B] to-[#A8C97F] text-center mb-8">
                 Por que confiar no PubliMicro?
               </h2>
               <TrustBadges />
@@ -435,7 +426,7 @@ export default function HomePage() {
 
             {/* Testimonials */}
             <div className="max-w-4xl mx-auto">
-              <h2 className="text-3xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-[#D4A574] to-[#FF6B35] text-center mb-8">
+              <h2 className="text-3xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-[#E6C98B] to-[#A8C97F] text-center mb-8">
                 O que nossos clientes dizem
               </h2>
               <Testimonials />
@@ -447,35 +438,35 @@ export default function HomePage() {
         <footer className="py-12 mt-20 border-t-2 border-[#2a2a1a]">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-8 mb-8">
             <div>
-              <h4 className="font-bold text-[#D4A574] mb-4">Imóveis</h4>
-              <ul className="space-y-2 text-[#8B9B6E]">
-                <li><Link href="/proper/urban" className="hover:text-[#FF6B35]">Urbanos</Link></li>
-                <li><Link href="/proper/rural" className="hover:text-[#FF6B35]">Rurais</Link></li>
+              <h4 className="font-bold text-[#E6C98B] mb-4">Imóveis</h4>
+              <ul className="space-y-2 text-[#A8C97F]">
+                <li><Link href="/proper/urban" className="hover:text-[#B7791F]">Urbanos</Link></li>
+                <li><Link href="/proper/rural" className="hover:text-[#B7791F]">Rurais</Link></li>
               </ul>
             </div>
             <div>
-              <h4 className="font-bold text-[#D4A574] mb-4">Veículos</h4>
-              <ul className="space-y-2 text-[#8B9B6E]">
-                <li><Link href="/motors" className="hover:text-[#FF6B35]">Carros</Link></li>
-                <li><Link href="/motors" className="hover:text-[#FF6B35]">Motos</Link></li>
+              <h4 className="font-bold text-[#E6C98B] mb-4">Veículos</h4>
+              <ul className="space-y-2 text-[#A8C97F]">
+                <li><Link href="/motors" className="hover:text-[#B7791F]">Carros</Link></li>
+                <li><Link href="/motors" className="hover:text-[#B7791F]">Motos</Link></li>
               </ul>
             </div>
             <div>
-              <h4 className="font-bold text-[#D4A574] mb-4">Serviços</h4>
-              <ul className="space-y-2 text-[#8B9B6E]">
-                <li><Link href="/tudo" className="hover:text-[#FF6B35]">Marketplace</Link></li>
-                <li><Link href="/share" className="hover:text-[#FF6B35]">Compartilhado</Link></li>
+              <h4 className="font-bold text-[#E6C98B] mb-4">Serviços</h4>
+              <ul className="space-y-2 text-[#A8C97F]">
+                <li><Link href="/tudo" className="hover:text-[#B7791F]">Marketplace</Link></li>
+                <li><Link href="/share" className="hover:text-[#B7791F]">Compartilhado</Link></li>
               </ul>
             </div>
             <div>
-              <h4 className="font-bold text-[#D4A574] mb-4">Conta</h4>
-              <ul className="space-y-2 text-[#8B9B6E]">
-                <li><Link href="/entrar" className="hover:text-[#FF6B35]">Entrar</Link></li>
-                <li><Link href="/postar" className="hover:text-[#FF6B35]">Postar</Link></li>
+              <h4 className="font-bold text-[#E6C98B] mb-4">Conta</h4>
+              <ul className="space-y-2 text-[#A8C97F]">
+                <li><Link href="/entrar" className="hover:text-[#B7791F]">Entrar</Link></li>
+                <li><Link href="/postar" className="hover:text-[#B7791F]">Postar</Link></li>
               </ul>
             </div>
           </div>
-          <div className="text-center text-[#8B9B6E] text-sm pt-8 border-t border-[#2a2a1a]">
+          <div className="text-center text-[#A8C97F] text-sm pt-8 border-t border-[#2a2a1a]">
             2025 PubliMicro Ecosystem. Todos os direitos reservados.
           </div>
         </footer>
