@@ -52,7 +52,7 @@ export default function WorldRegionsSidebar() {
     >
       {/* Language Dropdown (placeholder) */}
       <select
-        className="w-full mb-6 px-4 py-3 bg-[#1a1a1a] border-2 border-[#3a3a2a] text-[#f2e6b1] rounded-lg focus:border-[#00e6cc] focus:outline-none transition-all"
+        className="w-full mb-6 px-4 py-3 bg-[#1a1a1a] border-2 border-[#3a3a2a] text-[#f2e6b1] rounded-lg focus:border-[#A8C97F] focus:outline-none transition-all"
         defaultValue="pt-BR"
         onChange={(e) =>
           alert(`Language change to ${e.target.value} - Coming soon`)
@@ -72,7 +72,7 @@ export default function WorldRegionsSidebar() {
       <div className="space-y-3 text-sm">
         {worldRegions.map((continent, idx) => (
           <details key={idx} className="group" open>
-            <summary className="cursor-pointer text-[#d8c68e] font-semibold hover:text-[#FF6B35] transition-colors list-none flex items-center gap-2">
+            <summary className="cursor-pointer text-[#d8c68e] font-semibold hover:text-[#A8C97F] transition-colors list-none flex items-center gap-2">
               <span className="text-xs"></span>
               {continent.continent}
             </summary>
@@ -99,7 +99,7 @@ export default function WorldRegionsSidebar() {
                                   {state.cities.map((city, cyidx) => (
                                     <li
                                       key={cyidx}
-                                      className="hover:text-[#FF6B35] cursor-pointer"
+                                      className="hover:text-[#A8C97F] cursor-pointer"
                                     >
                                       {city}
                                     </li>

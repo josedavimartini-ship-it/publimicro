@@ -14,7 +14,7 @@ export default function EntrarPage() {
         <div className="text-center">
           <button
             onClick={() => setShowModal(true)}
-            className="px-8 py-4 bg-gradient-to-r from-[#FF6B35] to-[#FF8C42] hover:from-[#FF8C42] hover:to-[#FF6B35] text-[#0a0a0a] font-bold rounded-full transition-all hover:scale-105"
+            className="px-8 py-4 bg-gradient-to-r from-[#A8C97F] to-[#0D7377] hover:from-[#0D7377] hover:to-[#A8C97F] text-white font-bold rounded-full transition-all hover:scale-105"
           >
             Abrir Login
           </button>

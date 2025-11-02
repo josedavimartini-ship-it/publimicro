@@ -45,7 +45,7 @@ export default function BirdAudioToggle() {
       {isMuted ? (
         <VolumeX className="w-5 h-5 text-[#676767]" />
       ) : (
-        <Volume2 className="w-5 h-5 text-[#FF6B35]" />
+        <Volume2 className="w-5 h-5 text-[#A8C97F]" />
       )}
     </button>
   );

@@ -81,8 +81,8 @@ export default function FavoritesButton({ propertyId, userId, size = 'md' }: Fav
       disabled={loading}
       className={`${sizeClasses[size]} rounded-full flex items-center justify-center transition-all ${
         isFavorite
-          ? 'bg-[#FF6B35] text-[#0a0a0a] hover:bg-[#FF8C42]'
-          : 'bg-[#0a0a0a]/80 text-[#D4A574] hover:bg-[#FF6B35]/20 border-2 border-[#2a2a1a]'
+          ? 'bg-[#A8C97F] text-[#0a0a0a] hover:bg-[#B7791F]'
+          : 'bg-[#0a0a0a]/80 text-[#D4A574] hover:bg-[#A8C97F]/20 border-2 border-[#2a2a1a]'
       } ${loading ? 'opacity-50 cursor-wait' : 'hover:scale-110'}`}
       aria-label={isFavorite ? 'Remover dos favoritos' : 'Adicionar aos favoritos'}
       title={isFavorite ? 'Remover dos favoritos' : 'Adicionar aos favoritos'}

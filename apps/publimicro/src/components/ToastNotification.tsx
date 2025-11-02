@@ -96,7 +96,7 @@ function ToastItem({ toast, onRemove }: { toast: Toast; onRemove: (id: string) =
       case "error":
         return <AlertCircle className="w-5 h-5 text-red-400" />;
       case "bid":
-        return <TrendingUp className="w-5 h-5 text-[#FF6B35]" />;
+        return <TrendingUp className="w-5 h-5 text-[#B7791F]" />;
       default:
         return <Info className="w-5 h-5 text-[#E6C98B]" />;
     }
@@ -109,7 +109,7 @@ function ToastItem({ toast, onRemove }: { toast: Toast; onRemove: (id: string) =
       case "error":
         return "border-red-400";
       case "bid":
-        return "border-[#FF6B35]";
+        return "border-[#B7791F]";
       default:
         return "border-[#E6C98B]";
     }

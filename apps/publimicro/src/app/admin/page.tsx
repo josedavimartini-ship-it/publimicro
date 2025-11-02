@@ -254,7 +254,7 @@ export default function AdminPage() {
   if (loading) {
     return (
       <main className="min-h-screen bg-gradient-to-b from-[#0a0a0a] via-[#0d0d0d] to-[#0a0a0a] flex items-center justify-center">
-        <div className="text-[#D4A574] text-xl">Verificando permissões...</div>
+        <div className="text-[#E6C98B] text-xl">Verificando permissões...</div>
       </main>
     );
   }
@@ -271,14 +271,14 @@ export default function AdminPage() {
           <div className="mb-8">
             <Link
               href="/"
-              className="flex items-center gap-2 text-[#D4A574] hover:text-[#FF6B35] transition-colors"
+              className="flex items-center gap-2 text-[#E6C98B] hover:text-[#A8C97F] transition-colors"
             >
               <ArrowLeft className="w-5 h-5" />
               <span className="font-semibold">Voltar ao Site</span>
             </Link>
           </div>
 
-          <h1 className="text-2xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-[#D4A574] to-[#FF6B35] mb-8">
+          <h1 className="text-2xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-[#E6C98B] to-[#A8C97F] mb-8">
             Admin Panel
           </h1>
 
@@ -287,7 +287,7 @@ export default function AdminPage() {
               onClick={() => setActiveTab("dashboard")}
               className={`w-full flex items-center gap-3 px-4 py-3 rounded-lg transition-all ${
                 activeTab === "dashboard"
-                  ? "bg-gradient-to-r from-[#FF6B35] to-[#FF8C42] text-[#0a0a0a] font-bold"
+                  ? "bg-gradient-to-r from-[#A8C97F] to-[#0D7377] text-[#0a0a0a] font-bold"
                   : "text-[#8B9B6E] hover:bg-[#2a2a1a]"
               }`}
             >
@@ -299,7 +299,7 @@ export default function AdminPage() {
               onClick={() => setActiveTab("properties")}
               className={`w-full flex items-center gap-3 px-4 py-3 rounded-lg transition-all ${
                 activeTab === "properties"
-                  ? "bg-gradient-to-r from-[#FF6B35] to-[#FF8C42] text-[#0a0a0a] font-bold"
+                  ? "bg-gradient-to-r from-[#A8C97F] to-[#0D7377] text-[#0a0a0a] font-bold"
                   : "text-[#8B9B6E] hover:bg-[#2a2a1a]"
               }`}
             >
@@ -311,14 +311,14 @@ export default function AdminPage() {
               onClick={() => setActiveTab("bids")}
               className={`w-full flex items-center gap-3 px-4 py-3 rounded-lg transition-all ${
                 activeTab === "bids"
-                  ? "bg-gradient-to-r from-[#FF6B35] to-[#FF8C42] text-[#0a0a0a] font-bold"
+                  ? "bg-gradient-to-r from-[#A8C97F] to-[#0D7377] text-[#0a0a0a] font-bold"
                   : "text-[#8B9B6E] hover:bg-[#2a2a1a]"
               }`}
             >
               <DollarSign className="w-5 h-5" />
               Lances
               {stats && stats.activeBids > 0 && (
-                <span className="ml-auto bg-[#FF6B35] text-[#0a0a0a] text-xs font-bold px-2 py-1 rounded-full">
+                <span className="ml-auto bg-[#A8C97F] text-[#0a0a0a] text-xs font-bold px-2 py-1 rounded-full">
                   {stats.activeBids}
                 </span>
               )}
@@ -328,14 +328,14 @@ export default function AdminPage() {
               onClick={() => setActiveTab("contacts")}
               className={`w-full flex items-center gap-3 px-4 py-3 rounded-lg transition-all ${
                 activeTab === "contacts"
-                  ? "bg-gradient-to-r from-[#FF6B35] to-[#FF8C42] text-[#0a0a0a] font-bold"
+                  ? "bg-gradient-to-r from-[#A8C97F] to-[#0D7377] text-[#0a0a0a] font-bold"
                   : "text-[#8B9B6E] hover:bg-[#2a2a1a]"
               }`}
             >
               <Mail className="w-5 h-5" />
               Contatos
               {stats && stats.pendingContacts > 0 && (
-                <span className="ml-auto bg-[#FF6B35] text-[#0a0a0a] text-xs font-bold px-2 py-1 rounded-full">
+                <span className="ml-auto bg-[#A8C97F] text-[#0a0a0a] text-xs font-bold px-2 py-1 rounded-full">
                   {stats.pendingContacts}
                 </span>
               )}
@@ -345,7 +345,7 @@ export default function AdminPage() {
               onClick={() => setActiveTab("users")}
               className={`w-full flex items-center gap-3 px-4 py-3 rounded-lg transition-all ${
                 activeTab === "users"
-                  ? "bg-gradient-to-r from-[#FF6B35] to-[#FF8C42] text-[#0a0a0a] font-bold"
+                  ? "bg-gradient-to-r from-[#A8C97F] to-[#0D7377] text-[#0a0a0a] font-bold"
                   : "text-[#8B9B6E] hover:bg-[#2a2a1a]"
               }`}
             >
@@ -368,18 +368,18 @@ export default function AdminPage() {
           {/* Dashboard Tab */}
           {activeTab === "dashboard" && stats && (
             <div className="space-y-8">
-              <h2 className="text-3xl font-bold text-[#D4A574]">Dashboard</h2>
+              <h2 className="text-3xl font-bold text-[#E6C98B]">Dashboard</h2>
 
               {/* Stats Grid */}
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
                 <div className="bg-gradient-to-br from-[#1a1a1a] to-[#0d0d0d] border-2 border-[#2a2a1a] rounded-2xl p-6">
                   <div className="flex items-center gap-4">
-                    <div className="w-12 h-12 bg-[#FF6B35]/20 rounded-full flex items-center justify-center">
-                      <Home className="w-6 h-6 text-[#FF6B35]" />
+                    <div className="w-12 h-12 bg-[#A8C97F]/20 rounded-full flex items-center justify-center">
+                      <Home className="w-6 h-6 text-[#A8C97F]" />
                     </div>
                     <div>
                       <p className="text-[#8B9B6E] text-sm">Propriedades</p>
-                      <p className="text-3xl font-bold text-[#D4A574]">{stats.totalProperties}</p>
+                      <p className="text-3xl font-bold text-[#E6C98B]">{stats.totalProperties}</p>
                     </div>
                   </div>
                 </div>
@@ -391,31 +391,31 @@ export default function AdminPage() {
                     </div>
                     <div>
                       <p className="text-[#8B9B6E] text-sm">Lances Ativos</p>
-                      <p className="text-3xl font-bold text-[#D4A574]">{stats.activeBids}</p>
+                      <p className="text-3xl font-bold text-[#E6C98B]">{stats.activeBids}</p>
                     </div>
                   </div>
                 </div>
 
                 <div className="bg-gradient-to-br from-[#1a1a1a] to-[#0d0d0d] border-2 border-[#2a2a1a] rounded-2xl p-6">
                   <div className="flex items-center gap-4">
-                    <div className="w-12 h-12 bg-[#D4A574]/20 rounded-full flex items-center justify-center">
-                      <Mail className="w-6 h-6 text-[#D4A574]" />
+                    <div className="w-12 h-12 bg-[#E6C98B]/20 rounded-full flex items-center justify-center">
+                      <Mail className="w-6 h-6 text-[#E6C98B]" />
                     </div>
                     <div>
                       <p className="text-[#8B9B6E] text-sm">Contatos Pendentes</p>
-                      <p className="text-3xl font-bold text-[#D4A574]">{stats.pendingContacts}</p>
+                      <p className="text-3xl font-bold text-[#E6C98B]">{stats.pendingContacts}</p>
                     </div>
                   </div>
                 </div>
 
                 <div className="bg-gradient-to-br from-[#1a1a1a] to-[#0d0d0d] border-2 border-[#2a2a1a] rounded-2xl p-6">
                   <div className="flex items-center gap-4">
-                    <div className="w-12 h-12 bg-[#FF6B35]/20 rounded-full flex items-center justify-center">
-                      <Users className="w-6 h-6 text-[#FF6B35]" />
+                    <div className="w-12 h-12 bg-[#A8C97F]/20 rounded-full flex items-center justify-center">
+                      <Users className="w-6 h-6 text-[#A8C97F]" />
                     </div>
                     <div>
                       <p className="text-[#8B9B6E] text-sm">Usuários</p>
-                      <p className="text-3xl font-bold text-[#D4A574]">{stats.totalUsers}</p>
+                      <p className="text-3xl font-bold text-[#E6C98B]">{stats.totalUsers}</p>
                     </div>
                   </div>
                 </div>
@@ -424,35 +424,35 @@ export default function AdminPage() {
               {/* Additional Stats */}
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
                 <div className="bg-gradient-to-br from-[#1a1a1a] to-[#0d0d0d] border-2 border-[#2a2a1a] rounded-2xl p-6">
-                  <h3 className="text-xl font-bold text-[#D4A574] mb-4">Estatísticas de Lances</h3>
+                  <h3 className="text-xl font-bold text-[#E6C98B] mb-4">Estatísticas de Lances</h3>
                   <div className="space-y-4">
                     <div className="flex justify-between items-center">
                       <span className="text-[#8B9B6E]">Total de Lances</span>
-                      <span className="text-[#D4A574] font-bold">{stats.totalBids}</span>
+                      <span className="text-[#E6C98B] font-bold">{stats.totalBids}</span>
                     </div>
                     <div className="flex justify-between items-center">
                       <span className="text-[#8B9B6E]">Lance Médio</span>
-                      <span className="text-[#D4A574] font-bold">
+                      <span className="text-[#E6C98B] font-bold">
                         R$ {stats.avgBidAmount.toLocaleString("pt-BR", { minimumFractionDigits: 2 })}
                       </span>
                     </div>
                     <div className="flex justify-between items-center">
                       <span className="text-[#8B9B6E]">Lances Pendentes</span>
-                      <span className="text-[#FF6B35] font-bold">{stats.activeBids}</span>
+                      <span className="text-[#A8C97F] font-bold">{stats.activeBids}</span>
                     </div>
                   </div>
                 </div>
 
                 <div className="bg-gradient-to-br from-[#1a1a1a] to-[#0d0d0d] border-2 border-[#2a2a1a] rounded-2xl p-6">
-                  <h3 className="text-xl font-bold text-[#D4A574] mb-4">Contatos</h3>
+                  <h3 className="text-xl font-bold text-[#E6C98B] mb-4">Contatos</h3>
                   <div className="space-y-4">
                     <div className="flex justify-between items-center">
                       <span className="text-[#8B9B6E]">Total de Contatos</span>
-                      <span className="text-[#D4A574] font-bold">{stats.totalContacts}</span>
+                      <span className="text-[#E6C98B] font-bold">{stats.totalContacts}</span>
                     </div>
                     <div className="flex justify-between items-center">
                       <span className="text-[#8B9B6E]">Novos</span>
-                      <span className="text-[#FF6B35] font-bold">{stats.pendingContacts}</span>
+                      <span className="text-[#A8C97F] font-bold">{stats.pendingContacts}</span>
                     </div>
                   </div>
                 </div>
@@ -464,10 +464,10 @@ export default function AdminPage() {
           {activeTab === "properties" && (
             <div className="space-y-6">
               <div className="flex justify-between items-center">
-                <h2 className="text-3xl font-bold text-[#D4A574]">Propriedades</h2>
+                <h2 className="text-3xl font-bold text-[#E6C98B]">Propriedades</h2>
                 <Link
                   href="/anunciar"
-                  className="flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-[#FF6B35] to-[#FF8C42] text-[#0a0a0a] font-bold rounded-full hover:scale-105 transition-all"
+                  className="flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-[#A8C97F] to-[#0D7377] text-[#0a0a0a] font-bold rounded-full hover:scale-105 transition-all"
                 >
                   <Plus className="w-5 h-5" />
                   Nova Propriedade
@@ -479,11 +479,11 @@ export default function AdminPage() {
                   <table className="w-full">
                     <thead className="bg-[#0a0a0a]">
                       <tr>
-                        <th className="px-6 py-4 text-left text-[#D4A574] font-semibold">Nome</th>
-                        <th className="px-6 py-4 text-left text-[#D4A574] font-semibold">Localização</th>
-                        <th className="px-6 py-4 text-left text-[#D4A574] font-semibold">Preço</th>
-                        <th className="px-6 py-4 text-left text-[#D4A574] font-semibold">Lance Inicial</th>
-                        <th className="px-6 py-4 text-left text-[#D4A574] font-semibold">Ações</th>
+                        <th className="px-6 py-4 text-left text-[#E6C98B] font-semibold">Nome</th>
+                        <th className="px-6 py-4 text-left text-[#E6C98B] font-semibold">Localização</th>
+                        <th className="px-6 py-4 text-left text-[#E6C98B] font-semibold">Preço</th>
+                        <th className="px-6 py-4 text-left text-[#E6C98B] font-semibold">Lance Inicial</th>
+                        <th className="px-6 py-4 text-left text-[#E6C98B] font-semibold">Ações</th>
                       </tr>
                     </thead>
                     <tbody>
@@ -491,10 +491,10 @@ export default function AdminPage() {
                         <tr key={property.id} className="border-t border-[#2a2a1a] hover:bg-[#2a2a1a]/30 transition-colors">
                           <td className="px-6 py-4 text-[#8B9B6E]">{property.nome}</td>
                           <td className="px-6 py-4 text-[#8B9B6E]">{property.localizacao}</td>
-                          <td className="px-6 py-4 text-[#D4A574] font-semibold">
+                          <td className="px-6 py-4 text-[#E6C98B] font-semibold">
                             R$ {property.preco?.toLocaleString("pt-BR") || "N/A"}
                           </td>
-                          <td className="px-6 py-4 text-[#FF6B35] font-semibold">
+                          <td className="px-6 py-4 text-[#A8C97F] font-semibold">
                             R$ {property.lance_inicial?.toLocaleString("pt-BR") || "N/A"}
                           </td>
                           <td className="px-6 py-4">
@@ -527,19 +527,19 @@ export default function AdminPage() {
           {/* Bids Tab */}
           {activeTab === "bids" && (
             <div className="space-y-6">
-              <h2 className="text-3xl font-bold text-[#D4A574]">Lances</h2>
+              <h2 className="text-3xl font-bold text-[#E6C98B]">Lances</h2>
 
               <div className="bg-[#1a1a1a] border-2 border-[#2a2a1a] rounded-2xl overflow-hidden">
                 <div className="overflow-x-auto">
                   <table className="w-full">
                     <thead className="bg-[#0a0a0a]">
                       <tr>
-                        <th className="px-6 py-4 text-left text-[#D4A574] font-semibold">Propriedade</th>
-                        <th className="px-6 py-4 text-left text-[#D4A574] font-semibold">Valor</th>
-                        <th className="px-6 py-4 text-left text-[#D4A574] font-semibold">Mensagem</th>
-                        <th className="px-6 py-4 text-left text-[#D4A574] font-semibold">Status</th>
-                        <th className="px-6 py-4 text-left text-[#D4A574] font-semibold">Data</th>
-                        <th className="px-6 py-4 text-left text-[#D4A574] font-semibold">Ações</th>
+                        <th className="px-6 py-4 text-left text-[#E6C98B] font-semibold">Propriedade</th>
+                        <th className="px-6 py-4 text-left text-[#E6C98B] font-semibold">Valor</th>
+                        <th className="px-6 py-4 text-left text-[#E6C98B] font-semibold">Mensagem</th>
+                        <th className="px-6 py-4 text-left text-[#E6C98B] font-semibold">Status</th>
+                        <th className="px-6 py-4 text-left text-[#E6C98B] font-semibold">Data</th>
+                        <th className="px-6 py-4 text-left text-[#E6C98B] font-semibold">Ações</th>
                       </tr>
                     </thead>
                     <tbody>
@@ -548,7 +548,7 @@ export default function AdminPage() {
                           <td className="px-6 py-4 text-[#8B9B6E]">
                             {Array.isArray(bid.sitios) ? bid.sitios[0]?.nome : bid.sitios?.nome || "N/A"}
                           </td>
-                          <td className="px-6 py-4 text-[#FF6B35] font-bold">
+                          <td className="px-6 py-4 text-[#A8C97F] font-bold">
                             R$ {bid.bid_amount.toLocaleString("pt-BR")}
                           </td>
                           <td className="px-6 py-4 text-[#8B9B6E] max-w-xs truncate">
@@ -602,7 +602,7 @@ export default function AdminPage() {
           {/* Contacts Tab */}
           {activeTab === "contacts" && (
             <div className="space-y-6">
-              <h2 className="text-3xl font-bold text-[#D4A574]">Contatos</h2>
+              <h2 className="text-3xl font-bold text-[#E6C98B]">Contatos</h2>
 
               <div className="grid gap-4">
                 {contacts.map((contact) => (
@@ -612,7 +612,7 @@ export default function AdminPage() {
                   >
                     <div className="flex justify-between items-start mb-4">
                       <div>
-                        <h3 className="text-xl font-bold text-[#D4A574]">{contact.nome}</h3>
+                        <h3 className="text-xl font-bold text-[#E6C98B]">{contact.nome}</h3>
                         <p className="text-[#8B9B6E] text-sm">{contact.email}</p>
                         {contact.telefone && (
                           <p className="text-[#8B9B6E] text-sm">{contact.telefone}</p>
@@ -622,7 +622,7 @@ export default function AdminPage() {
                         <span
                           className={`px-3 py-1 rounded-full text-xs font-semibold ${
                             contact.status === "novo"
-                              ? "bg-[#FF6B35]/20 text-[#FF6B35]"
+                              ? "bg-[#A8C97F]/20 text-[#A8C97F]"
                               : contact.status === "em_analise"
                               ? "bg-yellow-500/20 text-yellow-400"
                               : contact.status === "respondido"
@@ -679,7 +679,7 @@ export default function AdminPage() {
           {/* Users Tab */}
           {activeTab === "users" && (
             <div className="space-y-6">
-              <h2 className="text-3xl font-bold text-[#D4A574]">Usuários</h2>
+              <h2 className="text-3xl font-bold text-[#E6C98B]">Usuários</h2>
               <div className="bg-gradient-to-br from-[#1a1a1a] to-[#0d0d0d] border-2 border-[#2a2a1a] rounded-2xl p-8 text-center">
                 <Users className="w-16 h-16 text-[#8B9B6E] mx-auto mb-4" />
                 <p className="text-[#8B9B6E] text-lg">

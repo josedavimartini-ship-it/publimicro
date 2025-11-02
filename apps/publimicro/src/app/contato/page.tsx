@@ -71,7 +71,7 @@ export default function ContatoPage() {
       <div className="absolute top-6 left-6 z-20">
         <Link
           href="/"
-          className="flex items-center gap-2 px-4 py-2 bg-black/60 hover:bg-black/80 text-[#D4A574] border border-[#D4A574]/30 rounded-full transition-all backdrop-blur-sm"
+          className="flex items-center gap-2 px-4 py-2 bg-black/60 hover:bg-black/80 text-[#E6C98B] border border-[#E6C98B]/30 rounded-full transition-all backdrop-blur-sm"
         >
           <ArrowLeft className="w-5 h-5" />
           <span>Voltar</span>
@@ -79,9 +79,9 @@ export default function ContatoPage() {
       </div>
 
       {/* Conteúdo */}
-      <section className="flex flex-col items-center justify-center min-h-screen text-[#D4A574] text-center px-6 py-20">
-        <div className="bg-black/70 backdrop-blur-sm p-10 rounded-2xl max-w-2xl w-full shadow-2xl border border-[#D4A574]/20">
-          <h1 className="text-4xl font-bold mb-3 text-transparent bg-clip-text bg-gradient-to-r from-[#D4A574] to-[#FF6B35]">
+      <section className="flex flex-col items-center justify-center min-h-screen text-[#E6C98B] text-center px-6 py-20">
+        <div className="bg-black/70 backdrop-blur-sm p-10 rounded-2xl max-w-2xl w-full shadow-2xl border border-[#E6C98B]/20">
+          <h1 className="text-4xl font-bold mb-3 text-transparent bg-clip-text bg-gradient-to-r from-[#E6C98B] to-[#A8C97F]">
             Contato & Agendamento
           </h1>
           <p className="mb-8 text-lg text-[#8B9B6E]">
@@ -118,7 +118,7 @@ export default function ContatoPage() {
                 value={formData.nome}
                 onChange={(e) => setFormData({ ...formData, nome: e.target.value })}
                 required
-                className="w-full p-4 rounded-lg bg-[#0a0a0a]/80 border-2 border-[#2a2a1a] text-[#D4A574] placeholder-[#676767] focus:border-[#FF6B35] focus:outline-none transition-colors"
+                className="w-full p-4 rounded-lg bg-[#0a0a0a]/80 border-2 border-[#2a2a1a] text-[#E6C98B] placeholder-[#676767] focus:border-[#A8C97F] focus:outline-none transition-colors"
               />
             </div>
 
@@ -134,7 +134,7 @@ export default function ContatoPage() {
                   value={formData.email}
                   onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                   required
-                  className="w-full pl-12 pr-4 py-4 rounded-lg bg-[#0a0a0a]/80 border-2 border-[#2a2a1a] text-[#D4A574] placeholder-[#676767] focus:border-[#FF6B35] focus:outline-none transition-colors"
+                  className="w-full pl-12 pr-4 py-4 rounded-lg bg-[#0a0a0a]/80 border-2 border-[#2a2a1a] text-[#E6C98B] placeholder-[#676767] focus:border-[#A8C97F] focus:outline-none transition-colors"
                 />
               </div>
             </div>
@@ -150,7 +150,7 @@ export default function ContatoPage() {
                   placeholder="Telefone/WhatsApp"
                   value={formData.telefone}
                   onChange={(e) => setFormData({ ...formData, telefone: e.target.value })}
-                  className="w-full pl-12 pr-4 py-4 rounded-lg bg-[#0a0a0a]/80 border-2 border-[#2a2a1a] text-[#D4A574] placeholder-[#676767] focus:border-[#FF6B35] focus:outline-none transition-colors"
+                  className="w-full pl-12 pr-4 py-4 rounded-lg bg-[#0a0a0a]/80 border-2 border-[#2a2a1a] text-[#E6C98B] placeholder-[#676767] focus:border-[#A8C97F] focus:outline-none transition-colors"
                 />
               </div>
             </div>
@@ -167,7 +167,7 @@ export default function ContatoPage() {
                   onChange={(e) => setFormData({ ...formData, mensagem: e.target.value })}
                   required
                   rows={5}
-                  className="w-full pl-12 pr-4 py-4 rounded-lg bg-[#0a0a0a]/80 border-2 border-[#2a2a1a] text-[#D4A574] placeholder-[#676767] focus:border-[#FF6B35] focus:outline-none transition-colors resize-none"
+                  className="w-full pl-12 pr-4 py-4 rounded-lg bg-[#0a0a0a]/80 border-2 border-[#2a2a1a] text-[#E6C98B] placeholder-[#676767] focus:border-[#A8C97F] focus:outline-none transition-colors resize-none"
                 />
               </div>
             </div>
@@ -175,7 +175,7 @@ export default function ContatoPage() {
             <button
               type="submit"
               disabled={submitting}
-              className="w-full bg-gradient-to-r from-[#FF6B35] to-[#FF8C42] hover:from-[#FF8C42] hover:to-[#FF6B35] text-[#0a0a0a] font-bold py-4 rounded-full transition-all shadow-lg disabled:opacity-50 disabled:cursor-not-allowed"
+              className="w-full bg-gradient-to-r from-[#A8C97F] to-[#0D7377] hover:from-[#0D7377] hover:to-[#A8C97F] text-[#0a0a0a] font-bold py-4 rounded-full transition-all shadow-lg disabled:opacity-50 disabled:cursor-not-allowed"
             >
               {submitting ? "Enviando..." : "✉️ Enviar solicitação"}
             </button>
@@ -196,7 +196,7 @@ export default function ContatoPage() {
               </a>
               <a
                 href="mailto:contato@publimicro.com.br"
-                className="flex items-center justify-center gap-2 px-6 py-3 border-2 border-[#D4A574] text-[#D4A574] font-semibold rounded-full hover:bg-[#D4A574]/10 transition-all"
+                className="flex items-center justify-center gap-2 px-6 py-3 border-2 border-[#E6C98B] text-[#E6C98B] font-semibold rounded-full hover:bg-[#E6C98B]/10 transition-all"
               >
                 <Mail className="w-5 h-5" />
                 Email

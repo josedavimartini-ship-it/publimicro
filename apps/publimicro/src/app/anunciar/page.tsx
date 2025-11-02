@@ -147,22 +147,22 @@ export default function AnunciarPage() {
         {/* Header */}
         <Link
           href="/"
-          className="inline-flex items-center gap-2 text-[#D4A574] hover:text-[#FF6B35] mb-8 transition-colors"
+          className="inline-flex items-center gap-2 text-[#E6C98B] hover:text-[#A8C97F] mb-8 transition-colors"
         >
           <ArrowLeft className="w-5 h-5" />
           Voltar
         </Link>
 
         <div className="bg-gradient-to-br from-[#1a1a1a] to-[#0d0d0d] border-2 border-[#2a2a1a] rounded-2xl p-8 mb-8">
-          <h1 className="text-4xl font-bold text-[#D4A574] mb-4">Anunciar Propriedade</h1>
-          <p className="text-[#8B9B6E] text-lg">
+          <h1 className="text-4xl font-bold text-[#E6C98B] mb-4">Anunciar Propriedade</h1>
+          <p className="text-[#A8C97F] text-lg">
             Preencha os dados abaixo para criar seu anúncio. Todos os campos marcados com * são obrigatórios.
           </p>
         </div>
 
         <div className="bg-gradient-to-br from-[#1a1a1a] to-[#0d0d0d] border-2 border-[#2a2a1a] rounded-2xl p-8 mb-8">
-          <h1 className="text-4xl font-bold text-[#D4A574] mb-4">Anunciar Propriedade</h1>
-          <p className="text-[#8B9B6E] text-lg">
+          <h1 className="text-4xl font-bold text-[#E6C98B] mb-4">Anunciar Propriedade</h1>
+          <p className="text-[#A8C97F] text-lg">
             Preencha os dados abaixo para criar seu anúncio. Todos os campos marcados com * são obrigatórios.
           </p>
         </div>
@@ -171,8 +171,8 @@ export default function AnunciarPage() {
         <form onSubmit={handleSubmit} className="space-y-6">
           {/* Category Selection */}
           <div className="bg-gradient-to-br from-[#1a1a1a] to-[#0d0d0d] border-2 border-[#2a2a1a] rounded-2xl p-8">
-            <label className="flex items-center gap-2 text-[#D4A574] font-semibold text-lg mb-4">
-              <Home className="w-6 h-6 text-[#FF6B35]" />
+            <label className="flex items-center gap-2 text-[#E6C98B] font-semibold text-lg mb-4">
+              <Home className="w-6 h-6 text-[#A8C97F]" />
               Categoria *
             </label>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
@@ -183,12 +183,12 @@ export default function AnunciarPage() {
                   onClick={() => setCategoria(cat.value)}
                   className={`flex items-center gap-3 p-4 rounded-lg border-2 transition-all ${
                     categoria === cat.value
-                      ? "border-[#FF6B35] bg-[#FF6B35]/10"
-                      : "border-[#2a2a1a] hover:border-[#D4A574]"
+                      ? "border-[#A8C97F] bg-[#A8C97F]/10"
+                      : "border-[#2a2a1a] hover:border-[#E6C98B]"
                   }`}
                 >
-                  <cat.icon className={`w-5 h-5 ${categoria === cat.value ? "text-[#FF6B35]" : "text-[#D4A574]"}`} />
-                  <span className={categoria === cat.value ? "text-[#FF6B35] font-bold" : "text-[#8B9B6E]"}>
+                  <cat.icon className={`w-5 h-5 ${categoria === cat.value ? "text-[#A8C97F]" : "text-[#E6C98B]"}`} />
+                  <span className={categoria === cat.value ? "text-[#A8C97F] font-bold" : "text-[#A8C97F]"}>
                     {cat.label}
                   </span>
                 </button>
@@ -198,23 +198,23 @@ export default function AnunciarPage() {
 
           {/* Basic Information */}
           <div className="bg-gradient-to-br from-[#1a1a1a] to-[#0d0d0d] border-2 border-[#2a2a1a] rounded-2xl p-8 space-y-6">
-            <h2 className="text-2xl font-bold text-[#D4A574] mb-4">Informações Básicas</h2>
+            <h2 className="text-2xl font-bold text-[#E6C98B] mb-4">Informações Básicas</h2>
 
             <div>
-              <label className="text-[#8B9B6E] font-semibold mb-2 block">Título do Anúncio *</label>
+              <label className="text-[#A8C97F] font-semibold mb-2 block">Título do Anúncio *</label>
               <input
                 type="text"
                 value={nome}
                 onChange={(e) => setNome(e.target.value)}
                 required
                 placeholder="Ex: Casa em condomínio com 3 quartos"
-                className="w-full px-4 py-3 bg-[#0a0a0a] border-2 border-[#2a2a1a] rounded-lg text-[#D4A574] focus:border-[#FF6B35] focus:outline-none"
+                className="w-full px-4 py-3 bg-[#0a0a0a] border-2 border-[#2a2a1a] rounded-lg text-[#E6C98B] focus:border-[#A8C97F] focus:outline-none"
               />
             </div>
 
             <div>
-              <label className="text-[#8B9B6E] font-semibold mb-2 block flex items-center gap-2">
-                <MapPin className="w-4 h-4 text-[#FF6B35]" />
+              <label className="text-[#A8C97F] font-semibold mb-2 block flex items-center gap-2">
+                <MapPin className="w-4 h-4 text-[#A8C97F]" />
                 Localização *
               </label>
               <input
@@ -223,24 +223,24 @@ export default function AnunciarPage() {
                 onChange={(e) => setLocalizacao(e.target.value)}
                 required
                 placeholder="Ex: Ipameri, GO - Zona Rural"
-                className="w-full px-4 py-3 bg-[#0a0a0a] border-2 border-[#2a2a1a] rounded-lg text-[#D4A574] focus:border-[#FF6B35] focus:outline-none"
+                className="w-full px-4 py-3 bg-[#0a0a0a] border-2 border-[#2a2a1a] rounded-lg text-[#E6C98B] focus:border-[#A8C97F] focus:outline-none"
               />
             </div>
 
             <div>
-              <label className="text-[#8B9B6E] font-semibold mb-2 block">Zona</label>
+              <label className="text-[#A8C97F] font-semibold mb-2 block">Zona</label>
               <input
                 type="text"
                 value={zona}
                 onChange={(e) => setZona(e.target.value)}
                 placeholder="Ex: Zona Rural, Centro, Residencial"
-                className="w-full px-4 py-3 bg-[#0a0a0a] border-2 border-[#2a2a1a] rounded-lg text-[#D4A574] focus:border-[#FF6B35] focus:outline-none"
+                className="w-full px-4 py-3 bg-[#0a0a0a] border-2 border-[#2a2a1a] rounded-lg text-[#E6C98B] focus:border-[#A8C97F] focus:outline-none"
               />
             </div>
 
             <div>
-              <label className="text-[#8B9B6E] font-semibold mb-2 block flex items-center gap-2">
-                <FileText className="w-4 h-4 text-[#FF6B35]" />
+              <label className="text-[#A8C97F] font-semibold mb-2 block flex items-center gap-2">
+                <FileText className="w-4 h-4 text-[#A8C97F]" />
                 Descrição *
               </label>
               <textarea
@@ -249,19 +249,19 @@ export default function AnunciarPage() {
                 required
                 rows={6}
                 placeholder="Descreva os detalhes da propriedade, características especiais, infraestrutura..."
-                className="w-full px-4 py-3 bg-[#0a0a0a] border-2 border-[#2a2a1a] rounded-lg text-[#D4A574] focus:border-[#FF6B35] focus:outline-none resize-none"
+                className="w-full px-4 py-3 bg-[#0a0a0a] border-2 border-[#2a2a1a] rounded-lg text-[#E6C98B] focus:border-[#A8C97F] focus:outline-none resize-none"
               />
             </div>
           </div>
 
           {/* Pricing */}
           <div className="bg-gradient-to-br from-[#1a1a1a] to-[#0d0d0d] border-2 border-[#2a2a1a] rounded-2xl p-8 space-y-6">
-            <h2 className="text-2xl font-bold text-[#D4A574] mb-4">Valores</h2>
+            <h2 className="text-2xl font-bold text-[#E6C98B] mb-4">Valores</h2>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div>
-                <label className="text-[#8B9B6E] font-semibold mb-2 block flex items-center gap-2">
-                  <DollarSign className="w-4 h-4 text-[#FF6B35]" />
+                <label className="text-[#A8C97F] font-semibold mb-2 block flex items-center gap-2">
+                  <DollarSign className="w-4 h-4 text-[#A8C97F]" />
                   Preço (R$)
                 </label>
                 <input
@@ -270,19 +270,19 @@ export default function AnunciarPage() {
                   onChange={(e) => setPreco(e.target.value)}
                   placeholder="0.00"
                   step="0.01"
-                  className="w-full px-4 py-3 bg-[#0a0a0a] border-2 border-[#2a2a1a] rounded-lg text-[#D4A574] focus:border-[#FF6B35] focus:outline-none"
+                  className="w-full px-4 py-3 bg-[#0a0a0a] border-2 border-[#2a2a1a] rounded-lg text-[#E6C98B] focus:border-[#A8C97F] focus:outline-none"
                 />
               </div>
 
               <div>
-                <label className="text-[#8B9B6E] font-semibold mb-2 block">Lance Inicial (R$)</label>
+                <label className="text-[#A8C97F] font-semibold mb-2 block">Lance Inicial (R$)</label>
                 <input
                   type="number"
                   value={lanceInicial}
                   onChange={(e) => setLanceInicial(e.target.value)}
                   placeholder="0.00"
                   step="0.01"
-                  className="w-full px-4 py-3 bg-[#0a0a0a] border-2 border-[#2a2a1a] rounded-lg text-[#D4A574] focus:border-[#FF6B35] focus:outline-none"
+                  className="w-full px-4 py-3 bg-[#0a0a0a] border-2 border-[#2a2a1a] rounded-lg text-[#E6C98B] focus:border-[#A8C97F] focus:outline-none"
                 />
               </div>
             </div>
@@ -290,12 +290,12 @@ export default function AnunciarPage() {
 
           {/* Property Details */}
           <div className="bg-gradient-to-br from-[#1a1a1a] to-[#0d0d0d] border-2 border-[#2a2a1a] rounded-2xl p-8 space-y-6">
-            <h2 className="text-2xl font-bold text-[#D4A574] mb-4">Características</h2>
+            <h2 className="text-2xl font-bold text-[#E6C98B] mb-4">Características</h2>
 
             <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
               <div>
-                <label className="text-[#8B9B6E] font-semibold mb-2 block flex items-center gap-2">
-                  <Ruler className="w-4 h-4 text-[#FF6B35]" />
+                <label className="text-[#A8C97F] font-semibold mb-2 block flex items-center gap-2">
+                  <Ruler className="w-4 h-4 text-[#A8C97F]" />
                   Área Total (m²)
                 </label>
                 <input
@@ -303,13 +303,13 @@ export default function AnunciarPage() {
                   value={areaTotal}
                   onChange={(e) => setAreaTotal(e.target.value)}
                   placeholder="0"
-                  className="w-full px-4 py-3 bg-[#0a0a0a] border-2 border-[#2a2a1a] rounded-lg text-[#D4A574] focus:border-[#FF6B35] focus:outline-none"
+                  className="w-full px-4 py-3 bg-[#0a0a0a] border-2 border-[#2a2a1a] rounded-lg text-[#E6C98B] focus:border-[#A8C97F] focus:outline-none"
                 />
               </div>
 
               <div>
-                <label className="text-[#8B9B6E] font-semibold mb-2 block flex items-center gap-2">
-                  <Ruler className="w-4 h-4 text-[#FF6B35]" />
+                <label className="text-[#A8C97F] font-semibold mb-2 block flex items-center gap-2">
+                  <Ruler className="w-4 h-4 text-[#A8C97F]" />
                   Área Construída (m²)
                 </label>
                 <input
@@ -317,13 +317,13 @@ export default function AnunciarPage() {
                   value={areaConstruida}
                   onChange={(e) => setAreaConstruida(e.target.value)}
                   placeholder="0"
-                  className="w-full px-4 py-3 bg-[#0a0a0a] border-2 border-[#2a2a1a] rounded-lg text-[#D4A574] focus:border-[#FF6B35] focus:outline-none"
+                  className="w-full px-4 py-3 bg-[#0a0a0a] border-2 border-[#2a2a1a] rounded-lg text-[#E6C98B] focus:border-[#A8C97F] focus:outline-none"
                 />
               </div>
 
               <div>
-                <label className="text-[#8B9B6E] font-semibold mb-2 block flex items-center gap-2">
-                  <Bed className="w-4 h-4 text-[#FF6B35]" />
+                <label className="text-[#A8C97F] font-semibold mb-2 block flex items-center gap-2">
+                  <Bed className="w-4 h-4 text-[#A8C97F]" />
                   Quartos
                 </label>
                 <input
@@ -331,13 +331,13 @@ export default function AnunciarPage() {
                   value={quartos}
                   onChange={(e) => setQuartos(e.target.value)}
                   placeholder="0"
-                  className="w-full px-4 py-3 bg-[#0a0a0a] border-2 border-[#2a2a1a] rounded-lg text-[#D4A574] focus:border-[#FF6B35] focus:outline-none"
+                  className="w-full px-4 py-3 bg-[#0a0a0a] border-2 border-[#2a2a1a] rounded-lg text-[#E6C98B] focus:border-[#A8C97F] focus:outline-none"
                 />
               </div>
 
               <div>
-                <label className="text-[#8B9B6E] font-semibold mb-2 block flex items-center gap-2">
-                  <Bath className="w-4 h-4 text-[#FF6B35]" />
+                <label className="text-[#A8C97F] font-semibold mb-2 block flex items-center gap-2">
+                  <Bath className="w-4 h-4 text-[#A8C97F]" />
                   Banheiros
                 </label>
                 <input
@@ -345,13 +345,13 @@ export default function AnunciarPage() {
                   value={banheiros}
                   onChange={(e) => setBanheiros(e.target.value)}
                   placeholder="0"
-                  className="w-full px-4 py-3 bg-[#0a0a0a] border-2 border-[#2a2a1a] rounded-lg text-[#D4A574] focus:border-[#FF6B35] focus:outline-none"
+                  className="w-full px-4 py-3 bg-[#0a0a0a] border-2 border-[#2a2a1a] rounded-lg text-[#E6C98B] focus:border-[#A8C97F] focus:outline-none"
                 />
               </div>
 
               <div>
-                <label className="text-[#8B9B6E] font-semibold mb-2 block flex items-center gap-2">
-                  <Car className="w-4 h-4 text-[#FF6B35]" />
+                <label className="text-[#A8C97F] font-semibold mb-2 block flex items-center gap-2">
+                  <Car className="w-4 h-4 text-[#A8C97F]" />
                   Vagas
                 </label>
                 <input
@@ -359,7 +359,7 @@ export default function AnunciarPage() {
                   value={vagas}
                   onChange={(e) => setVagas(e.target.value)}
                   placeholder="0"
-                  className="w-full px-4 py-3 bg-[#0a0a0a] border-2 border-[#2a2a1a] rounded-lg text-[#D4A574] focus:border-[#FF6B35] focus:outline-none"
+                  className="w-full px-4 py-3 bg-[#0a0a0a] border-2 border-[#2a2a1a] rounded-lg text-[#E6C98B] focus:border-[#A8C97F] focus:outline-none"
                 />
               </div>
             </div>
@@ -367,17 +367,17 @@ export default function AnunciarPage() {
 
           {/* Photos */}
           <div className="bg-gradient-to-br from-[#1a1a1a] to-[#0d0d0d] border-2 border-[#2a2a1a] rounded-2xl p-8">
-            <h2 className="text-2xl font-bold text-[#D4A574] mb-4 flex items-center gap-2">
-              <Camera className="w-7 h-7 text-[#FF6B35]" />
+            <h2 className="text-2xl font-bold text-[#E6C98B] mb-4 flex items-center gap-2">
+              <Camera className="w-7 h-7 text-[#A8C97F]" />
               Fotos *
             </h2>
-            <p className="text-[#8B9B6E] mb-6">Adicione fotos de alta qualidade da propriedade (mínimo 1 foto)</p>
+            <p className="text-[#A8C97F] mb-6">Adicione fotos de alta qualidade da propriedade (mínimo 1 foto)</p>
 
             <div className="space-y-4">
-              <label className="flex flex-col items-center justify-center w-full h-48 border-2 border-dashed border-[#2a2a1a] rounded-lg cursor-pointer hover:border-[#FF6B35] transition-colors bg-[#0a0a0a]/50">
-                <Upload className="w-12 h-12 text-[#D4A574] mb-2" />
-                <span className="text-[#8B9B6E] font-semibold">Clique para adicionar fotos</span>
-                <span className="text-[#8B9B6E]/70 text-sm mt-1">JPG, PNG até 5MB</span>
+              <label className="flex flex-col items-center justify-center w-full h-48 border-2 border-dashed border-[#2a2a1a] rounded-lg cursor-pointer hover:border-[#A8C97F] transition-colors bg-[#0a0a0a]/50">
+                <Upload className="w-12 h-12 text-[#E6C98B] mb-2" />
+                <span className="text-[#A8C97F] font-semibold">Clique para adicionar fotos</span>
+                <span className="text-[#A8C97F]/70 text-sm mt-1">JPG, PNG até 5MB</span>
                 <input
                   type="file"
                   accept="image/*"
@@ -401,7 +401,7 @@ export default function AnunciarPage() {
                       <button
                         type="button"
                         onClick={() => removeFoto(index)}
-                        className="absolute top-2 right-2 bg-[#FF6B35] text-[#0a0a0a] rounded-full p-1 opacity-0 group-hover:opacity-100 transition-opacity"
+                        className="absolute top-2 right-2 bg-[#B7791F] text-white rounded-full p-1 opacity-0 group-hover:opacity-100 transition-opacity"
                       >
                         <X className="w-4 h-4" />
                       </button>
@@ -417,13 +417,13 @@ export default function AnunciarPage() {
             <button
               type="submit"
               disabled={loading || fotos.length === 0}
-              className="flex-1 px-8 py-4 bg-gradient-to-r from-[#FF6B35] to-[#FF8C42] text-[#0a0a0a] font-bold text-lg rounded-full shadow-xl hover:from-[#FF8C42] hover:to-[#FF6B35] transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+              className="flex-1 px-8 py-4 bg-gradient-to-r from-[#A8C97F] to-[#0D7377] text-white font-bold text-lg rounded-full shadow-xl hover:from-[#0D7377] hover:to-[#A8C97F] transition-all disabled:opacity-50 disabled:cursor-not-allowed"
             >
               {loading ? "Publicando..." : "Publicar Anúncio"}
             </button>
             <Link
               href="/"
-              className="px-8 py-4 border-2 border-[#D4A574] text-[#D4A574] font-bold text-lg rounded-full hover:bg-[#D4A574]/10 transition-all text-center"
+              className="px-8 py-4 border-2 border-[#E6C98B] text-[#E6C98B] font-bold text-lg rounded-full hover:bg-[#E6C98B]/10 transition-all text-center"
             >
               Cancelar
             </Link>

@@ -97,7 +97,7 @@ export default function VisitModal({ adId, adTitle, open, onClose }: VisitModalP
         <div className="bg-gradient-to-br from-[#1a1a1a] to-[#0d0d0d] border-2 border-[#2a2a1a] rounded-2xl w-full max-w-lg relative shadow-2xl max-h-[90vh] overflow-y-auto">
           <button
             onClick={handleClose}
-            className="absolute top-4 right-4 text-[#959595] hover:text-[#FF6B35] transition-colors z-10"
+            className="absolute top-4 right-4 text-[#959595] hover:text-[#A8C97F] transition-colors z-10"
             aria-label="Fechar modal de agendamento"
           >
             <X className="w-6 h-6" />

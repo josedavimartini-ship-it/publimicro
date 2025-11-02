@@ -45,7 +45,7 @@ export default function MobileBottomNav() {
               href={item.href}
               className={`flex flex-col items-center justify-center gap-1 min-w-[60px] py-2 px-3 rounded-lg transition-all ${
                 item.active
-                  ? "text-[#FF6B35] bg-[#FF6B35]/10"
+                  ? "text-[#A8C97F] bg-[#A8C97F]/10"
                   : "text-[#676767] hover:text-[#D4A574] active:scale-95"
               }`}
             >
@@ -57,7 +57,7 @@ export default function MobileBottomNav() {
                 {item.label}
               </span>
               {item.active && (
-                <div className="absolute bottom-0 w-1 h-1 bg-[#FF6B35] rounded-full" />
+                <div className="absolute bottom-0 w-1 h-1 bg-[#A8C97F] rounded-full" />
               )}
             </Link>
           );

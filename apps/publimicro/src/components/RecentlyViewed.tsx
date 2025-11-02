@@ -46,8 +46,8 @@ export default function RecentlyViewed() {
     <section className="py-16">
       <div className="max-w-7xl mx-auto px-6">
         <div className="flex items-center gap-3 mb-8">
-          <Clock className="w-8 h-8 text-[#FF6B35]" />
-          <h2 className="text-3xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-[#D4A574] to-[#FF6B35]">
+          <Clock className="w-8 h-8 text-[#B7791F]" />
+          <h2 className="text-3xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-[#E6C98B] to-[#B7791F]">
             Vistos Recentemente
           </h2>
         </div>
@@ -57,7 +57,7 @@ export default function RecentlyViewed() {
             <Link
               key={property.id}
               href={`/imoveis/${property.id}`}
-              className="bg-gradient-to-br from-[#1a1a1a] to-[#0d0d0d] border-2 border-[#2a2a1a] rounded-xl overflow-hidden hover:border-[#FF6B35] transition-all hover:scale-105 shadow-lg hover:shadow-2xl group"
+              className="bg-gradient-to-br from-[#1a1a1a] to-[#0d0d0d] border-2 border-[#2a2a1a] rounded-xl overflow-hidden hover:border-[#A8C97F] transition-all hover:scale-105 shadow-lg hover:shadow-2xl group"
             >
               {/* Image */}
               <div className="relative w-full h-40 bg-[#2a2a1a] overflow-hidden">
@@ -79,7 +79,7 @@ export default function RecentlyViewed() {
 
               {/* Content */}
               <div className="p-4">
-                <h3 className="text-sm font-bold text-[#D4A574] mb-2 group-hover:text-[#FF6B35] transition-colors line-clamp-1">
+                <h3 className="text-sm font-bold text-[#E6C98B] mb-2 group-hover:text-[#A8C97F] transition-colors line-clamp-1">
                   {property.nome}
                 </h3>
 
@@ -98,8 +98,8 @@ export default function RecentlyViewed() {
 
                   {property.preco && (
                     <div className="flex items-center gap-1">
-                      <DollarSign className="w-3 h-3 text-[#FF6B35]" />
-                      <span className="text-[#FF6B35] font-bold">
+                      <DollarSign className="w-3 h-3 text-[#B7791F]" />
+                      <span className="text-[#B7791F] font-bold">
                         R$ {property.preco.toLocaleString("pt-BR")}
                       </span>
                     </div>

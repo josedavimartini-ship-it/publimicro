@@ -201,7 +201,7 @@ export default function SearchBar({ onSearch, onFilterChange }: SearchBarProps) 
           onChange={(e) => setQuery(e.target.value)}
           onFocus={() => query && setIsOpen(true)}
           placeholder="Buscar propriedades por nome ou localização..."
-          className="w-full pl-12 pr-32 py-4 bg-[#1a1a1a] border-2 border-[#2a2a1a] rounded-full text-[#D4A574] placeholder-[#676767] focus:border-[#FF6B35] focus:outline-none transition-colors"
+          className="w-full pl-12 pr-32 py-4 bg-[#1a1a1a] border-2 border-[#2a2a1a] rounded-full text-[#D4A574] placeholder-[#676767] focus:border-[#A8C97F] focus:outline-none transition-colors"
         />
 
         <div className="absolute right-3 top-1/2 -translate-y-1/2 flex items-center gap-2">
@@ -219,14 +219,14 @@ export default function SearchBar({ onSearch, onFilterChange }: SearchBarProps) 
             onClick={() => setShowFilters(!showFilters)}
             className={`flex items-center gap-2 px-4 py-2 rounded-full transition-all ${
               showFilters
-                ? "bg-gradient-to-r from-[#FF6B35] to-[#FF8C42] text-[#0a0a0a]"
+                ? "bg-gradient-to-r from-[#A8C97F] to-[#0D7377] text-white"
                 : "bg-[#2a2a1a] text-[#8B9B6E] hover:bg-[#3a3a2a]"
             }`}
           >
             <SlidersHorizontal className="w-4 h-4" />
             <span className="text-sm font-semibold">Filtros</span>
             {activeFiltersCount > 0 && (
-              <span className="ml-1 w-5 h-5 bg-[#FF6B35] text-[#0a0a0a] text-xs font-bold rounded-full flex items-center justify-center">
+              <span className="ml-1 w-5 h-5 bg-[#B7791F] text-[#0a0a0a] text-xs font-bold rounded-full flex items-center justify-center">
                 {activeFiltersCount}
               </span>
             )}
@@ -241,7 +241,7 @@ export default function SearchBar({ onSearch, onFilterChange }: SearchBarProps) 
             <h3 className="text-xl font-bold text-[#D4A574]">Filtros de Busca</h3>
             <button
               onClick={resetFilters}
-              className="text-sm text-[#8B9B6E] hover:text-[#FF6B35] transition-colors"
+              className="text-sm text-[#8B9B6E] hover:text-[#A8C97F] transition-colors"
             >
               Limpar Filtros
             </button>
@@ -262,7 +262,7 @@ export default function SearchBar({ onSearch, onFilterChange }: SearchBarProps) 
                     value={priceMin}
                     onChange={(e) => setPriceMin(Number(e.target.value))}
                     placeholder="R$ 0"
-                    className="w-full px-3 py-2 bg-[#0a0a0a] border border-[#2a2a1a] rounded-lg text-[#D4A574] text-sm focus:border-[#FF6B35] focus:outline-none"
+                    className="w-full px-3 py-2 bg-[#0a0a0a] border border-[#2a2a1a] rounded-lg text-[#D4A574] text-sm focus:border-[#A8C97F] focus:outline-none"
                   />
                 </div>
                 <div>
@@ -272,7 +272,7 @@ export default function SearchBar({ onSearch, onFilterChange }: SearchBarProps) 
                     value={priceMax}
                     onChange={(e) => setPriceMax(Number(e.target.value))}
                     placeholder="R$ 10.000.000"
-                    className="w-full px-3 py-2 bg-[#0a0a0a] border border-[#2a2a1a] rounded-lg text-[#D4A574] text-sm focus:border-[#FF6B35] focus:outline-none"
+                    className="w-full px-3 py-2 bg-[#0a0a0a] border border-[#2a2a1a] rounded-lg text-[#D4A574] text-sm focus:border-[#A8C97F] focus:outline-none"
                   />
                 </div>
               </div>
@@ -285,7 +285,7 @@ export default function SearchBar({ onSearch, onFilterChange }: SearchBarProps) 
                   step="100000"
                   value={priceMax}
                   onChange={(e) => setPriceMax(Number(e.target.value))}
-                  className="w-full h-2 bg-[#2a2a1a] rounded-lg appearance-none cursor-pointer accent-[#FF6B35]"
+                  className="w-full h-2 bg-[#2a2a1a] rounded-lg appearance-none cursor-pointer accent-[#A8C97F]"
                 />
                 <div className="flex justify-between text-xs text-[#676767] mt-1">
                   <span>R$ 0</span>
@@ -308,7 +308,7 @@ export default function SearchBar({ onSearch, onFilterChange }: SearchBarProps) 
                     value={areaMin}
                     onChange={(e) => setAreaMin(Number(e.target.value))}
                     placeholder="0 ha"
-                    className="w-full px-3 py-2 bg-[#0a0a0a] border border-[#2a2a1a] rounded-lg text-[#D4A574] text-sm focus:border-[#FF6B35] focus:outline-none"
+                    className="w-full px-3 py-2 bg-[#0a0a0a] border border-[#2a2a1a] rounded-lg text-[#D4A574] text-sm focus:border-[#A8C97F] focus:outline-none"
                   />
                 </div>
                 <div>
@@ -318,7 +318,7 @@ export default function SearchBar({ onSearch, onFilterChange }: SearchBarProps) 
                     value={areaMax}
                     onChange={(e) => setAreaMax(Number(e.target.value))}
                     placeholder="1000 ha"
-                    className="w-full px-3 py-2 bg-[#0a0a0a] border border-[#2a2a1a] rounded-lg text-[#D4A574] text-sm focus:border-[#FF6B35] focus:outline-none"
+                    className="w-full px-3 py-2 bg-[#0a0a0a] border border-[#2a2a1a] rounded-lg text-[#D4A574] text-sm focus:border-[#A8C97F] focus:outline-none"
                   />
                 </div>
               </div>
@@ -331,7 +331,7 @@ export default function SearchBar({ onSearch, onFilterChange }: SearchBarProps) 
                   step="10"
                   value={areaMax}
                   onChange={(e) => setAreaMax(Number(e.target.value))}
-                  className="w-full h-2 bg-[#2a2a1a] rounded-lg appearance-none cursor-pointer accent-[#FF6B35]"
+                  className="w-full h-2 bg-[#2a2a1a] rounded-lg appearance-none cursor-pointer accent-[#A8C97F]"
                 />
                 <div className="flex justify-between text-xs text-[#676767] mt-1">
                   <span>0 ha</span>
@@ -350,7 +350,7 @@ export default function SearchBar({ onSearch, onFilterChange }: SearchBarProps) 
                 <select
                   value={location}
                   onChange={(e) => setLocation(e.target.value)}
-                  className="w-full px-3 py-2 bg-[#0a0a0a] border border-[#2a2a1a] rounded-lg text-[#D4A574] text-sm focus:border-[#FF6B35] focus:outline-none appearance-none cursor-pointer"
+                  className="w-full px-3 py-2 bg-[#0a0a0a] border border-[#2a2a1a] rounded-lg text-[#D4A574] text-sm focus:border-[#A8C97F] focus:outline-none appearance-none cursor-pointer"
                 >
                   <option value="">Todas as localidades</option>
                   {locations.map((loc) => (
@@ -374,7 +374,7 @@ export default function SearchBar({ onSearch, onFilterChange }: SearchBarProps) 
                   onClick={() => setSortBy("relevance")}
                   className={`px-4 py-2 rounded-lg text-sm font-semibold transition-all ${
                     sortBy === "relevance"
-                      ? "bg-gradient-to-r from-[#FF6B35] to-[#FF8C42] text-[#0a0a0a]"
+                      ? "bg-gradient-to-r from-[#A8C97F] to-[#0D7377] text-white"
                       : "bg-[#2a2a1a] text-[#8B9B6E] hover:bg-[#3a3a2a]"
                   }`}
                 >
@@ -384,7 +384,7 @@ export default function SearchBar({ onSearch, onFilterChange }: SearchBarProps) 
                   onClick={() => setSortBy("newest")}
                   className={`px-4 py-2 rounded-lg text-sm font-semibold transition-all ${
                     sortBy === "newest"
-                      ? "bg-gradient-to-r from-[#FF6B35] to-[#FF8C42] text-[#0a0a0a]"
+                      ? "bg-gradient-to-r from-[#A8C97F] to-[#0D7377] text-white"
                       : "bg-[#2a2a1a] text-[#8B9B6E] hover:bg-[#3a3a2a]"
                   }`}
                 >
@@ -394,7 +394,7 @@ export default function SearchBar({ onSearch, onFilterChange }: SearchBarProps) 
                   onClick={() => setSortBy("price_asc")}
                   className={`px-4 py-2 rounded-lg text-sm font-semibold transition-all ${
                     sortBy === "price_asc"
-                      ? "bg-gradient-to-r from-[#FF6B35] to-[#FF8C42] text-[#0a0a0a]"
+                      ? "bg-gradient-to-r from-[#A8C97F] to-[#0D7377] text-white"
                       : "bg-[#2a2a1a] text-[#8B9B6E] hover:bg-[#3a3a2a]"
                   }`}
                 >
@@ -404,7 +404,7 @@ export default function SearchBar({ onSearch, onFilterChange }: SearchBarProps) 
                   onClick={() => setSortBy("price_desc")}
                   className={`px-4 py-2 rounded-lg text-sm font-semibold transition-all ${
                     sortBy === "price_desc"
-                      ? "bg-gradient-to-r from-[#FF6B35] to-[#FF8C42] text-[#0a0a0a]"
+                      ? "bg-gradient-to-r from-[#A8C97F] to-[#0D7377] text-white"
                       : "bg-[#2a2a1a] text-[#8B9B6E] hover:bg-[#3a3a2a]"
                   }`}
                 >
@@ -414,7 +414,7 @@ export default function SearchBar({ onSearch, onFilterChange }: SearchBarProps) 
                   onClick={() => setSortBy("area_desc")}
                   className={`px-4 py-2 rounded-lg text-sm font-semibold transition-all col-span-2 ${
                     sortBy === "area_desc"
-                      ? "bg-gradient-to-r from-[#FF6B35] to-[#FF8C42] text-[#0a0a0a]"
+                      ? "bg-gradient-to-r from-[#A8C97F] to-[#0D7377] text-white"
                       : "bg-[#2a2a1a] text-[#8B9B6E] hover:bg-[#3a3a2a]"
                   }`}
                 >
@@ -430,7 +430,7 @@ export default function SearchBar({ onSearch, onFilterChange }: SearchBarProps) 
               performSearch();
               setShowFilters(false);
             }}
-            className="w-full mt-6 px-6 py-3 bg-gradient-to-r from-[#FF6B35] to-[#FF8C42] text-[#0a0a0a] font-bold rounded-full hover:scale-105 transition-all shadow-lg"
+            className="w-full mt-6 px-6 py-3 bg-gradient-to-r from-[#A8C97F] to-[#0D7377] text-white font-bold rounded-full hover:scale-105 transition-all shadow-lg"
           >
             Aplicar Filtros
           </button>
@@ -442,7 +442,7 @@ export default function SearchBar({ onSearch, onFilterChange }: SearchBarProps) 
         <div className="absolute top-full left-0 right-0 mt-2 bg-gradient-to-br from-[#1a1a1a] to-[#0d0d0d] border-2 border-[#2a2a1a] rounded-2xl shadow-2xl overflow-hidden z-40">
           {loading ? (
             <div className="p-6 text-center text-[#8B9B6E]">
-              <div className="animate-spin w-8 h-8 border-4 border-[#FF6B35] border-t-transparent rounded-full mx-auto mb-2"></div>
+              <div className="animate-spin w-8 h-8 border-4 border-[#A8C97F] border-t-transparent rounded-full mx-auto mb-2"></div>
               Buscando...
             </div>
           ) : results.length > 0 ? (
@@ -486,7 +486,7 @@ export default function SearchBar({ onSearch, onFilterChange }: SearchBarProps) 
                     </p>
                     <div className="flex items-center gap-4 mt-2">
                       {result.preco && (
-                        <span className="text-[#FF6B35] font-bold text-sm">
+                        <span className="text-[#B7791F] font-bold text-sm">
                           R$ {result.preco.toLocaleString("pt-BR")}
                         </span>
                       )}

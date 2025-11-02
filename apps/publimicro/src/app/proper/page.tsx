@@ -8,7 +8,7 @@ export default function PubliProperPage() {
       icon: <Building2 className="w-12 h-12" />,
       href: '/proper/urban',
       description: 'Apartamentos, casas e imóveis urbanos',
-      color: 'from-[#FF6B35] to-[#FF8C42]',
+      color: 'from-[#A8C97F] to-[#0D7377]',
     },
     {
       title: 'Proper Rural',
@@ -29,7 +29,7 @@ export default function PubliProperPage() {
       icon: <Sparkles className="w-12 h-12" />,
       href: '/proper/lancamentos',
       description: 'Novos empreendimentos',
-      color: 'from-[#FF6B35] to-[#B7791F]',
+      color: 'from-[#E6C98B] to-[#B7791F]',
     },
   ];
 
@@ -53,16 +53,16 @@ export default function PubliProperPage() {
             <Link
               key={category.title}
               href={category.href}
-              className="group bg-gradient-to-br from-[#1a1a1a] to-[#0d0d0d] border-2 border-[#2a2a1a] rounded-2xl p-8 hover:border-[#FF6B35] transition-all hover:scale-105"
+              className="group bg-gradient-to-br from-[#1a1a1a] to-[#0d0d0d] border-2 border-[#2a2a1a] rounded-2xl p-8 hover:border-[#A8C97F] transition-all hover:scale-105"
             >
               <div className={`w-20 h-20 bg-gradient-to-r ${category.color} rounded-full flex items-center justify-center text-[#0a0a0a] mb-6`}>
                 {category.icon}
               </div>
-              <h2 className="text-3xl font-bold text-[#B7791F] group-hover:text-[#FF6B35] transition-colors mb-3">
+              <h2 className="text-3xl font-bold text-[#B7791F] group-hover:text-[#A8C97F] transition-colors mb-3">
                 {category.title}
               </h2>
               <p className="text-[#676767]">{category.description}</p>
-              <div className="mt-6 text-[#FF6B35] group-hover:translate-x-2 transition-transform">
+              <div className="mt-6 text-[#A8C97F] group-hover:translate-x-2 transition-transform">
                 Ver anúncios →
               </div>
             </Link>
@@ -78,7 +78,7 @@ export default function PubliProperPage() {
           </p>
           <Link
             href="/anunciar"
-            className="inline-block px-10 py-4 bg-gradient-to-r from-[#FF6B35] to-[#FF8C42] hover:from-[#FF8C42] hover:to-[#FF6B35] text-[#0a0a0a] font-bold rounded-full transition-all hover:scale-105"
+            className="inline-block px-10 py-4 bg-gradient-to-r from-[#A8C97F] to-[#0D7377] hover:from-[#0D7377] hover:to-[#A8C97F] text-white font-bold rounded-full transition-all hover:scale-105"
           >
             📢 Publicar Anúncio Grátis
           </Link>

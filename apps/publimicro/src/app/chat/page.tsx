@@ -25,7 +25,7 @@ export default function ChatPage() {
   if (loading) {
     return (
       <main className="min-h-screen bg-gradient-to-b from-[#0a0a0a] via-[#0d0d0d] to-[#0a0a0a] flex items-center justify-center">
-        <div className="text-[#D4A574] text-xl">Carregando...</div>
+        <div className="text-[#E6C98B] text-xl">Carregando...</div>
       </main>
     );
   }
@@ -35,7 +35,7 @@ export default function ChatPage() {
       <div className="max-w-7xl mx-auto px-6 py-12">
         <Link
           href="/"
-          className="inline-flex items-center gap-2 text-[#D4A574] hover:text-[#FF6B35] mb-8 transition-colors"
+          className="inline-flex items-center gap-2 text-[#E6C98B] hover:text-[#A8C97F] mb-8 transition-colors"
         >
           <ArrowLeft className="w-5 h-5" />
           Voltar
@@ -43,8 +43,8 @@ export default function ChatPage() {
 
         <div className="bg-gradient-to-br from-[#1a1a1a] to-[#0d0d0d] border-2 border-[#2a2a1a] rounded-2xl p-8">
           <div className="flex items-center gap-3 mb-8">
-            <MessageCircle className="w-10 h-10 text-[#FF6B35]" strokeWidth={2.5} />
-            <h1 className="text-4xl font-bold text-[#D4A574]">Chat</h1>
+            <MessageCircle className="w-10 h-10 text-[#A8C97F]" strokeWidth={2.5} />
+            <h1 className="text-4xl font-bold text-[#E6C98B]">Chat</h1>
           </div>
 
           {chats.length === 0 ? (
@@ -58,7 +58,7 @@ export default function ChatPage() {
               </p>
               <Link
                 href="/"
-                className="inline-block px-8 py-4 bg-gradient-to-r from-[#FF6B35] to-[#FF8C42] text-[#0a0a0a] font-bold rounded-full hover:from-[#FF8C42] hover:to-[#FF6B35] transition-all"
+                className="inline-block px-8 py-4 bg-gradient-to-r from-[#A8C97F] to-[#0D7377] text-[#0a0a0a] font-bold rounded-full hover:from-[#0D7377] hover:to-[#A8C97F] transition-all"
               >
                 Explorar Propriedades
               </Link>
