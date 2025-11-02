@@ -1,5 +1,5 @@
 {
-  "buildCommand": "pnpm run build --filter=@publimicro/motors",
+  "buildCommand": "pnpm turbo run build --filter=@publimicro/motors",
   "installCommand": "pnpm install --no-frozen-lockfile",
   "framework": "nextjs",
   "outputDirectory": "apps/motors/.next"

@@ -18,9 +18,10 @@ $apps = @(
 $repoUrl = "https://github.com/josedavimartini-ship-it/publimicro"
 
 foreach ($app in $apps) {
-    $url = "https://vercel.com/new/clone?repository-url=$repoUrl&root-directory=apps/$($app.name)&project-name=publi$($app.name)"
+    $url = "https://vercel.com/new/clone?repository-url=$repoUrl&project-name=publi$($app.name)"
     Write-Host "Opening deployment for $($app.displayName)..." -ForegroundColor Cyan
     Write-Host "   URL: $url" -ForegroundColor Gray
+    Write-Host "   IMPORTANT: Leave Root Directory EMPTY or set to '.' in Vercel UI" -ForegroundColor Yellow
     Start-Process $url
     Start-Sleep -Seconds 2
 }
