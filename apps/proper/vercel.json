@@ -1,5 +1,6 @@
 {
-  "buildCommand": "cd ../.. && npx pnpm@9.12.3 run build --filter=proper",
-  "installCommand": "cd ../.. && npx pnpm@9.12.3 install --no-frozen-lockfile",
-  "framework": "nextjs"
+  "buildCommand": "pnpm run build --filter=proper",
+  "installCommand": "pnpm install --no-frozen-lockfile",
+  "framework": "nextjs",
+  "outputDirectory": "apps/proper/.next"
 }
