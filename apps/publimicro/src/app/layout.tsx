@@ -1,5 +1,5 @@
 ﻿import { TopNav } from "@publimicro/ui";
-import WhatsAppButton from "@/components/WhatsAppButton";
+import FloatingWhatsApp from "@/components/FloatingWhatsApp";
 import Navbar from "@/components/Navbar";
 import UserQuickPanel from "@/components/UserQuickPanel";
 import BackToTop from "@/components/BackToTop";
@@ -59,21 +59,21 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     <html lang="pt-BR">
       <head>
         <link rel="manifest" href="/manifest.json" />
-        <meta name="theme-color" content="#FF6B35" />
+        <meta name="theme-color" content="#A8C97F" />
         <link rel="apple-touch-icon" href="/icons/icon-192x192.png" />
         <script src="/register-sw.js" defer></script>
       </head>
-      <body className="min-h-screen bg-[#0a0a0a] text-[#D4A574] antialiased" aria-label="PubliMicro Ecossistema" role="document">
+      <body className="min-h-screen bg-[#0a0a0a] text-[#E6C98B] antialiased" aria-label="PubliMicro Ecossistema" role="document">
         <ErrorBoundaryWrapper>
           <ToastProvider>
-            <a href="#main-content" className="skip-to-content sr-only focus:not-sr-only focus:absolute focus:left-2 focus:top-2 z-50 bg-[#FF6B35] text-black font-bold px-4 py-2 rounded focus:outline-none focus:ring-2 focus:ring-[#B7791F]" tabIndex={0} aria-label="Pular para o conteúdo principal">Pular para o conteúdo</a>
+            <a href="#main-content" className="skip-to-content sr-only focus:not-sr-only focus:absolute focus:left-2 focus:top-2 z-50 bg-[#A8C97F] text-black font-bold px-4 py-2 rounded focus:outline-none focus:ring-2 focus:ring-[#B7791F]" tabIndex={0} aria-label="Pular para o conteúdo principal">Pular para o conteúdo</a>
             <TopNav brand="PubliMicro" brandHref="/" searchTarget="local" />
             {/* Sidebar removed - will implement as dropdown menu later */}
             <main id="main-content" role="main">
               {children}
             </main>
             <UserQuickPanel />
-            <WhatsAppButton />
+            <FloatingWhatsApp />
             <BackToTop />
             <MobileBottomNav />
             <PWAInstallPrompt />
