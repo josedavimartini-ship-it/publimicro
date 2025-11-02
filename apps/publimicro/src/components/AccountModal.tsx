@@ -18,7 +18,7 @@ export default function AccountModal({ open, onClose }: AccountModalProps) {
   const [fullName, setFullName] = useState('');
   const [phone, setPhone] = useState('');
 
-  const signInWithProvider = async (provider: 'google' | 'azure' | 'github') => {
+  const signInWithProvider = async (provider: 'google' | 'azure' | 'apple') => {
     setLoading(true);
     setError('');
     
@@ -95,17 +95,17 @@ export default function AccountModal({ open, onClose }: AccountModalProps) {
         {/* Close Button */}
         <button
           onClick={onClose}
-          className="absolute top-4 right-4 text-[#676767] hover:text-[#FF6B35] transition-colors"
+          className="absolute top-4 right-4 text-[#676767] hover:text-[#A8C97F] transition-colors"
           aria-label="Close"
         >
           <X className="w-6 h-6" />
         </button>
 
         <div className="p-8">
-          <h2 className="text-3xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-[#D4A574] to-[#FF6B35] mb-2">
+          <h2 className="text-3xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-[#E6C98B] to-[#A8C97F] mb-2">
             {mode === 'login' ? 'Entrar' : 'Cadastrar'}
           </h2>
-          <p className="text-[#8B9B6E] mb-6">
+          <p className="text-[#A8C97F] mb-6">
             {mode === 'login'
               ? 'Acesse sua conta para continuar'
               : 'Crie sua conta e ganhe 2 anúncios grátis!'}
@@ -116,7 +116,7 @@ export default function AccountModal({ open, onClose }: AccountModalProps) {
             <button
               onClick={() => signInWithProvider('google')}
               disabled={loading}
-              className="w-full flex items-center justify-center gap-3 px-6 py-3 bg-white text-[#0a0a0a] rounded-lg hover:bg-gray-100 transition-colors font-medium disabled:opacity-50"
+              className="w-full flex items-center justify-center gap-3 px-6 py-4 bg-white text-[#0a0a0a] rounded-lg hover:bg-gray-100 hover:scale-105 transition-all font-medium disabled:opacity-50 text-base"
             >
               <svg className="w-5 h-5" viewBox="0 0 24 24">
                 <path
@@ -142,7 +142,7 @@ export default function AccountModal({ open, onClose }: AccountModalProps) {
             <button
               onClick={() => signInWithProvider('azure')}
               disabled={loading}
-              className="w-full flex items-center justify-center gap-3 px-6 py-3 bg-[#2F2F2F] text-white rounded-lg hover:bg-[#3F3F3F] transition-colors font-medium disabled:opacity-50"
+              className="w-full flex items-center justify-center gap-3 px-6 py-4 bg-[#2F2F2F] text-white rounded-lg hover:bg-[#3F3F3F] hover:scale-105 transition-all font-medium disabled:opacity-50 text-base"
             >
               <svg className="w-5 h-5" viewBox="0 0 23 23">
                 <path fill="#f3f3f3" d="M0 0h23v23H0z" />
@@ -155,14 +155,14 @@ export default function AccountModal({ open, onClose }: AccountModalProps) {
             </button>
 
             <button
-              onClick={() => signInWithProvider('github')}
+              onClick={() => signInWithProvider('apple')}
               disabled={loading}
-              className="w-full flex items-center justify-center gap-3 px-6 py-3 bg-[#24292e] text-white rounded-lg hover:bg-[#2f3640] transition-colors font-medium disabled:opacity-50"
+              className="w-full flex items-center justify-center gap-3 px-6 py-4 bg-black text-white rounded-lg hover:bg-[#1a1a1a] hover:scale-105 transition-all font-medium disabled:opacity-50 text-base border border-[#2a2a1a]"
             >
               <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
-                <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z" />
+                <path d="M17.05 20.28c-.98.95-2.05.88-3.08.4-1.09-.5-2.08-.48-3.24 0-1.44.62-2.2.44-3.06-.4C2.79 15.25 3.51 7.59 9.05 7.31c1.35.07 2.29.74 3.08.8 1.18-.24 2.31-.93 3.57-.84 1.51.12 2.65.72 3.4 1.8-3.12 1.87-2.38 5.98.48 7.13-.57 1.5-1.31 2.99-2.54 4.09l.01-.01zM12.03 7.25c-.15-2.23 1.66-4.07 3.74-4.25.29 2.58-2.34 4.5-3.74 4.25z"/>
               </svg>
-              Continuar com GitHub
+              Continuar com Apple
             </button>
           </div>
 
@@ -184,7 +184,7 @@ export default function AccountModal({ open, onClose }: AccountModalProps) {
                   placeholder="Nome Completo"
                   value={fullName}
                   onChange={(e) => setFullName(e.target.value)}
-                  className="w-full px-4 py-3 bg-[#2a2a2a] border border-[#3a3a2a] rounded-lg text-[#f2e6b1] placeholder-[#676767] focus:outline-none focus:border-[#FF6B35] transition-colors"
+                  className="w-full px-4 py-3 bg-[#2a2a2a] border border-[#3a3a2a] rounded-lg text-[#E6C98B] placeholder-[#676767] focus:outline-none focus:border-[#A8C97F] transition-colors"
                   required
                 />
                 <input
@@ -192,7 +192,7 @@ export default function AccountModal({ open, onClose }: AccountModalProps) {
                   placeholder="Telefone (WhatsApp)"
                   value={phone}
                   onChange={(e) => setPhone(e.target.value)}
-                  className="w-full px-4 py-3 bg-[#2a2a2a] border border-[#3a3a2a] rounded-lg text-[#f2e6b1] placeholder-[#676767] focus:outline-none focus:border-[#FF6B35] transition-colors"
+                  className="w-full px-4 py-3 bg-[#2a2a2a] border border-[#3a3a2a] rounded-lg text-[#E6C98B] placeholder-[#676767] focus:outline-none focus:border-[#A8C97F] transition-colors"
                 />
               </>
             )}
@@ -202,7 +202,7 @@ export default function AccountModal({ open, onClose }: AccountModalProps) {
               placeholder="Email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              className="w-full px-4 py-3 bg-[#2a2a2a] border border-[#3a3a2a] rounded-lg text-[#f2e6b1] placeholder-[#676767] focus:outline-none focus:border-[#FF6B35] transition-colors"
+              className="w-full px-4 py-3 bg-[#2a2a2a] border border-[#3a3a2a] rounded-lg text-[#E6C98B] placeholder-[#676767] focus:outline-none focus:border-[#A8C97F] transition-colors"
               required
             />
             
@@ -211,7 +211,7 @@ export default function AccountModal({ open, onClose }: AccountModalProps) {
               placeholder="Senha"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              className="w-full px-4 py-3 bg-[#2a2a2a] border border-[#3a3a2a] rounded-lg text-[#f2e6b1] placeholder-[#676767] focus:outline-none focus:border-[#FF6B35] transition-colors"
+              className="w-full px-4 py-3 bg-[#2a2a2a] border border-[#3a3a2a] rounded-lg text-[#E6C98B] placeholder-[#676767] focus:outline-none focus:border-[#A8C97F] transition-colors"
               required
               minLength={6}
             />
@@ -225,7 +225,7 @@ export default function AccountModal({ open, onClose }: AccountModalProps) {
             <button
               type="submit"
               disabled={loading}
-              className="w-full px-6 py-3 bg-gradient-to-r from-[#FF6B35] to-[#FF8C42] hover:from-[#FF8C42] hover:to-[#FF6B35] text-[#0a0a0a] font-bold rounded-lg transition-all hover:scale-105 disabled:opacity-50 disabled:hover:scale-100"
+              className="w-full px-6 py-4 bg-gradient-to-r from-[#A8C97F] to-[#8B9B6E] hover:from-[#8B9B6E] hover:to-[#A8C97F] text-[#0a0a0a] font-bold rounded-lg transition-all hover:scale-105 disabled:opacity-50 disabled:hover:scale-100 text-base"
             >
               {loading ? 'Processando...' : mode === 'login' ? 'Entrar' : 'Criar Conta'}
             </button>
@@ -237,7 +237,7 @@ export default function AccountModal({ open, onClose }: AccountModalProps) {
                 setMode(mode === 'login' ? 'register' : 'login');
                 setError('');
               }}
-              className="text-[#B7791F] hover:text-[#FF6B35] transition-colors"
+              className="text-[#E6C98B] hover:text-[#A8C97F] transition-colors"
             >
               {mode === 'login' ? 'Não tem conta? Cadastre-se' : 'Já tem conta? Faça login'}
             </button>
