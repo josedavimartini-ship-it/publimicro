@@ -300,8 +300,8 @@ export default function PropertyPage() {
                   target.src = "/images/fallback-rancho.jpg";
                 }}
               />
-              {/* Heart Favorite on Main Image */}
-              <div className="absolute top-4 left-4 z-10 opacity-0 group-hover:opacity-100 transition-opacity">
+              {/* Heart Favorite on Main Image - Moved to top right */}
+              <div className="absolute top-4 right-4 z-10 opacity-0 group-hover:opacity-100 transition-opacity">
                 <FavoritesButton propertyId={sitio.id} size="lg" />
               </div>
             </div>
@@ -318,8 +318,8 @@ export default function PropertyPage() {
                       onClick={() => setCurrentImageIndex(index)}
                       className={`relative aspect-video rounded-lg overflow-hidden border-2 transition-all w-full ${
                         index === currentImageIndex
-                          ? "border-[#FF6B35] scale-105"
-                          : "border-[#2a2a1a] hover:border-[#D4A574]"
+                          ? "border-[#A8C97F] scale-105"
+                          : "border-[#2a2a1a] hover:border-[#E6C98B]"
                       }`}
                     >
                       <Image
@@ -341,17 +341,17 @@ export default function PropertyPage() {
 
             {/* Property Info */}
             <div className="bg-gradient-to-br from-[#1a1a1a] to-[#0d0d0d] border-2 border-[#2a2a1a] rounded-2xl p-8">
-              <h1 className="text-4xl font-bold text-[#D4A574] mb-4">{sitio.nome}</h1>
+              <h1 className="text-4xl font-bold text-[#E6C98B] mb-4">{sitio.nome}</h1>
               
               {sitio.localizacao && (
-                <div className="flex items-center gap-2 text-[#8B9B6E] mb-6">
-                  <MapPin className="w-5 h-5 text-[#FF6B35]" />
+                <div className="flex items-center gap-2 text-[#A8C97F] mb-6">
+                  <MapPin className="w-5 h-5 text-[#A8C97F]" />
                   <span className="text-lg">{sitio.localizacao}</span>
                 </div>
               )}
 
               {sitio.zona && (
-                <div className="inline-block px-4 py-2 bg-[#FF6B35] text-[#0a0a0a] font-bold rounded-full mb-6">
+                <div className="inline-block px-4 py-2 bg-[#A8C97F]/20 text-[#A8C97F] font-bold rounded-lg mb-6 border border-[#A8C97F]/30">
                   {sitio.zona}
                 </div>
               )}
@@ -360,46 +360,46 @@ export default function PropertyPage() {
               <div className="grid grid-cols-2 md:grid-cols-3 gap-4 mb-8">
                 {sitio.area_total && (
                   <div className="flex items-center gap-3 bg-[#0a0a0a] rounded-lg p-4 border border-[#2a2a1a]">
-                    <Ruler className="w-6 h-6 text-[#FF6B35]" />
+                    <Ruler className="w-6 h-6 text-[#A8C97F]" />
                     <div>
-                      <div className="text-[#8B9B6E] text-xs">Área Total</div>
-                      <div className="text-[#D4A574] font-bold">{sitio.area_total} m²</div>
+                      <div className="text-[#A8C97F] text-xs">Área Total</div>
+                      <div className="text-[#E6C98B] font-bold">{sitio.area_total} m²</div>
                     </div>
                   </div>
                 )}
                 {sitio.area_construida && (
                   <div className="flex items-center gap-3 bg-[#0a0a0a] rounded-lg p-4 border border-[#2a2a1a]">
-                    <Ruler className="w-6 h-6 text-[#FF6B35]" />
+                    <Ruler className="w-6 h-6 text-[#A8C97F]" />
                     <div>
-                      <div className="text-[#8B9B6E] text-xs">Área Construída</div>
-                      <div className="text-[#D4A574] font-bold">{sitio.area_construida} m²</div>
+                      <div className="text-[#A8C97F] text-xs">Área Construída</div>
+                      <div className="text-[#E6C98B] font-bold">{sitio.area_construida} m²</div>
                     </div>
                   </div>
                 )}
                 {sitio.quartos && (
                   <div className="flex items-center gap-3 bg-[#0a0a0a] rounded-lg p-4 border border-[#2a2a1a]">
-                    <Bed className="w-6 h-6 text-[#FF6B35]" />
+                    <Bed className="w-6 h-6 text-[#A8C97F]" />
                     <div>
-                      <div className="text-[#8B9B6E] text-xs">Quartos</div>
-                      <div className="text-[#D4A574] font-bold">{sitio.quartos}</div>
+                      <div className="text-[#A8C97F] text-xs">Quartos</div>
+                      <div className="text-[#E6C98B] font-bold">{sitio.quartos}</div>
                     </div>
                   </div>
                 )}
                 {sitio.banheiros && (
                   <div className="flex items-center gap-3 bg-[#0a0a0a] rounded-lg p-4 border border-[#2a2a1a]">
-                    <Bath className="w-6 h-6 text-[#FF6B35]" />
+                    <Bath className="w-6 h-6 text-[#A8C97F]" />
                     <div>
-                      <div className="text-[#8B9B6E] text-xs">Banheiros</div>
-                      <div className="text-[#D4A574] font-bold">{sitio.banheiros}</div>
+                      <div className="text-[#A8C97F] text-xs">Banheiros</div>
+                      <div className="text-[#E6C98B] font-bold">{sitio.banheiros}</div>
                     </div>
                   </div>
                 )}
                 {sitio.vagas && (
                   <div className="flex items-center gap-3 bg-[#0a0a0a] rounded-lg p-4 border border-[#2a2a1a]">
-                    <Car className="w-6 h-6 text-[#FF6B35]" />
+                    <Car className="w-6 h-6 text-[#A8C97F]" />
                     <div>
-                      <div className="text-[#8B9B6E] text-xs">Vagas</div>
-                      <div className="text-[#D4A574] font-bold">{sitio.vagas}</div>
+                      <div className="text-[#A8C97F] text-xs">Vagas</div>
+                      <div className="text-[#E6C98B] font-bold">{sitio.vagas}</div>
                     </div>
                   </div>
                 )}
@@ -408,8 +408,8 @@ export default function PropertyPage() {
               {/* Description */}
               {sitio.descricao && (
                 <div>
-                  <h2 className="text-2xl font-bold text-[#D4A574] mb-4">Descrição</h2>
-                  <p className="text-[#8B9B6E] leading-relaxed whitespace-pre-line">
+                  <h2 className="text-2xl font-bold text-[#E6C98B] mb-4">Descrição</h2>
+                  <p className="text-[#A8C97F] leading-relaxed whitespace-pre-line">
                     {sitio.descricao}
                   </p>
                 </div>
@@ -606,14 +606,14 @@ export default function PropertyPage() {
 
           {/* Right Column - Bidding Box (Sticky) */}
           <div className="lg:col-span-1">
-            <div className="sticky top-24 bg-gradient-to-br from-[#1a1a1a] to-[#0d0d0d] border-2 border-[#FF6B35]/40 rounded-2xl p-6 space-y-6">
+            <div className="sticky top-24 bg-gradient-to-br from-[#1a1a1a] to-[#0d0d0d] border-2 border-[#A8C97F]/40 rounded-2xl p-6 space-y-6">
               <div>
-                <h3 className="text-[#D4A574] font-semibold mb-2">Lance Inicial</h3>
-                <div className="text-[#FF6B35] font-bold text-3xl">
+                <h3 className="text-[#E6C98B] font-semibold mb-2">Lance Inicial</h3>
+                <div className="text-[#A8C97F] font-bold text-3xl">
                   R$ {sitio.lance_inicial?.toLocaleString("pt-BR") || "N/A"}
                 </div>
                 {sitio.preco && (
-                  <div className="text-[#8B9B6E] text-sm mt-1">
+                  <div className="text-[#A8C97F] text-sm mt-1">
                     Valor de referência: R$ {sitio.preco.toLocaleString("pt-BR")}
                   </div>
                 )}
@@ -622,8 +622,8 @@ export default function PropertyPage() {
               {/* Current Highest Bid */}
               {currentHighestBid && currentHighestBid > (sitio.lance_inicial || 0) && (
                 <div className="pt-3 border-t border-[#2a2a1a]">
-                  <h4 className="text-[#8B9B6E] text-sm mb-1">🔥 Lance Mais Alto</h4>
-                  <p className="text-2xl font-bold text-[#FF6B35]">
+                  <h4 className="text-[#A8C97F] text-sm mb-1">🔥 Lance Mais Alto</h4>
+                  <p className="text-2xl font-bold text-[#A8C97F]">
                     R$ {currentHighestBid.toLocaleString("pt-BR")}
                   </p>
                 </div>
@@ -631,7 +631,7 @@ export default function PropertyPage() {
 
               {/* Bidding Form */}
               <div id="fazer-lance" className="space-y-4">
-                <h3 className="text-[#D4A574] font-bold text-xl">Fazer Lance</h3>
+                <h3 className="text-[#E6C98B] font-bold text-xl">Fazer Lance</h3>
                 
                 {bidSuccess && (
                   <div className="bg-green-900/20 border border-green-500/50 rounded-lg p-4 animate-pulse">
@@ -648,7 +648,7 @@ export default function PropertyPage() {
                 )}
 
                 <div>
-                  <label className="text-[#8B9B6E] text-sm mb-2 block">
+                  <label className="text-[#A8C97F] text-sm mb-2 block">
                     Seu Lance (R$) {currentHighestBid && (
                       <span className="text-xs text-[#676767]">
                         (mínimo: R$ {currentHighestBid.toLocaleString("pt-BR")})
@@ -661,12 +661,12 @@ export default function PropertyPage() {
                     onChange={(e) => setBidValue(e.target.value)}
                     min={currentHighestBid || sitio.lance_inicial || 0}
                     step="1000"
-                    className="w-full px-4 py-3 bg-[#0a0a0a] border-2 border-[#2a2a1a] rounded-lg text-[#D4A574] focus:border-[#FF6B35] focus:outline-none"
+                    className="w-full px-4 py-3 bg-[#0a0a0a] border-2 border-[#2a2a1a] rounded-lg text-[#E6C98B] focus:border-[#A8C97F] focus:outline-none"
                   />
                 </div>
 
                 <div>
-                  <label className="text-[#8B9B6E] text-sm mb-2 block">
+                  <label className="text-[#A8C97F] text-sm mb-2 block">
                     Mensagem (opcional)
                   </label>
                   <textarea
@@ -674,14 +674,14 @@ export default function PropertyPage() {
                     onChange={(e) => setBidMessage(e.target.value)}
                     rows={3}
                     placeholder="Adicione detalhes sobre sua proposta..."
-                    className="w-full px-4 py-3 bg-[#0a0a0a] border-2 border-[#2a2a1a] rounded-lg text-[#D4A574] placeholder-[#676767] focus:border-[#FF6B35] focus:outline-none resize-none"
+                    className="w-full px-4 py-3 bg-[#0a0a0a] border-2 border-[#2a2a1a] rounded-lg text-[#E6C98B] placeholder-[#676767] focus:border-[#A8C97F] focus:outline-none resize-none"
                   />
                 </div>
 
                 <button
                   onClick={handleSubmitBid}
                   disabled={bidSubmitting}
-                  className="w-full px-6 py-4 bg-gradient-to-r from-[#FF6B35] to-[#FF8C42] text-[#0a0a0a] font-bold rounded-full shadow-xl hover:from-[#FF8C42] hover:to-[#FF6B35] transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+                  className="w-full px-6 py-4 bg-gradient-to-r from-[#A8C97F] to-[#8B9B6E] text-[#0a0a0a] font-bold rounded-full shadow-xl hover:from-[#8B9B6E] hover:to-[#A8C97F] hover:scale-105 transition-all disabled:opacity-50 disabled:cursor-not-allowed text-lg"
                 >
                   {bidSubmitting ? "Enviando..." : "💰 Enviar Lance"}
                 </button>
@@ -694,7 +694,7 @@ export default function PropertyPage() {
                   href="https://www.sitioscarcara.com.br"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="flex items-center justify-center gap-2 w-full px-6 py-3 bg-[#D4A574]/20 border-2 border-[#D4A574] text-[#D4A574] font-bold rounded-full hover:bg-[#D4A574]/30 transition-all"
+                  className="flex items-center justify-center gap-2 w-full px-6 py-4 bg-[#E6C98B]/20 border-2 border-[#E6C98B] text-[#E6C98B] font-bold rounded-full hover:bg-[#E6C98B]/30 hover:scale-105 transition-all text-lg"
                 >
                   <ExternalLink className="w-5 h-5" />
                   Ver Detalhes Completos
@@ -705,7 +705,7 @@ export default function PropertyPage() {
                   href="https://wa.me/5534992610004"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="flex items-center justify-center gap-2 w-full px-6 py-3 border-2 border-[#25D366] text-[#25D366] font-bold rounded-full hover:bg-[#25D366]/10 transition-all"
+                  className="flex items-center justify-center gap-2 w-full px-6 py-4 border-2 border-[#25D366] text-[#25D366] font-bold rounded-full hover:bg-[#25D366]/10 hover:scale-105 transition-all text-lg"
                 >
                   <Phone className="w-5 h-5" />
                   Contato WhatsApp
@@ -717,7 +717,7 @@ export default function PropertyPage() {
                     previouslyFocusedElement.current = document.activeElement as HTMLElement;
                     setVisitModalOpen(true);
                   }}
-                  className="flex items-center justify-center gap-2 w-full px-6 py-3 bg-[#8B9B6E]/20 border-2 border-[#8B9B6E] text-[#8B9B6E] font-bold rounded-full hover:bg-[#8B9B6E]/30 transition-all"
+                  className="flex items-center justify-center gap-2 w-full px-6 py-4 bg-[#A8C97F]/20 border-2 border-[#A8C97F] text-[#A8C97F] font-bold rounded-full hover:bg-[#A8C97F]/30 hover:scale-105 transition-all text-lg"
                 >
                   <Calendar className="w-5 h-5" />
                   Agendar Visita
@@ -740,7 +740,7 @@ export default function PropertyPage() {
                     previouslyFocusedElement.current.focus();
                   }
                 }}
-                className="absolute -top-12 right-0 text-white hover:text-[#FF6B35] text-2xl font-bold"
+                className="absolute -top-12 right-0 text-white hover:text-[#A8C97F] text-2xl font-bold"
                 aria-label="Fechar modal de agendamento"
               >
                 ✕ Fechar
