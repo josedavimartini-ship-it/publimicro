@@ -419,7 +419,7 @@ export default function PropertyPage() {
             {/* Videos Section */}
             <div className="bg-gradient-to-br from-[#1a1a1a] to-[#0d0d0d] border-2 border-[#2a2a1a] rounded-2xl p-8">
               <div className="flex items-center gap-3 mb-6">
-                <Video className="w-8 h-8 text-[#FF6B35]" />
+                <Video className="w-8 h-8 text-[#A8C97F]" />
                 <h2 className="text-2xl font-bold text-[#D4A574]">Vídeos da Propriedade</h2>
               </div>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -446,33 +446,33 @@ export default function PropertyPage() {
                 <TreePine className="w-8 h-8 text-[#8B9B6E]" />
                 <h2 className="text-2xl font-bold text-[#D4A574]">Construção Ecológica</h2>
               </div>
-              <div className="space-y-4">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div className="flex items-start gap-4 p-4 bg-[#0a0a0a]/50 rounded-lg border border-[#8B9B6E]/20">
                   <div className="w-2 h-2 rounded-full bg-[#8B9B6E] mt-2 flex-shrink-0" />
                   <div>
                     <h3 className="text-[#D4A574] font-semibold mb-1">Materiais Sustentáveis</h3>
-                    <p className="text-[#8B9B6E] text-sm">Madeira de reflorestamento, bambu, adobe e tijolo ecológico para construções de baixo impacto ambiental.</p>
+                    <p className="text-[#8B9B6E] text-sm">Madeira de reflorestamento, bambu, adobe e tijolo ecológico.</p>
                   </div>
                 </div>
                 <div className="flex items-start gap-4 p-4 bg-[#0a0a0a]/50 rounded-lg border border-[#8B9B6E]/20">
                   <div className="w-2 h-2 rounded-full bg-[#8B9B6E] mt-2 flex-shrink-0" />
                   <div>
                     <h3 className="text-[#D4A574] font-semibold mb-1">Energia Solar e Eólica</h3>
-                    <p className="text-[#8B9B6E] text-sm">Sistemas de captação de energia renovável para independência energética e economia a longo prazo.</p>
+                    <p className="text-[#8B9B6E] text-sm">Sistemas de energia renovável para independência energética.</p>
                   </div>
                 </div>
                 <div className="flex items-start gap-4 p-4 bg-[#0a0a0a]/50 rounded-lg border border-[#8B9B6E]/20">
                   <div className="w-2 h-2 rounded-full bg-[#8B9B6E] mt-2 flex-shrink-0" />
                   <div>
-                    <h3 className="text-[#D4A574] font-semibold mb-1">Captação de Água da Chuva</h3>
-                    <p className="text-[#8B9B6E] text-sm">Sistemas de armazenamento e tratamento de água pluvial para uso doméstico e irrigação.</p>
+                    <h3 className="text-[#D4A574] font-semibold mb-1">Captação de Água</h3>
+                    <p className="text-[#8B9B6E] text-sm">Armazenamento de água pluvial para uso doméstico e irrigação.</p>
                   </div>
                 </div>
                 <div className="flex items-start gap-4 p-4 bg-[#0a0a0a]/50 rounded-lg border border-[#8B9B6E]/20">
                   <div className="w-2 h-2 rounded-full bg-[#8B9B6E] mt-2 flex-shrink-0" />
                   <div>
                     <h3 className="text-[#D4A574] font-semibold mb-1">Bioarquitetura</h3>
-                    <p className="text-[#8B9B6E] text-sm">Aproveitamento da iluminação e ventilação natural, reduzindo consumo energético e integrando com o ambiente.</p>
+                    <p className="text-[#8B9B6E] text-sm">Iluminação e ventilação natural integrando com o ambiente.</p>
                   </div>
                 </div>
               </div>
@@ -484,71 +484,71 @@ export default function PropertyPage() {
                 <Leaf className="w-8 h-8 text-[#B7791F]" />
                 <h2 className="text-2xl font-bold text-[#D4A574]">Agrofloresta e Produção Sustentável</h2>
               </div>
-              <div className="space-y-4">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div className="flex items-start gap-4 p-4 bg-[#0a0a0a]/50 rounded-lg border border-[#B7791F]/20">
                   <div className="w-2 h-2 rounded-full bg-[#B7791F] mt-2 flex-shrink-0" />
                   <div>
-                    <h3 className="text-[#D4A574] font-semibold mb-1">Sistema Agroflorestal (SAF)</h3>
-                    <p className="text-[#8B9B6E] text-sm">Consórcio de árvores nativas, frutíferas, hortaliças e plantas medicinais, criando um ecossistema produtivo e autossustentável.</p>
+                    <h3 className="text-[#D4A574] font-semibold mb-1">Sistema Agroflorestal</h3>
+                    <p className="text-[#8B9B6E] text-sm">Consórcio de árvores nativas, frutíferas e hortaliças.</p>
                   </div>
                 </div>
                 <div className="flex items-start gap-4 p-4 bg-[#0a0a0a]/50 rounded-lg border border-[#B7791F]/20">
                   <div className="w-2 h-2 rounded-full bg-[#B7791F] mt-2 flex-shrink-0" />
                   <div>
                     <h3 className="text-[#D4A574] font-semibold mb-1">Pomar Diversificado</h3>
-                    <p className="text-[#8B9B6E] text-sm">Cultivo de frutas nativas e exóticas: manga, jabuticaba, pequi, cagaita, pitanga, acerola, banana, maracujá.</p>
+                    <p className="text-[#8B9B6E] text-sm">Frutas nativas e exóticas: manga, jabuticaba, pequi, cagaita.</p>
                   </div>
                 </div>
                 <div className="flex items-start gap-4 p-4 bg-[#0a0a0a]/50 rounded-lg border border-[#B7791F]/20">
                   <div className="w-2 h-2 rounded-full bg-[#B7791F] mt-2 flex-shrink-0" />
                   <div>
-                    <h3 className="text-[#D4A574] font-semibold mb-1">Horta Orgânica e Mandala</h3>
-                    <p className="text-[#8B9B6E] text-sm">Cultivo de hortaliças, ervas aromáticas e plantas medicinais em sistemas permaculturais de alta produtividade.</p>
+                    <h3 className="text-[#D4A574] font-semibold mb-1">Horta Orgânica</h3>
+                    <p className="text-[#8B9B6E] text-sm">Hortaliças e ervas em sistemas permaculturais.</p>
                   </div>
                 </div>
                 <div className="flex items-start gap-4 p-4 bg-[#0a0a0a]/50 rounded-lg border border-[#B7791F]/20">
                   <div className="w-2 h-2 rounded-full bg-[#B7791F] mt-2 flex-shrink-0" />
                   <div>
-                    <h3 className="text-[#D4A574] font-semibold mb-1">Criação Animal Integrada</h3>
-                    <p className="text-[#8B9B6E] text-sm">Galinhas caipiras, peixes em tanques, abelhas nativas (meliponicultura) e outros animais em sistemas integrados.</p>
+                    <h3 className="text-[#D4A574] font-semibold mb-1">Criação Integrada</h3>
+                    <p className="text-[#8B9B6E] text-sm">Galinhas, peixes, abelhas nativas em sistemas integrados.</p>
                   </div>
                 </div>
               </div>
             </div>
 
             {/* Boat Structures */}
-            <div className="bg-gradient-to-br from-[#1a1a1a] to-[#0d0d0d] border-2 border-[#FF6B35]/30 rounded-2xl p-8">
+            <div className="bg-gradient-to-br from-[#1a1a1a] to-[#0d0d0d] border-2 border-[#0D7377]/30 rounded-2xl p-8">
               <div className="flex items-center gap-3 mb-6">
-                <Ship className="w-8 h-8 text-[#FF6B35]" />
+                <Ship className="w-8 h-8 text-[#0D7377]" />
                 <h2 className="text-2xl font-bold text-[#D4A574]">Infraestrutura Náutica</h2>
               </div>
-              <div className="space-y-4">
-                <div className="flex items-start gap-4 p-4 bg-[#0a0a0a]/50 rounded-lg border border-[#FF6B35]/20">
-                  <div className="w-2 h-2 rounded-full bg-[#FF6B35] mt-2 flex-shrink-0" />
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div className="flex items-start gap-4 p-4 bg-[#0a0a0a]/50 rounded-lg border border-[#0D7377]/20">
+                  <div className="w-2 h-2 rounded-full bg-[#0D7377] mt-2 flex-shrink-0" />
                   <div>
                     <h3 className="text-[#D4A574] font-semibold mb-1">Pier e Atracadouro</h3>
-                    <p className="text-[#8B9B6E] text-sm">Estrutura de madeira ou concreto para atraque de lanchas, barcos e jet skis, com segurança e estabilidade.</p>
+                    <p className="text-[#8B9B6E] text-sm">Estrutura para atraque de lanchas, barcos e jet skis.</p>
                   </div>
                 </div>
-                <div className="flex items-start gap-4 p-4 bg-[#0a0a0a]/50 rounded-lg border border-[#FF6B35]/20">
-                  <div className="w-2 h-2 rounded-full bg-[#FF6B35] mt-2 flex-shrink-0" />
+                <div className="flex items-start gap-4 p-4 bg-[#0a0a0a]/50 rounded-lg border border-[#0D7377]/20">
+                  <div className="w-2 h-2 rounded-full bg-[#0D7377] mt-2 flex-shrink-0" />
                   <div>
-                    <h3 className="text-[#D4A574] font-semibold mb-1">Garagem Náutica Coberta</h3>
-                    <p className="text-[#8B9B6E] text-sm">Área coberta para armazenamento e manutenção de embarcações, protegendo do sol e chuva.</p>
+                    <h3 className="text-[#D4A574] font-semibold mb-1">Garagem Náutica</h3>
+                    <p className="text-[#8B9B6E] text-sm">Área coberta para armazenamento e manutenção de embarcações.</p>
                   </div>
                 </div>
-                <div className="flex items-start gap-4 p-4 bg-[#0a0a0a]/50 rounded-lg border border-[#FF6B35]/20">
-                  <div className="w-2 h-2 rounded-full bg-[#FF6B35] mt-2 flex-shrink-0" />
+                <div className="flex items-start gap-4 p-4 bg-[#0a0a0a]/50 rounded-lg border border-[#0D7377]/20">
+                  <div className="w-2 h-2 rounded-full bg-[#0D7377] mt-2 flex-shrink-0" />
                   <div>
                     <h3 className="text-[#D4A574] font-semibold mb-1">Rampas de Acesso</h3>
-                    <p className="text-[#8B9B6E] text-sm">Rampas facilitadas para lançamento de jet skis e caiaques diretamente na represa.</p>
+                    <p className="text-[#8B9B6E] text-sm">Rampas para lançamento de jet skis e caiaques na represa.</p>
                   </div>
                 </div>
-                <div className="flex items-start gap-4 p-4 bg-[#0a0a0a]/50 rounded-lg border border-[#FF6B35]/20">
-                  <div className="w-2 h-2 rounded-full bg-[#FF6B35] mt-2 flex-shrink-0" />
+                <div className="flex items-start gap-4 p-4 bg-[#0a0a0a]/50 rounded-lg border border-[#0D7377]/20">
+                  <div className="w-2 h-2 rounded-full bg-[#0D7377] mt-2 flex-shrink-0" />
                   <div>
                     <h3 className="text-[#D4A574] font-semibold mb-1">Área de Lazer Aquático</h3>
-                    <p className="text-[#8B9B6E] text-sm">Deck flutuante, boia de ancoragem e área delimitada para banho seguro na represa.</p>
+                    <p className="text-[#8B9B6E] text-sm">Deck flutuante e área delimitada para banho seguro.</p>
                   </div>
                 </div>
               </div>
@@ -560,33 +560,33 @@ export default function PropertyPage() {
                 <TreePine className="w-8 h-8 text-[#8B9B6E]" />
                 <h2 className="text-2xl font-bold text-[#D4A574]">Preservação e Reflorestamento</h2>
               </div>
-              <div className="space-y-4">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div className="flex items-start gap-4 p-4 bg-[#0a0a0a]/50 rounded-lg border border-[#8B9B6E]/20">
                   <div className="w-2 h-2 rounded-full bg-[#8B9B6E] mt-2 flex-shrink-0" />
                   <div>
-                    <h3 className="text-[#D4A574] font-semibold mb-1">Área de Preservação Permanente (APP)</h3>
-                    <p className="text-[#8B9B6E] text-sm">Manutenção e recuperação das matas ciliares ao redor da represa, protegendo a qualidade da água e biodiversidade.</p>
+                    <h3 className="text-[#D4A574] font-semibold mb-1">APP - Área Preservação</h3>
+                    <p className="text-[#8B9B6E] text-sm">Recuperação de matas ciliares protegendo a biodiversidade.</p>
                   </div>
                 </div>
                 <div className="flex items-start gap-4 p-4 bg-[#0a0a0a]/50 rounded-lg border border-[#8B9B6E]/20">
                   <div className="w-2 h-2 rounded-full bg-[#8B9B6E] mt-2 flex-shrink-0" />
                   <div>
-                    <h3 className="text-[#D4A574] font-semibold mb-1">Reflorestamento com Nativas do Cerrado</h3>
-                    <p className="text-[#8B9B6E] text-sm">Plantio de espécies nativas: ipê, jatobá, aroeira, pequi, baru, sucupira, garantindo a preservação do bioma.</p>
+                    <h3 className="text-[#D4A574] font-semibold mb-1">Nativas do Cerrado</h3>
+                    <p className="text-[#8B9B6E] text-sm">Ipê, jatobá, aroeira, pequi e baru preservando o bioma.</p>
                   </div>
                 </div>
                 <div className="flex items-start gap-4 p-4 bg-[#0a0a0a]/50 rounded-lg border border-[#8B9B6E]/20">
                   <div className="w-2 h-2 rounded-full bg-[#8B9B6E] mt-2 flex-shrink-0" />
                   <div>
                     <h3 className="text-[#D4A574] font-semibold mb-1">Corredores Ecológicos</h3>
-                    <p className="text-[#8B9B6E] text-sm">Criação de corredores verdes para trânsito da fauna local: tatus, capivaras, seriemas, tucanos e aves aquáticas.</p>
+                    <p className="text-[#8B9B6E] text-sm">Rotas verdes para fauna: tatus, capivaras e aves aquáticas.</p>
                   </div>
                 </div>
                 <div className="flex items-start gap-4 p-4 bg-[#0a0a0a]/50 rounded-lg border border-[#8B9B6E]/20">
                   <div className="w-2 h-2 rounded-full bg-[#8B9B6E] mt-2 flex-shrink-0" />
                   <div>
-                    <h3 className="text-[#D4A574] font-semibold mb-1">Programa de Educação Ambiental</h3>
-                    <p className="text-[#8B9B6E] text-sm">Desenvolvimento de trilhas ecológicas e programas educativos sobre a flora e fauna local.</p>
+                    <h3 className="text-[#D4A574] font-semibold mb-1">Educação Ambiental</h3>
+                    <p className="text-[#8B9B6E] text-sm">Trilhas e programas educativos sobre flora e fauna.</p>
                   </div>
                 </div>
               </div>
