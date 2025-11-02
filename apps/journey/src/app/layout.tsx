@@ -1,4 +1,4 @@
-﻿import { TopNav } from "@publimicro/ui";
+﻿import { TopNav, FloatingWhatsApp } from "@publimicro/ui";
 import "./globals.css";
 import type { Metadata } from "next";
 import Link from "next/link";
@@ -42,6 +42,7 @@ export default function RootLayout({
       <body className="min-h-screen bg-[#0a0a0a] text-[#e6c86b]">
         <TopNav brand="PubliJourney" brandHref="/" searchTarget="main" />
         {children}
+        <FloatingWhatsApp />
       </body>
     </html>
   );

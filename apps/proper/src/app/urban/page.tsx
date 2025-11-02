@@ -17,8 +17,8 @@ export default function UrbanPage() {
           <Building2 className="w-12 h-12 text-[#676767] mx-auto mb-4" />
           <h3 className="text-2xl font-bold text-[#676767] mb-2">Em breve</h3>
           <p className="text-[#676767] mb-6">Estamos preparando oportunidades urbanas exclusivas.</p>
-          <Link href="/proper" className="text-[#B7791F] hover:text-[#FF6B35] transition-colors">
-             Voltar para PubliProper
+          <Link href="/proper" className="text-[#B7791F] hover:text-[#A8C97F] transition-colors">
+            ← Voltar para PubliProper
           </Link>
         </div>
       </div>

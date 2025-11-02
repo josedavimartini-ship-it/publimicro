@@ -31,7 +31,7 @@ export default function ProperPage() {
       <div className="flex justify-end items-center max-w-7xl mx-auto px-6 pt-8">
         <a
           href="/anunciar"
-          className="inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-[#FF6B35] to-[#FF8C42] text-black font-bold rounded-full shadow-lg hover:scale-105 transition-all"
+          className="inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-[#A8C97F] to-[#B7791F] text-black font-bold rounded-full shadow-lg hover:scale-105 transition-all"
           aria-label="Anunciar propriedade"
         >
           <svg className="w-6 h-6" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path d="M12 4v16m8-8H4" /></svg>
@@ -79,7 +79,7 @@ export default function ProperPage() {
                     unoptimized
                   />
                   {cat.featured && (
-                    <div className="absolute top-4 right-4 px-4 py-2 bg-[#FF6B35] text-[#0a0a0a] font-bold rounded-full text-sm z-20">
+                    <div className="absolute top-4 right-4 px-4 py-2 bg-[#E6C98B] text-[#0a0a0a] font-bold rounded-full text-sm z-20">
                       ⭐ Destaque
                     </div>
                   )}
@@ -91,7 +91,7 @@ export default function ProperPage() {
                       <IconComponent className="w-8 h-8 text-[#B7791F]" />
                     </div>
                     <div className="flex-1">
-                      <h3 className="text-2xl font-bold text-[#B7791F] group-hover:text-[#FF6B35] transition-colors mb-2">
+                      <h3 className="text-2xl font-bold text-[#B7791F] group-hover:text-[#A8C97F] transition-colors mb-2">
                         {cat.name}
                       </h3>
                       <p className="text-[#676767] mb-3">{cat.description}</p>
@@ -112,14 +112,14 @@ export default function ProperPage() {
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          className="relative bg-gradient-to-r from-[#FF6B35]/20 to-[#B7791F]/20 border-2 border-[#FF6B35] rounded-3xl p-8 md:p-12"
+          className="relative bg-gradient-to-r from-[#A8C97F]/20 to-[#B7791F]/20 border-2 border-[#B7791F] rounded-3xl p-8 md:p-12"
         >
           <div className="flex flex-col md:flex-row items-center gap-8">
             <div className="flex-1">
-              <div className="inline-flex items-center gap-2 mb-4 px-4 py-2 bg-[#FF6B35]/30 rounded-full">
-                <span className="text-[#FF6B35] font-bold text-sm"> LANÇAMENTO EXCLUSIVO</span>
+              <div className="inline-flex items-center gap-2 mb-4 px-4 py-2 bg-[#E6C98B]/30 rounded-full">
+                <span className="text-[#B7791F] font-bold text-sm">🌟 LANÇAMENTO EXCLUSIVO</span>
               </div>
-              <h2 className="text-4xl md:text-5xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-[#FF6B35] to-[#B7791F] mb-4">
+              <h2 className="text-4xl md:text-5xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-[#B7791F] to-[#0D7377] mb-4">
                 Sítios Carcará
               </h2>
               <p className="text-[#d8c68e] text-lg mb-6">
@@ -129,7 +129,7 @@ export default function ProperPage() {
               <div className="flex flex-wrap gap-4">
                 <Link
                   href="/projetos/carcara"
-                  className="px-8 py-4 bg-gradient-to-r from-[#FF6B35] to-[#FF8C42] hover:from-[#FF8C42] hover:to-[#FF6B35] text-[#0a0a0a] font-bold rounded-full transition-all hover:scale-105"
+                  className="px-8 py-4 bg-gradient-to-r from-[#A8C97F] to-[#0D7377] hover:from-[#0D7377] hover:to-[#A8C97F] text-white font-bold rounded-full transition-all hover:scale-105"
                 >
                   Ver Propriedades
                 </Link>
@@ -147,7 +147,7 @@ export default function ProperPage() {
             <div className="w-full md:w-auto">
               <div className="grid grid-cols-2 gap-4">
                 <div className="text-center p-4 bg-[#1a1a1a]/80 rounded-xl">
-                  <div className="text-3xl font-bold text-[#FF6B35]">6</div>
+                  <div className="text-3xl font-bold text-[#B7791F]">6</div>
                   <div className="text-sm text-[#676767]">Propriedades</div>
                 </div>
                 <div className="text-center p-4 bg-[#1a1a1a]/80 rounded-xl">
