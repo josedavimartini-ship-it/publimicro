@@ -1,5 +1,5 @@
 {
-  "buildCommand": "pnpm run build --filter=@publimicro/tudo",
+  "buildCommand": "pnpm turbo run build --filter=@publimicro/tudo",
   "installCommand": "pnpm install --no-frozen-lockfile",
   "framework": "nextjs",
   "outputDirectory": "apps/tudo/.next"

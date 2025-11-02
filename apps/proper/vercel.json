@@ -1,5 +1,5 @@
 {
-  "buildCommand": "pnpm run build --filter=proper",
+  "buildCommand": "pnpm turbo run build --filter=proper",
   "installCommand": "pnpm install --no-frozen-lockfile",
   "framework": "nextjs",
   "outputDirectory": "apps/proper/.next"

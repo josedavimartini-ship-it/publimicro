@@ -1,5 +1,5 @@
 {
-  "buildCommand": "pnpm run build --filter=@publimicro/outdoor",
+  "buildCommand": "pnpm turbo run build --filter=@publimicro/outdoor",
   "installCommand": "pnpm install --no-frozen-lockfile",
   "framework": "nextjs",
   "outputDirectory": "apps/outdoor/.next"
