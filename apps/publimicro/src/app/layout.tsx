@@ -60,10 +60,10 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     <html lang="pt-BR">
       <head>
         <link rel="manifest" href="/manifest.json" />
-        {/* Moss green with emerald stone details */}
-        <meta name="theme-color" content="#6B8E23" media="(prefers-color-scheme: light)" />
-        <meta name="theme-color" content="#50C878" media="(prefers-color-scheme: dark)" />
-        <meta name="msapplication-TileColor" content="#6B8E23" />
+        {/* Burnt gold/bronze - light and smooth for the eyes */}
+        <meta name="theme-color" content="#D4A574" media="(prefers-color-scheme: light)" />
+        <meta name="theme-color" content="#B8936D" media="(prefers-color-scheme: dark)" />
+        <meta name="msapplication-TileColor" content="#D4A574" />
         <link rel="apple-touch-icon" href="/icons/icon-192x192.png" />
         <script src="/register-sw.js" defer></script>
       </head>
