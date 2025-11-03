@@ -316,7 +316,7 @@ export default function CarcaraProjectPage() {
                     </div>
                   )}
 
-                  <div className="grid grid-cols-2 gap-6 mb-8 p-6 bg-[#2a2a2a]/50 rounded-2xl">
+                  <div className="grid grid-cols-2 gap-6 p-6 bg-[#2a2a2a]/50 rounded-2xl">
                     <div>
                       <div className="text-xs text-[#676767] mb-2 uppercase tracking-wide">Valor Estimado</div>
                       <div className="font-bold text-[#E6C98B] text-2xl">
@@ -329,31 +329,6 @@ export default function CarcaraProjectPage() {
                         R$ {(sitio.lance_inicial / 1000000).toFixed(2).replace('.', ',')}M
                       </div>
                     </div>
-                  </div>
-
-                  <div className="flex gap-3">
-                    <button
-                      onClick={(e) => {
-                        e.preventDefault();
-                        e.stopPropagation();
-                        handleScheduleVisit(sitio);
-                      }}
-                      className="flex-1 px-6 py-4 border-2 border-[#0D7377] text-[#0D7377] hover:bg-[#0D7377]/10 font-bold rounded-xl transition-all flex items-center justify-center gap-2"
-                    >
-                      <Calendar className="w-5 h-5" />
-                      Agendar Visita
-                    </button>
-                    <button
-                      onClick={(e) => {
-                        e.preventDefault();
-                        e.stopPropagation();
-                        handleMakeProposal(sitio);
-                      }}
-                      className="flex-1 px-6 py-4 bg-gradient-to-r from-[#A8C97F] to-[#8B9B6E] hover:from-[#8B9B6E] hover:to-[#A8C97F] text-[#0a0a0a] font-bold rounded-xl transition-all hover:scale-105 flex items-center justify-center gap-2"
-                    >
-                      <TrendingUp className="w-5 h-5" />
-                      Fazer Proposta
-                    </button>
                   </div>
                 </div>
               </article>
