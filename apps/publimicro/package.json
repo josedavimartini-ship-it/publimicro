@@ -30,6 +30,7 @@
     "react-leaflet": "^5.0.0",
     "stripe": "^19.1.0",
     "tailwind-variants": "^3.1.1",
+    "unsplash-js": "^7.0.20",
     "zustand": "^5.0.8"
   },
   "devDependencies": {
