@@ -313,11 +313,8 @@ export default function CarcaraProjectPage() {
                   <div className="absolute top-4 left-4 px-5 py-2 bg-[#2a2a2a]/95 backdrop-blur-md rounded-full border border-[#3a3a2a]">
                     <span className="text-[#0D7377] text-sm font-bold">{sitio.zona}</span>
                   </div>
-                  <div className="absolute top-4 right-4 px-5 py-2 bg-[#0D7377] text-black text-sm font-bold rounded-full shadow-lg">
-                     Disponível
-                  </div>
                   {userId && (
-                    <div className="absolute top-16 right-4 z-20">
+                    <div className="absolute top-4 right-4 z-30">
                       <FavoritesButton propertyId={sitio.id} userId={userId} />
                     </div>
                   )}
@@ -434,23 +431,21 @@ export default function CarcaraProjectPage() {
       </section>
 
       {/* Modals */}
+      <VisitModal
+        adId={selectedSitio?.id || 'sitios-carcara'}
+        adTitle={selectedSitio ? `Sítio ${selectedSitio.nome}` : 'Sítios Carcará'}
+        open={showVisitModal}
+        onClose={() => setShowVisitModal(false)}
+      />
       {selectedSitio && (
-        <>
-          <VisitModal
-            adId={selectedSitio.id}
-            adTitle={`Sítio ${selectedSitio.nome}`}
-            open={showVisitModal}
-            onClose={() => setShowVisitModal(false)}
-          />
-          <ProposalModal
-            adId={selectedSitio.id}
-            adTitle={`Sítio ${selectedSitio.nome}`}
-            currentBid={selectedSitio.preco}
-            minBid={selectedSitio.lance_inicial}
-            open={showProposalModal}
-            onClose={() => setShowProposalModal(false)}
-          />
-        </>
+        <ProposalModal
+          adId={selectedSitio.id}
+          adTitle={`Sítio ${selectedSitio.nome}`}
+          currentBid={selectedSitio.preco}
+          minBid={selectedSitio.lance_inicial}
+          open={showProposalModal}
+          onClose={() => setShowProposalModal(false)}
+        />
       )}
     </main>
   );
