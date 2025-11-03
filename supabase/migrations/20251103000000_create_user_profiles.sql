@@ -65,29 +65,41 @@ CREATE POLICY "Users can update own profile"
   USING (auth.uid() = id)
   WITH CHECK (auth.uid() = id);
 
--- Admin users can view all profiles (assuming admin_users table exists)
-CREATE POLICY "Admins can view all profiles"
-  ON public.user_profiles
-  FOR SELECT
-  TO authenticated
-  USING (
-    EXISTS (
-      SELECT 1 FROM public.admin_users
-      WHERE admin_users.id = auth.uid()
-    )
-  );
+-- Admin users can view all profiles (only if admin_users table exists)
+DO $$
+BEGIN
+  IF EXISTS (SELECT FROM pg_tables WHERE schemaname = 'public' AND tablename = 'admin_users') THEN
+    EXECUTE '
+      CREATE POLICY "Admins can view all profiles"
+        ON public.user_profiles
+        FOR SELECT
+        TO authenticated
+        USING (
+          EXISTS (
+            SELECT 1 FROM public.admin_users
+            WHERE admin_users.id = auth.uid()
+          )
+        )';
+  END IF;
+END $$;
 
--- Admin users can update all profiles (for verification)
-CREATE POLICY "Admins can update all profiles"
-  ON public.user_profiles
-  FOR UPDATE
-  TO authenticated
-  USING (
-    EXISTS (
-      SELECT 1 FROM public.admin_users
-      WHERE admin_users.id = auth.uid()
-    )
-  );
+-- Admin users can update all profiles (only if admin_users table exists)
+DO $$
+BEGIN
+  IF EXISTS (SELECT FROM pg_tables WHERE schemaname = 'public' AND tablename = 'admin_users') THEN
+    EXECUTE '
+      CREATE POLICY "Admins can update all profiles"
+        ON public.user_profiles
+        FOR UPDATE
+        TO authenticated
+        USING (
+          EXISTS (
+            SELECT 1 FROM public.admin_users
+            WHERE admin_users.id = auth.uid()
+          )
+        )';
+  END IF;
+END $$;
 
 -- Function to update updated_at timestamp
 CREATE OR REPLACE FUNCTION public.handle_updated_at()
