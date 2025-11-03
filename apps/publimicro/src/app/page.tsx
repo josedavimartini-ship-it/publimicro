@@ -13,6 +13,7 @@ import WelcomeModal from "@/components/WelcomeModal";
 import RecentlyViewed from "@/components/RecentlyViewed";
 import { LiveCounter, ActivityFeed, Testimonials, TrustBadges } from "@/components/SocialProof";
 import { useUnsplashImages } from "@/hooks/useUnsplashImages";
+import { getFirstPhoto } from "@/lib/photoUtils";
 import { 
   Home, Car, Tractor, Ship, Globe, 
   Plane, Share2, ShoppingBag, Sparkles, Calendar, Info
@@ -365,7 +366,7 @@ export default function HomePage() {
             )}
             <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-6">
               {sitios.map((sitio) => {
-                const fotoUrl = sitio.fotos && sitio.fotos.length > 0 ? sitio.fotos[0] : "/images/fallback-rancho.jpg";
+                const fotoUrl = getFirstPhoto(sitio.fotos);
                 console.log(`Sitio ${sitio.nome} photo URL:`, fotoUrl);
                 return (
                   <Link 
