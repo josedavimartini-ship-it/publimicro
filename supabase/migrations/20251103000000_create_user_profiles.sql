@@ -125,10 +125,14 @@ BEGIN
     NEW.id,
     NEW.raw_user_meta_data->>'full_name',
     NEW.raw_user_meta_data->>'phone'
-  );
+  )
+  ON CONFLICT (id) DO NOTHING;
   RETURN NEW;
 END;
 $$ LANGUAGE plpgsql SECURITY DEFINER;
+
+-- Drop trigger if exists, then create
+DROP TRIGGER IF EXISTS on_auth_user_created ON auth.users;
 
 -- Trigger to create profile when user signs up
 CREATE TRIGGER on_auth_user_created
