@@ -47,7 +47,7 @@ export function TopNav({
           {/* LOGO - Left Corner - BIGGER with Home Link */}
           <Link href={brandHref} className="flex flex-col items-start hover:opacity-90 transition-opacity flex-shrink-0 group">
             <div className="flex items-center gap-2 mb-1">
-              <svg className="w-8 h-8 text-[#FF6B35]" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2">
+              <svg className="w-8 h-8 text-[#A8C97F]" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2">
                 <path strokeLinecap="round" strokeLinejoin="round" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
               </svg>
               <div className="text-5xl font-bold tracking-tight leading-none">
@@ -56,7 +56,7 @@ export function TopNav({
                 <span className="relative inline-block">
                   <span className="text-[#B87333]">o</span>
                   <svg
-                    className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[30px] h-[30px] text-[#FF6B35]"
+                    className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[30px] h-[30px] text-[#A8C97F]"
                     viewBox="0 0 24 24"
                     fill="none"
                     stroke="currentColor"
@@ -76,20 +76,20 @@ export function TopNav({
             </span>
           </Link>
 
-          {/* SEARCH BAR - EXTRA VERTICAL (Very Tall, Very Narrow) with Purple Background */}
-          <form action={searchAction} method="get" className="flex-shrink-0 hidden md:flex flex-col gap-3 bg-gradient-to-b from-[#4A148C] to-[#6A1B9A] p-4 rounded-2xl shadow-2xl max-w-[280px]">
+          {/* SEARCH BAR - EXTRA VERTICAL (Very Tall, Very Narrow) with Nature Theme */}
+          <form action={searchAction} method="get" className="flex-shrink-0 hidden md:flex flex-col gap-3 bg-gradient-to-b from-[#1a1a1a] to-[#0d0d0d] p-4 rounded-2xl shadow-2xl max-w-[280px] border-2 border-[#2a2a1a]">
             <div className="flex flex-col gap-2">
               <div className="relative w-full">
                 <button
                   type="button"
                   onClick={() => setShowCategories(!showCategories)}
-                  className="w-full h-12 px-4 bg-[#7B1FA2] border-2 border-[#9C27B0] rounded-lg text-[#D4A574] hover:bg-[#8E24AA] transition-colors flex items-center justify-between gap-2 text-sm font-medium"
+                  className="w-full h-12 px-4 bg-[#1a1a1a] border-2 border-[#2a2a1a] rounded-lg text-[#E6C98B] hover:bg-[#2a2a1a] hover:border-[#A8C97F] transition-colors flex items-center justify-between gap-2 text-sm font-medium"
                 >
                   <span className="truncate">{categories.find(c => c.value === selectedCategory)?.label || "Categoria"}</span>
                   <ChevronDown className="w-5 h-5 flex-shrink-0" />
                 </button>
                 {showCategories && (
-                  <div className="absolute top-full left-0 mt-1 bg-[#4A148C] border-2 border-[#7B1FA2] rounded-xl shadow-2xl z-50 w-full max-h-[400px] overflow-y-auto">
+                  <div className="absolute top-full left-0 mt-1 bg-[#1a1a1a] border-2 border-[#2a2a1a] rounded-xl shadow-2xl z-50 w-full max-h-[400px] overflow-y-auto">
                     {categories.map((cat) => (
                       <button
                         key={cat.value}
@@ -98,7 +98,7 @@ export function TopNav({
                           setSelectedCategory(cat.value);
                           setShowCategories(false);
                         }}
-                        className="w-full text-left px-4 py-3 text-sm text-[#D4A574] hover:bg-[#6A1B9A] first:rounded-t-xl last:rounded-b-xl transition-colors"
+                        className="w-full text-left px-4 py-3 text-sm text-[#E6C98B] hover:bg-[#2a2a1a] hover:text-[#A8C97F] first:rounded-t-xl last:rounded-b-xl transition-colors"
                       >
                         {cat.label}
                       </button>
@@ -111,7 +111,7 @@ export function TopNav({
                 type="text"
                 name="location"
                 placeholder="Localização"
-                className="w-full h-12 px-4 bg-[#6A1B9A] border-2 border-[#9C27B0] text-[#D4A574] placeholder-[#8B9B6E] focus:outline-none focus:ring-2 focus:ring-[#FF6B35] rounded-lg text-sm font-medium"
+                className="w-full h-12 px-4 bg-[#1a1a1a] border-2 border-[#2a2a1a] text-[#E6C98B] placeholder-[#8B9B6E] focus:outline-none focus:ring-2 focus:ring-[#A8C97F] focus:border-[#A8C97F] rounded-lg text-sm font-medium"
               />
             </div>
 
@@ -120,13 +120,13 @@ export function TopNav({
                 type="search"
                 name="q"
                 placeholder="O que você procura?"
-                className="w-full h-12 px-4 bg-[#6A1B9A] border-2 border-[#9C27B0] text-[#D4A574] placeholder-[#8B9B6E] focus:outline-none focus:ring-2 focus:ring-[#FF6B35] rounded-lg text-sm font-medium"
+                className="w-full h-12 px-4 bg-[#1a1a1a] border-2 border-[#2a2a1a] text-[#E6C98B] placeholder-[#8B9B6E] focus:outline-none focus:ring-2 focus:ring-[#A8C97F] focus:border-[#A8C97F] rounded-lg text-sm font-medium"
               />
               <input type="hidden" name="category" value={selectedCategory} />
 
               <button
                 type="submit"
-                className="w-full h-12 px-6 rounded-lg bg-gradient-to-r from-[#FF6B35] to-[#FF8C42] hover:from-[#FF8C42] hover:to-[#FF6B35] flex items-center justify-center gap-2 transition-all shadow-xl hover:shadow-2xl font-bold text-[#0a0a0a]"
+                className="w-full h-12 px-6 rounded-lg bg-gradient-to-r from-[#A8C97F] to-[#0D7377] hover:from-[#0D7377] hover:to-[#A8C97F] flex items-center justify-center gap-2 transition-all shadow-xl hover:shadow-2xl font-bold text-white"
                 aria-label="Buscar"
               >
                 <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2.5">
@@ -139,12 +139,12 @@ export function TopNav({
 
           {/* ACTIONS */}
           <nav className="flex items-center gap-4">
-            <Link href={favHref} className="flex flex-col items-center text-[#D4A574] hover:text-[#FF6B35] transition-all group transform hover:scale-110">
+            <Link href={favHref} className="flex flex-col items-center text-[#E6C98B] hover:text-[#B7791F] transition-all group transform hover:scale-110">
               <Heart className="w-7 h-7 mb-1 drop-shadow-lg" strokeWidth={2.5} />
               <span className="text-xs font-bold">Favoritos</span>
             </Link>
             
-            <Link href={chatHref} className="flex flex-col items-center text-[#8B9B6E] hover:text-[#FF6B35] transition-all group transform hover:scale-110">
+            <Link href={chatHref} className="flex flex-col items-center text-[#A8C97F] hover:text-[#0D7377] transition-all group transform hover:scale-110">
               <MessageCircle className="w-7 h-7 mb-1 drop-shadow-lg" strokeWidth={2.5} />
               <span className="text-xs font-bold">Chat</span>
             </Link>
@@ -152,7 +152,7 @@ export function TopNav({
             {/* Prominent Free Ad Button */}
             <Link
               href={postHref}
-              className="flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-[#FF6B35] via-[#FF8C42] to-[#FFB347] hover:from-[#FFB347] hover:via-[#FF8C42] hover:to-[#FF6B35] text-[#0a0a0a] rounded-xl transition-all hover:scale-110 shadow-2xl font-bold animate-pulse hover:animate-none border-2 border-[#FF6B35]/30"
+              className="flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-[#A8C97F] via-[#8B9B6E] to-[#0D7377] hover:from-[#0D7377] hover:via-[#8B9B6E] hover:to-[#A8C97F] text-white rounded-xl transition-all hover:scale-110 shadow-2xl font-bold animate-pulse hover:animate-none border-2 border-[#A8C97F]/30"
             >
               <Plus className="w-6 h-6" strokeWidth={3} />
               <span className="hidden lg:inline text-base">Publique Grátis</span>
@@ -161,7 +161,7 @@ export function TopNav({
             
             <Link
               href={accountHref}
-              className="flex flex-col items-center px-4 py-2 border-2 border-[#D4A574] text-[#D4A574] hover:bg-[#D4A574]/20 hover:border-[#FF6B35] hover:text-[#FF6B35] rounded-xl transition-all transform hover:scale-110 shadow-lg"
+              className="flex flex-col items-center px-4 py-2 border-2 border-[#E6C98B] text-[#E6C98B] hover:bg-[#E6C98B]/20 hover:border-[#A8C97F] hover:text-[#A8C97F] rounded-xl transition-all transform hover:scale-110 shadow-lg"
             >
               <User className="w-7 h-7 mb-1" strokeWidth={2.5} />
               <span className="text-xs font-bold">Conta</span>
