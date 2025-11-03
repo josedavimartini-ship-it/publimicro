@@ -44,25 +44,40 @@ export function TopNav({
     <header className="sticky top-0 z-50 bg-[#0a0a0a]/95 backdrop-blur-sm border-b-2 border-[#2a2a1a]">
       <div className="max-w-[1920px] mx-auto px-4 sm:px-6">
         <div className="flex items-center justify-between h-20 gap-6">
-          {/* LOGO - Left Corner - BIGGER with Home Link */}
-          <Link href={brandHref} className="flex flex-col items-start hover:opacity-90 transition-opacity flex-shrink-0 group">
-            <div className="flex items-center gap-2 mb-1">
-              <svg className="w-8 h-8 text-[#A8C97F]" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2">
-                <path strokeLinecap="round" strokeLinejoin="round" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
-              </svg>
-              <div className="text-5xl font-bold tracking-tight leading-none">
-                <span className="text-[#B7791F]">Publi</span>
-                <span className="text-[#CD7F32]">Micr</span>
+          {/* LOGO - Left Corner - Enhanced Professional Brand */}
+          <Link href={brandHref} className="flex flex-col items-start hover:opacity-90 transition-all flex-shrink-0 group relative">
+            {/* Glow effect on hover */}
+            <div className="absolute inset-0 bg-gradient-to-r from-[#A8C97F]/20 to-[#50C878]/20 blur-xl opacity-0 group-hover:opacity-100 transition-opacity rounded-2xl"></div>
+            
+            <div className="flex items-center gap-3 mb-1 relative z-10">
+              {/* Premium Home Icon with emerald accent */}
+              <div className="relative">
+                <svg className="w-10 h-10 text-[#50C878] drop-shadow-lg" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2.5">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
+                </svg>
+                {/* Emerald shine */}
+                <div className="absolute top-0 right-0 w-2 h-2 bg-[#50C878] rounded-full animate-pulse"></div>
+              </div>
+              
+              {/* Enhanced Typography */}
+              <div className="text-5xl font-black tracking-tight leading-none">
+                <span className="bg-gradient-to-r from-[#B7791F] via-[#CD7F32] to-[#DAA520] bg-clip-text text-transparent drop-shadow-lg">
+                  Publi
+                </span>
+                <span className="bg-gradient-to-r from-[#6B8E23] via-[#50C878] to-[#A8C97F] bg-clip-text text-transparent drop-shadow-lg">
+                  Micr
+                </span>
                 <span className="relative inline-block">
-                  <span className="text-[#B87333]">o</span>
+                  <span className="bg-gradient-to-r from-[#B87333] to-[#CD7F32] bg-clip-text text-transparent">o</span>
+                  {/* Enhanced Sniper Target Icon with emerald glow */}
                   <svg
-                    className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[30px] h-[30px] text-[#A8C97F]"
+                    className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[32px] h-[32px] text-[#50C878] drop-shadow-[0_0_8px_rgba(80,200,120,0.6)]"
                     viewBox="0 0 24 24"
                     fill="none"
                     stroke="currentColor"
-                    strokeWidth="2.5"
+                    strokeWidth="3"
                   >
-                    <circle cx="12" cy="12" r="3" />
+                    <circle cx="12" cy="12" r="3" className="animate-pulse" />
                     <line x1="12" y1="2" x2="12" y2="7" />
                     <line x1="12" y1="17" x2="12" y2="22" />
                     <line x1="2" y1="12" x2="7" y2="12" />
@@ -71,9 +86,15 @@ export function TopNav({
                 </span>
               </div>
             </div>
-            <span className="text-xs text-[#8B9B6E] font-medium tracking-wide opacity-0 group-hover:opacity-100 transition-opacity">
-              ← Voltar ao Início
-            </span>
+            
+            {/* Premium subtitle with moss green and emerald */}
+            <div className="flex items-center gap-2 opacity-0 group-hover:opacity-100 transition-opacity relative z-10">
+              <div className="w-1 h-1 bg-[#50C878] rounded-full animate-pulse"></div>
+              <span className="text-xs bg-gradient-to-r from-[#6B8E23] to-[#50C878] bg-clip-text text-transparent font-bold tracking-wider uppercase">
+                Ecossistema de Negócios
+              </span>
+              <div className="w-1 h-1 bg-[#6B8E23] rounded-full animate-pulse"></div>
+            </div>
           </Link>
 
           {/* SEARCH BAR - EXTRA VERTICAL (Very Tall, Very Narrow) with Nature Theme */}
