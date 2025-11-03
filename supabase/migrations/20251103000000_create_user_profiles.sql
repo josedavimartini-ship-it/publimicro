@@ -117,6 +117,9 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
+-- Drop trigger if exists, then create
+DROP TRIGGER IF EXISTS set_updated_at ON public.user_profiles;
+
 -- Trigger to automatically update updated_at
 CREATE TRIGGER set_updated_at
   BEFORE UPDATE ON public.user_profiles
