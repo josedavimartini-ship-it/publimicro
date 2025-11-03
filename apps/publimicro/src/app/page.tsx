@@ -22,7 +22,7 @@ import {
 const LeafletMapKML = dynamic(() => import("@/components/LeafletMapKML"), {
   ssr: false,
   loading: () => (
-    <div className="w-full h-[600px] bg-[#1a1a1a] rounded-2xl flex items-center justify-center">
+    <div className="w-full h-[600px] bg-[#5A5E5D] rounded-2xl flex items-center justify-center">
       <div className="text-[#D4A574] text-xl">Carregando mapa gratuito...</div>
     </div>
   ),
@@ -116,11 +116,11 @@ export default function HomePage() {
   }, []);
 
   return (
-    <main id="main-content" className="min-h-screen bg-gradient-to-b from-[#0a0a0a] via-[#0d0d0d] to-[#0a0a0a]" role="main">
+    <main id="main-content" className="min-h-screen bg-gradient-to-b from-[#4A4E4D] via-[#3A3E3D] to-[#4A4E4D]" role="main">
       <div className="max-w-7xl mx-auto px-6">
         {/* SEARCH SECTION */}
         <section className="py-12">
-          <div className="bg-gradient-to-br from-[#1a1a1a] to-[#0d0d0d] border-2 border-[#2a2a1a] rounded-3xl p-8 shadow-2xl">
+          <div className="bg-gradient-to-br from-[#5A5E5D] to-[#3A3E3D] border-2 border-[#2a2a1a] rounded-3xl p-8 shadow-2xl">
             <div className="flex flex-col items-center mb-6">
               <h2 className="text-3xl md:text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-[#E6C98B] to-[#B7791F] mb-3">
                 Encontre sua Propriedade Ideal
@@ -146,7 +146,7 @@ export default function HomePage() {
               priority
               unoptimized
             />
-            <div className="absolute inset-0 bg-gradient-to-r from-[#0a0a0a]/95 via-[#0a0a0a]/80 to-transparent" />
+            <div className="absolute inset-0 bg-gradient-to-r from-[#4A4E4D]/95 via-[#4A4E4D]/80 to-transparent" />
             {/* Bird */}
             <div className="absolute top-8 left-8 w-[220px] h-[220px] z-30 hidden lg:block">
               <Carcara3D scale={1.1} />
@@ -156,10 +156,10 @@ export default function HomePage() {
                 <Sparkles className="w-5 h-5 text-[#fbbf24] animate-pulse" />
                 <span className="text-[#fbbf24] font-bold text-lg tracking-widest uppercase drop-shadow-[0_2px_8px_rgba(0,0,0,0.8)]">Super Destaque</span>
               </div>
-              <h2 className="text-5xl md:text-7xl lg:text-8xl font-bold text-[#1a1a1a] mb-6 drop-shadow-[0_2px_4px_rgba(255,255,255,0.5)] leading-tight">
+              <h2 className="text-5xl md:text-7xl lg:text-8xl font-bold text-[#5A5E5D] mb-6 drop-shadow-[0_2px_4px_rgba(255,255,255,0.5)] leading-tight">
                 Sítios Carcará
               </h2>
-              <p className="text-[#1a1a1a] text-xl md:text-2xl mb-8 max-w-2xl leading-relaxed font-semibold drop-shadow-[0_1px_2px_rgba(255,255,255,0.3)]">
+              <p className="text-[#5A5E5D] text-xl md:text-2xl mb-8 max-w-2xl leading-relaxed font-semibold drop-shadow-[0_1px_2px_rgba(255,255,255,0.3)]">
                 6 propriedades exclusivas às margens da represa de Corumbaíba, GO. 
                 Natureza preservada, infraestrutura completa. 
                 Lances a partir de <span className="text-[#B7791F] font-bold">R$ 1.050.000</span>
@@ -167,7 +167,7 @@ export default function HomePage() {
               <div className="flex gap-4 flex-wrap">
                 <Link
                   href="/projetos/carcara"
-                  className="px-10 py-5 bg-gradient-to-r from-[#A8C97F] to-[#8B9B6E] hover:from-[#8B9B6E] hover:to-[#A8C97F] text-[#0a0a0a] text-lg font-bold rounded-full transition-all hover:scale-105 shadow-2xl"
+                  className="px-10 py-5 bg-gradient-to-r from-[#A8C97F] to-[#8B9B6E] hover:from-[#8B9B6E] hover:to-[#A8C97F] text-[#4A4E4D] text-lg font-bold rounded-full transition-all hover:scale-105 shadow-2xl"
                 >
                   Conhecer
                 </Link>
@@ -186,14 +186,18 @@ export default function HomePage() {
                 href="/proper"
                 className="group relative w-full max-w-sm h-48 rounded-xl overflow-hidden shadow-xl hover:shadow-[#A8C97F]/50 transition-all duration-300 hover:scale-105 block border-2 border-[#2a2a1a] hover:border-[#A8C97F]"
               >
-                <Image
-                  src="https://source.unsplash.com/random/600x400/?modern+luxury+house+exterior"
-                  alt="PubliProper"
-                  fill
-                  className="object-cover transition-transform duration-700 group-hover:scale-110"
-                  unoptimized
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-[#0a0a0a]/95 via-[#0a0a0a]/80 to-[#0a0a0a]/30" />
+                {!imagesLoading && unsplashImages.proper ? (
+                  <Image
+                    src={unsplashImages.proper}
+                    alt="PubliProper"
+                    fill
+                    className="object-cover transition-transform duration-700 group-hover:scale-110"
+                    unoptimized
+                  />
+                ) : (
+                  <div className="absolute inset-0 bg-gradient-to-br from-[#2a2a1a] to-[#5A5E5D] animate-pulse" />
+                )}
+                <div className="absolute inset-0 bg-gradient-to-t from-[#4A4E4D]/95 via-[#4A4E4D]/80 to-[#4A4E4D]/30" />
                 <div className="relative z-10 flex flex-col items-center justify-center h-full p-6 text-center">
                   <Home className="w-16 h-16 text-[#A8C97F] mb-3 group-hover:scale-125 transition-all duration-300" strokeWidth={1.5} />
                   <h3 className="text-2xl font-bold text-[#E6C98B] group-hover:text-[#A8C97F] transition-colors mb-2">
@@ -255,9 +259,9 @@ export default function HomePage() {
                     unoptimized
                   />
                 ) : (
-                  <div className="absolute inset-0 bg-gradient-to-br from-[#2a2a1a] to-[#1a1a1a] animate-pulse" />
+                  <div className="absolute inset-0 bg-gradient-to-br from-[#2a2a1a] to-[#5A5E5D] animate-pulse" />
                 )}
-                <div className="absolute inset-0 bg-gradient-to-t from-[#0a0a0a]/95 via-[#0a0a0a]/80 to-[#0a0a0a]/30" />
+                <div className="absolute inset-0 bg-gradient-to-t from-[#4A4E4D]/95 via-[#4A4E4D]/80 to-[#4A4E4D]/30" />
                 <div className="relative z-10 flex flex-col items-center justify-center h-full p-6 text-center">
                   <Plane className="w-16 h-16 text-[#E6C98B] mb-3 group-hover:scale-125 transition-all duration-300" strokeWidth={1.5} />
                   <h3 className="text-2xl font-bold text-[#E6C98B] group-hover:text-[#B7791F] transition-colors mb-2">
@@ -292,9 +296,9 @@ export default function HomePage() {
                       unoptimized
                     />
                   ) : (
-                    <div className="absolute inset-0 bg-gradient-to-br from-[#2a2a1a] to-[#1a1a1a] animate-pulse" />
+                    <div className="absolute inset-0 bg-gradient-to-br from-[#2a2a1a] to-[#5A5E5D] animate-pulse" />
                   )}
-                  <div className="absolute inset-0 bg-gradient-to-t from-[#0a0a0a]/95 via-[#0a0a0a]/80 to-[#0a0a0a]/30" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-[#4A4E4D]/95 via-[#4A4E4D]/80 to-[#4A4E4D]/30" />
                   <div className="relative z-10 flex flex-col items-center justify-center h-full p-4 text-center">
                     <IconComponent className="w-14 h-14 text-[#E6C98B] mb-2 group-hover:scale-125 transition-all duration-300" strokeWidth={1.5} />
                     <h3 className="text-xl font-bold text-[#E6C98B] group-hover:text-[#A8C97F] transition-colors mb-1">
@@ -330,9 +334,9 @@ export default function HomePage() {
                       unoptimized
                     />
                   ) : (
-                    <div className="absolute inset-0 bg-gradient-to-br from-[#2a2a1a] to-[#1a1a1a] animate-pulse" />
+                    <div className="absolute inset-0 bg-gradient-to-br from-[#2a2a1a] to-[#5A5E5D] animate-pulse" />
                   )}
-                  <div className="absolute inset-0 bg-gradient-to-t from-[#0a0a0a]/95 via-[#0a0a0a]/80 to-[#0a0a0a]/30" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-[#4A4E4D]/95 via-[#4A4E4D]/80 to-[#4A4E4D]/30" />
                   <div className="relative z-10 flex flex-col items-center justify-center h-full p-4 text-center">
                     <IconComponent className="w-14 h-14 text-[#B7791F] mb-2 group-hover:scale-125 transition-all duration-300" strokeWidth={1.5} />
                     <h3 className="text-xl font-bold text-[#E6C98B] group-hover:text-[#B7791F] transition-colors mb-1">
@@ -367,7 +371,7 @@ export default function HomePage() {
                   <Link 
                     key={sitio.id} 
                     href={`/imoveis/${sitio.id}`}
-                    className="group bg-gradient-to-br from-[#1a1a1a] to-[#0d0d0d] border-2 border-[#2a2a1a] rounded-2xl overflow-hidden hover:border-[#A8C97F] transition-all hover:scale-105 shadow-xl cursor-pointer block"
+                    className="group bg-gradient-to-br from-[#5A5E5D] to-[#3A3E3D] border-2 border-[#2a2a1a] rounded-2xl overflow-hidden hover:border-[#A8C97F] transition-all hover:scale-105 shadow-xl cursor-pointer block"
                   >
                     <div className="relative aspect-square overflow-hidden">
                       <Image
@@ -382,7 +386,7 @@ export default function HomePage() {
                         }}
                       />
                       {sitio.zona && (
-                        <div className="absolute top-3 left-3 px-3 py-1 bg-[#1a1a1a]/90 text-[#A8C97F] font-bold rounded-lg text-sm border border-[#A8C97F]/30">
+                        <div className="absolute top-3 left-3 px-3 py-1 bg-[#5A5E5D]/90 text-[#A8C97F] font-bold rounded-lg text-sm border border-[#A8C97F]/30">
                           {sitio.zona}
                         </div>
                       )}
@@ -398,7 +402,7 @@ export default function HomePage() {
                       
                       {/* Bidding Schema Box */}
                       {typeof sitio.lance_inicial === "number" && (
-                        <div className="bg-[#0a0a0a] rounded-lg p-3 border border-[#A8C97F]/40">
+                        <div className="bg-[#4A4E4D] rounded-lg p-3 border border-[#A8C97F]/40">
                           <div className="text-[#E6C98B] text-xs font-semibold mb-1">Lance Inicial</div>
                           <div className="text-[#A8C97F] font-bold text-xl">
                             R$ {sitio.lance_inicial.toLocaleString("pt-BR")}
