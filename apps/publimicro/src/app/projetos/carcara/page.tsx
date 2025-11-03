@@ -9,6 +9,7 @@ import { MapPin, Home, Trees, Droplets, Zap, ShieldCheck, Calendar, TrendingUp, 
 import VisitModal from '@/components/VisitModal';
 import ProposalModal from '@/components/ProposalModal';
 import FavoritesButton from '@/components/FavoritesButton';
+import { Carcara3D } from '@publimicro/ui';
 
 // Dynamic import to avoid SSR issues with Leaflet
 const LeafletMapKML = dynamic(() => import("@/components/LeafletMapKML"), {
@@ -117,22 +118,12 @@ export default function CarcaraProjectPage() {
           unoptimized
         />
         <div className="absolute inset-0 bg-gradient-to-b from-[#0a0a0a]/90 via-[#0a0a0a]/70 to-[#0a0a0a]" />
-        {/* Animated birds and nature effects */}
-        <div className="absolute inset-0 pointer-events-none z-20">
-          {/* Example: 3 animated SVG birds, can be replaced with 3D or Lottie later */}
-          <svg className="absolute left-10 top-20 animate-bird-fly" width="60" height="40" viewBox="0 0 60 40"><path d="M10 20 Q30 0 50 20 Q30 40 10 20" stroke="#A8C97F" strokeWidth="2" fill="none"/></svg>
-          <svg className="absolute right-20 top-32 animate-bird-fly" width="40" height="30" viewBox="0 0 40 30"><path d="M5 15 Q20 0 35 15 Q20 30 5 15" stroke="#B7791F" strokeWidth="2" fill="none"/></svg>
-          <svg className="absolute left-1/2 top-10 animate-bird-fly" width="50" height="35" viewBox="0 0 50 35"><path d="M8 17 Q25 2 42 17 Q25 32 8 17" stroke="#0D7377" strokeWidth="2" fill="none"/></svg>
-          {/* Add more effects as needed */}
+        
+        {/* 3D Carcará Bird Animation */}
+        <div className="absolute top-10 right-10 w-64 h-64 md:w-96 md:h-96 pointer-events-none z-20 opacity-80">
+          <Carcara3D scale={2.5} />
         </div>
-        <style jsx>{`
-          @keyframes bird-fly {
-            0% { transform: translateY(0) scale(1); opacity: 0.7; }
-            50% { transform: translateY(-20px) scale(1.1); opacity: 1; }
-            100% { transform: translateY(0) scale(1); opacity: 0.7; }
-          }
-          .animate-bird-fly { animation: bird-fly 6s infinite ease-in-out; }
-        `}</style>
+
         <div className="relative z-30 text-center px-6 max-w-6xl">
           <div className="inline-flex items-center gap-2 mb-6 px-8 py-4 bg-[#A8C97F]/30 border-2 border-[#A8C97F] rounded-full backdrop-blur-md animate-pulse">
             <span className="text-[#A8C97F] font-bold text-xl tracking-widest uppercase">
@@ -275,14 +266,17 @@ export default function CarcaraProjectPage() {
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
             {sitios.map((sitio) => (
-              <article
-                id={sitio.id}
+              <Link 
+                href={`/imoveis/${sitio.id}`}
                 key={sitio.id}
-                className="group bg-gradient-to-br from-[#1a1a1a] to-[#0d0d0d] border-3 border-[#2a2a1a] rounded-3xl overflow-hidden hover:border-[#A8C97F] hover:shadow-2xl hover:shadow-[#A8C97F]/40 transition-all focus:outline-none focus:ring-4 focus:ring-[#A8C97F]"
-                tabIndex={0}
-                role="button"
-                aria-label={`Ver detalhes do sítio ${sitio.nome}`}
               >
+                <article
+                  id={sitio.id}
+                  className="group bg-gradient-to-br from-[#1a1a1a] to-[#0d0d0d] border-3 border-[#2a2a1a] rounded-3xl overflow-hidden hover:border-[#A8C97F] hover:shadow-2xl hover:shadow-[#A8C97F]/40 transition-all focus:outline-none focus:ring-4 focus:ring-[#A8C97F] cursor-pointer"
+                  tabIndex={0}
+                  role="button"
+                  aria-label={`Ver detalhes do sítio ${sitio.nome}`}
+                >
                 <div className="relative aspect-video">
                   <Image
                     src={sitio.fotos && sitio.fotos.length > 0 ? sitio.fotos[0] : '/images/fallback-rancho.jpg'}
@@ -302,15 +296,15 @@ export default function CarcaraProjectPage() {
                   <div className="absolute top-4 right-4 px-5 py-2 bg-[#0D7377] text-black text-sm font-bold rounded-full shadow-lg">
                      Disponível
                   </div>
+                  {userId && (
+                    <div className="absolute top-16 right-4 z-20">
+                      <FavoritesButton propertyId={sitio.id} userId={userId} />
+                    </div>
+                  )}
                 </div>
 
                 <div className="p-8">
                   <h3 className="text-4xl font-bold text-[#A8C97F] mb-4">Sítio {sitio.nome}</h3>
-                  {userId && (
-                    <div className="mb-4">
-                      <FavoritesButton propertyId={sitio.id} userId={userId} />
-                    </div>
-                  )}
                   {sitio.descricao && (
                     <p className="text-[#676767] mb-6 leading-relaxed">{sitio.descricao}</p>
                   )}
@@ -339,14 +333,22 @@ export default function CarcaraProjectPage() {
 
                   <div className="flex gap-3">
                     <button
-                      onClick={() => handleScheduleVisit(sitio)}
+                      onClick={(e) => {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        handleScheduleVisit(sitio);
+                      }}
                       className="flex-1 px-6 py-4 border-2 border-[#0D7377] text-[#0D7377] hover:bg-[#0D7377]/10 font-bold rounded-xl transition-all flex items-center justify-center gap-2"
                     >
                       <Calendar className="w-5 h-5" />
                       Agendar Visita
                     </button>
                     <button
-                      onClick={() => handleMakeProposal(sitio)}
+                      onClick={(e) => {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        handleMakeProposal(sitio);
+                      }}
                       className="flex-1 px-6 py-4 bg-gradient-to-r from-[#A8C97F] to-[#8B9B6E] hover:from-[#8B9B6E] hover:to-[#A8C97F] text-[#0a0a0a] font-bold rounded-xl transition-all hover:scale-105 flex items-center justify-center gap-2"
                     >
                       <TrendingUp className="w-5 h-5" />
@@ -355,6 +357,7 @@ export default function CarcaraProjectPage() {
                   </div>
                 </div>
               </article>
+              </Link>
             ))}
           </div>
         )}
