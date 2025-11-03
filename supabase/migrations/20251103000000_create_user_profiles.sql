@@ -42,6 +42,13 @@ CREATE INDEX IF NOT EXISTS idx_user_profiles_profile_completed ON public.user_pr
 -- Enable Row Level Security
 ALTER TABLE public.user_profiles ENABLE ROW LEVEL SECURITY;
 
+-- Drop existing policies if they exist (for idempotent migrations)
+DROP POLICY IF EXISTS "Users can view own profile" ON public.user_profiles;
+DROP POLICY IF EXISTS "Users can insert own profile" ON public.user_profiles;
+DROP POLICY IF EXISTS "Users can update own profile" ON public.user_profiles;
+DROP POLICY IF EXISTS "Admins can view all profiles" ON public.user_profiles;
+DROP POLICY IF EXISTS "Admins can update all profiles" ON public.user_profiles;
+
 -- RLS Policies
 -- Users can view their own profile
 CREATE POLICY "Users can view own profile"
