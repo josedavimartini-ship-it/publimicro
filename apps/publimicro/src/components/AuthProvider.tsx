@@ -49,6 +49,11 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         .single();
 
       if (error) {
+        // Profile doesn't exist yet - this is normal for new users
+        if (error.code === 'PGRST116') {
+          console.log("Profile not found, will be created on signup");
+          return null;
+        }
         console.error("Error loading profile:", error);
         return null;
       }

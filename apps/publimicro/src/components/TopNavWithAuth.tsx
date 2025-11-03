@@ -45,7 +45,14 @@ export function TopNavWithAuth({
 
   const favHref = "/favoritos";
   const chatHref = "/chat";
-  const postHref = "/anunciar";
+
+  const handlePostAd = (e: React.MouseEvent) => {
+    if (!user) {
+      e.preventDefault();
+      setShowAccountModal(true);
+    }
+    // If user exists, let the link work normally
+  };
 
   const handleSignOut = async () => {
     await supabase.auth.signOut();
@@ -185,7 +192,8 @@ export function TopNavWithAuth({
               
               {/* Prominent Free Ad Button */}
               <Link
-                href={postHref}
+                href="/anunciar"
+                onClick={handlePostAd}
                 className="flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-[#A8C97F] via-[#8B9B6E] to-[#0D7377] hover:from-[#0D7377] hover:via-[#8B9B6E] hover:to-[#A8C97F] text-white rounded-xl transition-all hover:scale-110 shadow-2xl font-bold animate-pulse hover:animate-none border-2 border-[#A8C97F]/30"
               >
                 <Plus className="w-6 h-6" strokeWidth={3} />
