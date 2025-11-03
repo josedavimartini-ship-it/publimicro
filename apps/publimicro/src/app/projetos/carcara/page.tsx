@@ -201,25 +201,25 @@ export default function CarcaraProjectPage() {
         </div>
       </section>
 
-      {/* Stats Section */}
-      <section className="py-16 bg-[#0D7377]/10">
+      {/* Stats Section - Enhanced Contrast */}
+      <section className="py-16 bg-gradient-to-b from-[#0D7377]/20 to-transparent">
         <div className="max-w-7xl mx-auto px-6">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
             <div>
               <div className="text-5xl font-bold text-[#A8C97F] mb-2">6</div>
-              <div className="text-[#676767] uppercase tracking-wide">Propriedades</div>
+              <div className="text-white uppercase tracking-wide font-semibold">Propriedades</div>
             </div>
             <div>
-              <div className="text-5xl font-bold text-[#0D7377] mb-2">~2.5km²</div>
-              <div className="text-[#676767] uppercase tracking-wide">Área Média</div>
+              <div className="text-5xl font-bold text-[#50C878] mb-2">~2.5km²</div>
+              <div className="text-white uppercase tracking-wide font-semibold">Área Média</div>
             </div>
             <div>
               <div className="text-5xl font-bold text-[#B7791F] mb-2">100%</div>
-              <div className="text-[#676767] uppercase tracking-wide">Regularizado</div>
+              <div className="text-white uppercase tracking-wide font-semibold">Regularizado</div>
             </div>
             <div>
               <div className="text-5xl font-bold text-[#A8C97F] mb-2">15km²</div>
-              <div className="text-[#676767] uppercase tracking-wide">Área Total</div>
+              <div className="text-white uppercase tracking-wide font-semibold">Área Total</div>
             </div>
           </div>
         </div>
@@ -230,7 +230,7 @@ export default function CarcaraProjectPage() {
         <h2 className="text-5xl md:text-6xl font-bold text-center text-transparent bg-clip-text bg-gradient-to-r from-[#B7791F] to-[#CD7F32] mb-4">
           Diferenciais do Projeto
         </h2>
-        <p className="text-center text-[#676767] text-xl mb-16 max-w-3xl mx-auto">
+        <p className="text-center text-white text-xl mb-16 max-w-3xl mx-auto font-medium drop-shadow-lg">
           Investimento com propósito: preservação ambiental, qualidade de vida e retorno sustentável.
         </p>
         
@@ -244,7 +244,7 @@ export default function CarcaraProjectPage() {
                 {feature.icon}
               </div>
               <h3 className="text-2xl font-bold text-[#E6C98B] mb-3">{feature.title}</h3>
-              <p className="text-[#676767] leading-relaxed">{feature.desc}</p>
+              <p className="text-white leading-relaxed font-medium">{feature.desc}</p>
             </div>
           ))}
         </div>
@@ -306,7 +306,7 @@ export default function CarcaraProjectPage() {
                 <div className="p-8">
                   <h3 className="text-4xl font-bold text-[#A8C97F] mb-4">Sítio {sitio.nome}</h3>
                   {sitio.descricao && (
-                    <p className="text-[#676767] mb-6 leading-relaxed">{sitio.descricao}</p>
+                    <p className="text-white mb-6 leading-relaxed font-medium">{sitio.descricao}</p>
                   )}
 
                   {sitio.area_total && (
@@ -318,13 +318,13 @@ export default function CarcaraProjectPage() {
 
                   <div className="grid grid-cols-2 gap-6 p-6 bg-[#2a2a2a]/50 rounded-2xl">
                     <div>
-                      <div className="text-xs text-[#676767] mb-2 uppercase tracking-wide">Valor Estimado</div>
+                      <div className="text-xs text-white mb-2 uppercase tracking-wide font-semibold opacity-80">Valor Estimado</div>
                       <div className="font-bold text-[#E6C98B] text-2xl">
                         R$ {(sitio.preco / 1000000).toFixed(1).replace('.', ',')}M
                       </div>
                     </div>
                     <div>
-                      <div className="text-xs text-[#676767] mb-2 uppercase tracking-wide">Lance Inicial</div>
+                      <div className="text-xs text-white mb-2 uppercase tracking-wide font-semibold opacity-80">Lance Inicial</div>
                       <div className="font-bold text-[#A8C97F] text-2xl">
                         R$ {(sitio.lance_inicial / 1000000).toFixed(2).replace('.', ',')}M
                       </div>
@@ -360,11 +360,11 @@ export default function CarcaraProjectPage() {
               <MapPin className="w-8 h-8" />
               Localização Privilegiada
             </h3>
-            <p className="text-[#676767] mb-6 text-lg leading-relaxed">
+            <p className="text-white mb-6 text-lg leading-relaxed font-medium">
               Zona Rural de Corumbaíba, GO - Último pontal do Rio Corumbá antes de encontrar o Rio Paranaíba. 
               Acesso por estrada asfaltada e infraestrutura completa.
             </p>
-            <ul className="space-y-3 text-[#676767]">
+            <ul className="space-y-3 text-white font-medium">
               <li className="flex items-start gap-3">
                 <span className="text-[#A8C97F] text-xl">✓</span>
                 <span>45 minutos do centro de Corumbaíba</span>
@@ -388,7 +388,7 @@ export default function CarcaraProjectPage() {
             <h3 className="text-3xl font-bold text-[#E6C98B] mb-6">
               Fale Conosco
             </h3>
-            <p className="text-[#676767] mb-8 text-lg">
+            <p className="text-white mb-8 text-lg font-medium">
               Nossa equipe está pronta para esclarecer todas as suas dúvidas e agendar sua visita.
             </p>
             <div className="space-y-4">
