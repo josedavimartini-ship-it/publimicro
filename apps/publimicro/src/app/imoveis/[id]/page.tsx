@@ -452,82 +452,51 @@ export default function PropertyPage() {
             </div>
           </div>
 
-          {/* Right Column - Bidding Box (Sticky) */}
+          {/* Right Column - Simplified Bidding Box (Sticky) */}
           <div className="lg:col-span-1">
             <div className="sticky top-24 bg-gradient-to-br from-[#1a1a1a] to-[#0d0d0d] border-2 border-[#A8C97F]/40 rounded-2xl p-6 space-y-6">
-              <div>
-                <h3 className="text-[#E6C98B] font-semibold mb-2">Lance Inicial</h3>
-                <div className="text-[#A8C97F] font-bold text-3xl">
-                  R$ {sitio.lance_inicial?.toLocaleString("pt-BR") || "N/A"}
+              {/* Last Bid Display */}
+              <div className="text-center">
+                <h3 className="text-[#E6C98B] font-semibold mb-3 text-sm uppercase tracking-wide">Último Lance</h3>
+                <div className="text-[#A8C97F] font-bold text-5xl mb-2">
+                  R$ {(currentHighestBid || sitio.lance_inicial || 0).toLocaleString("pt-BR")}
                 </div>
-                {sitio.preco && (
-                  <div className="text-[#A8C97F] text-sm mt-1">
-                    Valor de referência: R$ {sitio.preco.toLocaleString("pt-BR")}
-                  </div>
-                )}
+                <p className="text-[#8B9B6E] text-xs">
+                  {currentHighestBid && currentHighestBid > (sitio.lance_inicial || 0) 
+                    ? '🔥 Lance ativo' 
+                    : `Lance inicial: R$ ${sitio.lance_inicial?.toLocaleString("pt-BR")}`}
+                </p>
               </div>
 
-              {/* Current Highest Bid */}
-              {currentHighestBid && currentHighestBid > (sitio.lance_inicial || 0) && (
-                <div className="pt-3 border-t border-[#2a2a1a]">
-                  <h4 className="text-[#A8C97F] text-sm mb-1">🔥 Lance Mais Alto</h4>
-                  <p className="text-2xl font-bold text-[#A8C97F]">
-                    R$ {currentHighestBid.toLocaleString("pt-BR")}
+              {/* Simplified Bid Button */}
+              <button
+                onClick={() => {
+                  const userBid = prompt(
+                    `Digite seu lance (mínimo R$ ${(currentHighestBid || sitio.lance_inicial || 0).toLocaleString("pt-BR")}):`
+                  );
+                  if (userBid) {
+                    setBidValue(userBid);
+                    handleSubmitBid();
+                  }
+                }}
+                className="w-full px-8 py-5 bg-gradient-to-r from-[#A8C97F] to-[#8B9B6E] text-[#0a0a0a] font-bold rounded-full shadow-xl hover:from-[#8B9B6E] hover:to-[#A8C97F] hover:scale-105 transition-all text-2xl"
+              >
+                💰 Bid
+              </button>
+
+              {bidSuccess && (
+                <div className="bg-green-900/20 border border-green-500/50 rounded-lg p-4 animate-pulse">
+                  <p className="text-green-400 text-sm font-semibold text-center">
+                    ✓ Lance enviado com sucesso!
                   </p>
                 </div>
               )}
 
-              {/* Bidding Form */}
-              <div id="fazer-lance" className="space-y-4">
-                <h3 className="text-[#E6C98B] font-bold text-xl">Fazer Lance</h3>
-                
-                {bidSuccess && (
-                  <div className="bg-green-900/20 border border-green-500/50 rounded-lg p-4 animate-pulse">
-                    <p className="text-green-400 text-sm font-semibold">
-                      ✓ Lance enviado com sucesso!
-                    </p>
-                  </div>
-                )}
-
-                {bidError && (
-                  <div className="bg-red-900/20 border border-red-500/50 rounded-lg p-4">
-                    <p className="text-red-400 text-sm">{bidError}</p>
-                  </div>
-                )}
-
-                <div>
-                  <label className="text-[#A8C97F] text-sm mb-2 block">
-                    Seu Lance (R$) {currentHighestBid && (
-                      <span className="text-xs text-[#676767]">
-                        (mínimo: R$ {currentHighestBid.toLocaleString("pt-BR")})
-                      </span>
-                    )}
-                  </label>
-                  <input
-                    type="number"
-                    value={bidValue}
-                    onChange={(e) => setBidValue(e.target.value)}
-                    min={currentHighestBid || sitio.lance_inicial || 0}
-                    step="1000"
-                    className="w-full px-4 py-3 bg-[#0a0a0a] border-2 border-[#2a2a1a] rounded-lg text-[#E6C98B] focus:border-[#A8C97F] focus:outline-none"
-                  />
+              {bidError && (
+                <div className="bg-red-900/20 border border-red-500/50 rounded-lg p-4">
+                  <p className="text-red-400 text-sm text-center">{bidError}</p>
                 </div>
-
-                <div>
-                  <label className="text-[#A8C97F] text-sm mb-2 block">
-                    Mensagem (opcional)
-                  </label>
-                  <textarea
-                    value={bidMessage}
-                    onChange={(e) => setBidMessage(e.target.value)}
-                    rows={3}
-                    placeholder="Adicione detalhes sobre sua proposta..."
-                    className="w-full px-4 py-3 bg-[#0a0a0a] border-2 border-[#2a2a1a] rounded-lg text-[#E6C98B] placeholder-[#676767] focus:border-[#A8C97F] focus:outline-none resize-none"
-                  />
-                </div>
-
-                <button
-                  onClick={handleSubmitBid}
+              )}
                   disabled={bidSubmitting}
                   className="w-full px-6 py-4 bg-gradient-to-r from-[#A8C97F] to-[#8B9B6E] text-[#0a0a0a] font-bold rounded-full shadow-xl hover:from-[#8B9B6E] hover:to-[#A8C97F] hover:scale-105 transition-all disabled:opacity-50 disabled:cursor-not-allowed text-lg"
                 >
