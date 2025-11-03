@@ -107,7 +107,7 @@ export default function CarcaraProjectPage() {
         </Link>
       </div>
 
-      {/* Hero Section - ENHANCED */}
+      {/* Hero Section - ENHANCED WITH BETTER CONTRAST */}
       <section className="relative h-[80vh] flex items-center justify-center overflow-hidden">
         <Image
           src="https://irrzpwzyqcubhhjeuakc.supabase.co/storage/v1/object/public/imagens-sitios/pordosol4mediumearthwide.jpg"
@@ -117,34 +117,54 @@ export default function CarcaraProjectPage() {
           priority
           unoptimized
         />
-        <div className="absolute inset-0 bg-gradient-to-b from-[#0a0a0a]/90 via-[#0a0a0a]/70 to-[#0a0a0a]" />
+        {/* Stronger dark overlay for better text contrast */}
+        <div className="absolute inset-0 bg-gradient-to-b from-[#0a0a0a]/95 via-[#0a0a0a]/85 to-[#0a0a0a]" />
         
         {/* 3D Carcará Bird Animation */}
-        <div className="absolute top-10 right-10 w-64 h-64 md:w-96 md:h-96 pointer-events-none z-20 opacity-80">
+        <div className="absolute top-10 left-10 w-64 h-64 md:w-96 md:h-96 pointer-events-none z-20">
           <Carcara3D scale={2.5} />
         </div>
 
+        {/* Audio control for Carcará sound */}
+        <audio id="carcara-sound" loop>
+          <source src="https://www.xeno-canto.org/sounds/uploaded/BTQHBBKHQE/XC324827-Caracara%20plancus%20-%20Southern%20Caracara%20-%20Carcara%CC%81%20-%20Poli.mp3" type="audio/mpeg" />
+        </audio>
+        <button
+          onClick={() => {
+            const audio = document.getElementById('carcara-sound') as HTMLAudioElement;
+            if (audio.paused) {
+              audio.play();
+            } else {
+              audio.pause();
+            }
+          }}
+          className="absolute top-10 right-10 px-4 py-2 bg-[#A8C97F]/30 border-2 border-[#A8C97F] rounded-full backdrop-blur-md text-[#E6C98B] hover:bg-[#A8C97F]/50 transition-all z-30"
+          aria-label="Reproduzir som do Carcará"
+        >
+          🔊 Som do Carcará
+        </button>
+
         <div className="relative z-30 text-center px-6 max-w-6xl">
-          <div className="inline-flex items-center gap-2 mb-6 px-8 py-4 bg-[#A8C97F]/30 border-2 border-[#A8C97F] rounded-full backdrop-blur-md animate-pulse">
-            <span className="text-[#A8C97F] font-bold text-xl tracking-widest uppercase">
+          <div className="inline-flex items-center gap-2 mb-6 px-8 py-4 bg-[#A8C97F]/40 border-2 border-[#A8C97F] rounded-full backdrop-blur-md animate-pulse shadow-2xl">
+            <span className="text-white font-bold text-xl tracking-widest uppercase drop-shadow-[0_2px_10px_rgba(0,0,0,0.9)]">
                LANÇAMENTO EXCLUSIVO
             </span>
           </div>
           
-          <h1 className="text-7xl md:text-9xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-[#E6C98B] via-[#A8C97F] to-[#B7791F] mb-8 leading-tight">
+          <h1 className="text-7xl md:text-9xl font-bold text-white mb-8 leading-tight drop-shadow-[0_4px_20px_rgba(0,0,0,0.9)]">
             Sítios Carcará
           </h1>
           
-          <p className="text-3xl md:text-4xl text-[#E6C98B] mb-6 leading-relaxed font-light">
+          <p className="text-3xl md:text-4xl text-white mb-6 leading-relaxed font-light drop-shadow-[0_2px_15px_rgba(0,0,0,0.9)]">
             6 Propriedades Exclusivas às Margens da Represa
           </p>
           
-          <p className="text-xl text-[#A8C97F] mb-4 max-w-4xl mx-auto">
+          <p className="text-xl text-white mb-4 max-w-4xl mx-auto drop-shadow-[0_2px_10px_rgba(0,0,0,0.9)]">
             <MapPin className="inline w-5 h-5 mr-2" />
             Corumbaíba, Goiás - Último Pontal do Rio Corumbá antes do Paranaíba
           </p>
 
-          <p className="text-lg text-[#E6C98B] mb-10 max-w-3xl mx-auto leading-relaxed">
+          <p className="text-lg text-white mb-10 max-w-3xl mx-auto leading-relaxed drop-shadow-[0_2px_10px_rgba(0,0,0,0.9)]">
             Natureza preservada, infraestrutura completa e localização privilegiada. 
             Perfeito para descanso, agricultura sustentável e investimento de longo prazo.
           </p>

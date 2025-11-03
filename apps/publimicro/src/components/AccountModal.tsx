@@ -25,16 +25,30 @@ export default function AccountModal({ open, onClose }: AccountModalProps) {
     setError('');
     
     try {
-      const { error } = await supabase.auth.signInWithOAuth({
+      // Get the current URL origin
+      const origin = typeof window !== 'undefined' ? window.location.origin : '';
+      const redirectUrl = `${origin}/api/auth/callback`;
+      
+      const { data, error } = await supabase.auth.signInWithOAuth({
         provider,
         options: {
-          redirectTo: `${window.location.origin}/api/auth/callback`,
+          redirectTo: redirectUrl,
+          queryParams: {
+            access_type: 'offline',
+            prompt: 'consent',
+          },
         },
       });
       
-      if (error) throw error;
+      if (error) {
+        console.error('OAuth error:', error);
+        throw error;
+      }
+      
+      // The modal will close automatically when auth state changes
     } catch (err: any) {
-      setError(err.message);
+      console.error('Sign in error:', err);
+      setError(err.message || 'Failed to sign in. Please try again.');
     } finally {
       setLoading(false);
     }
