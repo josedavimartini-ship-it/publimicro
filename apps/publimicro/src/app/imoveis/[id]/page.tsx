@@ -497,12 +497,6 @@ export default function PropertyPage() {
                   <p className="text-red-400 text-sm text-center">{bidError}</p>
                 </div>
               )}
-                  disabled={bidSubmitting}
-                  className="w-full px-6 py-4 bg-gradient-to-r from-[#A8C97F] to-[#8B9B6E] text-[#0a0a0a] font-bold rounded-full shadow-xl hover:from-[#8B9B6E] hover:to-[#A8C97F] hover:scale-105 transition-all disabled:opacity-50 disabled:cursor-not-allowed text-lg"
-                >
-                  {bidSubmitting ? "Enviando..." : "💰 Enviar Lance"}
-                </button>
-              </div>
 
               {/* Action Buttons */}
               <div className="pt-6 border-t border-[#2a2a1a] space-y-3">
