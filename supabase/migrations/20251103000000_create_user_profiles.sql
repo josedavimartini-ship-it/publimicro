@@ -117,14 +117,15 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
--- Drop trigger if exists, then create
-DROP TRIGGER IF EXISTS set_updated_at ON public.user_profiles;
-
--- Trigger to automatically update updated_at
-CREATE TRIGGER set_updated_at
-  BEFORE UPDATE ON public.user_profiles
-  FOR EACH ROW
-  EXECUTE FUNCTION public.handle_updated_at();
+-- Drop and recreate trigger for updated_at
+DO $$
+BEGIN
+  DROP TRIGGER IF EXISTS set_updated_at ON public.user_profiles;
+  CREATE TRIGGER set_updated_at
+    BEFORE UPDATE ON public.user_profiles
+    FOR EACH ROW
+    EXECUTE FUNCTION public.handle_updated_at();
+END $$;
 
 -- Function to automatically create profile on user signup
 CREATE OR REPLACE FUNCTION public.handle_new_user()
@@ -141,14 +142,15 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql SECURITY DEFINER;
 
--- Drop trigger if exists, then create
-DROP TRIGGER IF EXISTS on_auth_user_created ON auth.users;
-
--- Trigger to create profile when user signs up
-CREATE TRIGGER on_auth_user_created
-  AFTER INSERT ON auth.users
-  FOR EACH ROW
-  EXECUTE FUNCTION public.handle_new_user();
+-- Drop and recreate trigger for new user
+DO $$
+BEGIN
+  DROP TRIGGER IF EXISTS on_auth_user_created ON auth.users;
+  CREATE TRIGGER on_auth_user_created
+    AFTER INSERT ON auth.users
+    FOR EACH ROW
+    EXECUTE FUNCTION public.handle_new_user();
+END $$;
 
 -- Grant permissions
 GRANT ALL ON public.user_profiles TO authenticated;
