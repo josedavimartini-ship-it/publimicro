@@ -1,5 +1,4 @@
-﻿import { TopNav } from "@publimicro/ui";
-import FloatingWhatsApp from "@/components/FloatingWhatsApp";
+﻿import FloatingWhatsApp from "@/components/FloatingWhatsApp";
 import Navbar from "@/components/Navbar";
 import UserQuickPanel from "@/components/UserQuickPanel";
 import BackToTop from "@/components/BackToTop";
@@ -7,6 +6,8 @@ import MobileBottomNav from "@/components/MobileBottomNav";
 import { ToastProvider } from "@/components/ToastNotification";
 import PWAInstallPrompt from "@/components/PWAInstallPrompt";
 import ErrorBoundaryWrapper from "@/components/ErrorBoundary";
+import { AuthProvider } from "@/components/AuthProvider";
+import { TopNavWithAuth } from "@/components/TopNavWithAuth";
 import "./globals.css";
 
 export const metadata = {
@@ -68,19 +69,21 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       </head>
       <body className="min-h-screen bg-[#0a0a0a] text-[#E6C98B] antialiased" aria-label="PubliMicro Ecossistema" role="document">
         <ErrorBoundaryWrapper>
-          <ToastProvider>
-            <a href="#main-content" className="skip-to-content sr-only focus:not-sr-only focus:absolute focus:left-2 focus:top-2 z-50 bg-[#A8C97F] text-black font-bold px-4 py-2 rounded focus:outline-none focus:ring-2 focus:ring-[#B7791F]" tabIndex={0} aria-label="Pular para o conteúdo principal">Pular para o conteúdo</a>
-            <TopNav brand="PubliMicro" brandHref="/" searchTarget="local" />
-            {/* Sidebar removed - will implement as dropdown menu later */}
-            <main id="main-content" role="main">
-              {children}
-            </main>
-            <UserQuickPanel />
-            <FloatingWhatsApp />
-            <BackToTop />
-            <MobileBottomNav />
-            <PWAInstallPrompt />
-          </ToastProvider>
+          <AuthProvider>
+            <ToastProvider>
+              <a href="#main-content" className="skip-to-content sr-only focus:not-sr-only focus:absolute focus:left-2 focus:top-2 z-50 bg-[#A8C97F] text-black font-bold px-4 py-2 rounded focus:outline-none focus:ring-2 focus:ring-[#B7791F]" tabIndex={0} aria-label="Pular para o conteúdo principal">Pular para o conteúdo</a>
+              <TopNavWithAuth brand="PubliMicro" brandHref="/" searchTarget="local" />
+              {/* Sidebar removed - will implement as dropdown menu later */}
+              <main id="main-content" role="main">
+                {children}
+              </main>
+              <UserQuickPanel />
+              <FloatingWhatsApp />
+              <BackToTop />
+              <MobileBottomNav />
+              <PWAInstallPrompt />
+            </ToastProvider>
+          </AuthProvider>
         </ErrorBoundaryWrapper>
       </body>
     </html>
