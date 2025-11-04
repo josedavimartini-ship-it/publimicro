@@ -117,8 +117,8 @@ export default function CarcaraProjectPage() {
           priority
           unoptimized
         />
-        {/* Stronger dark overlay for better text contrast */}
-        <div className="absolute inset-0 bg-gradient-to-b from-[#0a0a0a]/95 via-[#0a0a0a]/85 to-[#0a0a0a]" />
+        {/* Maximum dark overlay for perfect text contrast */}
+        <div className="absolute inset-0 bg-gradient-to-b from-[#0a0a0a]/98 via-[#0a0a0a]/95 to-[#0a0a0a]" />
         
         {/* 3D Carcará Bird Animation */}
         <div className="absolute top-10 left-10 w-64 h-64 md:w-96 md:h-96 pointer-events-none z-20">
@@ -151,26 +151,34 @@ export default function CarcaraProjectPage() {
             </span>
           </div>
           
-          <h1 className="text-7xl md:text-9xl font-bold text-white mb-8 leading-tight drop-shadow-[0_4px_20px_rgba(0,0,0,0.9)]">
-            Sítios Carcará
-          </h1>
+          <div className="bg-black/70 backdrop-blur-md px-8 py-6 rounded-2xl border-2 border-[#A8C97F]/30 inline-block mb-8">
+            <h1 className="text-7xl md:text-9xl font-bold text-white leading-tight drop-shadow-[0_4px_20px_rgba(0,0,0,0.9)]">
+              Sítios Carcará
+            </h1>
+          </div>
           
-          <p className="text-3xl md:text-4xl text-white mb-6 leading-relaxed font-light drop-shadow-[0_2px_15px_rgba(0,0,0,0.9)]">
-            6 Propriedades Exclusivas às Margens da Represa
-          </p>
+          <div className="bg-black/60 backdrop-blur-sm px-6 py-4 rounded-xl max-w-5xl mx-auto mb-6">
+            <p className="text-3xl md:text-4xl text-white leading-relaxed font-light drop-shadow-[0_2px_15px_rgba(0,0,0,0.9)]">
+              6 Propriedades Exclusivas às Margens da Represa
+            </p>
+          </div>
           
-          <p className="text-xl text-white mb-4 max-w-4xl mx-auto drop-shadow-[0_2px_10px_rgba(0,0,0,0.9)]">
-            <MapPin className="inline w-5 h-5 mr-2" />
-            Corumbaíba, Goiás - Último Pontal do Rio Corumbá antes do Paranaíba
-          </p>
+          <div className="bg-black/50 backdrop-blur-sm px-6 py-3 rounded-lg inline-block mb-4">
+            <p className="text-xl text-white drop-shadow-[0_2px_10px_rgba(0,0,0,0.9)]">
+              <MapPin className="inline w-5 h-5 mr-2" />
+              Corumbaíba, Goiás - Último Pontal do Rio Corumbá antes do Paranaíba
+            </p>
+          </div>
 
-          <p className="text-lg text-white mb-10 max-w-3xl mx-auto leading-relaxed drop-shadow-[0_2px_10px_rgba(0,0,0,0.9)]">
-            Natureza preservada, infraestrutura completa e localização privilegiada. 
-            Perfeito para descanso, agricultura sustentável e investimento de longo prazo.
-          </p>
+          <div className="bg-black/50 backdrop-blur-sm px-6 py-4 rounded-lg max-w-3xl mx-auto mb-10">
+            <p className="text-lg text-white leading-relaxed drop-shadow-[0_2px_10px_rgba(0,0,0,0.9)]">
+              Natureza preservada, infraestrutura completa e localização privilegiada. 
+              Perfeito para descanso, agricultura sustentável e investimento de longo prazo.
+            </p>
+          </div>
 
-          <div className="inline-block px-6 py-3 bg-[#0D7377]/20 border-2 border-[#0D7377] rounded-full mb-8">
-            <span className="text-[#0D7377] font-bold text-2xl">
+          <div className="inline-block px-6 py-3 bg-[#A8C97F]/30 border-2 border-[#A8C97F] rounded-full mb-8 backdrop-blur-md">
+            <span className="text-white font-bold text-2xl drop-shadow-[0_2px_10px_rgba(0,0,0,0.9)]">
               Lances a partir de R$ 1.050.000
             </span>
           </div>
