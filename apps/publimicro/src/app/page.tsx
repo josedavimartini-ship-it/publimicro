@@ -201,12 +201,14 @@ export default function HomePage() {
                 <div className="absolute inset-0 bg-gradient-to-t from-black/95 via-black/75 to-black/40" />
                 <div className="relative z-10 flex flex-col items-center justify-center h-full p-6 text-center">
                   <Home className="w-16 h-16 text-[#A8C97F] mb-3 group-hover:scale-125 transition-all duration-300 drop-shadow-[0_4px_8px_rgba(0,0,0,0.9)]" strokeWidth={1.5} />
-                  <h3 className="text-2xl font-bold text-white drop-shadow-[0_4px_12px_rgba(0,0,0,1)] group-hover:text-[#A8C97F] transition-colors mb-2">
-                    PubliProper
-                  </h3>
-                  <p className="text-sm text-[#E6C98B] font-bold drop-shadow-[0_2px_8px_rgba(0,0,0,1)]">
-                    Seu lar dos sonhos
-                  </p>
+                  <div className="bg-black/80 backdrop-blur-sm px-4 py-3 rounded-lg border-2 border-[#A8C97F]/30">
+                    <h3 className="text-2xl font-bold text-white drop-shadow-[0_4px_12px_rgba(0,0,0,1)] group-hover:text-[#A8C97F] transition-colors mb-2">
+                      PubliProper
+                    </h3>
+                    <p className="text-sm text-[#E6C98B] font-bold drop-shadow-[0_2px_8px_rgba(0,0,0,1)]">
+                      Seu lar dos sonhos
+                    </p>
+                  </div>
                 </div>
               </Link>
             </div>
@@ -265,12 +267,14 @@ export default function HomePage() {
                 <div className="absolute inset-0 bg-gradient-to-t from-black/95 via-black/75 to-black/40" />
                 <div className="relative z-10 flex flex-col items-center justify-center h-full p-6 text-center">
                   <Plane className="w-16 h-16 text-[#E6C98B] mb-3 group-hover:scale-125 transition-all duration-300 drop-shadow-[0_4px_8px_rgba(0,0,0,0.9)]" strokeWidth={1.5} />
-                  <h3 className="text-2xl font-bold text-white drop-shadow-[0_4px_12px_rgba(0,0,0,1)] group-hover:text-[#B7791F] transition-colors mb-2">
-                    PubliJourney
-                  </h3>
-                  <p className="text-sm text-[#E6C98B] font-bold drop-shadow-[0_2px_8px_rgba(0,0,0,1)]">
-                    Viva experiências únicas
-                  </p>
+                  <div className="bg-black/80 backdrop-blur-sm px-4 py-3 rounded-lg border-2 border-[#E6C98B]/30">
+                    <h3 className="text-2xl font-bold text-white drop-shadow-[0_4px_12px_rgba(0,0,0,1)] group-hover:text-[#B7791F] transition-colors mb-2">
+                      PubliJourney
+                    </h3>
+                    <p className="text-sm text-[#E6C98B] font-bold drop-shadow-[0_2px_8px_rgba(0,0,0,1)]">
+                      Viva experiências únicas
+                    </p>
+                  </div>
                 </div>
               </Link>
             </div>
@@ -302,12 +306,14 @@ export default function HomePage() {
                   <div className="absolute inset-0 bg-gradient-to-t from-black/95 via-black/75 to-black/40" />
                   <div className="relative z-10 flex flex-col items-center justify-center h-full p-4 text-center">
                     <IconComponent className="w-14 h-14 text-[#E6C98B] mb-2 group-hover:scale-125 transition-all duration-300 drop-shadow-[0_4px_8px_rgba(0,0,0,0.9)]" strokeWidth={1.5} />
-                    <h3 className="text-xl font-bold text-white drop-shadow-[0_4px_12px_rgba(0,0,0,1)] group-hover:text-[#A8C97F] transition-colors mb-1">
-                      {section.name}
-                    </h3>
-                    <p className="text-xs text-[#E6C98B] font-bold drop-shadow-[0_2px_8px_rgba(0,0,0,1)]">
-                      {section.concept}
-                    </p>
+                    <div className="bg-black/80 backdrop-blur-sm px-3 py-2 rounded-lg border-2 border-[#E6C98B]/30">
+                      <h3 className="text-xl font-bold text-white drop-shadow-[0_4px_12px_rgba(0,0,0,1)] group-hover:text-[#A8C97F] transition-colors mb-1">
+                        {section.name}
+                      </h3>
+                      <p className="text-xs text-[#E6C98B] font-bold drop-shadow-[0_2px_8px_rgba(0,0,0,1)]">
+                        {section.concept}
+                      </p>
+                    </div>
                   </div>
                 </Link>
               );
@@ -340,12 +346,14 @@ export default function HomePage() {
                   <div className="absolute inset-0 bg-gradient-to-t from-black/95 via-black/75 to-black/40" />
                   <div className="relative z-10 flex flex-col items-center justify-center h-full p-4 text-center">
                     <IconComponent className="w-14 h-14 text-[#E6C98B] mb-2 group-hover:scale-125 transition-all duration-300 drop-shadow-[0_4px_8px_rgba(0,0,0,0.9)]" strokeWidth={1.5} />
-                    <h3 className="text-xl font-bold text-white drop-shadow-[0_4px_12px_rgba(0,0,0,1)] group-hover:text-[#B7791F] transition-colors mb-1">
-                      {section.name}
-                    </h3>
-                    <p className="text-xs text-[#E6C98B] font-bold drop-shadow-[0_2px_8px_rgba(0,0,0,1)]">
-                      {section.concept}
-                    </p>
+                    <div className="bg-black/85 backdrop-blur-sm px-4 py-2 rounded-lg border-2 border-[#A8C97F]/30">
+                      <h3 className="text-xl font-bold text-white drop-shadow-[0_4px_12px_rgba(0,0,0,1)] group-hover:text-[#A8C97F] transition-colors mb-1">
+                        {section.name}
+                      </h3>
+                      <p className="text-xs text-[#E6C98B] font-bold drop-shadow-[0_2px_8px_rgba(0,0,0,1)]">
+                        {section.concept}
+                      </p>
+                    </div>
                   </div>
                 </Link>
               );
