@@ -2,8 +2,8 @@ import type { Metadata } from "next"
 import Link from "next/link"
 
 export const metadata: Metadata = {
-  title: "Proper Urban — Imóveis Urbanos",
-  description: "Apartamentos, casas, imóveis comerciais e terrenos urbanos em todo o Brasil",
+  title: "Proper Urban ï¿½ Imï¿½veis Urbanos",
+  description: "Apartamentos, casas, imï¿½veis comerciais e terrenos urbanos em todo o Brasil",
 }
 
 const propertyTypes = [
@@ -16,10 +16,10 @@ const propertyTypes = [
 ]
 
 const featuredCities = [
-  "São Paulo, SP",
+  "Sï¿½o Paulo, SP",
   "Rio de Janeiro, RJ",
   "Belo Horizonte, MG",
-  "Brasília, DF",
+  "Brasï¿½lia, DF",
   "Curitiba, PR",
   "Porto Alegre, RS",
 ]
@@ -44,7 +44,7 @@ export default function ProperUrbanPage() {
             href="/post"
             className="px-4 py-2 bg-amber-500 hover:bg-amber-400 text-black text-sm font-semibold rounded-lg transition-all"
           >
-            Anunciar Imóvel
+            Anunciar Imï¿½vel
           </Link>
         </div>
       </nav>
@@ -56,7 +56,7 @@ export default function ProperUrbanPage() {
           Proper Urban
         </h1>
         <p className="text-[#bfa97a] max-w-2xl mx-auto text-lg">
-          Imóveis urbanos em capitais e grandes cidades. Apartamentos, casas, 
+          Imï¿½veis urbanos em capitais e grandes cidades. Apartamentos, casas, 
           comerciais e oportunidades de investimento.
         </p>
       </section>
@@ -65,7 +65,7 @@ export default function ProperUrbanPage() {
       <section className="max-w-7xl mx-auto px-6 py-12 w-full">
         <div className="bg-[#0b0b0b] border border-[#242424] rounded-xl p-6">
           <h2 className="text-xl font-semibold text-[#e6c86b] mb-6">
-            Encontre seu Imóvel Urbano
+            Encontre seu Imï¿½vel Urbano
           </h2>
 
           <form className="space-y-4">
@@ -87,7 +87,7 @@ export default function ProperUrbanPage() {
 
               <div>
                 <label htmlFor="type" className="block text-sm text-[#bfa97a] mb-2">
-                  Tipo de Imóvel
+                  Tipo de Imï¿½vel
                 </label>
                 <select
                   id="type"
@@ -120,7 +120,7 @@ export default function ProperUrbanPage() {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
                 <label htmlFor="price-min" className="block text-sm text-[#bfa97a] mb-2">
-                  Preço Mínimo
+                  Preï¿½o Mï¿½nimo
                 </label>
                 <input
                   id="price-min"
@@ -132,7 +132,7 @@ export default function ProperUrbanPage() {
 
               <div>
                 <label htmlFor="price-max" className="block text-sm text-[#bfa97a] mb-2">
-                  Preço Máximo
+                  Preï¿½o Mï¿½ximo
                 </label>
                 <input
                   id="price-max"
@@ -147,7 +147,7 @@ export default function ProperUrbanPage() {
               type="submit"
               className="w-full rounded-lg bg-amber-500 hover:bg-amber-400 px-6 py-4 font-semibold text-black transition-all hover:scale-[1.02]"
             >
-              Buscar Imóveis Urbanos
+              Buscar Imï¿½veis Urbanos
             </button>
           </form>
         </div>
@@ -195,10 +195,10 @@ export default function ProperUrbanPage() {
               <div className="p-6">
                 <div className="text-xs text-amber-500 mb-2">DESTAQUE</div>
                 <h3 className="font-bold text-[#e6c86b] mb-2">
-                  Imóvel em Destaque {i}
+                  Imï¿½vel em Destaque {i}
                 </h3>
                 <p className="text-sm text-[#bfa97a] mb-4">
-                  Localização premium • Acabamento de alto padrão
+                  Localizaï¿½ï¿½o premium ï¿½ Acabamento de alto padrï¿½o
                 </p>
                 <div className="text-xl font-bold text-[#cfa847]">
                   R$ {(250000 + i * 100000).toLocaleString('pt-BR')}
@@ -212,7 +212,7 @@ export default function ProperUrbanPage() {
       {/* Footer */}
       <footer className="border-t border-[#242424] bg-[#0b0b0b] px-6 py-8 mt-12">
         <div className="max-w-7xl mx-auto text-center text-sm text-[#bfa97a]">
-          <p>© 2025 Publimicro Proper Urban. Todos os direitos reservados.</p>
+          <p>Â© {new Date().getFullYear()} AcheMeUrbanPropers. All rights reserved.</p>
         </div>
       </footer>
     </main>

@@ -74,10 +74,10 @@ export default function RuralPage() {
         {/* More properties coming soon */}
         <div className="text-center py-16 bg-[#1a1a1a] rounded-2xl border-2 border-[#2a2a1a]">
           <Trees className="w-12 h-12 text-[#676767] mx-auto mb-4" />
-          <h3 className="text-2xl font-bold text-[#676767] mb-2">Mais propriedades em breve</h3>
-          <p className="text-[#676767] mb-6">Estamos preparando novos sítios e fazendas para você.</p>
+          <h3 className="text-2xl font-bold text-[#676767] mb-2">More properties coming soon</h3>
+          <p className="text-[#676767] mb-6">We're preparing new sítios and fazendas for you.</p>
           <Link href="/proper" className="text-[#B7791F] hover:text-[#A8C97F] transition-colors">
-            ← Voltar para PubliProper
+            ← Back to AcheMePropers
           </Link>
         </div>
       </div>

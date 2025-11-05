@@ -15,10 +15,10 @@ export default function UrbanPage() {
         
         <div className="py-16 bg-[#1a1a1a] rounded-2xl border-2 border-[#2a2a1a]">
           <Building2 className="w-12 h-12 text-[#676767] mx-auto mb-4" />
-          <h3 className="text-2xl font-bold text-[#676767] mb-2">Em breve</h3>
-          <p className="text-[#676767] mb-6">Estamos preparando oportunidades urbanas exclusivas.</p>
+          <h3 className="text-2xl font-bold text-[#676767] mb-2">Coming Soon</h3>
+          <p className="text-[#676767] mb-6">We're preparing exclusive urban opportunities.</p>
           <Link href="/proper" className="text-[#B7791F] hover:text-[#A8C97F] transition-colors">
-            ← Voltar para PubliProper
+            ← Back to AcheMePropers
           </Link>
         </div>
       </div>

@@ -7,7 +7,7 @@ export default function Navbar() {
   return (
     <nav className="w-full bg-proper-darkgray border-b border-proper-moss flex justify-between items-center px-8 py-4 shadow-md">
       <Link href="/" className="text-proper-gold text-2xl font-semibold tracking-wide">
-        PubliProper
+        AcheMePropers
       </Link>
 
       <div className="flex items-center space-x-8">
