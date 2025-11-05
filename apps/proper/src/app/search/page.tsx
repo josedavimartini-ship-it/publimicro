@@ -9,6 +9,7 @@ import {
 } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
+import PropertyCard from "../components/PropertyCard";
 
 // Property type configurations
 const PROPERTY_TYPES = [
@@ -383,90 +384,13 @@ export default function SearchPage() {
                 </div>
 
                 <div className="grid md:grid-cols-2 xl:grid-cols-3 gap-6">
-                  {properties.map((property) => {
-                    const IconComponent = getPropertyTypeIcon(property.property_type);
-                    return (
-                      <Link
-                        key={property.id}
-                        href={`/property/${property.slug}`}
-                        className="group bg-gradient-to-br from-[#1a1a1a] to-[#0d0d0d] border-2 border-[#2a2a1a] hover:border-[#B87333] rounded-2xl overflow-hidden transition-all hover:scale-[1.02] shadow-xl"
-                      >
-                        {/* Image */}
-                        <div className="relative h-56 overflow-hidden">
-                          <Image
-                            src={getCoverPhoto(property.property_photos)}
-                            alt={property.title}
-                            fill
-                            className="object-cover group-hover:scale-110 transition-transform duration-500"
-                            unoptimized
-                          />
-                          {property.featured && (
-                            <div className="absolute top-4 left-4 px-3 py-1 bg-[#FFD700] text-[#0a0a0a] font-bold rounded-full text-sm z-10">
-                              ⭐ Featured
-                            </div>
-                          )}
-                          <div className="absolute top-4 right-4 px-3 py-1 bg-[#B87333] text-white font-semibold rounded-full text-sm z-10 capitalize">
-                            {property.transaction_type}
-                          </div>
-                        </div>
-
-                        {/* Content */}
-                        <div className="p-5">
-                          {/* Type Badge */}
-                          <div className="flex items-center gap-2 mb-3">
-                            <IconComponent className="w-4 h-4 text-[#B87333]" />
-                            <span className="text-sm text-[#676767] capitalize">
-                              {property.property_type.replace('_', ' ')}
-                            </span>
-                          </div>
-
-                          {/* Title */}
-                          <h3 className="text-xl font-bold text-[#e6c86b] mb-2 line-clamp-2 group-hover:text-[#FFD700] transition">
-                            {property.title}
-                          </h3>
-
-                          {/* Location */}
-                          <div className="flex items-center gap-2 text-sm text-[#676767] mb-4">
-                            <MapPin className="w-4 h-4" />
-                            <span>{property.city}, {property.state}</span>
-                          </div>
-
-                          {/* Features */}
-                          <div className="flex items-center gap-4 mb-4 text-sm text-[#d8c68e]">
-                            {property.bedrooms > 0 && (
-                              <div className="flex items-center gap-1">
-                                <BedDouble className="w-4 h-4" />
-                                <span>{property.bedrooms}</span>
-                              </div>
-                            )}
-                            {property.bathrooms > 0 && (
-                              <div className="flex items-center gap-1">
-                                <Bath className="w-4 h-4" />
-                                <span>{property.bathrooms}</span>
-                              </div>
-                            )}
-                            {property.parking_spaces > 0 && (
-                              <div className="flex items-center gap-1">
-                                <Car className="w-4 h-4" />
-                                <span>{property.parking_spaces}</span>
-                              </div>
-                            )}
-                            {property.total_area > 0 && (
-                              <div className="flex items-center gap-1">
-                                <Ruler className="w-4 h-4" />
-                                <span>{property.total_area}m²</span>
-                              </div>
-                            )}
-                          </div>
-
-                          {/* Price */}
-                          <div className="text-2xl font-bold text-[#B87333]">
-                            {formatPrice(property.price)}
-                          </div>
-                        </div>
-                      </Link>
-                    );
-                  })}
+                  {properties.map((property) => (
+                    <PropertyCard
+                      key={property.id}
+                      property={property}
+                      showFazerProposta={false}
+                    />
+                  ))}
                 </div>
               </>
             )}

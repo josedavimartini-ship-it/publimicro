@@ -88,8 +88,8 @@
       "icons": [{ "src": "/icons/icon-96x96.svg", "sizes": "96x96" }]
     },
     {
-      "name": "Favorites",
-      "short_name": "Favorites",
+      "name": "Gostei",
+      "short_name": "Gostei",
       "description": "View saved favorites",
       "url": "/favoritos",
       "icons": [{ "src": "/icons/icon-96x96.svg", "sizes": "96x96" }]

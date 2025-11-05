@@ -1,6 +1,6 @@
 "use client";
 
-import { Heart, Upload, User } from "lucide-react";
+import { Heart, PlusCircle, User } from "lucide-react";
 import Link from "next/link";
 
 export default function Navbar() {
@@ -12,12 +12,12 @@ export default function Navbar() {
 
       <div className="flex items-center space-x-8">
         <Link href="/favoritos" className="flex items-center space-x-2 hover:text-proper-gold transition">
-          <Heart className="w-5 h-5" />
-          <span>Favoritos</span>
+          <Heart className="w-5 h-5 fill-proper-gold" />
+          <span>Gostei</span>
         </Link>
 
         <Link href="/postar" className="flex items-center space-x-2 hover:text-proper-orange transition">
-          <Upload className="w-5 h-5" />
+          <PlusCircle className="w-5 h-5" />
           <span>Postar</span>
         </Link>
 

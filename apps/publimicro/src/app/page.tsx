@@ -408,7 +408,7 @@ export default function HomePage() {
           </div>
         </section>
 
-        {/* Featured Properties with Bidding Schema */}
+        {/* Featured Properties - Sítios Carcará with Enhanced Cards */}
         {!loading && sitios.length > 0 && (
           <section className="py-16">
             <h2 className="text-4xl font-bold text-[#E6C98B] mb-12 text-center">
@@ -419,10 +419,31 @@ export default function HomePage() {
                 {errorMsg}
               </div>
             )}
-            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {sitios.map((sitio) => {
                 const fotoUrl = getFirstPhoto(sitio.fotos);
                 console.log(`Sitio ${sitio.nome} photo URL:`, fotoUrl);
+                
+                // Transform sitio data to match PropertyCard interface
+                const propertyData = {
+                  id: sitio.id,
+                  title: sitio.nome,
+                  description: sitio.localizacao || '',
+                  property_type: 'sitio',
+                  transaction_type: 'auction',
+                  price: sitio.lance_inicial || sitio.preco || 0,
+                  total_area: 0, // Add if available in sitio data
+                  city: sitio.localizacao || 'Corumbaíba',
+                  state: 'GO',
+                  country: 'Brasil',
+                  slug: sitio.id,
+                  featured: sitio.destaque || false,
+                  property_photos: sitio.fotos?.map((url: string, index: number) => ({
+                    url,
+                    is_cover: index === 0
+                  })) || [{ url: fotoUrl, is_cover: true }]
+                };
+                
                 return (
                   <div 
                     key={sitio.id}
@@ -457,23 +478,28 @@ export default function HomePage() {
                         <h3 className="text-lg font-bold text-[#D4A574] line-clamp-1">{sitio.nome}</h3>
                         {sitio.localizacao && <p className="text-[#8B9B6E] text-xs line-clamp-1">{sitio.localizacao}</p>}
                         
-                        {/* Bidding Schema Box */}
+                        {/* Bidding Schema Box - Enhanced */}
                         {typeof sitio.lance_inicial === "number" && (
-                          <div className="bg-[#4A4E4D] rounded-lg p-3 border border-[#A8C97F]/40">
+                          <div className="bg-[#4A4E4D] rounded-lg p-3 border border-[#A8C97F]/40 hover:border-[#A8C97F]/70 transition-all">
                             <div className="text-[#E6C98B] text-xs font-semibold mb-1">Lance Inicial</div>
                             <div className="text-[#A8C97F] font-bold text-xl">
                               R$ {sitio.lance_inicial.toLocaleString("pt-BR")}
                             </div>
+                            {sitio.preco && sitio.preco > sitio.lance_inicial && (
+                              <div className="text-[#8B9B6E] text-xs mt-1">
+                                Valor: R$ {sitio.preco.toLocaleString("pt-BR")}
+                              </div>
+                            )}
                           </div>
                         )}
                       </div>
                     </Link>
                     
-                    {/* Action Button - Outside Link */}
+                    {/* Action Button - Enhanced with hover effects */}
                     <div className="px-4 pb-4">
                       <button
                         onClick={() => handleFazerProposta(sitio.id, sitio.nome)}
-                        className="flex items-center justify-center gap-2 w-full px-6 py-5 bg-gradient-to-r from-[#B7791F] to-[#D4A574] hover:from-[#D4A574] hover:to-[#B7791F] text-white font-bold rounded-lg transition-all hover:scale-105 shadow-lg text-base"
+                        className="flex items-center justify-center gap-2 w-full px-6 py-5 bg-gradient-to-r from-[#B7791F] to-[#D4A574] hover:from-[#D4A574] hover:to-[#B7791F] text-white font-bold rounded-lg transition-all hover:scale-105 hover:shadow-2xl shadow-lg text-base"
                       >
                         <Handshake className="w-6 h-6" />
                         <span>Fazer Proposta</span>

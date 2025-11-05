@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ACHEME App Icon Generator</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 40px;
+      background: #1a1a1a;
+      color: #fff;
+      font-family: system-ui, -apple-system, sans-serif;
+    }
+    h1 {
+      background: linear-gradient(135deg, #B87333, #D4A574, #FFD700);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin-bottom: 20px;
+    }
+    .icons-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 30px;
+      margin-top: 40px;
+    }
+    .icon-container {
+      text-align: center;
+    }
+    .icon-container h3 {
+      color: #D4A574;
+      margin-bottom: 10px;
+      font-size: 14px;
+    }
+    canvas {
+      border: 2px solid #333;
+      border-radius: 20px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+      max-width: 100%;
+      height: auto;
+    }
+    button {
+      margin-top: 15px;
+      padding: 10px 20px;
+      background: linear-gradient(135deg, #B87333, #FFD700);
+      color: #000;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: bold;
+      transition: transform 0.2s;
+    }
+    button:hover {
+      transform: scale(1.05);
+    }
+    .instructions {
+      background: #2a2a2a;
+      padding: 20px;
+      border-radius: 10px;
+      margin-bottom: 30px;
+      border-left: 4px solid #FFD700;
+    }
+  </style>
+</head>
+<body>
+  <h1>🦅 ACHEME App Icon Generator</h1>
+  
+  <div class="instructions">
+    <h3>📱 Instructions</h3>
+    <p><strong>Google Play Store:</strong> Download the 1024x1024 icon and the adaptive icon layers</p>
+    <p><strong>Apple App Store:</strong> Download the 1024x1024 icon - iOS will auto-generate other sizes</p>
+    <p><strong>PWA:</strong> Icons are auto-generated in various sizes for web app manifest</p>
+  </div>
+
+  <div class="icons-grid">
+    <!-- iOS 1024x1024 -->
+    <div class="icon-container">
+      <h3>iOS App Store Icon</h3>
+      <p style="color: #888; font-size: 12px;">1024 × 1024</p>
+      <canvas id="ios-1024" width="1024" height="1024"></canvas>
+      <button onclick="downloadIcon('ios-1024', 'acheme-ios-1024.png')">Download PNG</button>
+    </div>
+
+    <!-- Android 1024x1024 -->
+    <div class="icon-container">
+      <h3>Android Play Store Icon</h3>
+      <p style="color: #888; font-size: 12px;">1024 × 1024</p>
+      <canvas id="android-1024" width="1024" height="1024"></canvas>
+      <button onclick="downloadIcon('android-1024', 'acheme-android-1024.png')">Download PNG</button>
+    </div>
+
+    <!-- Android Adaptive - Foreground -->
+    <div class="icon-container">
+      <h3>Android Adaptive - Foreground</h3>
+      <p style="color: #888; font-size: 12px;">1024 × 1024 (Transparent)</p>
+      <canvas id="android-foreground" width="1024" height="1024"></canvas>
+      <button onclick="downloadIcon('android-foreground', 'acheme-android-foreground.png')">Download PNG</button>
+    </div>
+
+    <!-- Android Adaptive - Background -->
+    <div class="icon-container">
+      <h3>Android Adaptive - Background</h3>
+      <p style="color: #888; font-size: 12px;">1024 × 1024</p>
+      <canvas id="android-background" width="1024" height="1024"></canvas>
+      <button onclick="downloadIcon('android-background', 'acheme-android-background.png')">Download PNG</button>
+    </div>
+
+    <!-- PWA 512x512 -->
+    <div class="icon-container">
+      <h3>PWA Icon Large</h3>
+      <p style="color: #888; font-size: 12px;">512 × 512</p>
+      <canvas id="pwa-512" width="512" height="512"></canvas>
+      <button onclick="downloadIcon('pwa-512', 'acheme-pwa-512.png')">Download PNG</button>
+    </div>
+
+    <!-- PWA 192x192 -->
+    <div class="icon-container">
+      <h3>PWA Icon Small</h3>
+      <p style="color: #888; font-size: 12px;">192 × 192</p>
+      <canvas id="pwa-192" width="192" height="192"></canvas>
+      <button onclick="downloadIcon('pwa-192', 'acheme-pwa-192.png')">Download PNG</button>
+    </div>
+  </div>
+
+  <script>
+    // Draw icon on canvas
+    function drawIcon(canvasId, size, isAdaptiveForeground = false, isAdaptiveBackground = false) {
+      const canvas = document.getElementById(canvasId);
+      const ctx = canvas.getContext('2d');
+      const scale = size / 512;
+
+      // Clear canvas
+      ctx.clearRect(0, 0, size, size);
+
+      if (isAdaptiveBackground) {
+        // Adaptive background - solid gradient
+        const bgGradient = ctx.createLinearGradient(0, 0, size, size);
+        bgGradient.addColorStop(0, '#1a1a1a');
+        bgGradient.addColorStop(1, '#0a0a0a');
+        ctx.fillStyle = bgGradient;
+        ctx.fillRect(0, 0, size, size);
+        return;
+      }
+
+      // Background (skip for adaptive foreground)
+      if (!isAdaptiveForeground) {
+        const bgGradient = ctx.createLinearGradient(0, 0, size, size);
+        bgGradient.addColorStop(0, '#1a1a1a');
+        bgGradient.addColorStop(1, '#0a0a0a');
+        ctx.fillStyle = bgGradient;
+        
+        // Rounded rectangle for iOS
+        if (canvasId.includes('ios')) {
+          ctx.beginPath();
+          ctx.roundRect(0, 0, size, size, size * 0.2);
+          ctx.fill();
+        } else {
+          ctx.fillRect(0, 0, size, size);
+        }
+      }
+
+      // Create gradients
+      const iconGradient = ctx.createLinearGradient(0, 0, size, size);
+      iconGradient.addColorStop(0, '#B87333');
+      iconGradient.addColorStop(0.5, '#D4A574');
+      iconGradient.addColorStop(1, '#FFD700');
+
+      // Center point
+      const cx = size / 2;
+      const cy = size / 2;
+
+      // Draw Magnifying Glass
+      const glassX = cx + size * 0.15;
+      const glassY = cy - size * 0.1;
+      const glassRadius = size * 0.23;
+
+      // Glass circle
+      ctx.strokeStyle = iconGradient;
+      ctx.lineWidth = size * 0.03;
+      ctx.beginPath();
+      ctx.arc(glassX, glassY, glassRadius, 0, Math.PI * 2);
+      ctx.stroke();
+
+      // Glass fill (slight transparency)
+      const glassGradient = ctx.createRadialGradient(glassX, glassY, 0, glassX, glassY, glassRadius);
+      glassGradient.addColorStop(0, 'rgba(255, 255, 255, 0.15)');
+      glassGradient.addColorStop(0.5, 'rgba(255, 255, 255, 0.08)');
+      glassGradient.addColorStop(1, 'rgba(212, 165, 116, 0.1)');
+      ctx.fillStyle = glassGradient;
+      ctx.fill();
+
+      // Glass reflection
+      ctx.strokeStyle = 'rgba(255, 255, 255, 0.4)';
+      ctx.lineWidth = size * 0.008;
+      ctx.lineCap = 'round';
+      ctx.beginPath();
+      ctx.arc(glassX - glassRadius * 0.3, glassY - glassRadius * 0.4, glassRadius * 0.4, 0.8, 2.3);
+      ctx.stroke();
+
+      // Handle
+      ctx.strokeStyle = iconGradient;
+      ctx.lineWidth = size * 0.04;
+      ctx.lineCap = 'round';
+      ctx.beginPath();
+      ctx.moveTo(glassX + glassRadius * 0.7, glassY + glassRadius * 0.7);
+      ctx.lineTo(glassX + glassRadius * 1.4, glassY + glassRadius * 1.4);
+      ctx.stroke();
+
+      // Draw Emu Bird
+      const emuX = cx - size * 0.22;
+      const emuY = cy + size * 0.05;
+
+      // Body
+      ctx.fillStyle = iconGradient;
+      ctx.beginPath();
+      ctx.ellipse(emuX, emuY + size * 0.08, size * 0.12, size * 0.18, 0, 0, Math.PI * 2);
+      ctx.fill();
+
+      // Neck
+      ctx.strokeStyle = iconGradient;
+      ctx.lineWidth = size * 0.05;
+      ctx.lineCap = 'round';
+      ctx.beginPath();
+      ctx.moveTo(emuX, emuY - size * 0.05);
+      ctx.quadraticCurveTo(emuX + size * 0.03, emuY - size * 0.15, emuX + size * 0.08, emuY - size * 0.20);
+      ctx.stroke();
+
+      // Head
+      ctx.fillStyle = iconGradient;
+      ctx.beginPath();
+      ctx.arc(emuX + size * 0.09, emuY - size * 0.22, size * 0.04, 0, Math.PI * 2);
+      ctx.fill();
+
+      // Eye
+      ctx.fillStyle = '#FFD700';
+      ctx.beginPath();
+      ctx.arc(emuX + size * 0.105, emuY - size * 0.225, size * 0.012, 0, Math.PI * 2);
+      ctx.fill();
+
+      // Eye pupil
+      ctx.fillStyle = '#2a2a1a';
+      ctx.beginPath();
+      ctx.arc(emuX + size * 0.105, emuY - size * 0.225, size * 0.006, 0, Math.PI * 2);
+      ctx.fill();
+
+      // Beak
+      ctx.fillStyle = '#CD7F32';
+      ctx.beginPath();
+      ctx.moveTo(emuX + size * 0.12, emuY - size * 0.22);
+      ctx.lineTo(emuX + size * 0.16, emuY - size * 0.215);
+      ctx.lineTo(emuX + size * 0.12, emuY - size * 0.21);
+      ctx.closePath();
+      ctx.fill();
+
+      // Sparkles around magnifying glass
+      ctx.fillStyle = '#FFD700';
+      const sparkles = [
+        [glassX + glassRadius * 1.1, glassY - glassRadius * 0.8],
+        [glassX + glassRadius * 1.3, glassY - glassRadius * 0.3],
+        [glassX + glassRadius * 0.9, glassY - glassRadius * 1.2],
+      ];
+
+      sparkles.forEach(([x, y]) => {
+        const sparkleSize = size * 0.02;
+        ctx.beginPath();
+        ctx.moveTo(x, y - sparkleSize);
+        ctx.lineTo(x + sparkleSize * 0.3, y - sparkleSize * 0.3);
+        ctx.lineTo(x + sparkleSize, y);
+        ctx.lineTo(x + sparkleSize * 0.3, y + sparkleSize * 0.3);
+        ctx.lineTo(x, y + sparkleSize);
+        ctx.lineTo(x - sparkleSize * 0.3, y + sparkleSize * 0.3);
+        ctx.lineTo(x - sparkleSize, y);
+        ctx.lineTo(x - sparkleSize * 0.3, y - sparkleSize * 0.3);
+        ctx.closePath();
+        ctx.fill();
+      });
+    }
+
+    // Download function
+    function downloadIcon(canvasId, filename) {
+      const canvas = document.getElementById(canvasId);
+      const link = document.createElement('a');
+      link.download = filename;
+      link.href = canvas.toDataURL('image/png');
+      link.click();
+    }
+
+    // Generate all icons on load
+    window.onload = () => {
+      drawIcon('ios-1024', 1024);
+      drawIcon('android-1024', 1024);
+      drawIcon('android-foreground', 1024, true);
+      drawIcon('android-background', 1024, false, true);
+      drawIcon('pwa-512', 512);
+      drawIcon('pwa-192', 192);
+    };
+  </script>
+</body>
+</html>
