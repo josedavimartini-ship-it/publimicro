@@ -145,40 +145,46 @@ export default function CarcaraProjectPage() {
         </button>
 
         <div className="relative z-30 text-center px-6 max-w-6xl">
-          <div className="inline-flex items-center gap-2 mb-6 px-8 py-4 bg-[#A8C97F]/40 border-2 border-[#A8C97F] rounded-full backdrop-blur-md animate-pulse shadow-2xl">
-            <span className="text-white font-bold text-xl tracking-widest uppercase drop-shadow-[0_2px_10px_rgba(0,0,0,0.9)]">
+          {/* Exclusive Launch Badge - Elegant with minimal background */}
+          <div className="inline-flex items-center gap-2 mb-6 px-8 py-4 bg-gradient-to-r from-[#1a1a1a]/60 to-[#2a2a2a]/60 border-2 border-[#D4A574] rounded-full backdrop-blur-xl animate-pulse shadow-2xl">
+            <span className="text-[#D4A574] font-bold text-xl tracking-widest uppercase drop-shadow-[0_4px_12px_rgba(212,165,116,0.8)]" style={{textShadow: '0 0 20px rgba(212,165,116,0.6), 0 4px 8px rgba(0,0,0,1)'}}>
                LANÇAMENTO EXCLUSIVO
             </span>
           </div>
           
-          <div className="bg-black/70 backdrop-blur-md px-8 py-6 rounded-2xl border-2 border-[#A8C97F]/30 inline-block mb-8">
-            <h1 className="text-7xl md:text-9xl font-bold text-white leading-tight drop-shadow-[0_4px_20px_rgba(0,0,0,0.9)]">
+          {/* Main Title - Minimal elegant box */}
+          <div className="bg-gradient-to-b from-[#0D0D0D]/50 via-[#1a1a1a]/40 to-transparent backdrop-blur-md px-8 py-6 rounded-2xl border border-[#B7791F]/30 inline-block mb-8">
+            <h1 className="text-7xl md:text-9xl font-bold bg-gradient-to-b from-white via-[#E6C98B] to-[#B7791F] bg-clip-text text-transparent leading-tight drop-shadow-[0_8px_24px_rgba(0,0,0,1)]" style={{textShadow: '0 0 40px rgba(230,201,139,0.3)'}}>
               Sítios Carcará
             </h1>
           </div>
           
-          <div className="bg-black/60 backdrop-blur-sm px-6 py-4 rounded-xl max-w-5xl mx-auto mb-6">
-            <p className="text-3xl md:text-4xl text-white leading-relaxed font-light drop-shadow-[0_2px_15px_rgba(0,0,0,0.9)]">
+          {/* Subtitle - Refined semi-transparent */}
+          <div className="bg-gradient-to-r from-transparent via-[#0D0D0D]/40 to-transparent backdrop-blur-sm px-6 py-4 rounded-xl max-w-5xl mx-auto mb-6">
+            <p className="text-3xl md:text-4xl text-white leading-relaxed font-light drop-shadow-[0_6px_20px_rgba(0,0,0,1)]" style={{textShadow: '0 0 30px rgba(255,255,255,0.2), 0 4px 12px rgba(0,0,0,1)'}}>
               6 Propriedades Exclusivas às Margens da Represa
             </p>
           </div>
           
-          <div className="bg-black/50 backdrop-blur-sm px-6 py-3 rounded-lg inline-block mb-4">
-            <p className="text-xl text-white drop-shadow-[0_2px_10px_rgba(0,0,0,0.9)]">
+          {/* Location - Sleek minimal background */}
+          <div className="bg-[#0D0D0D]/30 backdrop-blur-sm px-6 py-3 rounded-lg inline-block mb-4 border border-[#A8C97F]/20">
+            <p className="text-xl text-[#E6C98B] drop-shadow-[0_4px_12px_rgba(0,0,0,1)]" style={{textShadow: '0 0 20px rgba(230,201,139,0.4), 0 2px 8px rgba(0,0,0,1)'}}>
               <MapPin className="inline w-5 h-5 mr-2" />
               Corumbaíba, Goiás - Último Pontal do Rio Corumbá antes do Paranaíba
             </p>
           </div>
 
-          <div className="bg-black/50 backdrop-blur-sm px-6 py-4 rounded-lg max-w-3xl mx-auto mb-10">
-            <p className="text-lg text-white leading-relaxed drop-shadow-[0_2px_10px_rgba(0,0,0,0.9)]">
+          {/* Description - Very subtle background */}
+          <div className="bg-gradient-to-b from-[#0D0D0D]/25 to-transparent backdrop-blur-sm px-6 py-4 rounded-lg max-w-3xl mx-auto mb-10">
+            <p className="text-lg text-white leading-relaxed drop-shadow-[0_4px_12px_rgba(0,0,0,1)]" style={{textShadow: '0 2px 8px rgba(0,0,0,1), 0 0 20px rgba(255,255,255,0.1)'}}>
               Natureza preservada, infraestrutura completa e localização privilegiada. 
               Perfeito para descanso, agricultura sustentável e investimento de longo prazo.
             </p>
           </div>
 
-          <div className="inline-block px-6 py-3 bg-[#A8C97F]/30 border-2 border-[#A8C97F] rounded-full mb-8 backdrop-blur-md">
-            <span className="text-white font-bold text-2xl drop-shadow-[0_2px_10px_rgba(0,0,0,0.9)]">
+          {/* Price Badge - Elegant premium look */}
+          <div className="inline-block px-6 py-3 bg-gradient-to-r from-[#B7791F]/30 via-[#D4A574]/20 to-[#B7791F]/30 border-2 border-[#D4A574] rounded-full mb-8 backdrop-blur-md shadow-[0_0_30px_rgba(212,165,116,0.4)]">
+            <span className="text-[#E6C98B] font-bold text-2xl drop-shadow-[0_4px_12px_rgba(0,0,0,1)]" style={{textShadow: '0 0 25px rgba(230,201,139,0.5), 0 4px 8px rgba(0,0,0,1)'}}>
               Lances a partir de R$ 1.050.000
             </span>
           </div>
@@ -186,43 +192,31 @@ export default function CarcaraProjectPage() {
           <div className="flex gap-6 justify-center flex-wrap">
             <a
               href="#sitios"
-              className="px-12 py-6 bg-gradient-to-r from-[#A8C97F] to-[#8B9B6E] hover:from-[#8B9B6E] hover:to-[#A8C97F] text-black text-xl font-bold rounded-full transition-all hover:scale-110 shadow-2xl focus:outline-none focus:ring-4 focus:ring-[#A8C97F]"
+              className="px-16 py-8 bg-gradient-to-r from-[#A8C97F] to-[#8B9B6E] hover:from-[#8B9B6E] hover:to-[#A8C97F] text-black text-2xl font-bold rounded-full transition-all hover:scale-110 shadow-2xl focus:outline-none focus:ring-4 focus:ring-[#A8C97F]"
               aria-label="Ver propriedades disponíveis"
               tabIndex={0}
               role="button"
             >
                Ver Propriedades
             </a>
-            <a
-              href="https://wa.me/5534992610004?text=Olá! Gostaria de conhecer os Sítios Carcará"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="px-12 py-6 border-4 border-[#25D366] text-[#25D366] hover:bg-[#25D366]/10 text-xl font-bold rounded-full transition-all hover:scale-110 flex items-center gap-3 focus:outline-none focus:ring-4 focus:ring-[#25D366]"
-              aria-label="Fale conosco no WhatsApp"
-              tabIndex={0}
-              role="button"
-            >
-              <Phone className="w-6 h-6" />
-              Contato WhatsApp
-            </a>
             <button
               type="button"
-              className="px-12 py-6 bg-gradient-to-r from-[#0D7377] to-[#5F7161] text-[#E6C98B] font-bold rounded-full shadow-lg transition-all hover:scale-110 flex items-center gap-3 focus:outline-none focus:ring-4 focus:ring-[#0D7377]"
+              className="px-16 py-8 bg-gradient-to-r from-[#0D7377] to-[#5F7161] text-[#E6C98B] text-2xl font-bold rounded-full shadow-lg transition-all hover:scale-110 flex items-center gap-3 focus:outline-none focus:ring-4 focus:ring-[#0D7377]"
               aria-label="Solicitar mais informações"
               onClick={() => window.location.href = '/contato'}
               tabIndex={0}
             >
-              <Mail className="w-6 h-6" />
-              Procurando mais informações
+              <Mail className="w-7 h-7" />
+              Mais Informações
             </button>
             <button
               type="button"
-              className="px-12 py-6 border-2 border-[#0D7377] text-[#0D7377] hover:bg-[#0D7377]/10 font-bold rounded-full transition-all flex items-center gap-3 focus:outline-none focus:ring-4 focus:ring-[#0D7377]"
+              className="px-16 py-8 border-2 border-[#0D7377] text-[#0D7377] hover:bg-[#0D7377]/10 text-2xl font-bold rounded-full transition-all flex items-center gap-3 focus:outline-none focus:ring-4 focus:ring-[#0D7377]"
               aria-label="Agendar visita"
               onClick={() => setShowVisitModal(true)}
               tabIndex={0}
             >
-              <Calendar className="w-6 h-6" />
+              <Calendar className="w-7 h-7" />
               Agendar Visita
             </button>
           </div>
@@ -455,6 +449,18 @@ export default function CarcaraProjectPage() {
           onClose={() => setShowProposalModal(false)}
         />
       )}
+
+      {/* Floating WhatsApp Button - Follows scroll */}
+      <a
+        href="https://wa.me/5534992610004?text=Olá! Gostaria de conhecer os Sítios Carcará"
+        target="_blank"
+        rel="noopener noreferrer"
+        className="fixed bottom-8 right-8 z-50 px-8 py-6 bg-[#25D366] hover:bg-[#20BA5A] text-white text-xl font-bold rounded-full shadow-2xl transition-all hover:scale-110 flex items-center gap-3 animate-bounce hover:animate-none focus:outline-none focus:ring-4 focus:ring-[#25D366]"
+        aria-label="Fale conosco no WhatsApp"
+      >
+        <Phone className="w-8 h-8" />
+        <span className="hidden md:inline">WhatsApp</span>
+      </a>
     </main>
   );
 }

@@ -1,7 +1,10 @@
 "use client";
 
 import Link from "next/link";
-import { Heart, MessageCircle, Plus, ChevronDown, User, LogOut, FileText, Calendar, Gavel } from "lucide-react";
+import {
+  Home, Search, MessageCircle, Heart, User, Menu, X,
+  TrendingUp, Award, Shield, Bell, LogOut, LayoutDashboard, FileText, Gavel, Handshake
+} from 'lucide-react';
 import { useMemo, useState } from "react";
 import { useAuth } from "./AuthProvider";
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
@@ -32,7 +35,6 @@ export function TopNavWithAuth({
 }) {
   const [showCategories, setShowCategories] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState("all");
-  const [showUserMenu, setShowUserMenu] = useState(false);
   const [showAccountModal, setShowAccountModal] = useState(false);
 
   const { user, profile, loading } = useAuth();
@@ -45,19 +47,6 @@ export function TopNavWithAuth({
 
   const favHref = "/favoritos";
   const chatHref = "/chat";
-
-  const handlePostAd = (e: React.MouseEvent) => {
-    if (!user) {
-      e.preventDefault();
-      setShowAccountModal(true);
-    }
-    // If user exists, let the link work normally
-  };
-
-  const handleSignOut = async () => {
-    await supabase.auth.signOut();
-    setShowUserMenu(false);
-  };
 
   return (
     <>
@@ -190,98 +179,27 @@ export function TopNavWithAuth({
                 <span className="text-xs font-bold">Chat</span>
               </Link>
               
-              {/* Prominent Free Ad Button - Enhanced for Mobile Visibility */}
+              {/* Prominent Post Ad Button - Enhanced for Mobile Visibility */}
               <Link
-                href="/anunciar"
-                onClick={handlePostAd}
+                href="/postar"
                 className="flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-[#A8C97F] via-[#50C878] to-[#0D7377] hover:from-[#0D7377] hover:via-[#50C878] hover:to-[#A8C97F] text-[#1a1a1a] rounded-xl transition-all hover:scale-110 shadow-[0_0_20px_rgba(168,201,127,0.6)] hover:shadow-[0_0_30px_rgba(80,200,120,0.8)] font-black animate-pulse hover:animate-none border-3 border-[#E6C98B] drop-shadow-2xl"
               >
-                <Plus className="w-6 h-6" strokeWidth={3.5} />
-                <span className="hidden lg:inline text-base">Publique Grátis</span>
-                <span className="lg:hidden text-base">Anunciar</span>
+                <Handshake className="w-6 h-6" strokeWidth={3.5} />
+                <span className="text-base">Postar</span>
               </Link>
               
               {/* User Account/Profile */}
               {!loading && (
                 user && profile ? (
-                  <div className="relative">
-                    <button
-                      onClick={() => setShowUserMenu(!showUserMenu)}
-                      className="flex flex-col items-center px-4 py-2 border-2 border-[#A8C97F] text-[#A8C97F] hover:bg-[#A8C97F]/20 rounded-xl transition-all transform hover:scale-110 shadow-lg"
-                    >
-                      <User className="w-7 h-7 mb-1" strokeWidth={2.5} />
-                      <span className="text-xs font-bold truncate max-w-[80px]">
-                        {profile.full_name?.split(' ')[0] || 'Perfil'}
-                      </span>
-                    </button>
-
-                    {showUserMenu && (
-                      <div className="absolute right-0 mt-2 w-64 bg-[#5A5E5D] border-2 border-[#2a2a1a] rounded-xl shadow-2xl z-50 overflow-hidden">
-                        <div className="p-4 border-b border-[#2a2a1a] bg-gradient-to-br from-[#2a2a1a] to-[#5A5E5D]">
-                          <p className="text-sm font-bold text-[#E6C98B] truncate">{profile.full_name || 'Usuário'}</p>
-                          <p className="text-xs text-[#676767] truncate">{user.email}</p>
-                          {profile.verified && (
-                            <div className="mt-2 inline-flex items-center gap-1 px-2 py-1 bg-[#A8C97F]/20 rounded-full">
-                              <div className="w-2 h-2 bg-[#A8C97F] rounded-full"></div>
-                              <span className="text-xs text-[#A8C97F] font-medium">Verificado</span>
-                            </div>
-                          )}
-                        </div>
-
-                        <div className="py-2">
-                          <Link
-                            href="/meu-perfil"
-                            onClick={() => setShowUserMenu(false)}
-                            className="flex items-center gap-3 px-4 py-3 text-sm text-[#E6C98B] hover:bg-[#2a2a1a] hover:text-[#A8C97F] transition-colors"
-                          >
-                            <User className="w-4 h-4" />
-                            <span>Meu Perfil</span>
-                          </Link>
-
-                          <Link
-                            href="/meus-anuncios"
-                            onClick={() => setShowUserMenu(false)}
-                            className="flex items-center gap-3 px-4 py-3 text-sm text-[#E6C98B] hover:bg-[#2a2a1a] hover:text-[#A8C97F] transition-colors"
-                          >
-                            <FileText className="w-4 h-4" />
-                            <span>Meus Anúncios</span>
-                          </Link>
-
-                          {profile.can_schedule_visits && (
-                            <Link
-                              href="/minhas-visitas"
-                              onClick={() => setShowUserMenu(false)}
-                              className="flex items-center gap-3 px-4 py-3 text-sm text-[#E6C98B] hover:bg-[#2a2a1a] hover:text-[#A8C97F] transition-colors"
-                            >
-                              <Calendar className="w-4 h-4" />
-                              <span>Minhas Visitas</span>
-                            </Link>
-                          )}
-
-                          {profile.can_place_bids && (
-                            <Link
-                              href="/meus-lances"
-                              onClick={() => setShowUserMenu(false)}
-                              className="flex items-center gap-3 px-4 py-3 text-sm text-[#E6C98B] hover:bg-[#2a2a1a] hover:text-[#A8C97F] transition-colors"
-                            >
-                              <Gavel className="w-4 h-4" />
-                              <span>Meus Lances</span>
-                            </Link>
-                          )}
-                        </div>
-
-                        <div className="border-t border-[#2a2a1a] py-2">
-                          <button
-                            onClick={handleSignOut}
-                            className="flex items-center gap-3 px-4 py-3 text-sm text-red-400 hover:bg-[#2a2a1a] transition-colors w-full"
-                          >
-                            <LogOut className="w-4 h-4" />
-                            <span>Sair</span>
-                          </button>
-                        </div>
-                      </div>
-                    )}
-                  </div>
+                  <Link
+                    href="/conta"
+                    className="flex flex-col items-center px-4 py-2 border-2 border-[#A8C97F] text-[#A8C97F] hover:bg-[#A8C97F]/20 rounded-xl transition-all transform hover:scale-110 shadow-lg"
+                  >
+                    <User className="w-7 h-7 mb-1" strokeWidth={2.5} />
+                    <span className="text-xs font-bold truncate max-w-[80px]">
+                      {profile.full_name?.split(' ')[0] || 'Conta'}
+                    </span>
+                  </Link>
                 ) : (
                   <button
                     onClick={() => setShowAccountModal(true)}
