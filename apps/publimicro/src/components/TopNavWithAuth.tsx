@@ -3,12 +3,13 @@
 import Link from "next/link";
 import {
   Home, Search, MessageCircle, Heart, User, Menu, X,
-  TrendingUp, Award, Shield, Bell, LogOut, LayoutDashboard, FileText, Gavel, Handshake
+  TrendingUp, Award, Shield, Bell, LogOut, LayoutDashboard, FileText, Gavel, Handshake, ChevronDown
 } from 'lucide-react';
 import { useMemo, useState } from "react";
 import { useAuth } from "./AuthProvider";
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 import AccountModal from "./AccountModal";
+import AchemeLogo from "./AchemeLogo";
 
 type SearchTarget = "local" | "main";
 
@@ -56,53 +57,27 @@ export function TopNavWithAuth({
             {/* LOGO - Left Corner - Enhanced Professional Brand */}
             <Link href={brandHref} className="flex flex-col items-start hover:opacity-90 transition-all flex-shrink-0 group relative">
               {/* Glow effect on hover */}
-              <div className="absolute inset-0 bg-gradient-to-r from-[#A8C97F]/20 to-[#50C878]/20 blur-xl opacity-0 group-hover:opacity-100 transition-opacity rounded-2xl"></div>
+              <div className="absolute inset-0 bg-gradient-to-r from-[#B87333]/20 to-[#FFD700]/20 blur-xl opacity-0 group-hover:opacity-100 transition-opacity rounded-2xl"></div>
               
               <div className="flex items-center gap-3 mb-1 relative z-10">
-                {/* Premium Home Icon with emerald accent */}
-                <div className="relative">
-                  <svg className="w-10 h-10 text-[#50C878] drop-shadow-lg" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2.5">
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
-                  </svg>
-                  {/* Emerald shine */}
-                  <div className="absolute top-0 right-0 w-2 h-2 bg-[#50C878] rounded-full animate-pulse"></div>
-                </div>
+                {/* ACHEME Logo with Search + Emu */}
+                <AchemeLogo className="w-10 h-10 drop-shadow-lg" />
                 
-                {/* Enhanced Typography */}
+                {/* Enhanced Typography - ACHEME */}
                 <div className="text-5xl font-black tracking-tight leading-none">
-                  <span className="bg-gradient-to-r from-[#B7791F] via-[#CD7F32] to-[#DAA520] bg-clip-text text-transparent drop-shadow-lg">
-                    Publi
-                  </span>
-                  <span className="bg-gradient-to-r from-[#6B8E23] via-[#50C878] to-[#A8C97F] bg-clip-text text-transparent drop-shadow-lg">
-                    Micr
-                  </span>
-                  <span className="relative inline-block">
-                    <span className="bg-gradient-to-r from-[#B87333] to-[#CD7F32] bg-clip-text text-transparent">o</span>
-                    {/* Enhanced Sniper Target Icon with emerald glow */}
-                    <svg
-                      className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[32px] h-[32px] text-[#50C878] drop-shadow-[0_0_8px_rgba(80,200,120,0.6)]"
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="currentColor"
-                      strokeWidth="3"
-                    >
-                      <circle cx="12" cy="12" r="3" className="animate-pulse" />
-                      <line x1="12" y1="2" x2="12" y2="7" />
-                      <line x1="12" y1="17" x2="12" y2="22" />
-                      <line x1="2" y1="12" x2="7" y2="12" />
-                      <line x1="17" y1="12" x2="22" y2="12" />
-                    </svg>
+                  <span className="bg-gradient-to-r from-[#B87333] via-[#DAA520] to-[#FFD700] bg-clip-text text-transparent drop-shadow-lg">
+                    ACHEME
                   </span>
                 </div>
               </div>
               
-              {/* Premium subtitle with moss green and emerald */}
+              {/* Premium subtitle - Find For Me */}
               <div className="flex items-center gap-2 opacity-0 group-hover:opacity-100 transition-opacity relative z-10">
-                <div className="w-1 h-1 bg-[#50C878] rounded-full animate-pulse"></div>
-                <span className="text-xs bg-gradient-to-r from-[#6B8E23] to-[#50C878] bg-clip-text text-transparent font-bold tracking-wider uppercase">
-                  Ecossistema de Negócios
+                <div className="w-1 h-1 bg-[#DAA520] rounded-full animate-pulse"></div>
+                <span className="text-xs bg-gradient-to-r from-[#B87333] to-[#DAA520] bg-clip-text text-transparent font-bold tracking-wider uppercase">
+                  Find For Me
                 </span>
-                <div className="w-1 h-1 bg-[#6B8E23] rounded-full animate-pulse"></div>
+                <div className="w-1 h-1 bg-[#B87333] rounded-full animate-pulse"></div>
               </div>
             </Link>
 

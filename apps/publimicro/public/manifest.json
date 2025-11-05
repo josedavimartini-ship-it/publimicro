@@ -1,7 +1,7 @@
 {
-  "name": "PubliMicro - Leilões de Propriedades",
-  "short_name": "PubliMicro",
-  "description": "Plataforma de leilões online de propriedades rurais e urbanas",
+  "name": "ACHEME - Find For Me | Global Marketplace",
+  "short_name": "ACHEME",
+  "description": "International marketplace for properties, vehicles, and more. Find what you need worldwide.",
   "start_url": "/",
   "display": "standalone",
   "background_color": "#0a0a0a",
@@ -74,23 +74,23 @@
   ],
   "shortcuts": [
     {
-      "name": "Buscar Propriedades",
-      "short_name": "Buscar",
-      "description": "Procurar propriedades disponíveis",
+      "name": "Search Listings",
+      "short_name": "Search",
+      "description": "Find properties, vehicles, and more",
       "url": "/buscar",
       "icons": [{ "src": "/icons/icon-96x96.svg", "sizes": "96x96" }]
     },
     {
-      "name": "Meus Lances",
-      "short_name": "Lances",
-      "description": "Ver meus lances ativos",
+      "name": "My Bids",
+      "short_name": "Bids",
+      "description": "View my active bids",
       "url": "/lances",
       "icons": [{ "src": "/icons/icon-96x96.svg", "sizes": "96x96" }]
     },
     {
-      "name": "Favoritos",
-      "short_name": "Favoritos",
-      "description": "Ver propriedades favoritas",
+      "name": "Favorites",
+      "short_name": "Favorites",
+      "description": "View saved favorites",
       "url": "/favoritos",
       "icons": [{ "src": "/icons/icon-96x96.svg", "sizes": "96x96" }]
     }
