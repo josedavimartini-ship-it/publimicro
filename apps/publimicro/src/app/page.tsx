@@ -16,7 +16,7 @@ import { useUnsplashImages } from "@/hooks/useUnsplashImages";
 import { getFirstPhoto } from "@/lib/photoUtils";
 import { 
   Home, Car, Tractor, Ship, Globe, 
-  Plane, Share2, ShoppingBag, Sparkles, Calendar, Info
+  Plane, Share2, ShoppingBag, Sparkles, Calendar, Info, Handshake
 } from "lucide-react";
 
 // Dynamic import to avoid SSR issues with Leaflet
@@ -79,6 +79,53 @@ export default function HomePage() {
   
   // Load Unsplash images for section buttons
   const { images: unsplashImages, loading: imagesLoading } = useUnsplashImages();
+
+  // Handler for Fazer Proposta button
+  const handleFazerProposta = async (propertyId: string, propertyTitle: string) => {
+    // Play auction sound
+    const audioContext = new (window.AudioContext || (window as any).webkitAudioContext)();
+    const oscillator = audioContext.createOscillator();
+    const gainNode = audioContext.createGain();
+    oscillator.connect(gainNode);
+    gainNode.connect(audioContext.destination);
+    oscillator.frequency.value = 800;
+    oscillator.type = 'sine';
+    gainNode.gain.setValueAtTime(0.3, audioContext.currentTime);
+    gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.3);
+    oscillator.start(audioContext.currentTime);
+    oscillator.stop(audioContext.currentTime + 0.3);
+
+    // Check if user is logged in
+    if (!userId) {
+      // Redirect to login - will open AccountModal via TopNav
+      alert('Por favor, faça login para fazer uma proposta.');
+      window.location.href = '/entrar';
+      return;
+    }
+
+    // Check if user has scheduled a visit for this property
+    const { data: visits, error } = await supabase
+      .from('visits')
+      .select('*')
+      .eq('ad_id', propertyId)
+      .eq('guest_email', (await supabase.auth.getUser()).data.user?.email)
+      .or('status.eq.confirmed,status.eq.completed');
+
+    if (error) {
+      console.error('Error checking visits:', error);
+    }
+
+    if (!visits || visits.length === 0) {
+      // User hasn't scheduled a visit yet
+      alert('Você precisa agendar e realizar uma visita antes de fazer uma proposta.');
+      setSelectedProperty({ id: propertyId, title: propertyTitle });
+      setVisitModalOpen(true);
+      return;
+    }
+
+    // User has visited, redirect to proposal form
+    window.location.href = `/proposta?propId=${propertyId}`;
+  };
 
   useEffect(() => {
     // Get current user
@@ -377,49 +424,62 @@ export default function HomePage() {
                 const fotoUrl = getFirstPhoto(sitio.fotos);
                 console.log(`Sitio ${sitio.nome} photo URL:`, fotoUrl);
                 return (
-                  <Link 
-                    key={sitio.id} 
-                    href={`/imoveis/${sitio.id}`}
-                    className="group bg-gradient-to-br from-[#5A5E5D] to-[#3A3E3D] border-2 border-[#2a2a1a] rounded-2xl overflow-hidden hover:border-[#A8C97F] transition-all hover:scale-105 shadow-xl cursor-pointer block"
+                  <div 
+                    key={sitio.id}
+                    className="group bg-gradient-to-br from-[#5A5E5D] to-[#3A3E3D] border-2 border-[#2a2a1a] rounded-2xl overflow-hidden hover:border-[#A8C97F] transition-all shadow-xl flex flex-col"
                   >
-                    <div className="relative aspect-square overflow-hidden">
-                      <Image
-                        src={fotoUrl}
-                        alt={sitio.nome || "Sítio"}
-                        fill
-                        className="object-cover group-hover:scale-110 transition-transform duration-500"
-                        unoptimized
-                        onError={(e) => {
-                          const target = e.target as HTMLImageElement;
-                          target.src = "/images/fallback-rancho.jpg";
-                        }}
-                      />
-                      {sitio.zona && (
-                        <div className="absolute top-3 left-3 px-3 py-1 bg-[#5A5E5D]/90 text-[#A8C97F] font-bold rounded-lg text-sm border border-[#A8C97F]/30">
-                          {sitio.zona}
-                        </div>
-                      )}
-                      {/* Favorites Heart Button - Moved to top right */}
-                      <div className="absolute top-3 right-3">
-                        <FavoritesButton propertyId={sitio.id} userId={userId} size="md" />
-                      </div>
-                    </div>
-                    
-                    <div className="p-4 flex flex-col gap-2">
-                      <h3 className="text-lg font-bold text-[#D4A574] line-clamp-1">{sitio.nome}</h3>
-                      {sitio.localizacao && <p className="text-[#8B9B6E] text-xs line-clamp-1">{sitio.localizacao}</p>}
-                      
-                      {/* Bidding Schema Box */}
-                      {typeof sitio.lance_inicial === "number" && (
-                        <div className="bg-[#4A4E4D] rounded-lg p-3 border border-[#A8C97F]/40">
-                          <div className="text-[#E6C98B] text-xs font-semibold mb-1">Lance Inicial</div>
-                          <div className="text-[#A8C97F] font-bold text-xl">
-                            R$ {sitio.lance_inicial.toLocaleString("pt-BR")}
+                    {/* Image and Basic Info - Clickable to property detail */}
+                    <Link href={`/imoveis/${sitio.id}`} className="flex-1">
+                      <div className="relative aspect-square overflow-hidden">
+                        <Image
+                          src={fotoUrl}
+                          alt={sitio.nome || "Sítio"}
+                          fill
+                          className="object-cover group-hover:scale-110 transition-transform duration-500"
+                          unoptimized
+                          onError={(e) => {
+                            const target = e.target as HTMLImageElement;
+                            target.src = "/images/fallback-rancho.jpg";
+                          }}
+                        />
+                        {sitio.zona && (
+                          <div className="absolute top-3 left-3 px-3 py-1 bg-[#5A5E5D]/90 text-[#A8C97F] font-bold rounded-lg text-sm border border-[#A8C97F]/30">
+                            {sitio.zona}
                           </div>
+                        )}
+                        {/* Favorites Heart Button - Moved to top right */}
+                        <div className="absolute top-3 right-3">
+                          <FavoritesButton propertyId={sitio.id} userId={userId} size="md" />
                         </div>
-                      )}
+                      </div>
+                      
+                      <div className="p-4 flex flex-col gap-2">
+                        <h3 className="text-lg font-bold text-[#D4A574] line-clamp-1">{sitio.nome}</h3>
+                        {sitio.localizacao && <p className="text-[#8B9B6E] text-xs line-clamp-1">{sitio.localizacao}</p>}
+                        
+                        {/* Bidding Schema Box */}
+                        {typeof sitio.lance_inicial === "number" && (
+                          <div className="bg-[#4A4E4D] rounded-lg p-3 border border-[#A8C97F]/40">
+                            <div className="text-[#E6C98B] text-xs font-semibold mb-1">Lance Inicial</div>
+                            <div className="text-[#A8C97F] font-bold text-xl">
+                              R$ {sitio.lance_inicial.toLocaleString("pt-BR")}
+                            </div>
+                          </div>
+                        )}
+                      </div>
+                    </Link>
+                    
+                    {/* Action Button - Outside Link */}
+                    <div className="px-4 pb-4">
+                      <button
+                        onClick={() => handleFazerProposta(sitio.id, sitio.nome)}
+                        className="flex items-center justify-center gap-2 w-full px-6 py-5 bg-gradient-to-r from-[#B7791F] to-[#D4A574] hover:from-[#D4A574] hover:to-[#B7791F] text-white font-bold rounded-lg transition-all hover:scale-105 shadow-lg text-base"
+                      >
+                        <Handshake className="w-6 h-6" />
+                        <span>Fazer Proposta</span>
+                      </button>
                     </div>
-                  </Link>
+                  </div>
                 );
               })}
             </div>
@@ -497,8 +557,15 @@ export default function HomePage() {
             <div>
               <h4 className="font-bold text-[#E6C98B] mb-4">Conta</h4>
               <ul className="space-y-2 text-[#A8C97F]">
-                <li><Link href="/entrar" className="hover:text-[#B7791F]">Entrar</Link></li>
-                <li><Link href="/postar" className="hover:text-[#B7791F]">Postar</Link></li>
+                <li>
+                  <Link 
+                    href="/postar" 
+                    className="inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-[#A8C97F] to-[#0D7377] hover:from-[#0D7377] hover:to-[#A8C97F] text-white rounded-lg transition-all font-bold shadow-lg hover:scale-105"
+                  >
+                    📢 Publique seu anúncio grátis
+                  </Link>
+                </li>
+                <li><Link href="/conta" className="hover:text-[#B7791F]">Minha Conta</Link></li>
               </ul>
             </div>
           </div>

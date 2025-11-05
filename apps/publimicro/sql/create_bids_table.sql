@@ -3,7 +3,7 @@ CREATE TABLE IF NOT EXISTS public.bids (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   property_id UUID NOT NULL REFERENCES public.sitios(id) ON DELETE CASCADE,
   user_id UUID NOT NULL REFERENCES auth.users(id) ON DELETE CASCADE,
-  bid_amount NUMERIC(15, 2) NOT NULL,
+  amount NUMERIC(15, 2) NOT NULL,
   message TEXT,
   status TEXT NOT NULL DEFAULT 'pending' CHECK (status IN ('pending', 'accepted', 'rejected', 'counter')),
   created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
@@ -62,10 +62,10 @@ RETURNS TRIGGER AS $$
 BEGIN
   -- Only update if the new bid is higher than current lance_inicial
   UPDATE public.sitios
-  SET lance_inicial = NEW.bid_amount,
+  SET lance_inicial = NEW.amount,
       updated_at = NOW()
   WHERE id = NEW.property_id
-  AND (lance_inicial IS NULL OR NEW.bid_amount > lance_inicial);
+  AND (lance_inicial IS NULL OR NEW.amount > lance_inicial);
   
   RETURN NEW;
 END;
@@ -81,7 +81,7 @@ CREATE TRIGGER trigger_update_lance_inicial
 -- Function to get current highest bid for a property
 CREATE OR REPLACE FUNCTION get_highest_bid(property_uuid UUID)
 RETURNS NUMERIC AS $$
-  SELECT COALESCE(MAX(bid_amount), 0)
+  SELECT COALESCE(MAX(amount), 0)
   FROM public.bids
   WHERE property_id = property_uuid
   AND status != 'rejected';
