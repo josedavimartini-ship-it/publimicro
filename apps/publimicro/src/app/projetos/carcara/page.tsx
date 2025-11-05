@@ -165,8 +165,8 @@ export default function CarcaraProjectPage() {
         {/* Maximum dark overlay for perfect text contrast */}
         <div className="absolute inset-0 bg-gradient-to-b from-[#0a0a0a]/98 via-[#0a0a0a]/95 to-[#0a0a0a]" />
         
-        {/* 3D Carcará Bird Animation */}
-        <div className="absolute top-10 left-10 w-64 h-64 md:w-96 md:h-96 pointer-events-none z-20">
+        {/* 3D Carcará Bird - Continuous Flying Animation from Right to Left */}
+        <div className="absolute top-10 w-64 h-64 md:w-96 md:h-96 pointer-events-none z-20 animate-fly-continuous">
           <Carcara3D scale={2.5} />
         </div>
 
@@ -183,11 +183,35 @@ export default function CarcaraProjectPage() {
               audio.pause();
             }
           }}
-          className="absolute top-10 right-10 px-4 py-2 bg-[#A8C97F]/30 border-2 border-[#A8C97F] rounded-full backdrop-blur-md text-[#E6C98B] hover:bg-[#A8C97F]/50 transition-all z-30"
+          className="absolute top-10 right-10 px-4 py-2 bg-[#A8C97F]/30 border-2 border-[#A8C97F] rounded-full backdrop-blur-md text-[#E6C98B] hover:bg-[#A8C97F]/50 transition-all z-30 flex items-center gap-2"
           aria-label="Reproduzir som do Carcará"
         >
           🔊 Som do Carcará
         </button>
+        
+        <style jsx>{`
+          @keyframes fly-continuous {
+            0% {
+              transform: translateX(100vw) translateY(0);
+            }
+            25% {
+              transform: translateX(75vw) translateY(-20px);
+            }
+            50% {
+              transform: translateX(50vw) translateY(0);
+            }
+            75% {
+              transform: translateX(25vw) translateY(-15px);
+            }
+            100% {
+              transform: translateX(-400px) translateY(0);
+            }
+          }
+          
+          .animate-fly-continuous {
+            animation: fly-continuous 20s linear infinite;
+          }
+        `}</style>
 
         <div className="relative z-30 text-center px-6 max-w-6xl">
           {/* Exclusive Launch Badge - Elegant with minimal background */}
@@ -339,16 +363,16 @@ export default function CarcaraProjectPage() {
                 className="group bg-gradient-to-br from-[#1a1a1a] to-[#0d0d0d] border-3 border-[#2a2a1a] rounded-3xl overflow-hidden hover:border-[#A8C97F] hover:shadow-2xl hover:shadow-[#A8C97F]/40 transition-all"
               >
                 <Link href={`/imoveis/${sitio.id}`} className="block">
-                  <div className="relative aspect-video">
+                  <div className="relative aspect-video bg-gradient-to-br from-[#2a2a2a] to-[#1a1a1a]">
                     <Image
-                      src={getFirstPhoto(sitio.fotos)}
+                      src={getFirstPhoto(sitio.fotos) || 'https://irrzpwzyqcubhhjeuakc.supabase.co/storage/v1/object/public/imagens-sitios/pordosol4mediumearthwide.jpg'}
                       alt={`Sítio ${sitio.nome}`}
                       fill
                       className="object-cover group-hover:scale-110 transition-transform duration-700"
                       unoptimized
                       onError={(e) => {
                         const target = e.target as HTMLImageElement;
-                        target.src = '/images/fallback-rancho.jpg';
+                        target.src = 'https://irrzpwzyqcubhhjeuakc.supabase.co/storage/v1/object/public/imagens-sitios/pordosol4mediumearthwide.jpg';
                       }}
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-[#0a0a0a]/90 via-transparent to-transparent" />
@@ -364,6 +388,32 @@ export default function CarcaraProjectPage() {
 
                   <div className="p-8">
                     <h3 className="text-4xl font-bold text-[#A8C97F] mb-4">Sítio {sitio.nome}</h3>
+                    
+                    {/* Property Benefits - Sweet & Persuasive */}
+                    <div className="mb-6 p-6 bg-gradient-to-r from-[#A8C97F]/10 to-[#0D7377]/10 rounded-2xl border border-[#A8C97F]/20">
+                      <h4 className="text-[#E6C98B] font-bold text-lg mb-3 flex items-center gap-2">
+                        ✨ Por que este é o seu lugar ideal?
+                      </h4>
+                      <ul className="space-y-2 text-white/90 text-sm leading-relaxed">
+                        <li className="flex items-start gap-2">
+                          <span className="text-[#A8C97F] mt-1">🌿</span>
+                          <span><strong>Tamanho perfeito:</strong> Pouco mais de 2 hectares, ideal para criar seu refúgio sem se sentir isolado</span>
+                        </li>
+                        <li className="flex items-start gap-2">
+                          <span className="text-[#50C878] mt-1">💧</span>
+                          <span><strong>Sua praia particular:</strong> Acesso exclusivo à represa, perfeitamente equilibrado entre todos os vizinhos</span>
+                        </li>
+                        <li className="flex items-start gap-2">
+                          <span className="text-[#B7791F] mt-1">🏡</span>
+                          <span><strong>Convivência harmoniosa:</strong> Margem de lago igualmente distribuída para todos - ninguém fica de fora</span>
+                        </li>
+                        <li className="flex items-start gap-2">
+                          <span className="text-[#D4A574] mt-1">🌅</span>
+                          <span><strong>Investimento inteligente:</strong> Propriedade legalizada em área de valorização constante</span>
+                        </li>
+                      </ul>
+                    </div>
+                    
                     {sitio.descricao && (
                       <p className="text-white mb-6 leading-relaxed font-medium">{sitio.descricao}</p>
                     )}
@@ -378,7 +428,7 @@ export default function CarcaraProjectPage() {
                     <div className="grid grid-cols-2 gap-6 p-6 bg-[#2a2a2a]/50 rounded-2xl mb-6">
                       <div>
                         <div className="text-xs text-white mb-2 uppercase tracking-wide font-semibold opacity-80">
-                          {sitio.current_bid ? 'Proposta Atual' : 'Proposta Inicial'}
+                          {sitio.current_bid ? 'Última Oferta' : 'Lance Inicial'}
                         </div>
                         <div className={`font-bold text-2xl ${sitio.current_bid ? 'text-[#B7791F]' : 'text-[#A8C97F]'}`}>
                           R$ {((sitio.current_bid || sitio.lance_inicial) / 1000000).toFixed(2).replace('.', ',')}M
@@ -388,11 +438,19 @@ export default function CarcaraProjectPage() {
                             Inicial: R$ {(sitio.lance_inicial / 1000000).toFixed(2).replace('.', ',')}M
                           </div>
                         )}
+                        {!sitio.current_bid && (
+                          <div className="text-xs text-[#A8C97F] mt-1 font-semibold">
+                            Aberto a ofertas
+                          </div>
+                        )}
                       </div>
                       <div>
                         <div className="text-xs text-white mb-2 uppercase tracking-wide font-semibold opacity-80">Valor Estimado</div>
                         <div className="font-bold text-[#E6C98B] text-2xl">
                           R$ {(sitio.preco / 1000000).toFixed(1).replace('.', ',')}M
+                        </div>
+                        <div className="text-xs text-[#676767] mt-1">
+                          ⭐⭐⭐⭐⭐ Avaliação
                         </div>
                       </div>
                     </div>

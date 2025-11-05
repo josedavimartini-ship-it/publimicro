@@ -373,11 +373,11 @@ export default function HomePage() {
                   <div className="absolute inset-0 bg-gradient-to-t from-black/95 via-black/75 to-black/40" />
                   <div className="relative z-10 flex flex-col items-center justify-center h-full p-4 text-center">
                     <IconComponent className="w-14 h-14 text-[#E6C98B] mb-2 group-hover:scale-125 transition-all duration-300 drop-shadow-[0_4px_8px_rgba(0,0,0,0.9)]" strokeWidth={1.5} />
-                    <div className="bg-black/90 backdrop-blur-md px-4 py-2 rounded-lg border-2 border-[#E6C98B]/40 shadow-2xl">
-                      <h3 className="text-xl font-bold text-white drop-shadow-[0_4px_12px_rgba(0,0,0,1)] group-hover:text-[#A8C97F] transition-colors mb-1">
+                    <div className="bg-black/95 backdrop-blur-md px-5 py-3 rounded-lg border-2 border-[#E6C98B]/60 shadow-2xl">
+                      <h3 className="text-xl md:text-2xl font-bold text-white drop-shadow-[0_4px_12px_rgba(0,0,0,1)] group-hover:text-[#A8C97F] transition-colors mb-1">
                         {section.name}
                       </h3>
-                      <p className="text-xs text-[#E6C98B] font-bold drop-shadow-[0_2px_8px_rgba(0,0,0,1)]">
+                      <p className="text-sm md:text-xs text-[#E6C98B] font-bold drop-shadow-[0_2px_8px_rgba(0,0,0,1)]">
                         {section.concept}
                       </p>
                     </div>
@@ -413,11 +413,11 @@ export default function HomePage() {
                   <div className="absolute inset-0 bg-gradient-to-t from-black/95 via-black/75 to-black/40" />
                   <div className="relative z-10 flex flex-col items-center justify-center h-full p-4 text-center">
                     <IconComponent className="w-14 h-14 text-[#E6C98B] mb-2 group-hover:scale-125 transition-all duration-300 drop-shadow-[0_4px_8px_rgba(0,0,0,0.9)]" strokeWidth={1.5} />
-                    <div className="bg-black/90 backdrop-blur-md px-4 py-2 rounded-lg border-2 border-[#A8C97F]/40 shadow-2xl">
-                      <h3 className="text-xl font-bold text-white drop-shadow-[0_4px_12px_rgba(0,0,0,1)] group-hover:text-[#A8C97F] transition-colors mb-1">
+                    <div className="bg-black/95 backdrop-blur-md px-5 py-3 rounded-lg border-2 border-[#A8C97F]/60 shadow-2xl">
+                      <h3 className="text-xl md:text-2xl font-bold text-white drop-shadow-[0_4px_12px_rgba(0,0,0,1)] group-hover:text-[#A8C97F] transition-colors mb-1">
                         {section.name}
                       </h3>
-                      <p className="text-xs text-[#E6C98B] font-bold drop-shadow-[0_2px_8px_rgba(0,0,0,1)]">
+                      <p className="text-sm md:text-xs text-[#E6C98B] font-bold drop-shadow-[0_2px_8px_rgba(0,0,0,1)]">
                         {section.concept}
                       </p>
                     </div>
