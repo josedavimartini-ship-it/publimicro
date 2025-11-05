@@ -36,7 +36,7 @@ export default function ProposalModal({
     const numericAmount = parseFloat(amount.replace(/[^\d]/g, ''));
 
     if (minBid && numericAmount < minBid) {
-      setError(`O lance mínimo é R$ ${minBid.toLocaleString('pt-BR')}`);
+      setError(`A proposta mínima é R$ ${minBid.toLocaleString('pt-BR')}`);
       setLoading(false);
       return;
     }
@@ -97,7 +97,7 @@ export default function ProposalModal({
             )}
             {currentBid && (
               <p className="text-[#676767] text-sm mt-2">
-                Lance atual: <span className="text-[#B7791F] font-bold">R$ {currentBid.toLocaleString('pt-BR')}</span>
+                Proposta atual: <span className="text-[#B7791F] font-bold">R$ {currentBid.toLocaleString('pt-BR')}</span>
               </p>
             )}
           </div>
@@ -142,7 +142,7 @@ export default function ProposalModal({
                 </div>
                 {minBid && parseFloat(amount.replace(/[^\d]/g, '')) / 100 < minBid && (
                   <p className="text-xs text-red-400 mt-1">
-                    Valor abaixo do lance mínimo
+                    Valor abaixo da proposta mínima
                   </p>
                 )}
               </div>
