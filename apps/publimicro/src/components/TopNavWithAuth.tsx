@@ -3,7 +3,8 @@
 import Link from "next/link";
 import {
   Home, Search, MessageCircle, Heart, User, Menu, X,
-  TrendingUp, Award, Shield, Bell, LogOut, LayoutDashboard, FileText, Gavel, Handshake, ChevronDown
+  TrendingUp, Award, Shield, Bell, LogOut, LayoutDashboard, FileText, Gavel, Handshake, ChevronDown,
+  ThumbsUp, Megaphone, PlusCircle
 } from 'lucide-react';
 import { useMemo, useState } from "react";
 import { useAuth } from "./AuthProvider";
@@ -144,9 +145,10 @@ export function TopNavWithAuth({
 
             {/* ACTIONS */}
             <nav className="flex items-center gap-4">
-              <Link href={favHref} className="flex flex-col items-center text-[#E6C98B] hover:text-[#B7791F] transition-all group transform hover:scale-110">
-                <Heart className="w-7 h-7 mb-1 drop-shadow-lg" strokeWidth={2.5} />
-                <span className="text-xs font-bold">Favoritos</span>
+              {/* Handshake - At the top */}
+              <Link href="/propostas" className="flex flex-col items-center text-[#FFD700] hover:text-[#B87333] transition-all group transform hover:scale-110">
+                <Handshake className="w-7 h-7 mb-1 drop-shadow-lg" strokeWidth={2.5} />
+                <span className="text-xs font-bold">Propostas</span>
               </Link>
               
               <Link href={chatHref} className="flex flex-col items-center text-[#A8C97F] hover:text-[#0D7377] transition-all group transform hover:scale-110">
@@ -154,12 +156,17 @@ export function TopNavWithAuth({
                 <span className="text-xs font-bold">Chat</span>
               </Link>
               
+              <Link href={favHref} className="flex flex-col items-center text-[#E6C98B] hover:text-[#B7791F] transition-all group transform hover:scale-110">
+                <Heart className="w-7 h-7 mb-1 drop-shadow-lg fill-[#E6C98B]" strokeWidth={2.5} />
+                <span className="text-xs font-bold">Gostei</span>
+              </Link>
+              
               {/* Prominent Post Ad Button - Enhanced for Mobile Visibility */}
               <Link
                 href="/postar"
                 className="flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-[#A8C97F] via-[#50C878] to-[#0D7377] hover:from-[#0D7377] hover:via-[#50C878] hover:to-[#A8C97F] text-[#1a1a1a] rounded-xl transition-all hover:scale-110 shadow-[0_0_20px_rgba(168,201,127,0.6)] hover:shadow-[0_0_30px_rgba(80,200,120,0.8)] font-black animate-pulse hover:animate-none border-3 border-[#E6C98B] drop-shadow-2xl"
               >
-                <Handshake className="w-6 h-6" strokeWidth={3.5} />
+                <PlusCircle className="w-6 h-6" strokeWidth={3.5} />
                 <span className="text-base">Postar</span>
               </Link>
               

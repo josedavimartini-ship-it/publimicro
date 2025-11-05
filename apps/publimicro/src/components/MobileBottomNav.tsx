@@ -22,7 +22,7 @@ export default function MobileBottomNav() {
     },
     {
       icon: Heart,
-      label: "Favoritos",
+      label: "Gostei",
       href: "/favoritos",
       active: pathname === "/favoritos"
     },

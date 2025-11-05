@@ -225,10 +225,8 @@ CREATE INDEX idx_property_amenities_property ON property_amenities(property_id);
 CREATE INDEX idx_property_favorites_user ON property_favorites(user_id);
 CREATE INDEX idx_property_views_property ON property_views(property_id);
 
--- GIS index for location queries
-CREATE INDEX idx_properties_location_gis ON properties USING GIST (
-  ll_to_earth(latitude::float8, longitude::float8)
-);
+-- Composite index for location queries (latitude, longitude)
+CREATE INDEX idx_properties_location_coords ON properties(latitude, longitude) WHERE latitude IS NOT NULL AND longitude IS NOT NULL;
 
 -- ============================================
 -- Functions
