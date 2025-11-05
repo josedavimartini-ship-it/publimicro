@@ -11,11 +11,11 @@ export default function ComercialPage() {
         <p className="text-2xl text-[#d8c68e] mb-8">Salas, Lojas, Galpões e Escritórios</p>
         <div className="bg-gradient-to-br from-[#1a1a1a] to-[#0d0d0d] border-2 border-[#2a2a1a] rounded-2xl p-12">
           <Building2 className="w-24 h-24 text-[#B7791F] mx-auto mb-6" />
-          <h3 className="text-2xl font-bold text-[#B7791F] mb-4">Em Construção</h3>
-          <p className="text-[#676767] text-lg">Anúncios de imóveis comerciais em breve</p>
+          <h3 className="text-2xl font-bold text-[#B7791F] mb-4">Under Construction</h3>
+          <p className="text-[#676767] text-lg">Commercial property listings coming soon</p>
         </div>
         <Link href="/proper" className="inline-block mt-8 px-8 py-4 bg-gradient-to-r from-[#B7791F] to-[#CD7F32] text-[#0a0a0a] font-bold rounded-full hover:scale-105 transition-all">
-           Voltar para PubliProper
+           Back to AcheMePropers
         </Link>
       </div>
     </main>

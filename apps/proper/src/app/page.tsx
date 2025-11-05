@@ -8,20 +8,20 @@ import { motion } from "framer-motion";
 export default function ProperPage() {
   const categories = [
     {
-      name: "Imóveis Urbanos",
+      name: "Urban Properties",
       href: "/proper/urban",
       icon: Building2,
-      description: "Apartamentos, casas, salas comerciais",
+      description: "Apartments, houses, commercial spaces",
       image: "/images/sections/publiProper-bg.jpg",
-      stats: "120+ imóveis"
+      stats: "120+ properties"
     },
     {
-      name: "Imóveis Rurais",
+      name: "Rural Properties",
       href: "/proper/rural",
       icon: Trees,
-      description: "Sítios, fazendas, chácaras e terrenos",
+      description: "Sítios, fazendas, chácaras, and ranchos",
       image: "/images/sections/publiProper-bg.jpg",
-      stats: "45+ propriedades",
+      stats: "45+ properties",
       featured: true
     }
   ];
@@ -47,15 +47,15 @@ export default function ProperPage() {
         >
           <div className="inline-flex items-center gap-2 mb-6 px-6 py-3 bg-[#B7791F]/20 border-2 border-[#B7791F] rounded-full">
             <Home className="w-5 h-5 text-[#B7791F]" />
-            <span className="text-[#B7791F] font-bold tracking-wider">PUBLIMICRO PROPER</span>
+            <span className="text-[#B7791F] font-bold tracking-wider">ACHEME PROPERS</span>
           </div>
           
           <h1 className="text-6xl md:text-7xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-[#B7791F] via-[#CD7F32] to-[#B87333] mb-6">
-            Seu Imóvel Ideal
+            Your Ideal Property
           </h1>
           
           <p className="text-[#d8c68e] text-xl md:text-2xl mb-4 max-w-3xl mx-auto">
-            Do apartamento na cidade ao sítio no campo. Encontre oportunidades exclusivas de investimento imobiliário.
+            From city apartments to countryside farms. Find exclusive real estate investment opportunities worldwide.
           </p>
         </motion.div>
 
@@ -117,24 +117,24 @@ export default function ProperPage() {
           <div className="flex flex-col md:flex-row items-center gap-8">
             <div className="flex-1">
               <div className="inline-flex items-center gap-2 mb-4 px-4 py-2 bg-[#E6C98B]/30 rounded-full">
-                <span className="text-[#B7791F] font-bold text-sm">🌟 LANÇAMENTO EXCLUSIVO</span>
+                <span className="text-[#B7791F] font-bold text-sm">🌟 EXCLUSIVE LAUNCH</span>
               </div>
               <h2 className="text-4xl md:text-5xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-[#B7791F] to-[#0D7377] mb-4">
                 Sítios Carcará
               </h2>
               <p className="text-[#d8c68e] text-lg mb-6">
-                6 propriedades exclusivas às margens da Represa de Corumbaíba, GO. 
-                Lances a partir de R$ 1.050.000.
+                6 exclusive properties on the shores of Corumbaíba Reservoir, GO. 
+                Bids starting at $250,000 USD.
               </p>
               <div className="flex flex-wrap gap-4">
                 <Link
                   href="/projetos/carcara"
                   className="px-8 py-4 bg-gradient-to-r from-[#A8C97F] to-[#0D7377] hover:from-[#0D7377] hover:to-[#A8C97F] text-white font-bold rounded-full transition-all hover:scale-105"
                 >
-                  Ver Propriedades
+                  View Properties
                 </Link>
                 <a
-                  href="https://wa.me/5534992610004?text=Olá! Gostaria de saber mais sobre os Sítios Carcará"
+                  href="https://wa.me/5534992610004?text=Hello! I'd like to know more about Sítios Carcará"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="px-8 py-4 border-2 border-[#25D366] text-[#25D366] hover:bg-[#25D366]/10 font-bold rounded-full transition-all flex items-center gap-2"

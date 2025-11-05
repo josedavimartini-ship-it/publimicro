@@ -2,24 +2,24 @@ import type { Metadata } from "next"
 import Link from "next/link"
 
 export const metadata: Metadata = {
-  title: "Proper Rural — Fazendas, Sítios e Propriedades Rurais",
-  description: "Fazendas, sítios, chácaras e propriedades rurais em todo o Brasil. Produção, lazer e investimento.",
+  title: "Proper Rural ï¿½ Fazendas, Sï¿½tios e Propriedades Rurais",
+  description: "Fazendas, sï¿½tios, chï¿½caras e propriedades rurais em todo o Brasil. Produï¿½ï¿½o, lazer e investimento.",
 }
 
 const propertyTypes = [
-  { value: "fazenda", label: "Fazendas", icon: "??", count: "320+", desc: "Produção e pecuária" },
-  { value: "sitio", label: "Sítios", icon: "??", count: "450+", desc: "Lazer e moradia" },
-  { value: "chacara", label: "Chácaras", icon: "??", count: "280+", desc: "Fim de semana" },
+  { value: "fazenda", label: "Fazendas", icon: "??", count: "320+", desc: "Produï¿½ï¿½o e pecuï¿½ria" },
+  { value: "sitio", label: "Sï¿½tios", icon: "??", count: "450+", desc: "Lazer e moradia" },
+  { value: "chacara", label: "Chï¿½caras", icon: "??", count: "280+", desc: "Fim de semana" },
   { value: "terreno", label: "Terrenos", icon: "??", count: "190+", desc: "Investimento" },
 ]
 
 const regions = [
-  { name: "Triângulo Mineiro", state: "MG", properties: "85+" },
+  { name: "Triï¿½ngulo Mineiro", state: "MG", properties: "85+" },
   { name: "Sul de Minas", state: "MG", properties: "120+" },
   { name: "Interior de SP", state: "SP", properties: "200+" },
-  { name: "Norte do Paraná", state: "PR", properties: "65+" },
+  { name: "Norte do Paranï¿½", state: "PR", properties: "65+" },
   { name: "Centro-Oeste", state: "GO/MT/MS", properties: "140+" },
-  { name: "Vale do Paraíba", state: "SP/RJ", properties: "75+" },
+  { name: "Vale do Paraï¿½ba", state: "SP/RJ", properties: "75+" },
 ]
 
 export default function ProperRuralPage() {
@@ -54,8 +54,8 @@ export default function ProperRuralPage() {
           Proper Rural
         </h1>
         <p className="text-[#bfa97a] max-w-2xl mx-auto text-lg">
-          Fazendas, sítios, chácaras e propriedades rurais. 
-          Do agronegócio ao refúgio de fim de semana.
+          Fazendas, sï¿½tios, chï¿½caras e propriedades rurais. 
+          Do agronegï¿½cio ao refï¿½gio de fim de semana.
         </p>
       </section>
 
@@ -73,11 +73,11 @@ export default function ProperRuralPage() {
             </div>
             <div>
               <div className="text-3xl font-bold text-[#cfa847] mb-1">R$ 2.8Bi</div>
-              <div className="text-xs text-[#bfa97a]">Em Negociação</div>
+              <div className="text-xs text-[#bfa97a]">Em Negociaï¿½ï¿½o</div>
             </div>
             <div>
               <div className="text-3xl font-bold text-[#cfa847] mb-1">95%</div>
-              <div className="text-xs text-[#bfa97a]">Satisfação</div>
+              <div className="text-xs text-[#bfa97a]">Satisfaï¿½ï¿½o</div>
             </div>
           </div>
         </div>
@@ -94,13 +94,13 @@ export default function ProperRuralPage() {
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
               <div>
                 <label htmlFor="region" className="block text-sm text-[#bfa97a] mb-2">
-                  Região
+                  Regiï¿½o
                 </label>
                 <select
                   id="region"
                   className="w-full rounded-lg px-4 py-3 bg-[#0f0f0f] border border-[#242424] text-[#e6c86b] focus:outline-none focus:border-amber-500/50"
                 >
-                  <option value="">Todas as regiões</option>
+                  <option value="">Todas as regiï¿½es</option>
                   {regions.map((region) => (
                     <option key={region.name} value={region.name}>
                       {region.name}, {region.state}
@@ -135,7 +135,7 @@ export default function ProperRuralPage() {
                   className="w-full rounded-lg px-4 py-3 bg-[#0f0f0f] border border-[#242424] text-[#e6c86b] focus:outline-none focus:border-amber-500/50"
                 >
                   <option value="">Todas</option>
-                  <option value="producao">Produção/Agronegócio</option>
+                  <option value="producao">Produï¿½ï¿½o/Agronegï¿½cio</option>
                   <option value="lazer">Lazer/Moradia</option>
                   <option value="investimento">Investimento</option>
                   <option value="misto">Misto</option>
@@ -146,7 +146,7 @@ export default function ProperRuralPage() {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
                 <label htmlFor="area-min" className="block text-sm text-[#bfa97a] mb-2">
-                  Área Mínima (hectares)
+                  ï¿½rea Mï¿½nima (hectares)
                 </label>
                 <input
                   id="area-min"
@@ -158,7 +158,7 @@ export default function ProperRuralPage() {
 
               <div>
                 <label htmlFor="area-max" className="block text-sm text-[#bfa97a] mb-2">
-                  Área Máxima (hectares)
+                  ï¿½rea Mï¿½xima (hectares)
                 </label>
                 <input
                   id="area-max"
@@ -199,7 +199,7 @@ export default function ProperRuralPage() {
                 {type.desc}
               </div>
               <div className="text-sm text-amber-500 font-semibold">
-                {type.count} disponíveis
+                {type.count} disponï¿½veis
               </div>
             </button>
           ))}
@@ -209,7 +209,7 @@ export default function ProperRuralPage() {
       {/* Featured Regions */}
       <section className="max-w-7xl mx-auto px-6 py-12 w-full">
         <h2 className="text-2xl font-bold text-[#cfa847] mb-8">
-          Regiões em Destaque
+          Regiï¿½es em Destaque
         </h2>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -241,8 +241,8 @@ export default function ProperRuralPage() {
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
           {[
-            { name: "Fazenda São Francisco", area: "850 ha", location: "Uberaba, MG", price: "R$ 15.000.000" },
-            { name: "Sítio Recanto Verde", area: "42 ha", location: "Socorro, SP", price: "R$ 1.850.000" },
+            { name: "Fazenda Sï¿½o Francisco", area: "850 ha", location: "Uberaba, MG", price: "R$ 15.000.000" },
+            { name: "Sï¿½tio Recanto Verde", area: "42 ha", location: "Socorro, SP", price: "R$ 1.850.000" },
             { name: "Fazenda Boa Vista", area: "1.200 ha", location: "Rio Verde, GO", price: "R$ 28.500.000" },
           ].map((property, i) => (
             <div 
@@ -287,20 +287,20 @@ export default function ProperRuralPage() {
           Tem uma propriedade rural para vender?
         </h2>
         <p className="text-[#bfa97a] mb-8 max-w-2xl mx-auto">
-          Anuncie gratuitamente e conecte-se com compradores qualificados e investidores do agronegócio.
+          Anuncie gratuitamente e conecte-se com compradores qualificados e investidores do agronegï¿½cio.
         </p>
         <Link
           href="/post"
           className="inline-block px-8 py-4 bg-amber-500 hover:bg-amber-400 text-black font-bold rounded-lg transition-all hover:scale-105 shadow-lg"
         >
-          Anunciar Propriedade — É Grátis
+          Anunciar Propriedade ï¿½ ï¿½ Grï¿½tis
         </Link>
       </section>
 
       {/* Footer */}
-      <footer className="border-t border-[#242424] bg-[#0b0b0b] px-6 py-8">
-        <div className="max-w-7xl mx-auto text-center text-sm text-[#bfa97a]">
-          <p>© 2025 Publimicro Proper Rural. Todos os direitos reservados.</p>
+      <footer className="border-t border-[#2a2a1a] bg-[#0a0a0a] px-6 py-8 mt-16">
+        <div className="max-w-7xl mx-auto text-center text-sm text-[#676767]">
+          <p>Â© {new Date().getFullYear()} AcheMeRuralPropers. All rights reserved.</p>
         </div>
       </footer>
     </main>
