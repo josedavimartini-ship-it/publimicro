@@ -42,11 +42,6 @@ export const metadata = {
     images: ["/og-image-acheme.jpg"],
     creator: "@acheme"
   },
-  viewport: {
-    width: "device-width",
-    initialScale: 1,
-    maximumScale: 5
-  },
   verification: {
     google: "your-google-verification-code",
     yandex: "your-yandex-verification-code"
@@ -54,6 +49,12 @@ export const metadata = {
   alternates: {
     canonical: "https://acheme.com"
   }
+};
+
+export const viewport = {
+  width: "device-width",
+  initialScale: 1,
+  maximumScale: 5
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {

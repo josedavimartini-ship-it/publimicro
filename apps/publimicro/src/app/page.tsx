@@ -67,6 +67,7 @@ interface Sitio {
   destaque?: boolean;
   zona?: string;
   lance_inicial?: number;
+  current_bid?: number; // Current highest proposal value
 }
 
 export default function HomePage() {
@@ -149,9 +150,28 @@ export default function HomePage() {
           const fallback = await supabase.from("sitios").select("*").limit(6);
           data = fallback.data;
         }
-        console.log("Sitios loaded:", data);
-        console.log("First sitio photos:", data?.[0]?.fotos);
-        setSitios(data || []);
+        
+        // Fetch current highest bid for each property
+        if (data) {
+          const sitiosWithBids = await Promise.all(
+            data.map(async (sitio) => {
+              const { data: bids } = await supabase
+                .from('proposals')
+                .select('amount')
+                .eq('property_id', sitio.id)
+                .order('amount', { ascending: false })
+                .limit(1);
+              
+              return {
+                ...sitio,
+                current_bid: bids && bids.length > 0 ? bids[0].amount : null
+              };
+            })
+          );
+          console.log("Sitios loaded:", sitiosWithBids);
+          console.log("First sitio photos:", sitiosWithBids?.[0]?.fotos);
+          setSitios(sitiosWithBids || []);
+        }
       } catch (err) {
         console.error("Error fetching sitios:", err);
         setErrorMsg("Erro inesperado ao buscar propriedades.");
@@ -353,7 +373,7 @@ export default function HomePage() {
                   <div className="absolute inset-0 bg-gradient-to-t from-black/95 via-black/75 to-black/40" />
                   <div className="relative z-10 flex flex-col items-center justify-center h-full p-4 text-center">
                     <IconComponent className="w-14 h-14 text-[#E6C98B] mb-2 group-hover:scale-125 transition-all duration-300 drop-shadow-[0_4px_8px_rgba(0,0,0,0.9)]" strokeWidth={1.5} />
-                    <div className="bg-black/80 backdrop-blur-sm px-3 py-2 rounded-lg border-2 border-[#E6C98B]/30">
+                    <div className="bg-black/90 backdrop-blur-md px-4 py-2 rounded-lg border-2 border-[#E6C98B]/40 shadow-2xl">
                       <h3 className="text-xl font-bold text-white drop-shadow-[0_4px_12px_rgba(0,0,0,1)] group-hover:text-[#A8C97F] transition-colors mb-1">
                         {section.name}
                       </h3>
@@ -393,7 +413,7 @@ export default function HomePage() {
                   <div className="absolute inset-0 bg-gradient-to-t from-black/95 via-black/75 to-black/40" />
                   <div className="relative z-10 flex flex-col items-center justify-center h-full p-4 text-center">
                     <IconComponent className="w-14 h-14 text-[#E6C98B] mb-2 group-hover:scale-125 transition-all duration-300 drop-shadow-[0_4px_8px_rgba(0,0,0,0.9)]" strokeWidth={1.5} />
-                    <div className="bg-black/85 backdrop-blur-sm px-4 py-2 rounded-lg border-2 border-[#A8C97F]/30">
+                    <div className="bg-black/90 backdrop-blur-md px-4 py-2 rounded-lg border-2 border-[#A8C97F]/40 shadow-2xl">
                       <h3 className="text-xl font-bold text-white drop-shadow-[0_4px_12px_rgba(0,0,0,1)] group-hover:text-[#A8C97F] transition-colors mb-1">
                         {section.name}
                       </h3>
@@ -481,11 +501,18 @@ export default function HomePage() {
                         {/* Bidding Schema Box - Enhanced */}
                         {typeof sitio.lance_inicial === "number" && (
                           <div className="bg-[#4A4E4D] rounded-lg p-3 border border-[#A8C97F]/40 hover:border-[#A8C97F]/70 transition-all">
-                            <div className="text-[#E6C98B] text-xs font-semibold mb-1">Lance Inicial</div>
-                            <div className="text-[#A8C97F] font-bold text-xl">
-                              R$ {sitio.lance_inicial.toLocaleString("pt-BR")}
+                            <div className="text-[#E6C98B] text-xs font-semibold mb-1">
+                              {sitio.current_bid ? 'Proposta Atual' : 'Proposta Inicial'}
                             </div>
-                            {sitio.preco && sitio.preco > sitio.lance_inicial && (
+                            <div className={`font-bold text-xl ${sitio.current_bid ? 'text-[#B7791F]' : 'text-[#A8C97F]'}`}>
+                              R$ {((sitio.current_bid || sitio.lance_inicial).toLocaleString("pt-BR"))}
+                            </div>
+                            {sitio.current_bid && (
+                              <div className="text-[#8B9B6E] text-xs mt-1">
+                                Inicial: R$ {sitio.lance_inicial.toLocaleString("pt-BR")}
+                              </div>
+                            )}
+                            {sitio.preco && sitio.preco > (sitio.current_bid || sitio.lance_inicial) && (
                               <div className="text-[#8B9B6E] text-xs mt-1">
                                 Valor: R$ {sitio.preco.toLocaleString("pt-BR")}
                               </div>

@@ -10,6 +10,7 @@ import VisitModal from '@/components/VisitModal';
 import ProposalModal from '@/components/ProposalModal';
 import FavoritesButton from '@/components/FavoritesButton';
 import { Carcara3D } from '@publimicro/ui';
+import { getFirstPhoto } from '@/lib/photoUtils';
 
 // Dynamic import to avoid SSR issues with Leaflet
 const LeafletMapKML = dynamic(() => import("@/components/LeafletMapKML"), {
@@ -44,6 +45,7 @@ interface Sitio {
   fotos: string[];
   descricao?: string;
   area_total?: number;
+  current_bid?: number; // Current highest proposal value
 }
 
 export default function CarcaraProjectPage() {
@@ -63,7 +65,23 @@ export default function CarcaraProjectPage() {
         .order('preco', { ascending: true });
 
       if (!error && data) {
-        setSitios(data);
+        // Fetch current highest bid for each property
+        const sitiosWithBids = await Promise.all(
+          data.map(async (sitio) => {
+            const { data: bids } = await supabase
+              .from('proposals')
+              .select('amount')
+              .eq('property_id', sitio.id)
+              .order('amount', { ascending: false })
+              .limit(1);
+            
+            return {
+              ...sitio,
+              current_bid: bids && bids.length > 0 ? bids[0].amount : null
+            };
+          })
+        );
+        setSitios(sitiosWithBids);
       }
       setLoading(false);
     }
@@ -203,7 +221,7 @@ export default function CarcaraProjectPage() {
               type="button"
               className="px-16 py-8 bg-gradient-to-r from-[#0D7377] to-[#5F7161] text-[#E6C98B] text-2xl font-bold rounded-full shadow-lg transition-all hover:scale-110 flex items-center gap-3 focus:outline-none focus:ring-4 focus:ring-[#0D7377]"
               aria-label="Solicitar mais informações"
-              onClick={() => window.location.href = '/contato'}
+              onClick={() => window.open('https://www.sitioscarcara.com.br', '_blank')}
               tabIndex={0}
             >
               <Mail className="w-7 h-7" />
@@ -301,7 +319,7 @@ export default function CarcaraProjectPage() {
                 >
                 <div className="relative aspect-video">
                   <Image
-                    src={sitio.fotos && sitio.fotos.length > 0 ? sitio.fotos[0] : '/images/fallback-rancho.jpg'}
+                    src={getFirstPhoto(sitio.fotos)}
                     alt={`Sítio ${sitio.nome}`}
                     fill
                     className="object-cover group-hover:scale-110 transition-transform duration-700"
@@ -337,15 +355,22 @@ export default function CarcaraProjectPage() {
 
                   <div className="grid grid-cols-2 gap-6 p-6 bg-[#2a2a2a]/50 rounded-2xl">
                     <div>
+                      <div className="text-xs text-white mb-2 uppercase tracking-wide font-semibold opacity-80">
+                        {sitio.current_bid ? 'Proposta Atual' : 'Proposta Inicial'}
+                      </div>
+                      <div className={`font-bold text-2xl ${sitio.current_bid ? 'text-[#B7791F]' : 'text-[#A8C97F]'}`}>
+                        R$ {((sitio.current_bid || sitio.lance_inicial) / 1000000).toFixed(2).replace('.', ',')}M
+                      </div>
+                      {sitio.current_bid && (
+                        <div className="text-xs text-[#676767] mt-1">
+                          Inicial: R$ {(sitio.lance_inicial / 1000000).toFixed(2).replace('.', ',')}M
+                        </div>
+                      )}
+                    </div>
+                    <div>
                       <div className="text-xs text-white mb-2 uppercase tracking-wide font-semibold opacity-80">Valor Estimado</div>
                       <div className="font-bold text-[#E6C98B] text-2xl">
                         R$ {(sitio.preco / 1000000).toFixed(1).replace('.', ',')}M
-                      </div>
-                    </div>
-                    <div>
-                      <div className="text-xs text-white mb-2 uppercase tracking-wide font-semibold opacity-80">Lance Inicial</div>
-                      <div className="font-bold text-[#A8C97F] text-2xl">
-                        R$ {(sitio.lance_inicial / 1000000).toFixed(2).replace('.', ',')}M
                       </div>
                     </div>
                   </div>

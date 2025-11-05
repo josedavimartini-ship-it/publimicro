@@ -145,14 +145,9 @@ export function TopNavWithAuth({
 
             {/* ACTIONS */}
             <nav className="flex items-center gap-4">
-              {/* Handshake - At the top */}
-              <Link href="/propostas" className="flex flex-col items-center text-[#FFD700] hover:text-[#B87333] transition-all group transform hover:scale-110">
+              {/* Chat with Handshake icon */}
+              <Link href={chatHref} className="flex flex-col items-center text-[#FFD700] hover:text-[#B87333] transition-all group transform hover:scale-110">
                 <Handshake className="w-7 h-7 mb-1 drop-shadow-lg" strokeWidth={2.5} />
-                <span className="text-xs font-bold">Propostas</span>
-              </Link>
-              
-              <Link href={chatHref} className="flex flex-col items-center text-[#A8C97F] hover:text-[#0D7377] transition-all group transform hover:scale-110">
-                <MessageCircle className="w-7 h-7 mb-1 drop-shadow-lg" strokeWidth={2.5} />
                 <span className="text-xs font-bold">Chat</span>
               </Link>
               

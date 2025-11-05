@@ -2,8 +2,10 @@
 
 import { useState, useEffect, useRef } from 'react';
 import { apiPost } from '@/lib/api';
-import { X, Calendar, Clock, Video, MapPin } from 'lucide-react';
+import { X, Calendar, Clock, Video, MapPin, LogIn } from 'lucide-react';
 import FocusLock from 'react-focus-lock';
+import { useAuth } from './AuthProvider';
+import { useRouter } from 'next/navigation';
 
 interface VisitModalProps {
   adId: string;
@@ -13,6 +15,8 @@ interface VisitModalProps {
 }
 
 export default function VisitModal({ adId, adTitle, open, onClose }: VisitModalProps) {
+  const router = useRouter();
+  const { user } = useAuth();
   const [form, setForm] = useState({
     guest_name: '',
     guest_email: '',
@@ -90,6 +94,41 @@ export default function VisitModal({ adId, adTitle, open, onClose }: VisitModalP
   };
 
   if (!open) return null;
+
+  // Show login prompt if not authenticated
+  if (!user) {
+    return (
+      <div className="fixed inset-0 bg-black/70 backdrop-blur-sm flex items-center justify-center z-50 p-4">
+        <FocusLock returnFocus>
+          <div className="bg-gradient-to-br from-[#1a1a1a] to-[#0d0d0d] border-2 border-[#2a2a1a] rounded-2xl w-full max-w-md relative shadow-2xl p-8">
+            <button
+              onClick={handleClose}
+              className="absolute top-4 right-4 text-[#959595] hover:text-[#A8C97F] transition-colors"
+              aria-label="Fechar"
+            >
+              <X className="w-6 h-6" />
+            </button>
+
+            <div className="text-center">
+              <div className="w-16 h-16 bg-[#B87333]/20 rounded-full flex items-center justify-center mx-auto mb-4">
+                <LogIn className="w-8 h-8 text-[#B87333]" />
+              </div>
+              <h3 className="text-2xl font-bold text-[#E6C98B] mb-3">Login Necessário</h3>
+              <p className="text-[#676767] mb-6">
+                Para agendar uma visita, você precisa estar logado.
+              </p>
+              <button
+                onClick={() => router.push(`/entrar?redirect=${encodeURIComponent(window.location.pathname)}`)}
+                className="w-full px-6 py-3 bg-gradient-to-r from-[#B87333] to-[#FFD700] hover:from-[#FFD700] hover:to-[#B87333] text-[#0a0a0a] font-bold rounded-xl transition-all shadow-lg"
+              >
+                Fazer Login
+              </button>
+            </div>
+          </div>
+        </FocusLock>
+      </div>
+    );
+  }
 
   return (
     <div className="fixed inset-0 bg-black/70 backdrop-blur-sm flex items-center justify-center z-50 p-4">
