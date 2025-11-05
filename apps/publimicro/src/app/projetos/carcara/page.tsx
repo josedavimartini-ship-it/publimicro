@@ -58,13 +58,40 @@ export default function CarcaraProjectPage() {
 
   useEffect(() => {
     async function fetchSitios() {
+      // Fetch all properties from Sítios Carcará project
       const { data, error } = await supabase
         .from('sitios')
         .select('*')
-        .in('id', ['surucua', 'juriti', 'seriema', 'mergulhao', 'bigua', 'abare'])
+        .eq('projeto', 'Sítios Carcará') // Filter by project name
         .order('preco', { ascending: true });
 
-      if (!error && data) {
+      // If no properties found with project filter, try the specific IDs as fallback
+      if (!data || data.length === 0) {
+        const { data: fallbackData, error: fallbackError } = await supabase
+          .from('sitios')
+          .select('*')
+          .in('id', ['surucua', 'juriti', 'seriema', 'mergulhao', 'bigua', 'abare'])
+          .order('preco', { ascending: true });
+        
+        if (fallbackData && fallbackData.length > 0) {
+          const sitiosWithBids = await Promise.all(
+            fallbackData.map(async (sitio) => {
+              const { data: bids } = await supabase
+                .from('proposals')
+                .select('amount')
+                .eq('property_id', sitio.id)
+                .order('amount', { ascending: false })
+                .limit(1);
+              
+              return {
+                ...sitio,
+                current_bid: bids && bids.length > 0 ? bids[0].amount : null
+              };
+            })
+          );
+          setSitios(sitiosWithBids);
+        }
+      } else if (data) {
         // Fetch current highest bid for each property
         const sitiosWithBids = await Promise.all(
           data.map(async (sitio) => {
@@ -306,77 +333,98 @@ export default function CarcaraProjectPage() {
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
             {sitios.map((sitio) => (
-              <Link 
-                href={`/imoveis/${sitio.id}`}
+              <article
                 key={sitio.id}
+                id={sitio.id}
+                className="group bg-gradient-to-br from-[#1a1a1a] to-[#0d0d0d] border-3 border-[#2a2a1a] rounded-3xl overflow-hidden hover:border-[#A8C97F] hover:shadow-2xl hover:shadow-[#A8C97F]/40 transition-all"
               >
-                <article
-                  id={sitio.id}
-                  className="group bg-gradient-to-br from-[#1a1a1a] to-[#0d0d0d] border-3 border-[#2a2a1a] rounded-3xl overflow-hidden hover:border-[#A8C97F] hover:shadow-2xl hover:shadow-[#A8C97F]/40 transition-all focus:outline-none focus:ring-4 focus:ring-[#A8C97F] cursor-pointer"
-                  tabIndex={0}
-                  role="button"
-                  aria-label={`Ver detalhes do sítio ${sitio.nome}`}
-                >
-                <div className="relative aspect-video">
-                  <Image
-                    src={getFirstPhoto(sitio.fotos)}
-                    alt={`Sítio ${sitio.nome}`}
-                    fill
-                    className="object-cover group-hover:scale-110 transition-transform duration-700"
-                    unoptimized
-                    onError={(e) => {
-                      const target = e.target as HTMLImageElement;
-                      target.src = '/images/fallback-rancho.jpg';
-                    }}
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-[#0a0a0a]/90 via-transparent to-transparent" />
-                  <div className="absolute top-4 left-4 px-5 py-2 bg-[#2a2a2a]/95 backdrop-blur-md rounded-full border border-[#3a3a2a]">
-                    <span className="text-[#0D7377] text-sm font-bold">{sitio.zona}</span>
+                <Link href={`/imoveis/${sitio.id}`} className="block">
+                  <div className="relative aspect-video">
+                    <Image
+                      src={getFirstPhoto(sitio.fotos)}
+                      alt={`Sítio ${sitio.nome}`}
+                      fill
+                      className="object-cover group-hover:scale-110 transition-transform duration-700"
+                      unoptimized
+                      onError={(e) => {
+                        const target = e.target as HTMLImageElement;
+                        target.src = '/images/fallback-rancho.jpg';
+                      }}
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-[#0a0a0a]/90 via-transparent to-transparent" />
+                    <div className="absolute top-4 left-4 px-5 py-2 bg-[#2a2a2a]/95 backdrop-blur-md rounded-full border border-[#3a3a2a]">
+                      <span className="text-[#0D7377] text-sm font-bold">{sitio.zona}</span>
+                    </div>
+                    {userId && (
+                      <div className="absolute top-4 right-4 z-30">
+                        <FavoritesButton propertyId={sitio.id} userId={userId} />
+                      </div>
+                    )}
                   </div>
-                  {userId && (
-                    <div className="absolute top-4 right-4 z-30">
-                      <FavoritesButton propertyId={sitio.id} userId={userId} />
-                    </div>
-                  )}
-                </div>
 
-                <div className="p-8">
-                  <h3 className="text-4xl font-bold text-[#A8C97F] mb-4">Sítio {sitio.nome}</h3>
-                  {sitio.descricao && (
-                    <p className="text-white mb-6 leading-relaxed font-medium">{sitio.descricao}</p>
-                  )}
+                  <div className="p-8">
+                    <h3 className="text-4xl font-bold text-[#A8C97F] mb-4">Sítio {sitio.nome}</h3>
+                    {sitio.descricao && (
+                      <p className="text-white mb-6 leading-relaxed font-medium">{sitio.descricao}</p>
+                    )}
 
-                  {sitio.area_total && (
-                    <div className="flex items-center gap-2 text-[#E6C98B] mb-6">
-                      <Home className="w-5 h-5" />
-                      <span className="font-semibold">{sitio.area_total} hectares</span>
-                    </div>
-                  )}
-
-                  <div className="grid grid-cols-2 gap-6 p-6 bg-[#2a2a2a]/50 rounded-2xl">
-                    <div>
-                      <div className="text-xs text-white mb-2 uppercase tracking-wide font-semibold opacity-80">
-                        {sitio.current_bid ? 'Proposta Atual' : 'Proposta Inicial'}
+                    {sitio.area_total && (
+                      <div className="flex items-center gap-2 text-[#E6C98B] mb-6">
+                        <Home className="w-5 h-5" />
+                        <span className="font-semibold">{sitio.area_total} hectares</span>
                       </div>
-                      <div className={`font-bold text-2xl ${sitio.current_bid ? 'text-[#B7791F]' : 'text-[#A8C97F]'}`}>
-                        R$ {((sitio.current_bid || sitio.lance_inicial) / 1000000).toFixed(2).replace('.', ',')}M
-                      </div>
-                      {sitio.current_bid && (
-                        <div className="text-xs text-[#676767] mt-1">
-                          Inicial: R$ {(sitio.lance_inicial / 1000000).toFixed(2).replace('.', ',')}M
+                    )}
+
+                    <div className="grid grid-cols-2 gap-6 p-6 bg-[#2a2a2a]/50 rounded-2xl mb-6">
+                      <div>
+                        <div className="text-xs text-white mb-2 uppercase tracking-wide font-semibold opacity-80">
+                          {sitio.current_bid ? 'Proposta Atual' : 'Proposta Inicial'}
                         </div>
-                      )}
-                    </div>
-                    <div>
-                      <div className="text-xs text-white mb-2 uppercase tracking-wide font-semibold opacity-80">Valor Estimado</div>
-                      <div className="font-bold text-[#E6C98B] text-2xl">
-                        R$ {(sitio.preco / 1000000).toFixed(1).replace('.', ',')}M
+                        <div className={`font-bold text-2xl ${sitio.current_bid ? 'text-[#B7791F]' : 'text-[#A8C97F]'}`}>
+                          R$ {((sitio.current_bid || sitio.lance_inicial) / 1000000).toFixed(2).replace('.', ',')}M
+                        </div>
+                        {sitio.current_bid && (
+                          <div className="text-xs text-[#676767] mt-1">
+                            Inicial: R$ {(sitio.lance_inicial / 1000000).toFixed(2).replace('.', ',')}M
+                          </div>
+                        )}
+                      </div>
+                      <div>
+                        <div className="text-xs text-white mb-2 uppercase tracking-wide font-semibold opacity-80">Valor Estimado</div>
+                        <div className="font-bold text-[#E6C98B] text-2xl">
+                          R$ {(sitio.preco / 1000000).toFixed(1).replace('.', ',')}M
+                        </div>
                       </div>
                     </div>
                   </div>
+                </Link>
+
+                {/* Action Buttons - Outside Link to prevent navigation conflicts */}
+                <div className="px-8 pb-8 grid grid-cols-2 gap-4">
+                  <button
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      handleScheduleVisit(sitio);
+                    }}
+                    className="px-6 py-3 bg-gradient-to-r from-[#0D7377] to-[#5F7161] hover:from-[#5F7161] hover:to-[#0D7377] text-white font-bold rounded-xl transition-all hover:scale-105 flex items-center justify-center gap-2 shadow-lg focus:outline-none focus:ring-2 focus:ring-[#0D7377]"
+                    aria-label={`Agendar visita ao sítio ${sitio.nome}`}
+                  >
+                    <Calendar className="w-5 h-5" />
+                    <span>Agendar Visita</span>
+                  </button>
+                  <button
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      handleMakeProposal(sitio);
+                    }}
+                    className="px-6 py-3 bg-gradient-to-r from-[#B87333] to-[#FFD700] hover:from-[#FFD700] hover:to-[#B87333] text-[#0a0a0a] font-bold rounded-xl transition-all hover:scale-105 flex items-center justify-center gap-2 shadow-lg focus:outline-none focus:ring-2 focus:ring-[#B87333]"
+                    aria-label={`Fazer proposta para sítio ${sitio.nome}`}
+                  >
+                    <TrendingUp className="w-5 h-5" />
+                    <span>Fazer Proposta</span>
+                  </button>
                 </div>
               </article>
-              </Link>
             ))}
           </div>
         )}
