@@ -97,20 +97,8 @@ function EntrarContent() {
       
       setSuccess("Account created! Please check your email to verify your account.");
       
-      // Auto-create profile
-      if (data.user) {
-        const { error: profileError } = await supabase
-          .from('user_profiles')
-          .insert([
-            {
-              id: data.user.id,
-              full_name: fullName,
-              phone: phone,
-            },
-          ]);
-        
-        if (profileError) console.error("Profile creation error:", profileError);
-      }
+      // Profile is auto-created by database trigger (handle_new_user)
+      console.log("User created successfully:", data.user?.id);
       
       // Switch to login mode after 3 seconds
       setTimeout(() => {

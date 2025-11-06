@@ -15,6 +15,9 @@ import StickyMobileAction, { ActionButton } from '@/components/StickyMobileActio
 import { Carcara3D } from '@publimicro/ui';
 import { getFirstPhoto } from '@/lib/photoUtils';
 
+// Note: Metadata must be exported from a Server Component or page.tsx file in the same directory
+// For client components, SEO is handled via layout.tsx or a parallel route
+
 // Dynamic import to avoid SSR issues with Leaflet
 const LeafletMapKML = dynamic(() => import("@/components/LeafletMapKML"), {
   ssr: false,
@@ -121,6 +124,7 @@ export default function CarcaraProjectPage() {
           .order('price', { ascending: true });
         
         if (fallbackData && fallbackData.length > 0) {
+          console.log('Fallback properties loaded:', fallbackData);
           const sitiosWithBids = await Promise.all(
             fallbackData.map(async (sitio) => {
               const { data: bids } = await supabase
@@ -129,6 +133,9 @@ export default function CarcaraProjectPage() {
                 .eq('property_id', sitio.id)
                 .order('amount', { ascending: false })
                 .limit(1);
+              
+              // Debug photo data
+              console.log(`Sítio ${sitio.id} photos:`, sitio.fotos);
               
               return {
                 ...sitio,
@@ -139,6 +146,7 @@ export default function CarcaraProjectPage() {
           setSitios(sitiosWithBids);
         }
       } else if (data) {
+        console.log('Project properties loaded:', data);
         // Fetch current highest bid for each property
         const sitiosWithBids = await Promise.all(
           data.map(async (sitio) => {
@@ -148,6 +156,9 @@ export default function CarcaraProjectPage() {
               .eq('property_id', sitio.id)
               .order('amount', { ascending: false })
               .limit(1);
+            
+            // Debug photo data
+            console.log(`Sítio ${sitio.id} photos:`, sitio.fotos);
             
             return {
               ...sitio,
@@ -212,15 +223,14 @@ export default function CarcaraProjectPage() {
         {/* Maximum dark overlay for perfect text contrast */}
         <div className="absolute inset-0 bg-gradient-to-b from-[#0a0a0a]/98 via-[#0a0a0a]/95 to-[#0a0a0a] z-[5]" />
         
-        {/* 3D Carcará Bird - Continuous Flying Animation from Right to Left - ABOVE EVERYTHING */}
-        <div className="absolute top-10 w-64 h-64 md:w-96 md:h-96 pointer-events-none z-[100] animate-fly-continuous">
+        {/* 3D Carcará Bird - Continuous Flying Animation from Right to Left - HIGHEST Z-INDEX */}
+        <div className="absolute top-10 w-64 h-64 md:w-96 md:h-96 pointer-events-none z-[200] animate-fly-continuous">
           <Carcara3D scale={2.5} />
         </div>
 
-        {/* Audio control for Carcará sound - ABOVE EVERYTHING */}
-        <audio id="carcara-sound" loop preload="auto" crossOrigin="anonymous">
-          <source src="https://xeno-canto.org/sounds/uploaded/GYAUIPBUMV/XC324827-Caracara%20plancus%20-%20Southern%20Caracara%20-%20Caracará%20-%20Poli.mp3" type="audio/mpeg" />
-          <source src="https://xeno-canto.org/324827/download" type="audio/mpeg" />
+        {/* Audio control for Carcará sound - HIGHEST Z-INDEX */}
+        <audio id="carcara-sound" loop preload="metadata">
+          <source src="/sounds/carcara.mp3" type="audio/mpeg" />
           Your browser does not support the audio element.
         </audio>
         <button
@@ -228,20 +238,25 @@ export default function CarcaraProjectPage() {
             const audio = document.getElementById('carcara-sound') as HTMLAudioElement;
             if (audio) {
               if (audio.paused) {
-                // Try to play with user interaction
+                audio.volume = 0.7; // Set volume
                 audio.play().catch(err => {
-                  console.error('Error playing audio:', err);
-                  // Try alternative URL
-                  audio.src = 'https://xeno-canto.org/324827/download';
-                  audio.load();
-                  audio.play().catch(e => console.error('Fallback also failed:', e));
+                  console.log('Audio play failed (normal for first click):', err);
+                  // Show friendly message
+                  const btn = document.querySelector('[aria-label="Reproduzir som do Carcará"]');
+                  if (btn) {
+                    const originalText = btn.textContent;
+                    btn.textContent = '🔊 Clique novamente';
+                    setTimeout(() => {
+                      btn.textContent = originalText;
+                    }, 2000);
+                  }
                 });
               } else {
                 audio.pause();
               }
             }
           }}
-          className="absolute top-10 right-10 px-6 py-3 bg-[#A8C97F]/90 border-2 border-[#E6C98B] rounded-full backdrop-blur-md text-[#0a0a0a] hover:bg-[#A8C97F] transition-all z-50 flex items-center gap-2 font-bold shadow-2xl hover:scale-110"
+          className="absolute top-10 right-10 px-6 py-3 bg-[#A8C97F]/90 border-2 border-[#E6C98B] rounded-full backdrop-blur-md text-[#0a0a0a] hover:bg-[#A8C97F] transition-all z-[200] flex items-center gap-2 font-bold shadow-2xl hover:scale-110"
           aria-label="Reproduzir som do Carcará"
         >
           🔊 Som do Carcará
@@ -440,6 +455,7 @@ export default function CarcaraProjectPage() {
                   )}
                 </div>
 
+                {/* Clickable content area */}
                 <Link href={`/imoveis/${sitio.id}`} className="block">
                   <div className="p-8">
                     {/* Nome e Subtítulo Poético */}
@@ -506,15 +522,30 @@ export default function CarcaraProjectPage() {
                   </div>
                 </Link>
                     
-                {/* Action Button - Single button to property profile */}
-                <div className="px-8 pb-8">
-                  <Link
-                    href={`/imoveis/${sitio.id}`}
-                    className="flex items-center justify-center gap-2 w-full px-6 py-4 bg-gradient-to-r from-[#0D7377] to-[#5F7161] hover:from-[#5F7161] hover:to-[#0D7377] text-white font-bold rounded-xl transition-all hover:scale-105 shadow-lg"
+                {/* Action Buttons - Two buttons for visit and proposal */}
+                <div className="px-8 pb-8 grid grid-cols-2 gap-4">
+                  <button
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      handleScheduleVisit(sitio);
+                    }}
+                    className="flex items-center justify-center gap-2 px-4 py-3 bg-gradient-to-r from-[#0D7377] to-[#5F7161] hover:from-[#5F7161] hover:to-[#0D7377] text-white font-bold rounded-xl transition-all hover:scale-105 shadow-lg focus:outline-none focus:ring-2 focus:ring-[#0D7377]"
+                    aria-label={`Agendar visita ao sítio ${sitio.title}`}
                   >
-                    <Info className="w-5 h-5" />
-                    <span>Mais Informações</span>
-                  </Link>
+                    <Calendar className="w-5 h-5" />
+                    <span>Agendar Visita</span>
+                  </button>
+                  <button
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      handleMakeProposal(sitio);
+                    }}
+                    className="flex items-center justify-center gap-2 px-4 py-3 bg-gradient-to-r from-[#B87333] to-[#FFD700] hover:from-[#FFD700] hover:to-[#B87333] text-[#0a0a0a] font-bold rounded-xl transition-all hover:scale-105 shadow-lg focus:outline-none focus:ring-2 focus:ring-[#B87333]"
+                    aria-label={`Fazer proposta para sítio ${sitio.title}`}
+                  >
+                    <TrendingUp className="w-5 h-5" />
+                    <span>Fazer Proposta</span>
+                  </button>
                 </div>
               </article>
             )})}
@@ -674,16 +705,13 @@ export default function CarcaraProjectPage() {
       {/* Mobile Action Bar - Bottom Sticky */}
       <StickyMobileAction position="bottom">
         <div className="flex gap-3">
-          <a
-            href="https://wa.me/5534992610004?text=Olá! Gostaria de conhecer os Sítios Carcará"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="flex-1"
+          <ActionButton
+            variant="primary"
+            icon={<Phone className="w-5 h-5" />}
+            onClick={() => window.open('https://wa.me/5534992610004?text=Olá! Gostaria de conhecer os Sítios Carcará', '_blank')}
           >
-            <ActionButton variant="primary" icon={<Phone className="w-5 h-5" />}>
-              WhatsApp
-            </ActionButton>
-          </a>
+            WhatsApp
+          </ActionButton>
           <ActionButton
             variant="secondary"
             icon={<Calendar className="w-5 h-5" />}
