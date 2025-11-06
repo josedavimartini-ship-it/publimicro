@@ -9,9 +9,11 @@ import dynamic from "next/dynamic";
 import VisitModal from "@/components/VisitModal";
 import FavoritesButton from "@/components/FavoritesButton";
 import SearchBar from "@/components/SearchBar";
+import SwipeGallery from "@/components/SwipeGallery";
 import WelcomeModal from "@/components/WelcomeModal";
 import RecentlyViewed from "@/components/RecentlyViewed";
 import { LiveCounter, ActivityFeed, Testimonials, TrustBadges } from "@/components/SocialProof";
+import { PropertyCardSkeleton } from "@/components/Skeleton";
 import { useUnsplashImages } from "@/hooks/useUnsplashImages";
 import { getFirstPhoto } from "@/lib/photoUtils";
 import { 
@@ -147,8 +149,20 @@ export default function HomePage() {
           setErrorMsg("Erro ao buscar propriedades em destaque.");
         }
         if (!data || data.length === 0) {
-          const fallback = await supabase.from("sitios").select("*").limit(6);
+          const { data: carcaraData, error: carcaraError } = await supabase
+          .from("properties")
+          .select("*")
+          .eq("status", "active")
+          .order("created_at", { ascending: false })
+          .limit(6);
+
+        if (carcaraError) {
+          console.error("Error fetching Carcará properties:", carcaraError);
+          const fallback = await supabase.from("properties").select("*").limit(6);
           data = fallback.data;
+        } else {
+          data = carcaraData;
+        }
         }
         
         // Fetch current highest bid for each property
@@ -372,12 +386,12 @@ export default function HomePage() {
                   )}
                   <div className="absolute inset-0 bg-gradient-to-t from-black/95 via-black/75 to-black/40" />
                   <div className="relative z-10 flex flex-col items-center justify-center h-full p-4 text-center">
-                    <IconComponent className="w-14 h-14 text-[#E6C98B] mb-2 group-hover:scale-125 transition-all duration-300 drop-shadow-[0_4px_8px_rgba(0,0,0,0.9)]" strokeWidth={1.5} />
-                    <div className="bg-black/95 backdrop-blur-md px-5 py-3 rounded-lg border-2 border-[#E6C98B]/60 shadow-2xl">
-                      <h3 className="text-xl md:text-2xl font-bold text-white drop-shadow-[0_4px_12px_rgba(0,0,0,1)] group-hover:text-[#A8C97F] transition-colors mb-1">
+                    <IconComponent className="w-16 h-16 md:w-14 md:h-14 text-[#E6C98B] mb-3 md:mb-2 group-hover:scale-125 transition-all duration-300 drop-shadow-[0_6px_12px_rgba(0,0,0,0.95)]" strokeWidth={2} />
+                    <div className="bg-black/95 backdrop-blur-md px-6 py-4 md:px-5 md:py-3 rounded-xl border-2 border-[#E6C98B]/70 shadow-2xl">
+                      <h3 className="text-2xl md:text-2xl font-black text-white drop-shadow-[0_4px_16px_rgba(0,0,0,1)] group-hover:text-[#A8C97F] transition-colors mb-1">
                         {section.name}
                       </h3>
-                      <p className="text-sm md:text-xs text-[#E6C98B] font-bold drop-shadow-[0_2px_8px_rgba(0,0,0,1)]">
+                      <p className="text-base md:text-xs text-[#E6C98B] font-extrabold drop-shadow-[0_3px_10px_rgba(0,0,0,1)]">
                         {section.concept}
                       </p>
                     </div>
@@ -412,12 +426,12 @@ export default function HomePage() {
                   )}
                   <div className="absolute inset-0 bg-gradient-to-t from-black/95 via-black/75 to-black/40" />
                   <div className="relative z-10 flex flex-col items-center justify-center h-full p-4 text-center">
-                    <IconComponent className="w-14 h-14 text-[#E6C98B] mb-2 group-hover:scale-125 transition-all duration-300 drop-shadow-[0_4px_8px_rgba(0,0,0,0.9)]" strokeWidth={1.5} />
-                    <div className="bg-black/95 backdrop-blur-md px-5 py-3 rounded-lg border-2 border-[#A8C97F]/60 shadow-2xl">
-                      <h3 className="text-xl md:text-2xl font-bold text-white drop-shadow-[0_4px_12px_rgba(0,0,0,1)] group-hover:text-[#A8C97F] transition-colors mb-1">
+                    <IconComponent className="w-16 h-16 md:w-14 md:h-14 text-[#E6C98B] mb-3 md:mb-2 group-hover:scale-125 transition-all duration-300 drop-shadow-[0_6px_12px_rgba(0,0,0,0.95)]" strokeWidth={2} />
+                    <div className="bg-black/95 backdrop-blur-md px-6 py-4 md:px-5 md:py-3 rounded-xl border-2 border-[#A8C97F]/70 shadow-2xl">
+                      <h3 className="text-2xl md:text-2xl font-black text-white drop-shadow-[0_4px_16px_rgba(0,0,0,1)] group-hover:text-[#A8C97F] transition-colors mb-1">
                         {section.name}
                       </h3>
-                      <p className="text-sm md:text-xs text-[#E6C98B] font-bold drop-shadow-[0_2px_8px_rgba(0,0,0,1)]">
+                      <p className="text-base md:text-xs text-[#E6C98B] font-extrabold drop-shadow-[0_3px_10px_rgba(0,0,0,1)]">
                         {section.concept}
                       </p>
                     </div>
@@ -440,7 +454,18 @@ export default function HomePage() {
               </div>
             )}
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {sitios.map((sitio) => {
+              {loading ? (
+                // Loading skeletons
+                <>
+                  <PropertyCardSkeleton />
+                  <PropertyCardSkeleton />
+                  <PropertyCardSkeleton />
+                  <PropertyCardSkeleton />
+                  <PropertyCardSkeleton />
+                  <PropertyCardSkeleton />
+                </>
+              ) : (
+                sitios.map((sitio) => {
                 const fotoUrl = getFirstPhoto(sitio.fotos);
                 console.log(`Sitio ${sitio.nome} photo URL:`, fotoUrl);
                 
@@ -469,31 +494,29 @@ export default function HomePage() {
                     key={sitio.id}
                     className="group bg-gradient-to-br from-[#5A5E5D] to-[#3A3E3D] border-2 border-[#2a2a1a] rounded-2xl overflow-hidden hover:border-[#A8C97F] transition-all shadow-xl flex flex-col"
                   >
-                    {/* Image and Basic Info - Clickable to property detail */}
-                    <Link href={`/imoveis/${sitio.id}`} className="flex-1">
-                      <div className="relative aspect-square overflow-hidden">
-                        <Image
-                          src={fotoUrl}
-                          alt={sitio.nome || "Sítio"}
-                          fill
-                          className="object-cover group-hover:scale-110 transition-transform duration-500"
-                          unoptimized
-                          onError={(e) => {
-                            const target = e.target as HTMLImageElement;
-                            target.src = "/images/fallback-rancho.jpg";
-                          }}
-                        />
-                        {sitio.zona && (
-                          <div className="absolute top-3 left-3 px-3 py-1 bg-[#5A5E5D]/90 text-[#A8C97F] font-bold rounded-lg text-sm border border-[#A8C97F]/30">
-                            {sitio.zona}
-                          </div>
-                        )}
-                        {/* Favorites Heart Button - Moved to top right */}
-                        <div className="absolute top-3 right-3">
-                          <FavoritesButton propertyId={sitio.id} userId={userId} size="md" />
+                    {/* Swipeable Image Gallery */}
+                    <div className="relative">
+                      <SwipeGallery
+                        images={sitio.fotos?.length > 0 ? sitio.fotos : [fotoUrl]}
+                        alt={sitio.nome || "Sítio"}
+                        aspectRatio="square"
+                        showThumbnails={false}
+                        showCounter={sitio.fotos?.length > 1}
+                        enableFullscreen={true}
+                      />
+                      {sitio.zona && (
+                        <div className="absolute top-3 left-3 px-3 py-1 bg-[#5A5E5D]/90 text-[#A8C97F] font-bold rounded-lg text-sm border border-[#A8C97F]/30 z-20">
+                          {sitio.zona}
                         </div>
+                      )}
+                      {/* Favorites Heart Button - Top right */}
+                      <div className="absolute top-3 right-3 z-30">
+                        <FavoritesButton propertyId={sitio.id} userId={userId} size="md" />
                       </div>
-                      
+                    </div>
+                    
+                    {/* Property Info - Clickable to detail */}
+                    <Link href={`/imoveis/${sitio.id}`} className="flex-1">
                       <div className="p-4 flex flex-col gap-2">
                         <h3 className="text-lg font-bold text-[#D4A574] line-clamp-1">{sitio.nome}</h3>
                         {sitio.localizacao && <p className="text-[#8B9B6E] text-xs line-clamp-1">{sitio.localizacao}</p>}
@@ -522,19 +545,20 @@ export default function HomePage() {
                       </div>
                     </Link>
                     
-                    {/* Action Button - Enhanced with hover effects */}
+                    {/* Action Button - Link to property profile */}
                     <div className="px-4 pb-4">
-                      <button
-                        onClick={() => handleFazerProposta(sitio.id, sitio.nome)}
-                        className="flex items-center justify-center gap-2 w-full px-6 py-5 bg-gradient-to-r from-[#B7791F] to-[#D4A574] hover:from-[#D4A574] hover:to-[#B7791F] text-white font-bold rounded-lg transition-all hover:scale-105 hover:shadow-2xl shadow-lg text-base"
+                      <Link
+                        href={`/imoveis/${sitio.id}`}
+                        className="flex items-center justify-center gap-2 w-full px-6 py-5 bg-gradient-to-r from-[#0D7377] to-[#5F7161] hover:from-[#5F7161] hover:to-[#0D7377] text-white font-bold rounded-lg transition-all hover:scale-105 hover:shadow-2xl shadow-lg text-base"
                       >
-                        <Handshake className="w-6 h-6" />
-                        <span>Fazer Proposta</span>
-                      </button>
+                        <Info className="w-5 h-5" />
+                        <span>Mais Informações</span>
+                      </Link>
                     </div>
                   </div>
                 );
-              })}
+              })
+              )}
             </div>
           </section>
         )}

@@ -2,9 +2,11 @@
 
 /**
  * ACHEME Logo Component
- * Combines a search icon with an Emu (Ema) bird in the center
- * Represents "Ache-me" (Find For Me)
+ * Combines a search icon with an Emu (Ema) bird holding binoculars in the center
+ * Represents "Ache-me" (Find For Me) - The Emu searches for you!
  * Designed for international marketplace www.acheme.com
+ * 
+ * The Emu with binoculars symbolizes active searching and discovery
  */
 
 export default function AchemeLogo({ className = "w-12 h-12", animate = false }: { className?: string; animate?: boolean }) {
@@ -37,8 +39,38 @@ export default function AchemeLogo({ className = "w-12 h-12", animate = false }:
         className={animate ? "animate-pulse" : ""}
       />
       
-      {/* Emu Bird Silhouette in Center */}
+      {/* Emu Bird Silhouette in Center with Binoculars */}
       <g transform="translate(55, 55)">
+        {/* Binoculars - Behind Emu */}
+        <g opacity="0.9">
+          {/* Left Lens */}
+          <circle cx="15" cy="8" r="5" fill="#2a2a2a" stroke="url(#achemeGradient)" strokeWidth="1.5" />
+          <circle cx="15" cy="8" r="3" fill="rgba(135, 206, 235, 0.3)" />
+          
+          {/* Right Lens */}
+          <circle cx="25" cy="8" r="5" fill="#2a2a2a" stroke="url(#achemeGradient)" strokeWidth="1.5" />
+          <circle cx="25" cy="8" r="3" fill="rgba(135, 206, 235, 0.3)" />
+          
+          {/* Bridge connecting lenses */}
+          <rect x="18" y="6" width="4" height="4" fill="url(#achemeGradient)" rx="1" />
+          
+          {/* Binocular straps */}
+          <path 
+            d="M 12 6 Q 8 2, 10 -2" 
+            stroke="url(#achemeGradient)" 
+            strokeWidth="1" 
+            fill="none"
+            strokeLinecap="round"
+          />
+          <path 
+            d="M 28 6 Q 32 2, 30 -2" 
+            stroke="url(#achemeGradient)" 
+            strokeWidth="1" 
+            fill="none"
+            strokeLinecap="round"
+          />
+        </g>
+        
         {/* Emu Body */}
         <ellipse
           cx="25"
@@ -65,12 +97,18 @@ export default function AchemeLogo({ className = "w-12 h-12", animate = false }:
           fill="url(#emuGradient)"
         />
         
-        {/* Emu Eye */}
+        {/* Emu Eye - Looking through binoculars */}
         <circle
           cx="20"
           cy="2"
-          r="1"
+          r="1.2"
           fill="#FFD700"
+        />
+        <circle
+          cx="20.5"
+          cy="1.8"
+          r="0.5"
+          fill="#000"
         />
         
         {/* Emu Beak */}

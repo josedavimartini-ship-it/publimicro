@@ -13,6 +13,8 @@ import Breadcrumbs from "@/components/Breadcrumbs";
 import { addToRecentlyViewed } from "@/components/RecentlyViewed";
 import { useToast } from "@/components/ToastNotification";
 import VisitScheduler from "@/components/scheduling/VisitScheduler";
+import SwipeGallery from "@/components/SwipeGallery";
+import StickyMobileAction, { ActionButton } from "@/components/StickyMobileAction";
 import FocusLock from "react-focus-lock";
 
 // Dynamic import to avoid SSR issues with Leaflet
@@ -287,57 +289,21 @@ export default function PropertyPage() {
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           {/* Left Column - Images and Details */}
           <div className="lg:col-span-2 space-y-6">
-            {/* Main Image with Favorite */}
-            <div className="relative aspect-video rounded-2xl overflow-hidden shadow-2xl group">
-              <Image
-                src={currentPhoto}
+            {/* Swipeable Gallery with Fullscreen */}
+            <div className="relative">
+              <SwipeGallery
+                images={photos}
                 alt={sitio.nome}
-                fill
-                className="object-cover"
-                unoptimized
-                onError={(e) => {
-                  const target = e.target as HTMLImageElement;
-                  target.src = "/images/fallback-rancho.jpg";
-                }}
+                aspectRatio="video"
+                showThumbnails={true}
+                showCounter={true}
+                enableFullscreen={true}
               />
-              {/* Heart Favorite on Main Image - Moved to top right */}
-              <div className="absolute top-4 right-4 z-10 opacity-0 group-hover:opacity-100 transition-opacity">
+              {/* Favorite Button - Always visible */}
+              <div className="absolute top-4 right-4 z-30">
                 <FavoritesButton propertyId={sitio.id} size="lg" />
               </div>
             </div>
-
-            {/* Thumbnail Gallery with Hearts */}
-            {photos.length > 1 && (
-              <div className="grid grid-cols-4 md:grid-cols-6 gap-3">
-                {photos.map((photo, index) => (
-                  <div
-                    key={index}
-                    className="relative group"
-                  >
-                    <button
-                      onClick={() => setCurrentImageIndex(index)}
-                      className={`relative aspect-video rounded-lg overflow-hidden border-2 transition-all w-full ${
-                        index === currentImageIndex
-                          ? "border-[#A8C97F] scale-105"
-                          : "border-[#2a2a1a] hover:border-[#E6C98B]"
-                      }`}
-                    >
-                      <Image
-                        src={photo}
-                        alt={`${sitio.nome} - ${index + 1}`}
-                        fill
-                        className="object-cover"
-                        unoptimized
-                      />
-                    </button>
-                    {/* Heart on each thumbnail */}
-                    <div className="absolute top-1 right-1 z-10 opacity-0 group-hover:opacity-100 transition-opacity">
-                      <FavoritesButton propertyId={`${sitio.id}-photo-${index}`} size="sm" />
-                    </div>
-                  </div>
-                ))}
-              </div>
-            )}
 
             {/* Property Info */}
             <div className="bg-gradient-to-br from-[#1a1a1a] to-[#0d0d0d] border-2 border-[#2a2a1a] rounded-2xl p-8">
@@ -564,6 +530,32 @@ export default function PropertyPage() {
           </FocusLock>
         </div>
       )}
+
+      {/* Mobile Action Bar - Bottom Sticky */}
+      <StickyMobileAction position="bottom">
+        <div className="flex gap-3">
+          <a
+            href="https://wa.me/5534992610004"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="flex-1"
+          >
+            <ActionButton variant="primary" icon={<Phone className="w-5 h-5" />}>
+              WhatsApp
+            </ActionButton>
+          </a>
+          <ActionButton
+            variant="secondary"
+            icon={<Calendar className="w-5 h-5" />}
+            onClick={() => {
+              previouslyFocusedElement.current = document.activeElement as HTMLElement;
+              setVisitModalOpen(true);
+            }}
+          >
+            Agendar Visita
+          </ActionButton>
+        </div>
+      </StickyMobileAction>
     </main>
   );
 }

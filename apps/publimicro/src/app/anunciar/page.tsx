@@ -96,7 +96,7 @@ export default function AnunciarPage() {
       }
 
       // Insert property into database
-      const { data, error } = await supabase.from("sitios").insert([
+      const { data, error } = await supabase.from("properties").insert([
         {
           nome,
           descricao,

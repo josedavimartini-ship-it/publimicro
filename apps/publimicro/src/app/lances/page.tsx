@@ -16,11 +16,10 @@ interface Bid {
   status: "pending" | "accepted" | "rejected" | "counter";
   created_at: string;
   updated_at: string;
-  sitios: {
-    nome: string;
-    localizacao: string;
-    preco: number;
-    lance_inicial: number;
+  properties: {
+    title: string;
+    location: string;
+    price: number;
     fotos: string[];
   } | null;
   highest_bid?: number;
@@ -57,14 +56,13 @@ export default function LancesPage() {
     setLoading(true);
     try {
       let query = supabase
-        .from("bids")
+        .from("proposals")
         .select(`
           *,
-          sitios (
-            nome,
-            localizacao,
-            preco,
-            lance_inicial,
+          properties (
+            title,
+            location,
+            price,
             fotos
           )
         `)
@@ -83,13 +81,13 @@ export default function LancesPage() {
       const bidsWithStats = await Promise.all(
         (data || []).map(async (bid) => {
           const { count } = await supabase
-            .from("bids")
+            .from("proposals")
             .select("*", { count: "exact", head: true })
             .eq("property_id", bid.property_id)
             .neq("status", "rejected");
 
           const { data: highestBidData } = await supabase
-            .from("bids")
+            .from("proposals")
             .select("bid_amount")
             .eq("property_id", bid.property_id)
             .neq("status", "rejected")
@@ -239,10 +237,10 @@ export default function LancesPage() {
                   <div className="flex flex-col md:flex-row gap-6">
                     {/* Property Image */}
                     <div className="w-full md:w-48 h-32 bg-[#2a2a1a] rounded-lg overflow-hidden flex-shrink-0">
-                      {bid.sitios?.fotos && bid.sitios.fotos[0] ? (
+                      {bid.properties?.fotos && bid.properties.fotos[0] ? (
                         <Image
-                          src={bid.sitios.fotos[0]}
-                          alt={bid.sitios.nome || "Propriedade"}
+                          src={bid.properties.fotos[0]}
+                          alt={bid.properties.title || "Propriedade"}
                           width={192}
                           height={128}
                           className="w-full h-full object-cover"
@@ -263,10 +261,10 @@ export default function LancesPage() {
                             href={`/imoveis/${bid.property_id}`}
                             className="text-xl font-bold text-[#E6C98B] hover:text-[#A8C97F] transition-colors"
                           >
-                            {bid.sitios?.nome || "Propriedade"}
+                            {bid.properties?.title || "Propriedade"}
                           </Link>
                           <p className="text-[#A8C97F] text-sm mt-1">
-                            {bid.sitios?.localizacao || "Localização não disponível"}
+                            {bid.properties?.location || "Localização não disponível"}
                           </p>
                         </div>
 

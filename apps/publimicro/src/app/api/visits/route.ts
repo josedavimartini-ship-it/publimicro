@@ -20,8 +20,8 @@ export async function POST(req: Request) {
 
     // Check if user has verified profile
     const { data: profile } = await supabase
-      .from('profiles')
-      .select('verified_minimal')
+      .from('user_profiles')
+      .select('profile_completed')
       .eq('id', user.id)
       .single();
 
@@ -36,7 +36,7 @@ export async function POST(req: Request) {
         guest_email: guest_email || user.email,
         guest_phone,
         notes,
-        verification_passed: profile?.verified_minimal || false,
+        verification_passed: profile?.profile_completed || false,
       })
       .select()
       .single();

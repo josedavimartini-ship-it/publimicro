@@ -31,7 +31,7 @@ export default function FavoritesButton({ propertyId, userId, size = 'md' }: Fav
 
     async function checkFavorite() {
       const { data } = await supabase
-        .from('favorites')
+        .from('property_favorites')
         .select('id')
         .eq('property_id', propertyId)
         .eq('user_id', userId)
@@ -57,14 +57,14 @@ export default function FavoritesButton({ propertyId, userId, size = 'md' }: Fav
     try {
       if (isFavorite) {
         await supabase
-          .from('favorites')
+          .from('property_favorites')
           .delete()
           .eq('property_id', propertyId)
           .eq('user_id', userId);
         setIsFavorite(false);
       } else {
         await supabase
-          .from('favorites')
+          .from('property_favorites')
           .insert({ property_id: propertyId, user_id: userId });
         setIsFavorite(true);
       }
