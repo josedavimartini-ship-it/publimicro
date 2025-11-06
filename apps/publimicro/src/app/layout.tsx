@@ -18,6 +18,7 @@ export const metadata = {
   creator: "ACHEME",
   publisher: "ACHEME",
   robots: "index, follow",
+  metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || 'https://acheme.com'),
   openGraph: {
     type: "website",
     locale: "en_US",
@@ -62,6 +63,15 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     <html lang="pt-BR">
       <head>
         <link rel="manifest" href="/manifest.json" />
+        
+        {/* Performance: Resource Hints */}
+        <link rel="preconnect" href="https://irrzpwzyqcubhhjeuakc.supabase.co" />
+        <link rel="dns-prefetch" href="https://irrzpwzyqcubhhjeuakc.supabase.co" />
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+        <link rel="dns-prefetch" href="https://unpkg.com" />
+        
+        {/* PWA Theme Colors */}
         {/* Burnt gold/bronze - light and smooth for the eyes */}
         <meta name="theme-color" content="#D4A574" media="(prefers-color-scheme: light)" />
         <meta name="theme-color" content="#B8936D" media="(prefers-color-scheme: dark)" />

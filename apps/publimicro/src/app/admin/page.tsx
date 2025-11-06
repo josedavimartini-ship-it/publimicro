@@ -31,10 +31,9 @@ interface AdminStats {
 
 interface Property {
   id: string;
-  nome: string;
-  localizacao: string;
-  preco: number;
-  lance_inicial: number;
+  title: string;
+  location: string;
+  price: number;
   created_at: string;
 }
 
@@ -46,7 +45,7 @@ interface Bid {
   message: string;
   status: string;
   created_at: string;
-  sitios: { nome: string } | { nome: string }[];
+  properties: { title: string } | { title: string }[];
 }
 
 interface Contact {
@@ -120,13 +119,13 @@ export default function AdminPage() {
         { count: pendingContactsCount },
         { data: avgBidData },
       ] = await Promise.all([
-        supabase.from("sitios").select("*", { count: "exact", head: true }),
-        supabase.from("profiles").select("*", { count: "exact", head: true }),
-        supabase.from("bids").select("*", { count: "exact", head: true }),
+        supabase.from("properties").select("*", { count: "exact", head: true }),
+        supabase.from("user_profiles").select("*", { count: "exact", head: true }),
+        supabase.from("proposals").select("*", { count: "exact", head: true }),
         supabase.from("contacts").select("*", { count: "exact", head: true }),
-        supabase.from("bids").select("*", { count: "exact", head: true }).eq("status", "pending"),
+        supabase.from("proposals").select("*", { count: "exact", head: true }).eq("status", "pending"),
         supabase.from("contacts").select("*", { count: "exact", head: true }).eq("status", "novo"),
-        supabase.from("bids").select("bid_amount"),
+        supabase.from("proposals").select("bid_amount"),
       ]);
 
       const avgBid = avgBidData && avgBidData.length > 0
@@ -151,8 +150,8 @@ export default function AdminPage() {
 
   const loadProperties = async () => {
     const { data } = await supabase
-      .from("sitios")
-      .select("id, nome, localizacao, preco, lance_inicial, created_at")
+      .from("properties")
+      .select("id, title, location, price, created_at")
       .order("created_at", { ascending: false })
       .limit(20);
     
@@ -161,7 +160,7 @@ export default function AdminPage() {
 
   const loadBids = async () => {
     const { data } = await supabase
-      .from("bids")
+      .from("proposals")
       .select(`
         id,
         property_id,
@@ -170,7 +169,7 @@ export default function AdminPage() {
         message,
         status,
         created_at,
-        sitios (nome)
+        properties (title)
       `)
       .order("created_at", { ascending: false })
       .limit(50);
@@ -191,7 +190,7 @@ export default function AdminPage() {
   const updateBidStatus = async (bidId: string, newStatus: string) => {
     try {
       const { error } = await supabase
-        .from("bids")
+        .from("proposals")
         .update({ status: newStatus })
         .eq("id", bidId);
 
@@ -225,7 +224,7 @@ export default function AdminPage() {
 
     try {
       const { error } = await supabase
-        .from("sitios")
+        .from("properties")
         .delete()
         .eq("id", propertyId);
 
@@ -482,20 +481,16 @@ export default function AdminPage() {
                         <th className="px-6 py-4 text-left text-[#E6C98B] font-semibold">Nome</th>
                         <th className="px-6 py-4 text-left text-[#E6C98B] font-semibold">Localização</th>
                         <th className="px-6 py-4 text-left text-[#E6C98B] font-semibold">Preço</th>
-                        <th className="px-6 py-4 text-left text-[#E6C98B] font-semibold">Lance Inicial</th>
                         <th className="px-6 py-4 text-left text-[#E6C98B] font-semibold">Ações</th>
                       </tr>
                     </thead>
                     <tbody>
                       {properties.map((property) => (
                         <tr key={property.id} className="border-t border-[#2a2a1a] hover:bg-[#2a2a1a]/30 transition-colors">
-                          <td className="px-6 py-4 text-[#8B9B6E]">{property.nome}</td>
-                          <td className="px-6 py-4 text-[#8B9B6E]">{property.localizacao}</td>
+                          <td className="px-6 py-4 text-[#8B9B6E]">{property.title}</td>
+                          <td className="px-6 py-4 text-[#8B9B6E]">{property.location}</td>
                           <td className="px-6 py-4 text-[#E6C98B] font-semibold">
-                            R$ {property.preco?.toLocaleString("pt-BR") || "N/A"}
-                          </td>
-                          <td className="px-6 py-4 text-[#A8C97F] font-semibold">
-                            R$ {property.lance_inicial?.toLocaleString("pt-BR") || "N/A"}
+                            R$ {property.price?.toLocaleString("pt-BR") || "N/A"}
                           </td>
                           <td className="px-6 py-4">
                             <div className="flex items-center gap-2">
@@ -546,7 +541,7 @@ export default function AdminPage() {
                       {bids.map((bid) => (
                         <tr key={bid.id} className="border-t border-[#2a2a1a] hover:bg-[#2a2a1a]/30 transition-colors">
                           <td className="px-6 py-4 text-[#8B9B6E]">
-                            {Array.isArray(bid.sitios) ? bid.sitios[0]?.nome : bid.sitios?.nome || "N/A"}
+                            {Array.isArray(bid.properties) ? bid.properties[0]?.title : bid.properties?.title || "N/A"}
                           </td>
                           <td className="px-6 py-4 text-[#A8C97F] font-bold">
                             R$ {bid.bid_amount.toLocaleString("pt-BR")}

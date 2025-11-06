@@ -6,6 +6,7 @@ import { X, Calendar, Clock, Video, MapPin, LogIn } from 'lucide-react';
 import FocusLock from 'react-focus-lock';
 import { useAuth } from './AuthProvider';
 import { useRouter } from 'next/navigation';
+import BottomSheet from './BottomSheet';
 
 interface VisitModalProps {
   adId: string;
@@ -17,6 +18,7 @@ interface VisitModalProps {
 export default function VisitModal({ adId, adTitle, open, onClose }: VisitModalProps) {
   const router = useRouter();
   const { user } = useAuth();
+  const [isMobile, setIsMobile] = useState(false);
   const [form, setForm] = useState({
     guest_name: '',
     guest_email: '',
@@ -53,6 +55,14 @@ export default function VisitModal({ adId, adTitle, open, onClose }: VisitModalP
       document.removeEventListener('keydown', handleEscape);
     };
   }, [open]);
+
+  // Detect mobile screen size
+  useEffect(() => {
+    const checkMobile = () => setIsMobile(window.innerWidth < 768);
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
 
   const handleClose = () => {
     onClose();
@@ -130,6 +140,66 @@ export default function VisitModal({ adId, adTitle, open, onClose }: VisitModalP
     );
   }
 
+  // Mobile: Use BottomSheet
+  if (isMobile) {
+    return (
+      <BottomSheet isOpen={open} onClose={handleClose} title="Agendar Visita">
+        <div className="space-y-4 pb-6">
+          {success ? (
+            <div className="bg-green-900/20 border border-green-500/50 rounded-lg p-6 text-center">
+              <div className="w-16 h-16 bg-green-500/20 rounded-full flex items-center justify-center mx-auto mb-4">
+                <svg className="w-8 h-8 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                </svg>
+              </div>
+              <h3 className="text-xl font-bold text-green-400 mb-2">Visita Agendada!</h3>
+              <p className="text-green-300 text-sm">Entraremos em contato em breve para confirmar.</p>
+            </div>
+          ) : (
+            <form onSubmit={handleSubmit} className="space-y-4">
+              <div>
+                <label className="block text-sm font-medium text-[#B7791F] mb-2">Nome Completo *</label>
+                <input type="text" name="guest_name" placeholder="Seu nome completo" value={form.guest_name} onChange={handleChange} className="w-full px-4 py-3 bg-[#232323] border border-[#0D7377] rounded-lg text-[#f2e6b1] placeholder-[#676767] focus:outline-none focus:border-[#0D7377]" required />
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-[#B7791F] mb-2">Email *</label>
+                <input type="email" name="guest_email" placeholder="seu@email.com" value={form.guest_email} onChange={handleChange} className="w-full px-4 py-3 bg-[#232323] border border-[#0D7377] rounded-lg text-[#f2e6b1] placeholder-[#676767] focus:outline-none focus:border-[#0D7377]" required />
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-[#B7791F] mb-2">WhatsApp *</label>
+                <input type="tel" name="guest_phone" placeholder="(00) 00000-0000" value={form.guest_phone} onChange={handleChange} className="w-full px-4 py-3 bg-[#232323] border border-[#0D7377] rounded-lg text-[#f2e6b1] placeholder-[#676767] focus:outline-none focus:border-[#0D7377]" required />
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-[#B7791F] mb-2">Tipo de Visita *</label>
+                <div className="grid grid-cols-2 gap-3">
+                  <button type="button" onClick={() => setForm({ ...form, visit_type: 'in_person' })} className={`flex items-center justify-center gap-2 px-4 py-3 rounded-lg border-2 transition-all ${form.visit_type === 'in_person' ? 'border-[#0D7377] bg-[#0D7377]/20 text-[#0D7377]' : 'border-[#3a3a2a] bg-[#2a2a2a] text-[#676767]'}`}>
+                    <MapPin className="w-5 h-5" /><span className="font-medium">Presencial</span>
+                  </button>
+                  <button type="button" onClick={() => setForm({ ...form, visit_type: 'video' })} className={`flex items-center justify-center gap-2 px-4 py-3 rounded-lg border-2 transition-all ${form.visit_type === 'video' ? 'border-[#0D7377] bg-[#0D7377]/20 text-[#0D7377]' : 'border-[#3a3a2a] bg-[#2a2a2a] text-[#676767]'}`}>
+                    <Video className="w-5 h-5" /><span className="font-medium">Vídeo</span>
+                  </button>
+                </div>
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-[#B7791F] mb-2">Data e Hora Preferencial *</label>
+                <input type="datetime-local" name="scheduled_at" value={form.scheduled_at} onChange={handleChange} min={new Date().toISOString().slice(0, 16)} className="w-full px-4 py-3 bg-[#232323] border border-[#0D7377] rounded-lg text-[#f2e6b1] focus:outline-none focus:border-[#0D7377]" required />
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-[#B7791F] mb-2">Observações (opcional)</label>
+                <textarea name="notes" placeholder="Informações adicionais..." value={form.notes} onChange={handleChange} rows={3} className="w-full px-4 py-3 bg-[#232323] border border-[#0D7377] rounded-lg text-[#f2e6b1] placeholder-[#676767] focus:outline-none focus:border-[#0D7377] resize-none" />
+              </div>
+              {error && <div className="bg-red-900/20 border border-red-500/50 rounded-lg p-3 text-red-400 text-sm">{error}</div>}
+              <button type="submit" disabled={loading} className="w-full px-6 py-4 bg-gradient-to-r from-[#0D7377] to-[#5F7161] hover:from-[#5F7161] hover:to-[#0D7377] text-white font-bold rounded-lg transition-all disabled:opacity-50 shadow-lg">
+                {loading ? <span className="flex items-center justify-center gap-2"><svg className="animate-spin h-5 w-5" viewBox="0 0 24 24"><circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none" /><path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" /></svg>Agendando...</span> : <span className="flex items-center justify-center gap-2"><Calendar className="w-5 h-5" />Agendar Visita</span>}
+              </button>
+            </form>
+          )}
+        </div>
+      </BottomSheet>
+    );
+  }
+
+  // Desktop: Use centered modal
   return (
     <div className="fixed inset-0 bg-black/70 backdrop-blur-sm flex items-center justify-center z-50 p-4">
       <FocusLock returnFocus>

@@ -13,13 +13,12 @@ import { useToast } from "@/components/ToastNotification";
 
 interface Property {
   id: string;
-  nome: string;
-  localizacao: string;
-  preco: number;
-  lance_inicial: number;
+  title: string;
+  location: string;
+  price: number;
   area_total: number;
   fotos: string[];
-  descricao: string;
+  description: string;
   created_at: string;
   highest_bid?: number;
   bid_count?: number;
@@ -50,24 +49,24 @@ export default function ImoveisPage() {
 
     try {
       let queryBuilder = supabase
-        .from("sitios")
-        .select("id, nome, localizacao, preco, lance_inicial, area_total, fotos, descricao, created_at", {
+        .from("properties")
+        .select("id, title, location, price, area_total, fotos, description, created_at", {
           count: "exact",
         });
 
       // Text search
       if (filters.query) {
         queryBuilder = queryBuilder.or(
-          `nome.ilike.%${filters.query}%,localizacao.ilike.%${filters.query}%,descricao.ilike.%${filters.query}%`
+          `title.ilike.%${filters.query}%,location.ilike.%${filters.query}%,description.ilike.%${filters.query}%`
         );
       }
 
       // Price filter
       if (filters.priceMin > 0) {
-        queryBuilder = queryBuilder.gte("preco", filters.priceMin);
+        queryBuilder = queryBuilder.gte("price", filters.priceMin);
       }
       if (filters.priceMax < 10000000) {
-        queryBuilder = queryBuilder.lte("preco", filters.priceMax);
+        queryBuilder = queryBuilder.lte("price", filters.priceMax);
       }
 
       // Area filter
@@ -80,16 +79,16 @@ export default function ImoveisPage() {
 
       // Location filter
       if (filters.location) {
-        queryBuilder = queryBuilder.ilike("localizacao", `%${filters.location}%`);
+        queryBuilder = queryBuilder.ilike("location", `%${filters.location}%`);
       }
 
       // Sorting
       switch (filters.sortBy) {
         case "price_asc":
-          queryBuilder = queryBuilder.order("preco", { ascending: true });
+          queryBuilder = queryBuilder.order("price", { ascending: true });
           break;
         case "price_desc":
-          queryBuilder = queryBuilder.order("preco", { ascending: false });
+          queryBuilder = queryBuilder.order("price", { ascending: false });
           break;
         case "area_desc":
           queryBuilder = queryBuilder.order("area_total", { ascending: false });
@@ -110,7 +109,7 @@ export default function ImoveisPage() {
       const propertiesWithBids = await Promise.all(
         (data || []).map(async (property) => {
           const { data: bidsData } = await supabase
-            .from("bids")
+            .from("proposals")
             .select("bid_amount")
             .eq("property_id", property.id)
             .neq("status", "rejected")
@@ -118,7 +117,7 @@ export default function ImoveisPage() {
             .limit(1);
 
           const { count: bidCount } = await supabase
-            .from("bids")
+            .from("proposals")
             .select("*", { count: "exact", head: true })
             .eq("property_id", property.id)
             .neq("status", "rejected");
@@ -228,7 +227,7 @@ export default function ImoveisPage() {
                   {property.fotos && property.fotos[0] ? (
                     <Image
                       src={property.fotos[0]}
-                      alt={property.nome}
+                      alt={property.title}
                       fill
                       sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                       className="object-cover group-hover:scale-110 transition-transform duration-300"
@@ -262,7 +261,7 @@ export default function ImoveisPage() {
                         showToast({
                           type: "success",
                           title: "Adicionado à comparação",
-                          message: `${property.nome} foi adicionado. Vá para Comparar.`
+                          message: `${property.title} foi adicionado. Vá para Comparar.`
                         });
                       }
                     }}
@@ -280,13 +279,13 @@ export default function ImoveisPage() {
                 {/* Content */}
                 <div className="p-6 flex-1">
                   <h3 className="text-xl font-bold text-[#E6C98B] mb-3 group-hover:text-[#A8C97F] transition-colors">
-                    {property.nome}
+                    {property.title}
                   </h3>
 
                   <div className="space-y-2 mb-4">
                     <div className="flex items-center gap-2 text-[#8B9B6E]">
                       <MapPin className="w-4 h-4" />
-                      <span className="text-sm">{property.localizacao}</span>
+                      <span className="text-sm">{property.location}</span>
                     </div>
 
                     {property.area_total && (
@@ -299,24 +298,19 @@ export default function ImoveisPage() {
 
                   {/* Price */}
                   <div className={viewMode === "list" ? "mb-4" : ""}>
-                    {property.preco ? (
+                    {property.price ? (
                       <div>
                         <div className="flex items-center gap-2">
                           <DollarSign className="w-5 h-5 text-[#A8C97F]" />
                           <span className="text-2xl font-bold text-[#A8C97F]">
-                            R$ {property.preco.toLocaleString("pt-BR")}
+                            R$ {property.price.toLocaleString("pt-BR")}
                           </span>
                         </div>
-                        {property.lance_inicial && property.lance_inicial > 0 && (
-                          <p className="text-xs text-[#8B9B6E] mt-1">
-                            Lance inicial: R$ {property.lance_inicial.toLocaleString("pt-BR")}
-                          </p>
-                        )}
                         
                         {/* Highest Bid Display */}
                         {property.highest_bid && property.highest_bid > 0 && (
                           <div className="mt-2 flex items-center gap-2">
-                            {property.highest_bid > (property.lance_inicial || 0) && (
+                            {property.highest_bid > property.price && (
                               <span className="text-lg">🔥</span>
                             )}
                             <div className="bg-[#A8C97F]/20 border border-[#A8C97F]/40 rounded-lg px-3 py-1">
@@ -333,7 +327,7 @@ export default function ImoveisPage() {
                           </div>
                         )}
                         
-                        {!property.highest_bid && property.lance_inicial && (
+                        {!property.highest_bid && (
                           <p className="text-xs text-[#676767] mt-2">Sem lances ainda</p>
                         )}
                       </div>
@@ -343,9 +337,9 @@ export default function ImoveisPage() {
                   </div>
 
                   {/* Description Preview */}
-                  {property.descricao && viewMode === "list" && (
+                  {property.description && viewMode === "list" && (
                     <p className="text-sm text-[#676767] line-clamp-2">
-                      {property.descricao}
+                      {property.description}
                     </p>
                   )}
                 </div>

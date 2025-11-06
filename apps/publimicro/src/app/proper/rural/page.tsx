@@ -6,35 +6,33 @@ import { useState, useEffect } from 'react';
 import { supabase } from '@/lib/supabaseClient';
 import { MapPin, Maximize2, DollarSign } from 'lucide-react';
 
-interface Sitio {
+interface Property {
   id: string;
-  nome: string;
-  localizacao: string;
-  zona: string;
-  preco: number;
-  lance_inicial: number;
-  area_total: number;
+  title: string;
+  location: string;
+  price: number;
+  total_area: number;
   fotos: string[];
 }
 
 export default function ProperRuralPage() {
-  const [sitios, setSitios] = useState<Sitio[]>([]);
+  const [properties, setProperties] = useState<Property[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    async function fetchSitios() {
+    async function fetchProperties() {
       const { data, error } = await supabase
-        .from('sitios')
+        .from('properties')
         .select('*')
         .in('id', ['surucua', 'juriti', 'seriema', 'mergulhao', 'bigua', 'abare'])
-        .order('preco', { ascending: true });
+        .order('price', { ascending: true });
 
       if (!error && data) {
-        setSitios(data);
+        setProperties(data);
       }
       setLoading(false);
     }
-    fetchSitios();
+    fetchProperties();
   }, []);
   return (
     <main className="min-h-screen bg-gradient-to-b from-[#0a0a0a] via-[#0d0d0d] to-[#0a0a0a] py-20 px-6">
@@ -74,24 +72,24 @@ export default function ProperRuralPage() {
           <div className="flex justify-center py-20">
             <div className="animate-spin rounded-full h-20 w-20 border-4 border-[#A8C97F] border-t-transparent"></div>
           </div>
-        ) : sitios.length > 0 ? (
+        ) : properties.length > 0 ? (
           <div className="mb-12">
             <h2 className="text-3xl font-bold text-[#E6C98B] mb-8 text-center">
               Propriedades Disponíveis - Sítios Carcará
             </h2>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-              {sitios.map((sitio) => (
+              {properties.map((property) => (
                 <Link
-                  key={sitio.id}
-                  href={`/imoveis/${sitio.id}`}
+                  key={property.id}
+                  href={`/imoveis/${property.id}`}
                   className="bg-gradient-to-br from-[#1a1a1a] to-[#0d0d0d] border-2 border-[#2a2a1a] rounded-2xl overflow-hidden hover:border-[#A8C97F] transition-all hover:scale-105 shadow-lg hover:shadow-2xl group"
                 >
                   {/* Image */}
                   <div className="relative w-full h-64 bg-[#2a2a1a] overflow-hidden">
-                    {sitio.fotos && sitio.fotos[0] ? (
+                    {property.fotos && property.fotos[0] ? (
                       <Image
-                        src={sitio.fotos[0]}
-                        alt={`Sítio ${sitio.nome}`}
+                        src={property.fotos[0]}
+                        alt={`Sítio ${property.title}`}
                         fill
                         sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                         className="object-cover group-hover:scale-110 transition-transform duration-300"
@@ -102,46 +100,36 @@ export default function ProperRuralPage() {
                         <MapPin className="w-16 h-16 text-[#676767]" />
                       </div>
                     )}
-                    
-                    {/* Zone Badge */}
-                    <div className="absolute top-4 left-4 px-4 py-2 bg-[#2a2a2a]/95 backdrop-blur-md rounded-full border border-[#3a3a2a]">
-                      <span className="text-[#0D7377] text-sm font-bold">{sitio.zona}</span>
-                    </div>
                   </div>
 
                   {/* Content */}
                   <div className="p-6">
                     <h3 className="text-2xl font-bold text-[#A8C97F] mb-3 group-hover:text-[#E6C98B] transition-colors">
-                      Sítio {sitio.nome}
+                      Sítio {property.title}
                     </h3>
 
                     <div className="space-y-2 mb-4">
                       <div className="flex items-center gap-2 text-[#8B9B6E]">
                         <MapPin className="w-4 h-4" />
-                        <span className="text-sm">{sitio.localizacao}</span>
+                        <span className="text-sm">{property.location}</span>
                       </div>
 
-                      {sitio.area_total && (
+                      {property.total_area && (
                         <div className="flex items-center gap-2 text-[#8B9B6E]">
                           <Maximize2 className="w-4 h-4" />
-                          <span className="text-sm">{sitio.area_total} hectares</span>
+                          <span className="text-sm">{property.total_area} hectares</span>
                         </div>
                       )}
                     </div>
 
                     {/* Price */}
-                    <div className="grid grid-cols-2 gap-4 p-4 bg-[#2a2a2a]/50 rounded-xl">
-                      <div>
-                        <div className="text-xs text-[#676767] mb-1">Valor Estimado</div>
-                        <div className="font-bold text-[#E6C98B] text-lg">
-                          R$ {(sitio.preco / 1000000).toFixed(1).replace('.', ',')}M
-                        </div>
+                    <div className="p-4 bg-[#2a2a2a]/50 rounded-xl">
+                      <div className="text-xs text-[#676767] mb-1">A partir de</div>
+                      <div className="font-bold text-[#E6C98B] text-xl">
+                        R$ {(property.price / 1000000).toFixed(2).replace('.', ',')}M
                       </div>
-                      <div>
-                        <div className="text-xs text-[#676767] mb-1">Lance Inicial</div>
-                        <div className="font-bold text-[#A8C97F] text-lg">
-                          R$ {(sitio.lance_inicial / 1000000).toFixed(2).replace('.', ',')}M
-                        </div>
+                      <div className="text-xs text-[#A8C97F] mt-2">
+                        ⭐ Excelente oportunidade
                       </div>
                     </div>
                   </div>

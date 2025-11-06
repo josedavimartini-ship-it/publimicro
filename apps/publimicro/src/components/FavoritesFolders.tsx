@@ -17,9 +17,9 @@ interface FavoriteFolder {
 
 interface Property {
   id: string;
-  nome: string;
-  localizacao: string;
-  preco: number;
+  title: string;
+  location: string;
+  price: number;
   area_total: number;
   fotos: string[];
 }
@@ -80,8 +80,8 @@ export default function FavoritesFolders() {
 
     try {
       const { data, error } = await supabase
-        .from("sitios")
-        .select("id, nome, localizacao, preco, area_total, fotos")
+        .from("properties")
+        .select("id, title, location, price, area_total, fotos")
         .in("id", folder.propertyIds);
 
       if (error) throw error;
@@ -352,7 +352,7 @@ export default function FavoritesFolders() {
                         {property.fotos && property.fotos[0] ? (
                           <Image
                             src={property.fotos[0]}
-                            alt={property.nome}
+                            alt={property.title}
                             fill
                             sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                             className="object-cover group-hover:scale-110 transition-transform duration-300"
@@ -369,16 +369,16 @@ export default function FavoritesFolders() {
                     <div className="p-6">
                       <Link href={`/imoveis/${property.id}`}>
                         <h4 className="text-xl font-bold text-[#E6C98B] mb-2 group-hover:text-[#A8C97F] transition-colors">
-                          {property.nome}
+                          {property.title}
                         </h4>
                       </Link>
-                      <p className="text-[#8B9B6E] text-sm mb-4">{property.localizacao}</p>
+                      <p className="text-[#8B9B6E] text-sm mb-4">{property.location}</p>
                       
                       <div className="flex items-center justify-between">
                         <div>
-                          {property.preco && (
+                          {property.price && (
                             <p className="text-[#B7791F] font-bold text-lg">
-                              R$ {property.preco.toLocaleString("pt-BR")}
+                              R$ {property.price.toLocaleString("pt-BR")}
                             </p>
                           )}
                           {property.area_total && (

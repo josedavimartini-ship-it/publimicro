@@ -5,10 +5,13 @@ import { supabase } from '@/lib/supabaseClient';
 import Image from 'next/image';
 import Link from 'next/link';
 import dynamic from 'next/dynamic';
-import { MapPin, Home, Trees, Droplets, Zap, ShieldCheck, Calendar, TrendingUp, Phone, Mail, ArrowLeft } from 'lucide-react';
+import { MapPin, Home, Trees, Droplets, Zap, ShieldCheck, Calendar, TrendingUp, Phone, Mail, ArrowLeft, Info } from 'lucide-react';
 import VisitModal from '@/components/VisitModal';
 import ProposalModal from '@/components/ProposalModal';
 import FavoritesButton from '@/components/FavoritesButton';
+import NeighborhoodInfo from '@/components/NeighborhoodInfo';
+import SwipeGallery from '@/components/SwipeGallery';
+import StickyMobileAction, { ActionButton } from '@/components/StickyMobileAction';
 import { Carcara3D } from '@publimicro/ui';
 import { getFirstPhoto } from '@/lib/photoUtils';
 
@@ -38,15 +41,59 @@ const KML_DATA = `<?xml version="1.0" encoding="UTF-8"?>
 
 interface Sitio {
   id: string;
-  nome: string;
-  zona: string;
-  preco: number;
-  lance_inicial: number;
+  title: string;
+  location: string;
+  price: number;
   fotos: string[];
-  descricao?: string;
-  area_total?: number;
+  description?: string;
+  total_area?: number;
   current_bid?: number; // Current highest proposal value
 }
+
+// Fábulas e descrições poéticas para cada sítio
+const PROPERTY_FABLES: Record<string, {
+  subtitle: string;
+  fable: string;
+  symbols: string;
+  color: string;
+}> = {
+  'abare': {
+    subtitle: "A companheira do rio",
+    fable: "Conta-se que nas veredas antigas, uma ave de penas cor de alvorada acompanhava os viajantes pelas margens do rio Corumbá. Diziam que seu canto trazia boas novas e proteção para quem respeitasse a terra e as águas. Chamavam-na Abaré — a \"amiga\", em tupi. E assim, o Sítio Abaré se tornou refúgio para quem busca harmonia com o fluxo natural da vida: onde o rio fala, e a terra responde.",
+    symbols: "🕊️ Amizade • Espiritualidade • Equilíbrio com a água",
+    color: "from-[#5F9EA0] to-[#A8C97F]"
+  },
+  'bigua': {
+    subtitle: "O mergulhador incansável",
+    fable: "Certa vez, um pescador observou um Biguá que mergulhava e emergia repetidas vezes, sem desistir. Intrigado, perguntou-lhe o segredo. O Biguá respondeu: \"A persistência é o que faz da água minha casa.\" O pescador entendeu — e nunca mais abandonou seus sonhos. Assim é o Sítio Biguá: para quem mergulha de corpo e alma na vida, encontrando beleza na constância e na profundidade.",
+    symbols: "🐟 Resiliência • Foco • Trabalho com propósito",
+    color: "from-[#4682B4] to-[#0D7377]"
+  },
+  'mergulhao': {
+    subtitle: "O guardião das águas profundas",
+    fable: "Dizem que o Mergulhão, ave arisca e silenciosa, conhece todos os segredos do fundo da represa. Ele mergulha em silêncio e retorna apenas quando as águas estão calmas. Quem o vê entende: sabedoria é saber o momento certo de agir e o momento certo de esperar. O Sítio Mergulhão é assim — um abrigo para quem busca profundidade e contemplação.",
+    symbols: "🌊 Introspecção • Sabedoria • Serenidade",
+    color: "from-[#2F4F4F] to-[#5F7161]"
+  },
+  'seriema': {
+    subtitle: "A voz do Cerrado",
+    fable: "Certa manhã, quando o sol tocava as serras, a Seriema soltou seu grito. Foi um chamado à vida — e todos os animais despertaram. Desde então, dizem que quem escuta o grito da Seriema sente renascer o desejo de recomeçar. O Sítio Seriema é a morada dos que buscam reerguer-se, falar alto seus sonhos e deixar ecoar a liberdade.",
+    symbols: "🪶 Coragem • Liderança • Renascimento",
+    color: "from-[#B7791F] to-[#D4A574]"
+  },
+  'juriti': {
+    subtitle: "A canção da alma rural",
+    fable: "No entardecer, quando o céu se cobre de ouro, ouve-se o canto suave da Juriti. Reza a lenda que é a voz da saudade, lembrando aos homens o valor das raízes e da simplicidade. O Sítio Juriti é o lar da paz: um canto de aconchego, onde o tempo desacelera e o coração volta a escutar.",
+    symbols: "🕊️ Paz • Tradição • Amor pelo interior",
+    color: "from-[#E6C98B] to-[#DDA15E]"
+  },
+  'surucua': {
+    subtitle: "A joia discreta da floresta",
+    fable: "No meio da mata, vive o Surucuá — ave de cores vivas, mas que raramente se mostra. Dizem que quem o encontra é abençoado com o dom de enxergar a beleza nas pequenas coisas. O Sítio Surucuá é um convite à vida simples, à contemplação e ao encanto que existe no silêncio da natureza.",
+    symbols: "🌺 Beleza interior • Simplicidade • Elegância natural",
+    color: "from-[#9B59B6] to-[#A8C97F]"
+  }
+};
 
 export default function CarcaraProjectPage() {
   const [sitios, setSitios] = useState<Sitio[]>([]);
@@ -60,18 +107,18 @@ export default function CarcaraProjectPage() {
     async function fetchSitios() {
       // Fetch all properties from Sítios Carcará project
       const { data, error } = await supabase
-        .from('sitios')
+        .from('properties')
         .select('*')
         .eq('projeto', 'Sítios Carcará') // Filter by project name
-        .order('preco', { ascending: true });
+        .order('price', { ascending: true });
 
       // If no properties found with project filter, try the specific IDs as fallback
       if (!data || data.length === 0) {
         const { data: fallbackData, error: fallbackError } = await supabase
-          .from('sitios')
+          .from('properties')
           .select('*')
           .in('id', ['surucua', 'juriti', 'seriema', 'mergulhao', 'bigua', 'abare'])
-          .order('preco', { ascending: true });
+          .order('price', { ascending: true });
         
         if (fallbackData && fallbackData.length > 0) {
           const sitiosWithBids = await Promise.all(
@@ -153,37 +200,48 @@ export default function CarcaraProjectPage() {
       </div>
 
       {/* Hero Section - ENHANCED WITH BETTER CONTRAST */}
-      <section className="relative h-[80vh] flex items-center justify-center overflow-hidden">
+      <section className="relative h-[80vh] flex items-center justify-center overflow-visible">
         <Image
           src="https://irrzpwzyqcubhhjeuakc.supabase.co/storage/v1/object/public/imagens-sitios/pordosol4mediumearthwide.jpg"
           alt="Sítios Carcará"
           fill
-          className="object-cover"
+          className="object-cover z-0"
           priority
           unoptimized
         />
         {/* Maximum dark overlay for perfect text contrast */}
-        <div className="absolute inset-0 bg-gradient-to-b from-[#0a0a0a]/98 via-[#0a0a0a]/95 to-[#0a0a0a]" />
+        <div className="absolute inset-0 bg-gradient-to-b from-[#0a0a0a]/98 via-[#0a0a0a]/95 to-[#0a0a0a] z-[5]" />
         
-        {/* 3D Carcará Bird - Continuous Flying Animation from Right to Left */}
-        <div className="absolute top-10 w-64 h-64 md:w-96 md:h-96 pointer-events-none z-20 animate-fly-continuous">
+        {/* 3D Carcará Bird - Continuous Flying Animation from Right to Left - ABOVE EVERYTHING */}
+        <div className="absolute top-10 w-64 h-64 md:w-96 md:h-96 pointer-events-none z-[100] animate-fly-continuous">
           <Carcara3D scale={2.5} />
         </div>
 
-        {/* Audio control for Carcará sound */}
-        <audio id="carcara-sound" loop>
-          <source src="https://www.xeno-canto.org/sounds/uploaded/BTQHBBKHQE/XC324827-Caracara%20plancus%20-%20Southern%20Caracara%20-%20Carcara%CC%81%20-%20Poli.mp3" type="audio/mpeg" />
+        {/* Audio control for Carcará sound - ABOVE EVERYTHING */}
+        <audio id="carcara-sound" loop preload="auto" crossOrigin="anonymous">
+          <source src="https://xeno-canto.org/sounds/uploaded/GYAUIPBUMV/XC324827-Caracara%20plancus%20-%20Southern%20Caracara%20-%20Caracará%20-%20Poli.mp3" type="audio/mpeg" />
+          <source src="https://xeno-canto.org/324827/download" type="audio/mpeg" />
+          Your browser does not support the audio element.
         </audio>
         <button
           onClick={() => {
             const audio = document.getElementById('carcara-sound') as HTMLAudioElement;
-            if (audio.paused) {
-              audio.play();
-            } else {
-              audio.pause();
+            if (audio) {
+              if (audio.paused) {
+                // Try to play with user interaction
+                audio.play().catch(err => {
+                  console.error('Error playing audio:', err);
+                  // Try alternative URL
+                  audio.src = 'https://xeno-canto.org/324827/download';
+                  audio.load();
+                  audio.play().catch(e => console.error('Fallback also failed:', e));
+                });
+              } else {
+                audio.pause();
+              }
             }
           }}
-          className="absolute top-10 right-10 px-4 py-2 bg-[#A8C97F]/30 border-2 border-[#A8C97F] rounded-full backdrop-blur-md text-[#E6C98B] hover:bg-[#A8C97F]/50 transition-all z-30 flex items-center gap-2"
+          className="absolute top-10 right-10 px-6 py-3 bg-[#A8C97F]/90 border-2 border-[#E6C98B] rounded-full backdrop-blur-md text-[#0a0a0a] hover:bg-[#A8C97F] transition-all z-50 flex items-center gap-2 font-bold shadow-2xl hover:scale-110"
           aria-label="Reproduzir som do Carcará"
         >
           🔊 Som do Carcará
@@ -213,7 +271,7 @@ export default function CarcaraProjectPage() {
           }
         `}</style>
 
-        <div className="relative z-30 text-center px-6 max-w-6xl">
+        <div className="relative z-[30] text-center px-6 max-w-6xl">
           {/* Exclusive Launch Badge - Elegant with minimal background */}
           <div className="inline-flex items-center gap-2 mb-6 px-8 py-4 bg-gradient-to-r from-[#1a1a1a]/60 to-[#2a2a2a]/60 border-2 border-[#D4A574] rounded-full backdrop-blur-xl animate-pulse shadow-2xl">
             <span className="text-[#D4A574] font-bold text-xl tracking-widest uppercase drop-shadow-[0_4px_12px_rgba(212,165,116,0.8)]" style={{textShadow: '0 0 20px rgba(212,165,116,0.6), 0 4px 8px rgba(0,0,0,1)'}}>
@@ -356,86 +414,77 @@ export default function CarcaraProjectPage() {
           </div>
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
-            {sitios.map((sitio) => (
+            {sitios.map((sitio) => {
+              const fable = PROPERTY_FABLES[sitio.id.toLowerCase()];
+              return (
               <article
                 key={sitio.id}
                 id={sitio.id}
                 className="group bg-gradient-to-br from-[#1a1a1a] to-[#0d0d0d] border-3 border-[#2a2a1a] rounded-3xl overflow-hidden hover:border-[#A8C97F] hover:shadow-2xl hover:shadow-[#A8C97F]/40 transition-all"
               >
-                <Link href={`/imoveis/${sitio.id}`} className="block">
-                  <div className="relative aspect-video bg-gradient-to-br from-[#2a2a2a] to-[#1a1a1a]">
-                    <Image
-                      src={getFirstPhoto(sitio.fotos) || 'https://irrzpwzyqcubhhjeuakc.supabase.co/storage/v1/object/public/imagens-sitios/pordosol4mediumearthwide.jpg'}
-                      alt={`Sítio ${sitio.nome}`}
-                      fill
-                      className="object-cover group-hover:scale-110 transition-transform duration-700"
-                      unoptimized
-                      onError={(e) => {
-                        const target = e.target as HTMLImageElement;
-                        target.src = 'https://irrzpwzyqcubhhjeuakc.supabase.co/storage/v1/object/public/imagens-sitios/pordosol4mediumearthwide.jpg';
-                      }}
-                    />
-                    <div className="absolute inset-0 bg-gradient-to-t from-[#0a0a0a]/90 via-transparent to-transparent" />
-                    <div className="absolute top-4 left-4 px-5 py-2 bg-[#2a2a2a]/95 backdrop-blur-md rounded-full border border-[#3a3a2a]">
-                      <span className="text-[#0D7377] text-sm font-bold">{sitio.zona}</span>
+                {/* Image Gallery with Swipe */}
+                <div className="relative">
+                  <SwipeGallery
+                    images={sitio.fotos && sitio.fotos.length > 0 ? sitio.fotos : ['https://irrzpwzyqcubhhjeuakc.supabase.co/storage/v1/object/public/imagens-sitios/pordosol4mediumearthwide.jpg']}
+                    alt={`Sítio ${sitio.title}`}
+                    aspectRatio="video"
+                    showThumbnails={false}
+                    showCounter={sitio.fotos && sitio.fotos.length > 1}
+                    enableFullscreen={true}
+                  />
+                  
+                  {userId && (
+                    <div className="absolute top-4 right-4 z-30">
+                      <FavoritesButton propertyId={sitio.id} userId={userId} />
                     </div>
-                    {userId && (
-                      <div className="absolute top-4 right-4 z-30">
-                        <FavoritesButton propertyId={sitio.id} userId={userId} />
+                  )}
+                </div>
+
+                <Link href={`/imoveis/${sitio.id}`} className="block">
+                  <div className="p-8">
+                    {/* Nome e Subtítulo Poético */}
+                    <div className="mb-6">
+                      <h3 className="text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-[#A8C97F] to-[#E6C98B] mb-2">
+                        Sítio {sitio.title}
+                      </h3>
+                      {fable && (
+                        <p className="text-[#D4A574] text-lg font-semibold italic">
+                          {fable.subtitle}
+                        </p>
+                      )}
+                    </div>
+
+                    {/* Fábula - Card Poético */}
+                    {fable && (
+                      <div className={`mb-6 p-6 bg-gradient-to-r ${fable.color} bg-opacity-10 rounded-2xl border-2 border-[#E6C98B]/30 backdrop-blur-sm`}>
+                        <p className="text-white/95 text-sm leading-relaxed mb-4 font-light italic">
+                          {fable.fable.length > 200 ? fable.fable.substring(0, 200) + '...' : fable.fable}
+                        </p>
+                        <div className="text-[#E6C98B] text-xs font-semibold">
+                          {fable.symbols}
+                        </div>
                       </div>
                     )}
-                  </div>
 
-                  <div className="p-8">
-                    <h3 className="text-4xl font-bold text-[#A8C97F] mb-4">Sítio {sitio.nome}</h3>
-                    
-                    {/* Property Benefits - Sweet & Persuasive */}
-                    <div className="mb-6 p-6 bg-gradient-to-r from-[#A8C97F]/10 to-[#0D7377]/10 rounded-2xl border border-[#A8C97F]/20">
-                      <h4 className="text-[#E6C98B] font-bold text-lg mb-3 flex items-center gap-2">
-                        ✨ Por que este é o seu lugar ideal?
-                      </h4>
-                      <ul className="space-y-2 text-white/90 text-sm leading-relaxed">
-                        <li className="flex items-start gap-2">
-                          <span className="text-[#A8C97F] mt-1">🌿</span>
-                          <span><strong>Tamanho perfeito:</strong> Pouco mais de 2 hectares, ideal para criar seu refúgio sem se sentir isolado</span>
-                        </li>
-                        <li className="flex items-start gap-2">
-                          <span className="text-[#50C878] mt-1">💧</span>
-                          <span><strong>Sua praia particular:</strong> Acesso exclusivo à represa, perfeitamente equilibrado entre todos os vizinhos</span>
-                        </li>
-                        <li className="flex items-start gap-2">
-                          <span className="text-[#B7791F] mt-1">🏡</span>
-                          <span><strong>Convivência harmoniosa:</strong> Margem de lago igualmente distribuída para todos - ninguém fica de fora</span>
-                        </li>
-                        <li className="flex items-start gap-2">
-                          <span className="text-[#D4A574] mt-1">🌅</span>
-                          <span><strong>Investimento inteligente:</strong> Propriedade legalizada em área de valorização constante</span>
-                        </li>
-                      </ul>
-                    </div>
-                    
-                    {sitio.descricao && (
-                      <p className="text-white mb-6 leading-relaxed font-medium">{sitio.descricao}</p>
-                    )}
-
-                    {sitio.area_total && (
+                    {sitio.total_area && (
                       <div className="flex items-center gap-2 text-[#E6C98B] mb-6">
                         <Home className="w-5 h-5" />
-                        <span className="font-semibold">{sitio.area_total} hectares</span>
+                        <span className="font-semibold">{sitio.total_area} hectares</span>
                       </div>
                     )}
 
+                    {/* Pricing Section */}
                     <div className="grid grid-cols-2 gap-6 p-6 bg-[#2a2a2a]/50 rounded-2xl mb-6">
                       <div>
                         <div className="text-xs text-white mb-2 uppercase tracking-wide font-semibold opacity-80">
                           {sitio.current_bid ? 'Última Oferta' : 'Lance Inicial'}
                         </div>
                         <div className={`font-bold text-2xl ${sitio.current_bid ? 'text-[#B7791F]' : 'text-[#A8C97F]'}`}>
-                          R$ {((sitio.current_bid || sitio.lance_inicial) / 1000000).toFixed(2).replace('.', ',')}M
+                          R$ {(sitio.price / 1000000).toFixed(2).replace('.', ',')}M
                         </div>
                         {sitio.current_bid && (
                           <div className="text-xs text-[#676767] mt-1">
-                            Inicial: R$ {(sitio.lance_inicial / 1000000).toFixed(2).replace('.', ',')}M
+                            Inicial: R$ {(sitio.price / 1000000).toFixed(2).replace('.', ',')}M
                           </div>
                         )}
                         {!sitio.current_bid && (
@@ -445,45 +494,30 @@ export default function CarcaraProjectPage() {
                         )}
                       </div>
                       <div>
-                        <div className="text-xs text-white mb-2 uppercase tracking-wide font-semibold opacity-80">Valor Estimado</div>
+                        <div className="text-xs text-white mb-2 uppercase tracking-wide font-semibold opacity-80">Valorização</div>
                         <div className="font-bold text-[#E6C98B] text-2xl">
-                          R$ {(sitio.preco / 1000000).toFixed(1).replace('.', ',')}M
+                          +25%/ano
                         </div>
                         <div className="text-xs text-[#676767] mt-1">
-                          ⭐⭐⭐⭐⭐ Avaliação
+                          ⭐⭐⭐⭐⭐ Potencial
                         </div>
                       </div>
                     </div>
                   </div>
                 </Link>
-
-                {/* Action Buttons - Outside Link to prevent navigation conflicts */}
-                <div className="px-8 pb-8 grid grid-cols-2 gap-4">
-                  <button
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      handleScheduleVisit(sitio);
-                    }}
-                    className="px-6 py-3 bg-gradient-to-r from-[#0D7377] to-[#5F7161] hover:from-[#5F7161] hover:to-[#0D7377] text-white font-bold rounded-xl transition-all hover:scale-105 flex items-center justify-center gap-2 shadow-lg focus:outline-none focus:ring-2 focus:ring-[#0D7377]"
-                    aria-label={`Agendar visita ao sítio ${sitio.nome}`}
+                    
+                {/* Action Button - Single button to property profile */}
+                <div className="px-8 pb-8">
+                  <Link
+                    href={`/imoveis/${sitio.id}`}
+                    className="flex items-center justify-center gap-2 w-full px-6 py-4 bg-gradient-to-r from-[#0D7377] to-[#5F7161] hover:from-[#5F7161] hover:to-[#0D7377] text-white font-bold rounded-xl transition-all hover:scale-105 shadow-lg"
                   >
-                    <Calendar className="w-5 h-5" />
-                    <span>Agendar Visita</span>
-                  </button>
-                  <button
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      handleMakeProposal(sitio);
-                    }}
-                    className="px-6 py-3 bg-gradient-to-r from-[#B87333] to-[#FFD700] hover:from-[#FFD700] hover:to-[#B87333] text-[#0a0a0a] font-bold rounded-xl transition-all hover:scale-105 flex items-center justify-center gap-2 shadow-lg focus:outline-none focus:ring-2 focus:ring-[#B87333]"
-                    aria-label={`Fazer proposta para sítio ${sitio.nome}`}
-                  >
-                    <TrendingUp className="w-5 h-5" />
-                    <span>Fazer Proposta</span>
-                  </button>
+                    <Info className="w-5 h-5" />
+                    <span>Mais Informações</span>
+                  </Link>
                 </div>
               </article>
-            ))}
+            )})}
           </div>
         )}
       </section>
@@ -499,6 +533,50 @@ export default function CarcaraProjectPage() {
         </p>
         <div className="h-[700px] rounded-3xl overflow-hidden border-2 border-[#2a2a1a] shadow-2xl">
           <LeafletMapKML kmlData={KML_DATA} />
+        </div>
+      </section>
+
+      {/* Neighborhood & Infrastructure Section - NEW */}
+      <section className="py-20 px-6 max-w-7xl mx-auto">
+        <h2 className="text-5xl md:text-6xl font-bold text-center text-transparent bg-clip-text bg-gradient-to-r from-[#B7791F] to-[#E6C98B] mb-4">
+          Região & Infraestrutura
+        </h2>
+        <p className="text-center text-white text-xl mb-16 max-w-3xl mx-auto">
+          Localização privilegiada com fácil acesso a serviços essenciais e infraestrutura completa
+        </p>
+        
+        <div className="bg-gradient-to-br from-[#1a1a1a] to-[#0d0d0d] border-2 border-[#2a2a1a] rounded-3xl p-10">
+          <NeighborhoodInfo 
+            data={{
+              nearest_hospital_name: 'Hospital Regional de Planaltina',
+              nearest_hospital_distance_km: 45.3,
+              nearest_clinic_name: 'UBS Mestre D\'Armas',
+              nearest_clinic_distance_km: 38.7,
+              nearest_school_name: 'Escola Classe 01 de Planaltina',
+              nearest_school_distance_km: 42.1,
+              nearest_university_name: 'UnB - Campus Planaltina',
+              nearest_university_distance_km: 47.5,
+              nearest_supermarket_name: 'Supermercado BH',
+              nearest_supermarket_distance_km: 40.2,
+              nearest_pharmacy_name: 'Drogaria São Paulo',
+              nearest_pharmacy_distance_km: 39.8,
+              nearest_gas_station_name: 'Posto Shell BR-020',
+              nearest_gas_station_distance_km: 35.4,
+              nearest_bank_name: 'Banco do Brasil Planaltina',
+              nearest_bank_distance_km: 41.5,
+              road_condition: 'paved',
+              road_quality: 'good',
+              internet_available: true,
+              internet_type: 'fiber',
+              internet_speed_mbps: 100,
+              mobile_signal_quality: 'good',
+              distance_to_city_center_km: 45.0,
+              nearest_city_name: 'Planaltina',
+              rural_area: true,
+              urban_area: false
+            }}
+            showTitle={false}
+          />
         </div>
       </section>
 
@@ -566,32 +644,55 @@ export default function CarcaraProjectPage() {
       {/* Modals */}
       <VisitModal
         adId={selectedSitio?.id || 'sitios-carcara'}
-        adTitle={selectedSitio ? `Sítio ${selectedSitio.nome}` : 'Sítios Carcará'}
+        adTitle={selectedSitio ? `Sítio ${selectedSitio.title}` : 'Sítios Carcará'}
         open={showVisitModal}
         onClose={() => setShowVisitModal(false)}
       />
       {selectedSitio && (
         <ProposalModal
           adId={selectedSitio.id}
-          adTitle={`Sítio ${selectedSitio.nome}`}
-          currentBid={selectedSitio.preco}
-          minBid={selectedSitio.lance_inicial}
+          adTitle={`Sítio ${selectedSitio.title}`}
+          currentBid={selectedSitio.price}
+          minBid={selectedSitio.price}
           open={showProposalModal}
           onClose={() => setShowProposalModal(false)}
         />
       )}
 
-      {/* Floating WhatsApp Button - Follows scroll */}
+      {/* Floating WhatsApp Button - Desktop Only */}
       <a
         href="https://wa.me/5534992610004?text=Olá! Gostaria de conhecer os Sítios Carcará"
         target="_blank"
         rel="noopener noreferrer"
-        className="fixed bottom-8 right-8 z-50 px-8 py-6 bg-[#25D366] hover:bg-[#20BA5A] text-white text-xl font-bold rounded-full shadow-2xl transition-all hover:scale-110 flex items-center gap-3 animate-bounce hover:animate-none focus:outline-none focus:ring-4 focus:ring-[#25D366]"
+        className="hidden md:flex fixed bottom-8 right-8 z-50 px-8 py-6 bg-[#25D366] hover:bg-[#20BA5A] text-white text-xl font-bold rounded-full shadow-2xl transition-all hover:scale-110 items-center gap-3 animate-bounce hover:animate-none focus:outline-none focus:ring-4 focus:ring-[#25D366]"
         aria-label="Fale conosco no WhatsApp"
       >
         <Phone className="w-8 h-8" />
-        <span className="hidden md:inline">WhatsApp</span>
+        <span>WhatsApp</span>
       </a>
+
+      {/* Mobile Action Bar - Bottom Sticky */}
+      <StickyMobileAction position="bottom">
+        <div className="flex gap-3">
+          <a
+            href="https://wa.me/5534992610004?text=Olá! Gostaria de conhecer os Sítios Carcará"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="flex-1"
+          >
+            <ActionButton variant="primary" icon={<Phone className="w-5 h-5" />}>
+              WhatsApp
+            </ActionButton>
+          </a>
+          <ActionButton
+            variant="secondary"
+            icon={<Calendar className="w-5 h-5" />}
+            onClick={() => setShowVisitModal(true)}
+          >
+            Agendar Visita
+          </ActionButton>
+        </div>
+      </StickyMobileAction>
     </main>
   );
 }

@@ -41,7 +41,7 @@ export default function ContaPage() {
       
       // Fetch profile
       const { data: profileData } = await supabase
-        .from('profiles')
+        .from('user_profiles')
         .select('*')
         .eq('id', user.id)
         .single();
@@ -65,7 +65,7 @@ export default function ContaPage() {
 
   const fetchProperties = async (userId: string) => {
     const { data } = await supabase
-      .from('sitios')
+      .from('properties')
       .select('*')
       .eq('user_id', userId);
     setProperties(data || []);
@@ -74,7 +74,7 @@ export default function ContaPage() {
   const fetchProposals = async (userId: string) => {
     const { data } = await supabase
       .from('proposals')
-      .select('*, sitios(*)')
+      .select('*, properties(*)')
       .eq('user_id', userId)
       .order('created_at', { ascending: false });
     setProposals(data || []);
@@ -83,16 +83,16 @@ export default function ContaPage() {
   const fetchVisits = async (userId: string) => {
     const { data } = await supabase
       .from('visits')
-      .select('*, sitios(*)')
+      .select('*')
       .eq('user_id', userId)
-      .order('scheduled_date', { ascending: false });
+      .order('scheduled_at', { ascending: false });
     setVisits(data || []);
   };
 
   const fetchFavorites = async (userId: string) => {
     const { data } = await supabase
-      .from('favoritos')
-      .select('*, sitios(*)')
+      .from('property_favorites')
+      .select('*, properties(*)')
       .eq('user_id', userId);
     setFavorites(data || []);
   };

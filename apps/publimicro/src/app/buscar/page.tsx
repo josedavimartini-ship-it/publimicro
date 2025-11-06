@@ -10,13 +10,12 @@ import { MapPin, Maximize2, DollarSign, ArrowLeft, Heart } from "lucide-react";
 
 interface Property {
   id: string;
-  nome: string;
-  localizacao: string;
-  preco: number;
-  lance_inicial: number;
+  title: string;
+  location: string;
+  price: number;
   area_total: number;
   fotos: string[];
-  descricao: string;
+  description: string;
   created_at: string;
 }
 
@@ -44,24 +43,24 @@ function SearchPageContent() {
 
     try {
       let queryBuilder = supabase
-        .from("sitios")
-        .select("id, nome, localizacao, preco, lance_inicial, area_total, fotos, descricao, created_at", {
+        .from("properties")
+        .select("id, title, location, price, area_total, fotos, description, created_at", {
           count: "exact",
         });
 
       // Text search
       if (filters.query) {
         queryBuilder = queryBuilder.or(
-          `nome.ilike.%${filters.query}%,localizacao.ilike.%${filters.query}%,descricao.ilike.%${filters.query}%`
+          `title.ilike.%${filters.query}%,location.ilike.%${filters.query}%,description.ilike.%${filters.query}%`
         );
       }
 
       // Price filter
       if (filters.priceMin > 0) {
-        queryBuilder = queryBuilder.gte("preco", filters.priceMin);
+        queryBuilder = queryBuilder.gte("price", filters.priceMin);
       }
       if (filters.priceMax < 10000000) {
-        queryBuilder = queryBuilder.lte("preco", filters.priceMax);
+        queryBuilder = queryBuilder.lte("price", filters.priceMax);
       }
 
       // Area filter
@@ -74,16 +73,16 @@ function SearchPageContent() {
 
       // Location filter
       if (filters.location) {
-        queryBuilder = queryBuilder.ilike("localizacao", `%${filters.location}%`);
+        queryBuilder = queryBuilder.ilike("location", `%${filters.location}%`);
       }
 
       // Sorting
       switch (filters.sortBy) {
         case "price_asc":
-          queryBuilder = queryBuilder.order("preco", { ascending: true });
+          queryBuilder = queryBuilder.order("price", { ascending: true });
           break;
         case "price_desc":
-          queryBuilder = queryBuilder.order("preco", { ascending: false });
+          queryBuilder = queryBuilder.order("price", { ascending: false });
           break;
         case "area_desc":
           queryBuilder = queryBuilder.order("area_total", { ascending: false });
@@ -182,7 +181,7 @@ function SearchPageContent() {
                   {property.fotos && property.fotos[0] ? (
                     <Image
                       src={property.fotos[0]}
-                      alt={property.nome}
+                      alt={property.title}
                       fill
                       sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                       className="object-cover group-hover:scale-110 transition-transform duration-300"
@@ -210,13 +209,13 @@ function SearchPageContent() {
                 {/* Content */}
                 <div className="p-6">
                   <h3 className="text-xl font-bold text-[#E6C98B] mb-3 group-hover:text-[#A8C97F] transition-colors">
-                    {property.nome}
+                    {property.title}
                   </h3>
 
                   <div className="space-y-2 mb-4">
                     <div className="flex items-center gap-2 text-[#8B9B6E]">
                       <MapPin className="w-4 h-4" />
-                      <span className="text-sm">{property.localizacao}</span>
+                      <span className="text-sm">{property.location}</span>
                     </div>
 
                     {property.area_total && (
@@ -229,19 +228,14 @@ function SearchPageContent() {
 
                   {/* Price */}
                   <div className="flex items-center justify-between">
-                    {property.preco ? (
+                    {property.price ? (
                       <div>
                         <div className="flex items-center gap-2">
                           <DollarSign className="w-5 h-5 text-[#A8C97F]" />
                           <span className="text-2xl font-bold text-[#A8C97F]">
-                            R$ {property.preco.toLocaleString("pt-BR")}
+                            R$ {property.price.toLocaleString("pt-BR")}
                           </span>
                         </div>
-                        {property.lance_inicial && property.lance_inicial > 0 && (
-                          <p className="text-xs text-[#8B9B6E] mt-1">
-                            Lance inicial: R$ {property.lance_inicial.toLocaleString("pt-BR")}
-                          </p>
-                        )}
                       </div>
                     ) : (
                       <span className="text-[#8B9B6E] text-sm">Consultar preço</span>
@@ -249,9 +243,9 @@ function SearchPageContent() {
                   </div>
 
                   {/* Description Preview */}
-                  {property.descricao && (
+                  {property.description && (
                     <p className="mt-4 text-sm text-[#676767] line-clamp-2">
-                      {property.descricao}
+                      {property.description}
                     </p>
                   )}
                 </div>

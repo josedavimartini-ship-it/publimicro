@@ -100,13 +100,12 @@ function EntrarContent() {
       // Auto-create profile
       if (data.user) {
         const { error: profileError } = await supabase
-          .from('profiles')
+          .from('user_profiles')
           .insert([
             {
               id: data.user.id,
               full_name: fullName,
               phone: phone,
-              avatar_url: null,
             },
           ]);
         
@@ -210,16 +209,16 @@ function EntrarContent() {
             <form onSubmit={handleLogin} className="space-y-4">
               {/* Email */}
               <div>
-                <label className="block text-[#D4A574] text-sm font-semibold mb-2">
+                <label className="block text-[#D4A574] text-base font-bold mb-3">
                   Email
                 </label>
                 <div className="relative">
-                  <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-[#676767]" />
+                  <Mail className="absolute left-4 top-1/2 -translate-y-1/2 w-6 h-6 text-[#676767]" />
                   <input
                     type="email"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
-                    className="w-full pl-12 pr-4 py-3 bg-[#1a1a1a] border-2 border-[#3a3a3a] rounded-xl text-[#e6c86b] placeholder-[#676767] focus:outline-none focus:border-[#B87333] transition"
+                    className="w-full pl-14 pr-4 py-4 text-lg bg-[#1a1a1a] border-2 border-[#3a3a3a] rounded-xl text-[#e6c86b] placeholder-[#676767] focus:outline-none focus:border-[#B87333] transition"
                     placeholder="seu@email.com"
                     required
                   />
@@ -228,25 +227,25 @@ function EntrarContent() {
 
               {/* Password */}
               <div>
-                <label className="block text-[#D4A574] text-sm font-semibold mb-2">
+                <label className="block text-[#D4A574] text-base font-bold mb-3">
                   Senha
                 </label>
                 <div className="relative">
-                  <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-[#676767]" />
+                  <Lock className="absolute left-4 top-1/2 -translate-y-1/2 w-6 h-6 text-[#676767]" />
                   <input
                     type={showPassword ? "text" : "password"}
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
-                    className="w-full pl-12 pr-12 py-3 bg-[#1a1a1a] border-2 border-[#3a3a3a] rounded-xl text-[#e6c86b] placeholder-[#676767] focus:outline-none focus:border-[#B87333] transition"
+                    className="w-full pl-14 pr-14 py-4 text-lg bg-[#1a1a1a] border-2 border-[#3a3a3a] rounded-xl text-[#e6c86b] placeholder-[#676767] focus:outline-none focus:border-[#B87333] transition"
                     placeholder="••••••••"
                     required
                   />
                   <button
                     type="button"
                     onClick={() => setShowPassword(!showPassword)}
-                    className="absolute right-3 top-1/2 -translate-y-1/2 text-[#676767] hover:text-[#D4A574] transition"
+                    className="absolute right-4 top-1/2 -translate-y-1/2 text-[#676767] hover:text-[#D4A574] transition"
                   >
-                    {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
+                    {showPassword ? <EyeOff className="w-6 h-6" /> : <Eye className="w-6 h-6" />}
                   </button>
                 </div>
               </div>
@@ -255,7 +254,7 @@ function EntrarContent() {
               <button
                 type="submit"
                 disabled={loading}
-                className="w-full py-3 bg-gradient-to-r from-[#B87333] to-[#FFD700] hover:from-[#FFD700] hover:to-[#B87333] text-[#0a0a0a] font-black rounded-xl transition-all disabled:opacity-50 disabled:cursor-not-allowed shadow-lg hover:shadow-2xl"
+                className="w-full py-5 text-xl bg-gradient-to-r from-[#B87333] to-[#FFD700] hover:from-[#FFD700] hover:to-[#B87333] text-[#0a0a0a] font-black rounded-xl transition-all disabled:opacity-50 disabled:cursor-not-allowed shadow-lg hover:shadow-2xl hover:scale-105"
               >
                 {loading ? "Entrando..." : "Entrar"}
               </button>
@@ -264,16 +263,16 @@ function EntrarContent() {
             <form onSubmit={handleSignup} className="space-y-4">
               {/* Full Name */}
               <div>
-                <label className="block text-[#D4A574] text-sm font-semibold mb-2">
+                <label className="block text-[#D4A574] text-base font-bold mb-3">
                   Nome Completo
                 </label>
                 <div className="relative">
-                  <UserIcon className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-[#676767]" />
+                  <UserIcon className="absolute left-4 top-1/2 -translate-y-1/2 w-6 h-6 text-[#676767]" />
                   <input
                     type="text"
                     value={fullName}
                     onChange={(e) => setFullName(e.target.value)}
-                    className="w-full pl-12 pr-4 py-3 bg-[#1a1a1a] border-2 border-[#3a3a3a] rounded-xl text-[#e6c86b] placeholder-[#676767] focus:outline-none focus:border-[#B87333] transition"
+                    className="w-full pl-14 pr-4 py-4 text-lg bg-[#1a1a1a] border-2 border-[#3a3a3a] rounded-xl text-[#e6c86b] placeholder-[#676767] focus:outline-none focus:border-[#B87333] transition"
                     placeholder="João Silva"
                     required
                   />
@@ -282,16 +281,16 @@ function EntrarContent() {
 
               {/* Phone */}
               <div>
-                <label className="block text-[#D4A574] text-sm font-semibold mb-2">
+                <label className="block text-[#D4A574] text-base font-bold mb-3">
                   Telefone (opcional)
                 </label>
                 <div className="relative">
-                  <Phone className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-[#676767]" />
+                  <Phone className="absolute left-4 top-1/2 -translate-y-1/2 w-6 h-6 text-[#676767]" />
                   <input
                     type="tel"
                     value={phone}
                     onChange={(e) => setPhone(e.target.value)}
-                    className="w-full pl-12 pr-4 py-3 bg-[#1a1a1a] border-2 border-[#3a3a3a] rounded-xl text-[#e6c86b] placeholder-[#676767] focus:outline-none focus:border-[#B87333] transition"
+                    className="w-full pl-14 pr-4 py-4 text-lg bg-[#1a1a1a] border-2 border-[#3a3a3a] rounded-xl text-[#e6c86b] placeholder-[#676767] focus:outline-none focus:border-[#B87333] transition"
                     placeholder="+55 11 98765-4321"
                   />
                 </div>
@@ -299,16 +298,16 @@ function EntrarContent() {
 
               {/* Email */}
               <div>
-                <label className="block text-[#D4A574] text-sm font-semibold mb-2">
+                <label className="block text-[#D4A574] text-base font-bold mb-3">
                   Email
                 </label>
                 <div className="relative">
-                  <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-[#676767]" />
+                  <Mail className="absolute left-4 top-1/2 -translate-y-1/2 w-6 h-6 text-[#676767]" />
                   <input
                     type="email"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
-                    className="w-full pl-12 pr-4 py-3 bg-[#1a1a1a] border-2 border-[#3a3a3a] rounded-xl text-[#e6c86b] placeholder-[#676767] focus:outline-none focus:border-[#B87333] transition"
+                    className="w-full pl-14 pr-4 py-4 text-lg bg-[#1a1a1a] border-2 border-[#3a3a3a] rounded-xl text-[#e6c86b] placeholder-[#676767] focus:outline-none focus:border-[#B87333] transition"
                     placeholder="seu@email.com"
                     required
                   />
@@ -317,41 +316,41 @@ function EntrarContent() {
 
               {/* Password */}
               <div>
-                <label className="block text-[#D4A574] text-sm font-semibold mb-2">
+                <label className="block text-[#D4A574] text-base font-bold mb-3">
                   Senha
                 </label>
                 <div className="relative">
-                  <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-[#676767]" />
+                  <Lock className="absolute left-4 top-1/2 -translate-y-1/2 w-6 h-6 text-[#676767]" />
                   <input
                     type={showPassword ? "text" : "password"}
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
-                    className="w-full pl-12 pr-12 py-3 bg-[#1a1a1a] border-2 border-[#3a3a3a] rounded-xl text-[#e6c86b] placeholder-[#676767] focus:outline-none focus:border-[#B87333] transition"
+                    className="w-full pl-14 pr-14 py-4 text-lg bg-[#1a1a1a] border-2 border-[#3a3a3a] rounded-xl text-[#e6c86b] placeholder-[#676767] focus:outline-none focus:border-[#B87333] transition"
                     placeholder="••••••••"
                     required
                   />
                   <button
                     type="button"
                     onClick={() => setShowPassword(!showPassword)}
-                    className="absolute right-3 top-1/2 -translate-y-1/2 text-[#676767] hover:text-[#D4A574] transition"
+                    className="absolute right-4 top-1/2 -translate-y-1/2 text-[#676767] hover:text-[#D4A574] transition"
                   >
-                    {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
+                    {showPassword ? <EyeOff className="w-6 h-6" /> : <Eye className="w-6 h-6" />}
                   </button>
                 </div>
               </div>
 
               {/* Confirm Password */}
               <div>
-                <label className="block text-[#D4A574] text-sm font-semibold mb-2">
+                <label className="block text-[#D4A574] text-base font-bold mb-3">
                   Confirmar Senha
                 </label>
                 <div className="relative">
-                  <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-[#676767]" />
+                  <Lock className="absolute left-4 top-1/2 -translate-y-1/2 w-6 h-6 text-[#676767]" />
                   <input
                     type={showPassword ? "text" : "password"}
                     value={confirmPassword}
                     onChange={(e) => setConfirmPassword(e.target.value)}
-                    className="w-full pl-12 pr-4 py-3 bg-[#1a1a1a] border-2 border-[#3a3a3a] rounded-xl text-[#e6c86b] placeholder-[#676767] focus:outline-none focus:border-[#B87333] transition"
+                    className="w-full pl-14 pr-4 py-4 text-lg bg-[#1a1a1a] border-2 border-[#3a3a3a] rounded-xl text-[#e6c86b] placeholder-[#676767] focus:outline-none focus:border-[#B87333] transition"
                     placeholder="••••••••"
                     required
                   />
@@ -362,7 +361,7 @@ function EntrarContent() {
               <button
                 type="submit"
                 disabled={loading}
-                className="w-full py-3 bg-gradient-to-r from-[#B87333] to-[#FFD700] hover:from-[#FFD700] hover:to-[#B87333] text-[#0a0a0a] font-black rounded-xl transition-all disabled:opacity-50 disabled:cursor-not-allowed shadow-lg hover:shadow-2xl"
+                className="w-full py-5 text-xl bg-gradient-to-r from-[#B87333] to-[#FFD700] hover:from-[#FFD700] hover:to-[#B87333] text-[#0a0a0a] font-black rounded-xl transition-all disabled:opacity-50 disabled:cursor-not-allowed shadow-lg hover:shadow-2xl hover:scale-105"
               >
                 {loading ? "Criando conta..." : "Criar Conta"}
               </button>

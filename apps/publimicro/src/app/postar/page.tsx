@@ -112,22 +112,23 @@ export default function PostarPage() {
 
       // Insert property
       const { data: property, error: propertyError } = await supabase
-        .from('sitios')
+        .from('properties')
         .insert({
           user_id: user.id,
-          nome,
-          descricao,
-          preco: parseFloat(preco.replace(/\D/g, '')),
-          localizacao,
-          cidade,
-          estado,
-          cep,
-          tipo: propertyType,
-          area_total: areaTotal ? parseFloat(areaTotal) : null,
-          quartos: quartos ? parseInt(quartos) : null,
-          banheiros: banheiros ? parseInt(banheiros) : null,
-          vagas_garagem: vagas ? parseInt(vagas) : null,
-          ano_construcao: anosConstrucao ? parseInt(anosConstrucao) : null,
+          title: nome,
+          description: descricao,
+          price: parseFloat(preco.replace(/\D/g, '')),
+          address: localizacao,
+          city: cidade,
+          state: estado,
+          zip_code: cep,
+          property_type: propertyType,
+          transaction_type: 'sale', // Default to sale
+          total_area: areaTotal ? parseFloat(areaTotal) : null,
+          bedrooms: quartos ? parseInt(quartos) : null,
+          bathrooms: banheiros ? parseInt(banheiros) : null,
+          parking_spaces: vagas ? parseInt(vagas) : null,
+          year_built: anosConstrucao ? parseInt(anosConstrucao) : null,
           status: 'active',
         })
         .select()
