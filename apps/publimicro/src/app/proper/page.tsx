@@ -1,5 +1,17 @@
 import Link from 'next/link';
 import { Home, Building2, Tractor, Sparkles } from 'lucide-react';
+import { Metadata } from 'next';
+
+export const metadata: Metadata = {
+  title: 'PubliProper - Imóveis Urbanos e Rurais | ACHEME',
+  description: 'Encontre imóveis urbanos, rurais e comerciais no PubliProper. Apartamentos, casas, sítios, fazendas e lançamentos. Compre, venda ou alugue com segurança no marketplace da ACHEME.',
+  keywords: 'imóveis, casas, apartamentos, sítios, fazendas, imóveis rurais, imóveis urbanos, lançamentos imobiliários',
+  openGraph: {
+    title: 'PubliProper - Imóveis para Todos os Estilos',
+    description: 'Imóveis urbanos, rurais e comerciais. Encontre sua próxima casa, apartamento, sítio ou fazenda.',
+    type: 'website',
+  },
+};
 
 export default function PubliProperPage() {
   const categories = [
