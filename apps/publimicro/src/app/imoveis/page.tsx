@@ -37,6 +37,7 @@ export default function ImoveisPage() {
     areaMax: 1000,
     location: "",
     sortBy: "relevance",
+    searchType: "properties",
   });
   const [totalResults, setTotalResults] = useState(0);
 
@@ -367,6 +368,7 @@ export default function ImoveisPage() {
                   areaMax: 1000,
                   location: "",
                   sortBy: "relevance",
+                  searchType: "properties",
                 });
               }}
               className="px-6 py-3 bg-gradient-to-r from-[#A8C97F] to-[#0D7377] text-[#0a0a0a] font-bold rounded-full hover:scale-105 transition-all"

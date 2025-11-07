@@ -10,6 +10,7 @@ interface UserProfile {
   full_name: string | null;
   cpf: string | null;
   phone: string | null;
+  avatar_url: string | null;
   profile_completed: boolean;
   verified: boolean;
   can_schedule_visits: boolean;

@@ -6,7 +6,7 @@ import { supabase } from "@/lib/supabaseClient";
 import Image from "next/image";
 import Link from "next/link";
 import dynamic from "next/dynamic";
-import { ArrowLeft, MapPin, Ruler, Bed, Bath, Car, Phone, ExternalLink, Video, Heart, Calendar } from "lucide-react";
+import { ArrowLeft, MapPin, Ruler, Bed, Bath, Car, Phone, ExternalLink, Video, Heart, Calendar, TrendingUp } from "lucide-react";
 import { getKMLForProperty, fetchKMLContent } from "@/lib/kmlMapping";
 import FavoritesButton from "@/components/FavoritesButton";
 import Breadcrumbs from "@/components/Breadcrumbs";
@@ -16,6 +16,7 @@ import VisitScheduler from "@/components/scheduling/VisitScheduler";
 import SwipeGallery from "@/components/SwipeGallery";
 import StickyMobileAction, { ActionButton } from "@/components/StickyMobileAction";
 import FocusLock from "react-focus-lock";
+import ProposalModal from "@/components/ProposalModal";
 
 // Dynamic import to avoid SSR issues with Leaflet
 const LeafletMapKML = dynamic(() => import("@/components/LeafletMapKML"), {
@@ -73,6 +74,7 @@ export default function PropertyPage() {
   const [currentHighestBid, setCurrentHighestBid] = useState<number | null>(null);
   const [kmlData, setKmlData] = useState<string>(KML_DATA_FALLBACK);
   const [visitModalOpen, setVisitModalOpen] = useState(false);
+  const [proposalModalOpen, setProposalModalOpen] = useState(false);
   const previouslyFocusedElement = useRef<HTMLElement | null>(null);
 
   // Handle Escape key to close modal
@@ -418,16 +420,23 @@ export default function PropertyPage() {
             </div>
           </div>
 
-          {/* Right Column - Simplified Bidding Box (Sticky) */}
+          {/* Right Column - Proposal Information Box (Sticky) */}
           <div className="lg:col-span-1">
-            <div className="sticky top-24 bg-gradient-to-br from-[#1a1a1a] to-[#0d0d0d] border-2 border-[#A8C97F]/40 rounded-2xl p-6 space-y-6">
-              {/* Last Bid Display */}
+            <div className="sticky top-24 bg-gradient-to-br from-[#1a1a1a] to-[#0d0d0d] border-2 border-[#CD7F32]/40 rounded-2xl p-6 space-y-6">
+              {/* Current Proposal Display */}
               <div className="text-center">
-                <h3 className="text-[#E6C98B] font-semibold mb-3 text-sm uppercase tracking-wide">Último Lance</h3>
-                <div className="text-[#A8C97F] font-bold text-5xl mb-2">
-                  R$ {(currentHighestBid || sitio.lance_inicial || 0).toLocaleString("pt-BR")}
+                <h3 className="text-[#E6C98B] font-semibold mb-3 text-sm uppercase tracking-wide">
+                  {currentHighestBid ? 'Proposta Atual' : 'Valor Inicial'}
+                </h3>
+                <div className="text-transparent bg-clip-text bg-gradient-to-r from-[#D4AF37] to-[#CD7F32] font-bold text-5xl mb-2">
+                  R$ {(currentHighestBid || sitio.lance_inicial || sitio.preco || 0).toLocaleString("pt-BR")}
                 </div>
-                <p className="text-[#8B9B6E] text-xs">
+                {currentHighestBid && sitio.lance_inicial && (
+                  <p className="text-[#8B9B6E] text-sm">
+                    Valor inicial: R$ {sitio.lance_inicial.toLocaleString("pt-BR")}
+                  </p>
+                )}
+                <p className="text-[#8B9B6E] text-xs mt-2">
                   {currentHighestBid && currentHighestBid > (sitio.lance_inicial || 0) 
                     ? '🔥 Lance ativo' 
                     : `Lance inicial: R$ ${sitio.lance_inicial?.toLocaleString("pt-BR")}`}
@@ -499,11 +508,50 @@ export default function PropertyPage() {
                   <Calendar className="w-5 h-5" />
                   Agendar Visita
                 </button>
+
+                {/* Make Proposal - Only after visit */}
+                <button
+                  onClick={() => {
+                    previouslyFocusedElement.current = document.activeElement as HTMLElement;
+                    setProposalModalOpen(true);
+                  }}
+                  className="flex items-center justify-center gap-2 w-full px-6 py-4 bg-gradient-to-r from-[#CD7F32] to-[#B87333] hover:from-[#D4AF37] hover:to-[#CD7F32] text-[#0a0a0a] font-bold rounded-full hover:scale-105 transition-all text-lg shadow-lg"
+                  title="Agende uma visita antes de fazer sua proposta"
+                >
+                  <TrendingUp className="w-5 h-5" />
+                  Fazer Proposta
+                </button>
               </div>
             </div>
           </div>
         </div>
       </div>
+
+      {/* Mobile Action Bar - Bottom Sticky */}
+      <StickyMobileAction position="bottom">
+        <div className="flex gap-2">
+          <ActionButton
+            variant="secondary"
+            icon={<Calendar className="w-5 h-5" />}
+            onClick={() => {
+              previouslyFocusedElement.current = document.activeElement as HTMLElement;
+              setVisitModalOpen(true);
+            }}
+          >
+            Agendar
+          </ActionButton>
+          <ActionButton
+            variant="primary"
+            icon={<TrendingUp className="w-5 h-5" />}
+            onClick={() => {
+              previouslyFocusedElement.current = document.activeElement as HTMLElement;
+              setProposalModalOpen(true);
+            }}
+          >
+            Fazer Proposta
+          </ActionButton>
+        </div>
+      </StickyMobileAction>
 
       {/* Visit Scheduler Modal */}
       {visitModalOpen && (
@@ -525,37 +573,34 @@ export default function PropertyPage() {
               <VisitScheduler 
                 propertyId={sitio.id}
                 propertyTitle={sitio.nome}
+                onClose={() => {
+                  setVisitModalOpen(false);
+                  if (previouslyFocusedElement.current) {
+                    previouslyFocusedElement.current.focus();
+                  }
+                }}
               />
             </div>
           </FocusLock>
         </div>
       )}
 
-      {/* Mobile Action Bar - Bottom Sticky */}
-      <StickyMobileAction position="bottom">
-        <div className="flex gap-3">
-          <a
-            href="https://wa.me/5534992610004"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="flex-1"
-          >
-            <ActionButton variant="primary" icon={<Phone className="w-5 h-5" />}>
-              WhatsApp
-            </ActionButton>
-          </a>
-          <ActionButton
-            variant="secondary"
-            icon={<Calendar className="w-5 h-5" />}
-            onClick={() => {
-              previouslyFocusedElement.current = document.activeElement as HTMLElement;
-              setVisitModalOpen(true);
-            }}
-          >
-            Agendar Visita
-          </ActionButton>
-        </div>
-      </StickyMobileAction>
+      {/* Proposal Modal */}
+      {proposalModalOpen && (
+        <ProposalModal
+          adId={sitio.id}
+          adTitle={sitio.nome}
+          currentBid={currentHighestBid || sitio.preco || sitio.lance_inicial || 0}
+          minBid={sitio.preco || sitio.lance_inicial || 0}
+          open={proposalModalOpen}
+          onClose={() => {
+            setProposalModalOpen(false);
+            if (previouslyFocusedElement.current) {
+              previouslyFocusedElement.current.focus();
+            }
+          }}
+        />
+      )}
     </main>
   );
 }

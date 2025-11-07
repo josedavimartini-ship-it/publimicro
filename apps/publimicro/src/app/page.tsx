@@ -32,18 +32,18 @@ const LeafletMapKML = dynamic(() => import("@/components/LeafletMapKML"), {
 });
 
 // Sections with concept phrases and category keys for Unsplash
-// Index 0: PubliProper (displayed separately)
+// Index 0: AcheMeProper (displayed separately)
 // Index 1-3: Row 1 (Motors, Machina, Marine)
 // Index 4-6: Row 2 (Global, Share, Tudo)
-// PubliJourney displayed separately on top
+// AcheMeJour displayed separately on top
 const sections = [
-  { name: "PubliProper", icon: Home, href: "/proper", category: "proper" as const, concept: "Seu lar dos sonhos" },
-  { name: "PubliMotors", icon: Car, href: "/motors", category: "motors" as const, concept: "Mobilidade com estilo" },
-  { name: "PubliMachina", icon: Tractor, href: "/machina", category: "machina" as const, concept: "Força para produzir" },
-  { name: "PubliMarine", icon: Ship, href: "/marine", category: "marine" as const, concept: "Navegue seus sonhos" },
-  { name: "PubliGlobal", icon: Globe, href: "/global", category: "global" as const, concept: "Negócios sem fronteiras" },
-  { name: "PubliShare", icon: Share2, href: "/share", category: "share" as const, concept: "Compartilhe e economize" },
-  { name: "PubliTudo", icon: ShoppingBag, href: "/tudo", category: "tudo" as const, concept: "Tudo em um só lugar" },
+  { name: "AcheMeProper", icon: Home, href: "/proper", category: "proper" as const, concept: "Seu lar dos sonhos" },
+  { name: "AcheMeMotors", icon: Car, href: "/motors", category: "motors" as const, concept: "Mobilidade com estilo" },
+  { name: "AcheMeMachina", icon: Tractor, href: "/machina", category: "machina" as const, concept: "Força para produzir" },
+  { name: "AcheMeMarine", icon: Ship, href: "/marine", category: "marine" as const, concept: "Navegue seus sonhos" },
+  { name: "AcheMeGlobal", icon: Globe, href: "/global", category: "global" as const, concept: "Negócios sem fronteiras" },
+  { name: "AcheMeShare", icon: Share2, href: "/share", category: "share" as const, concept: "Sharangas - Compartilhe e economize" },
+  { name: "AcheMeTudo", icon: ShoppingBag, href: "/tudo", category: "tudo" as const, concept: "Tudo em um só lugar" },
 ];
 
 // KML data from the attached file (Sítios Carcará property boundaries)
@@ -72,8 +72,26 @@ interface Sitio {
   current_bid?: number; // Current highest proposal value
 }
 
+interface Listing {
+  id: string;
+  title: string;
+  description: string;
+  price: number;
+  photos: string[];
+  city: string;
+  state: string;
+  slug: string;
+  is_featured: boolean;
+  condition: string;
+  categories: {
+    name: string;
+    icon: string;
+  } | null;
+}
+
 export default function HomePage() {
   const [sitios, setSitios] = useState<Sitio[]>([]);
+  const [listings, setListings] = useState<Listing[]>([]);
   const [loading, setLoading] = useState(true);
   const [errorMsg, setErrorMsg] = useState<string>("");
   const [visitModalOpen, setVisitModalOpen] = useState(false);
@@ -194,7 +212,54 @@ export default function HomePage() {
         setLoading(false);
       }
     }
+
+    async function fetchListings() {
+      try {
+        const { data, error } = await supabase
+          .from("listings")
+          .select(`
+            id,
+            title,
+            description,
+            price,
+            photos,
+            city,
+            state,
+            slug,
+            is_featured,
+            condition,
+            categories!inner (name, icon)
+          `)
+          .eq("status", "active")
+          .order("created_at", { ascending: false })
+          .limit(8);
+
+        if (error) {
+          console.error("Error fetching listings:", error);
+        } else {
+          // Transform the data to match our interface
+          const transformedData: Listing[] = (data || []).map((listing: any) => ({
+            id: listing.id,
+            title: listing.title,
+            description: listing.description,
+            price: listing.price,
+            photos: listing.photos,
+            city: listing.city,
+            state: listing.state,
+            slug: listing.slug,
+            is_featured: listing.is_featured,
+            condition: listing.condition,
+            categories: Array.isArray(listing.categories) ? listing.categories[0] : listing.categories
+          }));
+          setListings(transformedData);
+        }
+      } catch (err) {
+        console.error("Failed to fetch listings:", err);
+      }
+    }
+
     fetchSitios();
+    fetchListings();
   }, []);
 
   return (
@@ -228,41 +293,41 @@ export default function HomePage() {
               priority
               unoptimized
             />
-            <div className="absolute inset-0 bg-gradient-to-r from-[#4A4E4D]/95 via-[#4A4E4D]/80 to-transparent" />
+            <div className="absolute inset-0 bg-gradient-to-r from-black/80 via-black/60 to-transparent" />
             {/* Bird */}
             <div className="absolute top-8 left-8 w-[220px] h-[220px] z-30 hidden lg:block">
               <Carcara3D scale={1.1} />
             </div>
             <div className="relative p-12 lg:pl-64 z-20">
-              <div className="inline-flex items-center gap-2 mb-6 px-6 py-3 bg-[#78350f]/90 border-2 border-[#92400e] rounded-full backdrop-blur-md shadow-lg">
-                <Sparkles className="w-5 h-5 text-[#fbbf24] animate-pulse" />
-                <span className="text-[#fbbf24] font-bold text-lg tracking-widest uppercase drop-shadow-[0_2px_8px_rgba(0,0,0,0.8)]">Super Destaque</span>
+              <div className="inline-flex items-center gap-2 mb-6 px-6 py-3 bg-gradient-to-r from-[#D4AF37] to-[#CD7F32] rounded-full shadow-lg transform hover:scale-105 transition-transform">
+                <Sparkles className="w-5 h-5 text-[#0a0a0a] animate-pulse" />
+                <span className="text-[#0a0a0a] font-bold text-lg tracking-widest uppercase">Super Destaque</span>
               </div>
-              <h2 className="text-5xl md:text-7xl lg:text-8xl font-bold text-[#5A5E5D] mb-6 drop-shadow-[0_2px_4px_rgba(255,255,255,0.5)] leading-tight">
+              <h2 className="text-5xl md:text-7xl lg:text-8xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-[#D4AF37] via-[#CD7F32] to-[#B87333] mb-6 leading-tight drop-shadow-[0_4px_12px_rgba(0,0,0,0.8)]">
                 Sítios Carcará
               </h2>
-              <p className="text-[#5A5E5D] text-xl md:text-2xl mb-8 max-w-2xl leading-relaxed font-semibold drop-shadow-[0_1px_2px_rgba(255,255,255,0.3)]">
-                6 propriedades exclusivas às margens da represa de Corumbaíba, GO. 
-                Natureza preservada, infraestrutura completa. 
-                Lances a partir de <span className="text-[#B7791F] font-bold">R$ 1.050.000</span>
+              <p className="text-[#E6C98B] text-xl md:text-2xl mb-8 max-w-2xl leading-relaxed font-medium drop-shadow-[0_2px_8px_rgba(0,0,0,0.9)]">
+                6 propriedades exclusivas de <span className="text-[#D4AF37] font-bold">2 hectares cada</span>, próximas ao Lago das Brisas e Corumbazu, distritos de <span className="text-[#D4AF37] font-semibold">Buriti Alegre, GO</span> (30km de asfalto após a balsa, 40min de carro). 
+                Natureza preservada, rio perene. 
+                Lances a partir de <span className="text-[#D4AF37] font-bold text-3xl">R$ 1.050.000</span>
               </p>
               <div className="flex gap-4 flex-wrap">
                 <Link
                   href="/projetos/carcara"
-                  className="px-10 py-5 bg-gradient-to-r from-[#A8C97F] to-[#8B9B6E] hover:from-[#8B9B6E] hover:to-[#A8C97F] text-[#4A4E4D] text-lg font-bold rounded-full transition-all hover:scale-105 shadow-2xl"
+                  className="px-10 py-5 bg-gradient-to-r from-[#CD7F32] to-[#B87333] hover:from-[#D4AF37] hover:to-[#CD7F32] text-[#0a0a0a] text-lg font-bold rounded-full transition-all hover:scale-110 shadow-2xl transform hover:-translate-y-1"
                 >
-                  Conhecer
+                  Conhecer Projeto
                 </Link>
               </div>
             </div>
           </div>
         </section>
 
-        {/* CENTRAL PUBLIMICRO TITLE WITH SECTIONS - 3 PER ROW LAYOUT */}
+        {/* CENTRAL ACHEME TITLE WITH SECTIONS - 3 PER ROW LAYOUT */}
         <section className="py-20">
-          {/* Top Row: PubliProper + Title + PubliJourney */}
+          {/* Top Row: AcheMeProper + Title + AcheMeJour */}
           <div className="grid grid-cols-1 lg:grid-cols-[1fr_auto_1fr] gap-6 items-center mb-6">
-            {/* LEFT - PubliProper */}
+            {/* LEFT - AcheMeProper */}
             <div className="flex justify-end">
               <Link
                 href="/proper"
@@ -271,7 +336,7 @@ export default function HomePage() {
                 {!imagesLoading && unsplashImages.proper ? (
                   <Image
                     src={unsplashImages.proper}
-                    alt="PubliProper"
+                    alt="AcheMeProper"
                     fill
                     className="object-cover transition-transform duration-700 group-hover:scale-110"
                     unoptimized
@@ -283,8 +348,8 @@ export default function HomePage() {
                 <div className="relative z-10 flex flex-col items-center justify-center h-full p-6 text-center">
                   <Home className="w-16 h-16 text-[#A8C97F] mb-3 group-hover:scale-125 transition-all duration-300 drop-shadow-[0_4px_8px_rgba(0,0,0,0.9)]" strokeWidth={1.5} />
                   <div className="bg-black/80 backdrop-blur-sm px-4 py-3 rounded-lg border-2 border-[#A8C97F]/30">
-                    <h3 className="text-2xl font-bold text-white drop-shadow-[0_4px_12px_rgba(0,0,0,1)] group-hover:text-[#A8C97F] transition-colors mb-2">
-                      PubliProper
+                    <h3 className="text-2xl font-bold text-[#E6C98B] drop-shadow-[0_4px_12px_rgba(0,0,0,1)] group-hover:text-[#D4AF37] transition-colors mb-2">
+                      AcheMeProper
                     </h3>
                     <p className="text-sm text-[#E6C98B] font-bold drop-shadow-[0_2px_8px_rgba(0,0,0,1)]">
                       Seu lar dos sonhos
@@ -294,28 +359,23 @@ export default function HomePage() {
               </Link>
             </div>
 
-            {/* CENTER - PubliMicro Title */}
+            {/* CENTER - AcheMe Title */}
             <div className="flex items-center justify-center px-4 lg:px-12">
               <div className="text-center">
                 <h1 className="text-5xl md:text-6xl lg:text-7xl font-bold mb-4 leading-tight">
-                  <span className="text-[#B7791F]">Publi</span>
-                  <span className="text-[#CD7F32]">Micr</span>
-                  <span className="relative inline-block">
-                    <span className="text-[#B87333]">o</span>
+                  <span className="text-transparent bg-clip-text bg-gradient-to-r from-orange-500 via-yellow-500 to-orange-600">Ache</span>
+                  <span className="text-transparent bg-clip-text bg-gradient-to-r from-yellow-500 via-orange-500 to-yellow-600">Me</span>
                     <svg
-                      className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[35px] h-[35px] md:w-[40px] md:h-[40px] text-[#A8C97F]"
+                      className="inline-block w-[35px] h-[35px] md:w-[40px] md:h-[40px] ml-2 text-[#A8C97F]"
                       viewBox="0 0 24 24"
                       fill="none"
                       stroke="currentColor"
                       strokeWidth="2.5"
                     >
-                      <circle cx="12" cy="12" r="3" />
-                      <line x1="12" y1="2" x2="12" y2="7" />
-                      <line x1="12" y1="17" x2="12" y2="22" />
-                      <line x1="2" y1="12" x2="7" y2="12" />
-                      <line x1="17" y1="12" x2="22" y2="12" />
+                      <circle cx="12" cy="8" r="3" />
+                      <circle cx="12" cy="8" r="6" opacity="0.3" />
+                      <path d="M12 2 L12 14 M12 8 L18 8 M12 8 L6 8" opacity="0.5" />
                     </svg>
-                  </span>
                 </h1>
                 <p className="text-lg md:text-xl text-[#A8C97F] font-light tracking-wide mb-6">
                   Conectando pessoas, negócios e oportunidades
@@ -328,7 +388,7 @@ export default function HomePage() {
               </div>
             </div>
 
-            {/* RIGHT - PubliJourney */}
+            {/* RIGHT - AcheMeJour */}
             <div className="flex justify-start">
               <Link
                 href="/journey"
@@ -337,7 +397,7 @@ export default function HomePage() {
                 {!imagesLoading && unsplashImages.journey ? (
                   <Image
                     src={unsplashImages.journey}
-                    alt="PubliJourney"
+                    alt="AcheMeJour"
                     fill
                     className="object-cover transition-transform duration-700 group-hover:scale-110"
                     unoptimized
@@ -349,8 +409,8 @@ export default function HomePage() {
                 <div className="relative z-10 flex flex-col items-center justify-center h-full p-6 text-center">
                   <Plane className="w-16 h-16 text-[#E6C98B] mb-3 group-hover:scale-125 transition-all duration-300 drop-shadow-[0_4px_8px_rgba(0,0,0,0.9)]" strokeWidth={1.5} />
                   <div className="bg-black/80 backdrop-blur-sm px-4 py-3 rounded-lg border-2 border-[#E6C98B]/30">
-                    <h3 className="text-2xl font-bold text-white drop-shadow-[0_4px_12px_rgba(0,0,0,1)] group-hover:text-[#B7791F] transition-colors mb-2">
-                      PubliJourney
+                    <h3 className="text-2xl font-bold text-[#E6C98B] drop-shadow-[0_4px_12px_rgba(0,0,0,1)] group-hover:text-[#CD7F32] transition-colors mb-2">
+                      AcheMeJour
                     </h3>
                     <p className="text-sm text-[#E6C98B] font-bold drop-shadow-[0_2px_8px_rgba(0,0,0,1)]">
                       Viva experiências únicas
@@ -388,7 +448,7 @@ export default function HomePage() {
                   <div className="relative z-10 flex flex-col items-center justify-center h-full p-4 text-center">
                     <IconComponent className="w-16 h-16 md:w-14 md:h-14 text-[#E6C98B] mb-3 md:mb-2 group-hover:scale-125 transition-all duration-300 drop-shadow-[0_6px_12px_rgba(0,0,0,0.95)]" strokeWidth={2} />
                     <div className="bg-black/95 backdrop-blur-md px-6 py-4 md:px-5 md:py-3 rounded-xl border-2 border-[#E6C98B]/70 shadow-2xl">
-                      <h3 className="text-2xl md:text-2xl font-black text-white drop-shadow-[0_4px_16px_rgba(0,0,0,1)] group-hover:text-[#A8C97F] transition-colors mb-1">
+                      <h3 className="text-2xl md:text-2xl font-black text-[#E6C98B] drop-shadow-[0_4px_16px_rgba(0,0,0,1)] group-hover:text-[#D4AF37] transition-colors mb-1">
                         {section.name}
                       </h3>
                       <p className="text-base md:text-xs text-[#E6C98B] font-extrabold drop-shadow-[0_3px_10px_rgba(0,0,0,1)]">
@@ -428,7 +488,7 @@ export default function HomePage() {
                   <div className="relative z-10 flex flex-col items-center justify-center h-full p-4 text-center">
                     <IconComponent className="w-16 h-16 md:w-14 md:h-14 text-[#E6C98B] mb-3 md:mb-2 group-hover:scale-125 transition-all duration-300 drop-shadow-[0_6px_12px_rgba(0,0,0,0.95)]" strokeWidth={2} />
                     <div className="bg-black/95 backdrop-blur-md px-6 py-4 md:px-5 md:py-3 rounded-xl border-2 border-[#A8C97F]/70 shadow-2xl">
-                      <h3 className="text-2xl md:text-2xl font-black text-white drop-shadow-[0_4px_16px_rgba(0,0,0,1)] group-hover:text-[#A8C97F] transition-colors mb-1">
+                      <h3 className="text-2xl md:text-2xl font-black text-transparent bg-clip-text bg-gradient-to-r from-[#E6C98B] via-[#D4AF37] to-[#CD7F32] drop-shadow-[0_4px_16px_rgba(0,0,0,1)] group-hover:from-[#D4AF37] group-hover:via-[#CD7F32] group-hover:to-[#B87333] transition-all mb-1">
                         {section.name}
                       </h3>
                       <p className="text-base md:text-xs text-[#E6C98B] font-extrabold drop-shadow-[0_3px_10px_rgba(0,0,0,1)]">
@@ -509,10 +569,6 @@ export default function HomePage() {
                           {sitio.zona}
                         </div>
                       )}
-                      {/* Favorites Heart Button - Top right */}
-                      <div className="absolute top-3 right-3 z-30">
-                        <FavoritesButton propertyId={sitio.id} userId={userId} size="md" />
-                      </div>
                     </div>
                     
                     {/* Property Info - Clickable to detail */}
@@ -549,7 +605,7 @@ export default function HomePage() {
                     <div className="px-4 pb-4">
                       <Link
                         href={`/imoveis/${sitio.id}`}
-                        className="flex items-center justify-center gap-2 w-full px-6 py-5 bg-gradient-to-r from-[#0D7377] to-[#5F7161] hover:from-[#5F7161] hover:to-[#0D7377] text-white font-bold rounded-lg transition-all hover:scale-105 hover:shadow-2xl shadow-lg text-base"
+                        className="flex items-center justify-center gap-2 w-full px-6 py-5 bg-gradient-to-r from-[#556B2F] to-[#6B8E23] hover:from-[#6B8E23] hover:to-[#556B2F] text-[#E6C98B] font-bold rounded-lg transition-all hover:scale-105 hover:shadow-2xl shadow-lg text-base"
                       >
                         <Info className="w-5 h-5" />
                         <span>Mais Informações</span>
@@ -559,6 +615,101 @@ export default function HomePage() {
                 );
               })
               )}
+            </div>
+          </section>
+        )}
+
+        {/* AcheMeCoisas - Latest Listings */}
+        {listings.length > 0 && (
+          <section className="py-16">
+            <div className="flex justify-between items-center mb-12">
+              <div>
+                <h2 className="text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-yellow-400 to-orange-500 mb-2">
+                  🛍️ AcheMeCoisas
+                </h2>
+                <p className="text-[#A8C97F] text-lg">
+                  Últimos anúncios publicados - Compre, venda e troque!
+                </p>
+              </div>
+              <Link
+                href="/acheme-coisas"
+                className="px-6 py-3 bg-gradient-to-r from-[#CD7F32] to-[#B87333] hover:from-[#D4AF37] hover:to-[#CD7F32] text-[#0a0a0a] rounded-full font-semibold transition-all hover:scale-105 shadow-lg"
+              >
+                Ver Todos
+              </Link>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+              {listings.map((listing) => (
+                <Link
+                  key={listing.id}
+                  href={`/acheme-coisas/${listing.slug}`}
+                  className="group bg-gradient-to-br from-[#5A5E5D] to-[#3A3E3D] border-2 border-[#2a2a1a] rounded-xl overflow-hidden hover:border-orange-500 transition-all shadow-xl hover:shadow-orange-500/20 hover:scale-105"
+                >
+                  {/* Image */}
+                  <div className="relative h-48 overflow-hidden">
+                    {listing.photos && listing.photos.length > 0 ? (
+                      <img
+                        src={listing.photos[0]}
+                        alt={listing.title}
+                        className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
+                      />
+                    ) : (
+                      <div className="w-full h-full bg-gradient-to-br from-gray-700 to-gray-800 flex items-center justify-center">
+                        <span className="text-6xl">{listing.categories?.icon || '📦'}</span>
+                      </div>
+                    )}
+                    
+                    {/* Featured Badge */}
+                    {listing.is_featured && (
+                      <div className="absolute top-2 right-2 px-3 py-1 bg-gradient-to-r from-[#D4AF37] to-[#CD7F32] text-[#0a0a0a] text-xs font-bold rounded-full shadow-lg">
+                        ⭐ DESTAQUE
+                      </div>
+                    )}
+
+                    {/* Category Badge */}
+                    <div className="absolute top-2 left-2 px-3 py-1 bg-black/70 text-[#E6C98B] text-xs font-semibold rounded-full backdrop-blur-sm">
+                      {listing.categories?.icon} {listing.categories?.name}
+                    </div>
+                  </div>
+
+                  {/* Content */}
+                  <div className="p-4">
+                    <h3 className="text-lg font-bold text-[#E6C98B] mb-2 line-clamp-2 group-hover:text-[#D4AF37] transition-colors">
+                      {listing.title}
+                    </h3>
+                    
+                    <p className="text-gray-400 text-sm mb-3 line-clamp-2">
+                      {listing.description}
+                    </p>
+
+                    {/* Price & Location */}
+                    <div className="flex items-center justify-between">
+                      {listing.price ? (
+                        <div className="text-2xl font-bold text-orange-400">
+                          R$ {listing.price.toLocaleString('pt-BR')}
+                        </div>
+                      ) : (
+                        <div className="text-sm text-gray-500">Grátis</div>
+                      )}
+                    </div>
+                    
+                    <div className="text-xs text-gray-500 mt-2 flex items-center gap-1">
+                      📍 {listing.city}, {listing.state}
+                    </div>
+
+                    {/* Condition Badge */}
+                    {listing.condition && (
+                      <div className="mt-3 inline-block px-2 py-1 bg-[#4A4E4D] text-[#A8C97F] text-xs rounded-md">
+                        {listing.condition === 'new' && '🆕 Novo'}
+                        {listing.condition === 'like_new' && '✨ Seminovo'}
+                        {listing.condition === 'good' && '👍 Bom estado'}
+                        {listing.condition === 'fair' && '⚠️ Estado regular'}
+                      </div>
+                    )}
+                  </div>
+                </Link>
+              ))}
             </div>
           </section>
         )}
@@ -592,7 +743,7 @@ export default function HomePage() {
             {/* Trust Badges */}
             <div className="mb-16">
               <h2 className="text-3xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-[#E6C98B] to-[#A8C97F] text-center mb-8">
-                Por que confiar no PubliMicro?
+                Por que confiar no AchaMe?
               </h2>
               <TrustBadges />
             </div>
@@ -637,7 +788,7 @@ export default function HomePage() {
                 <li>
                   <Link 
                     href="/postar" 
-                    className="inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-[#A8C97F] to-[#0D7377] hover:from-[#0D7377] hover:to-[#A8C97F] text-white rounded-lg transition-all font-bold shadow-lg hover:scale-105"
+                    className="inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-[#CD7F32] to-[#B87333] hover:from-[#D4AF37] hover:to-[#CD7F32] text-[#0a0a0a] rounded-lg transition-all font-bold shadow-lg hover:scale-105"
                   >
                     📢 Publique seu anúncio grátis
                   </Link>
@@ -647,7 +798,7 @@ export default function HomePage() {
             </div>
           </div>
           <div className="text-center text-[#A8C97F] text-sm pt-8 border-t border-[#2a2a1a]">
-            2025 PubliMicro Ecosystem. Todos os direitos reservados.
+            2025 AchaMe Ecosystem. Todos os direitos reservados.
           </div>
         </footer>
       </div>

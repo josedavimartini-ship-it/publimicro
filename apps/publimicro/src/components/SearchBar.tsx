@@ -1,21 +1,34 @@
 "use client";
 
 import { useState, useEffect, useRef } from "react";
-import { Search, X, MapPin, DollarSign, Maximize2, Filter, ChevronDown, SlidersHorizontal, Heart, GraduationCap, ShoppingCart, Wifi } from "lucide-react";
+import { Search, X, MapPin, DollarSign, Maximize2, Filter, ChevronDown, SlidersHorizontal, Heart, GraduationCap, ShoppingCart, Wifi, Package } from "lucide-react";
 import { supabase } from "@/lib/supabaseClient";
 import Link from "next/link";
 import Image from "next/image";
 import BottomSheet from "./BottomSheet";
 
-interface SearchResult {
+interface PropertyResult {
   id: string;
-  nome: string;
-  localizacao: string;
-  preco: number;
-  lance_inicial: number;
+  title: string;
+  location: string;
+  price: number;
   area_total: number;
   fotos: string[];
+  type: "property";
 }
+
+interface ListingResult {
+  id: string;
+  title: string;
+  price: number;
+  location: string;
+  condition: string;
+  category_path: string;
+  photos: { url: string }[];
+  type: "listing";
+}
+
+type SearchResult = PropertyResult | ListingResult;
 
 interface SearchBarProps {
   onSearch?: (query: string) => void;
@@ -30,6 +43,7 @@ export interface SearchFilters {
   areaMax: number;
   location: string;
   sortBy: "relevance" | "price_asc" | "price_desc" | "area_desc" | "newest";
+  searchType: "all" | "properties" | "listings"; // NEW: Search type selector
   // Neighborhood filters
   maxHospitalDistance?: number | null;
   maxSchoolDistance?: number | null;
@@ -43,6 +57,7 @@ export default function SearchBar({ onSearch, onFilterChange }: SearchBarProps) 
   const [showFilters, setShowFilters] = useState(false);
   const [results, setResults] = useState<SearchResult[]>([]);
   const [loading, setLoading] = useState(false);
+  const [searchType, setSearchType] = useState<"all" | "properties" | "listings">("all");
   const searchRef = useRef<HTMLDivElement>(null);
 
   // Filter states
@@ -108,73 +123,110 @@ export default function SearchBar({ onSearch, onFilterChange }: SearchBarProps) 
         areaMax,
         location,
         sortBy,
+        searchType,
         maxHospitalDistance,
         maxSchoolDistance,
         internetType,
         roadCondition,
       });
     }
-  }, [query, priceMin, priceMax, areaMin, areaMax, location, sortBy, maxHospitalDistance, maxSchoolDistance, internetType, roadCondition]);
+  }, [query, priceMin, priceMax, areaMin, areaMax, location, sortBy, searchType, maxHospitalDistance, maxSchoolDistance, internetType, roadCondition]);
 
   const performSearch = async () => {
     setLoading(true);
     setIsOpen(true);
 
     try {
-      let queryBuilder = supabase
-        .from("properties")
-        .select("id, title, location, price, area_total, fotos");
+      const combinedResults: SearchResult[] = [];
 
-      // Text search
-      if (query) {
-        queryBuilder = queryBuilder.or(`title.ilike.%${query}%,location.ilike.%${query}%`);
+      // Search Properties (if all or properties selected)
+      if (searchType === "all" || searchType === "properties") {
+        let propertyQuery = supabase
+          .from("properties")
+          .select("id, title, location, price, area_total, fotos");
+
+        // Text search
+        if (query) {
+          propertyQuery = propertyQuery.or(`title.ilike.%${query}%,location.ilike.%${query}%`);
+        }
+
+        // Price filter
+        if (priceMin > 0) propertyQuery = propertyQuery.gte("price", priceMin);
+        if (priceMax < 10000000) propertyQuery = propertyQuery.lte("price", priceMax);
+
+        // Area filter
+        if (areaMin > 0) propertyQuery = propertyQuery.gte("area_total", areaMin);
+        if (areaMax < 1000) propertyQuery = propertyQuery.lte("area_total", areaMax);
+
+        // Location filter
+        if (location) propertyQuery = propertyQuery.ilike("location", `%${location}%`);
+
+        // Sorting
+        switch (sortBy) {
+          case "price_asc":
+            propertyQuery = propertyQuery.order("price", { ascending: true });
+            break;
+          case "price_desc":
+            propertyQuery = propertyQuery.order("price", { ascending: false });
+            break;
+          case "area_desc":
+            propertyQuery = propertyQuery.order("area_total", { ascending: false });
+            break;
+          case "newest":
+            propertyQuery = propertyQuery.order("created_at", { ascending: false });
+            break;
+        }
+
+        const { data: properties } = await propertyQuery.limit(searchType === "all" ? 5 : 10);
+        
+        if (properties) {
+          combinedResults.push(...properties.map(p => ({ ...p, type: "property" as const })));
+        }
       }
 
-      // Price filter
-      if (priceMin > 0) {
-        queryBuilder = queryBuilder.gte("price", priceMin);
-      }
-      if (priceMax < 10000000) {
-        queryBuilder = queryBuilder.lte("price", priceMax);
+      // Search AcheMeCoisas Listings (if all or listings selected)
+      if (searchType === "all" || searchType === "listings") {
+        let listingQuery = supabase
+          .from("listings")
+          .select("id, title, price, location, condition, category_path, photos")
+          .eq("status", "active");
+
+        // Text search - using full-text search on search_vector
+        if (query) {
+          listingQuery = listingQuery.textSearch("search_vector", query, {
+            type: "websearch",
+            config: "portuguese",
+          });
+        }
+
+        // Price filter
+        if (priceMin > 0) listingQuery = listingQuery.gte("price", priceMin);
+        if (priceMax < 10000000) listingQuery = listingQuery.lte("price", priceMax);
+
+        // Location filter
+        if (location) listingQuery = listingQuery.ilike("location", `%${location}%`);
+
+        // Sorting
+        switch (sortBy) {
+          case "price_asc":
+            listingQuery = listingQuery.order("price", { ascending: true });
+            break;
+          case "price_desc":
+            listingQuery = listingQuery.order("price", { ascending: false });
+            break;
+          case "newest":
+            listingQuery = listingQuery.order("created_at", { ascending: false });
+            break;
+        }
+
+        const { data: listings } = await listingQuery.limit(searchType === "all" ? 5 : 10);
+
+        if (listings) {
+          combinedResults.push(...listings.map(l => ({ ...l, type: "listing" as const })));
+        }
       }
 
-      // Area filter
-      if (areaMin > 0) {
-        queryBuilder = queryBuilder.gte("area_total", areaMin);
-      }
-      if (areaMax < 1000) {
-        queryBuilder = queryBuilder.lte("area_total", areaMax);
-      }
-
-      // Location filter
-      if (location) {
-        queryBuilder = queryBuilder.ilike("location", `%${location}%`);
-      }
-
-      // Sorting
-      switch (sortBy) {
-        case "price_asc":
-          queryBuilder = queryBuilder.order("price", { ascending: true });
-          break;
-        case "price_desc":
-          queryBuilder = queryBuilder.order("price", { ascending: false });
-          break;
-        case "area_desc":
-          queryBuilder = queryBuilder.order("area_total", { ascending: false });
-          break;
-        case "newest":
-          queryBuilder = queryBuilder.order("created_at", { ascending: false });
-          break;
-        default:
-          // Relevance - no specific order
-          break;
-      }
-
-      const { data, error } = await queryBuilder.limit(10);
-
-      if (error) throw error;
-
-      setResults(data || []);
+      setResults(combinedResults);
       if (onSearch) {
         onSearch(query);
       }
@@ -870,6 +922,40 @@ export default function SearchBar({ onSearch, onFilterChange }: SearchBarProps) 
           role="region"
           aria-label="Search results"
         >
+          {/* Search Type Tabs */}
+          <div className="flex border-b border-[#2a2a1a] bg-[#0a0a0a]">
+            <button
+              onClick={() => setSearchType("all")}
+              className={`flex-1 px-4 py-3 text-sm font-semibold transition-all ${
+                searchType === "all"
+                  ? "text-[#E6C98B] border-b-2 border-[#CD7F32]"
+                  : "text-[#676767] hover:text-[#8B9B6E]"
+              }`}
+            >
+              🔍 Todos ({results.length})
+            </button>
+            <button
+              onClick={() => setSearchType("properties")}
+              className={`flex-1 px-4 py-3 text-sm font-semibold transition-all ${
+                searchType === "properties"
+                  ? "text-[#E6C98B] border-b-2 border-[#CD7F32]"
+                  : "text-[#676767] hover:text-[#8B9B6E]"
+              }`}
+            >
+              🏡 Propriedades ({results.filter(r => r.type === "property").length})
+            </button>
+            <button
+              onClick={() => setSearchType("listings")}
+              className={`flex-1 px-4 py-3 text-sm font-semibold transition-all ${
+                searchType === "listings"
+                  ? "text-[#E6C98B] border-b-2 border-[#CD7F32]"
+                  : "text-[#676767] hover:text-[#8B9B6E]"
+              }`}
+            >
+              📦 AcheMeCoisas ({results.filter(r => r.type === "listing").length})
+            </button>
+          </div>
+
           {/* Screen Reader Results Count */}
           <div 
             role="status" 
@@ -889,62 +975,103 @@ export default function SearchBar({ onSearch, onFilterChange }: SearchBarProps) 
             </div>
           ) : results.length > 0 ? (
             <div className="max-h-96 overflow-y-auto">
-              {results.map((result) => (
-                <Link
-                  key={result.id}
-                  href={`/imoveis/${result.id}`}
-                  onClick={() => {
-                    setIsOpen(false);
-                    setQuery("");
-                  }}
-                  className="flex items-center gap-4 p-4 hover:bg-[#2a2a1a]/50 transition-colors border-b border-[#2a2a1a] last:border-0"
-                >
-                  {/* Property Image */}
-                  <div className="w-20 h-20 bg-[#2a2a1a] rounded-lg overflow-hidden flex-shrink-0 relative">
-                    {result.fotos && result.fotos[0] ? (
-                      <Image
-                        src={result.fotos[0]}
-                        alt={result.title}
-                        fill
-                        sizes="80px"
-                        className="object-cover"
-                        unoptimized
-                      />
-                    ) : (
-                      <div className="w-full h-full flex items-center justify-center">
-                        <MapPin className="w-8 h-8 text-[#959595]" />
+              {results.map((result) => {
+                const isProperty = result.type === "property";
+                const href = isProperty ? `/imoveis/${result.id}` : `/acheme-coisas/${result.id}`;
+                
+                return (
+                  <Link
+                    key={`${result.type}-${result.id}`}
+                    href={href}
+                    onClick={() => {
+                      setIsOpen(false);
+                      setQuery("");
+                    }}
+                    className="flex items-center gap-4 p-4 hover:bg-[#2a2a1a]/50 transition-colors border-b border-[#2a2a1a] last:border-0"
+                  >
+                    {/* Result Image */}
+                    <div className="w-20 h-20 bg-[#2a2a1a] rounded-lg overflow-hidden flex-shrink-0 relative">
+                      {isProperty ? (
+                        (result as PropertyResult).fotos && (result as PropertyResult).fotos[0] ? (
+                          <Image
+                            src={(result as PropertyResult).fotos[0]}
+                            alt={isProperty ? (result as PropertyResult).title : (result as ListingResult).title}
+                            fill
+                            sizes="80px"
+                            className="object-cover"
+                            unoptimized
+                          />
+                        ) : (
+                          <div className="w-full h-full flex items-center justify-center">
+                            <MapPin className="w-8 h-8 text-[#959595]" />
+                          </div>
+                        )
+                      ) : (
+                        (result as ListingResult).photos && (result as ListingResult).photos[0] ? (
+                          <Image
+                            src={(result as ListingResult).photos[0].url}
+                            alt={(result as ListingResult).title}
+                            fill
+                            sizes="80px"
+                            className="object-cover"
+                            unoptimized
+                          />
+                        ) : (
+                          <div className="w-full h-full flex items-center justify-center">
+                            <Package className="w-8 h-8 text-[#959595]" />
+                          </div>
+                        )
+                      )}
+                      
+                      {/* Type Badge */}
+                      <div className={`absolute top-1 right-1 px-1.5 py-0.5 rounded text-[9px] font-bold ${
+                        isProperty 
+                          ? "bg-[#A8C97F] text-[#0a0a0a]" 
+                          : "bg-[#CD7F32] text-[#0a0a0a]"
+                      }`}>
+                        {isProperty ? "🏡" : "📦"}
                       </div>
-                    )}
-                  </div>
-
-                  {/* Property Info */}
-                  <div className="flex-1 min-w-0">
-                    <h4 className="text-[#D4A574] font-semibold truncate">
-                      {result.title}
-                    </h4>
-                    <p className="text-[#8B9B6E] text-sm flex items-center gap-1 mt-1">
-                      <MapPin className="w-3 h-3" />
-                      {result.location}
-                    </p>
-                    <div className="flex items-center gap-4 mt-2">
-                      {result.price && (
-                        <span className="text-[#B7791F] font-bold text-sm">
-                          R$ {result.price.toLocaleString("pt-BR")}
-                        </span>
-                      )}
-                      {result.area_total && (
-                        <span className="text-[#8B9B6E] text-sm">
-                          {result.area_total} ha
-                        </span>
-                      )}
                     </div>
-                  </div>
-                </Link>
-              ))}
+
+                    {/* Result Info */}
+                    <div className="flex-1 min-w-0">
+                      <h4 className="text-[#D4A574] font-semibold truncate">
+                        {isProperty ? (result as PropertyResult).title : (result as ListingResult).title}
+                      </h4>
+                      
+                      <p className="text-[#8B9B6E] text-sm flex items-center gap-1 mt-1">
+                        <MapPin className="w-3 h-3" />
+                        {isProperty ? (result as PropertyResult).location : (result as ListingResult).location}
+                      </p>
+                      
+                      <div className="flex items-center gap-4 mt-2">
+                        <span className="text-[#B7791F] font-bold text-sm">
+                          R$ {isProperty 
+                            ? ((result as PropertyResult).price || 0).toLocaleString("pt-BR")
+                            : (result as ListingResult).price.toLocaleString("pt-BR")
+                          }
+                        </span>
+                        
+                        {isProperty && (result as PropertyResult).area_total && (
+                          <span className="text-[#8B9B6E] text-sm">
+                            {(result as PropertyResult).area_total} ha
+                          </span>
+                        )}
+                        
+                        {!isProperty && (result as ListingResult).condition && (
+                          <span className="text-xs bg-[#1a1a1a] text-[#A8C97F] px-2 py-0.5 rounded-full">
+                            {(result as ListingResult).condition}
+                          </span>
+                        )}
+                      </div>
+                    </div>
+                  </Link>
+                );
+              })}
             </div>
           ) : (
             <div className="p-6 text-center text-[#676767]">
-              Nenhuma propriedade encontrada para "{query}"
+              Nenhum resultado encontrado para "{query}"
             </div>
           )}
         </div>
