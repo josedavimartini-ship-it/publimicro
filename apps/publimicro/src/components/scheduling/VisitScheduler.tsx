@@ -6,6 +6,7 @@ import FocusLock from "react-focus-lock";
 interface VisitSchedulerProps {
   propertyId?: string;
   propertyTitle?: string;
+  onClose?: () => void;  // Optional close callback
 }
 
 type VisitType = "presencial" | "video";

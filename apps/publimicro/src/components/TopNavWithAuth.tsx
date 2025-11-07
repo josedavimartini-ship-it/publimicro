@@ -121,7 +121,7 @@ export function TopNavWithAuth({
                 <div className="flex items-center gap-2 relative z-10">
                   <div className="w-1 h-1 bg-[#D4AF37] rounded-full"></div>
                   <span className="text-xs bg-gradient-to-r from-[#B87333] to-[#D4AF37] bg-clip-text text-transparent font-bold tracking-wider uppercase">
-                    Ecossistema de Negócios
+                    Encontre Tudo que Procura
                   </span>
                   <div className="w-1 h-1 bg-[#CD7F32] rounded-full"></div>
                 </div>

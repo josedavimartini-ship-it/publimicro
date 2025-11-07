@@ -18,29 +18,30 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: 'Missing required fields' }, { status: 400 });
     }
 
-    // Check that user has completed a visit for this ad
-    const { data: visits } = await supabase
-      .from('visits')
-      .select('id, status')
-      .eq('ad_id', ad_id)
-      .eq('user_id', user.id)
-      .eq('status', 'completed');
+    // Check that user has completed a visit for this ad (OPTIONAL - commented out for now)
+    // const { data: visits } = await supabase
+    //   .from('visits')
+    //   .select('id, status')
+    //   .eq('ad_id', ad_id)
+    //   .eq('user_id', user.id)
+    //   .eq('status', 'completed');
 
-    if (!visits || visits.length === 0) {
-      return NextResponse.json(
-        { error: 'You must complete a visit before submitting a proposal' },
-        { status: 403 }
-      );
-    }
+    // if (!visits || visits.length === 0) {
+    //   return NextResponse.json(
+    //     { error: 'You must complete a visit before submitting a proposal' },
+    //     { status: 403 }
+    //   );
+    // }
 
     const { data, error } = await supabase
       .from('proposals')
       .insert({
-        ad_id,
+        property_id: ad_id,  // Using property_id to match schema
         user_id: user.id,
-        visit_id: visit_id || visits[0].id,
+        // visit_id: visit_id || visits[0]?.id,  // Optional
         amount,
         message,
+        status: 'pending',
       })
       .select()
       .single();

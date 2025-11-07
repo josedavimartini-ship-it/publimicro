@@ -1,5 +1,5 @@
 ﻿import { NextResponse } from "next/server";
-import { supabase } from "@/lib/supabaseClient";
+import { createServerSupabaseClient } from "@/lib/supabaseServer";
 
 interface ScheduleVisitData {
   nome: string;
@@ -18,6 +18,8 @@ interface ScheduleVisitData {
 }
 
 export async function POST(req: Request): Promise<NextResponse> {
+  const supabase = createServerSupabaseClient();
+  
   try {
     const body: ScheduleVisitData = await req.json();
 
@@ -45,26 +47,26 @@ export async function POST(req: Request): Promise<NextResponse> {
       );
     }
 
-    // Salvar no Supabase
+    // Get authenticated user (optional - guests can also schedule)
+    const { data: { user } } = await supabase.auth.getUser();
+    
+    // Combine date and time for scheduled_at
+    const scheduledAt = new Date(`${dataPreferencia}T${horarioPreferencia}`).toISOString();
+
+    // Salvar no Supabase - using 'visits' table
     const { data, error } = await supabase
-      .from("visitas_agendadas")
+      .from("visits")
       .insert([
         {
-          nome,
-          email,
-          telefone,
-          documento,
-          cidade,
-          estado,
-          pais,
-          data_preferencia: dataPreferencia,
-          horario_preferencia: horarioPreferencia,
-          mensagem,
-          tipo_visita: visitType,
-          property_id: propertyId,
-          property_title: propertyTitle,
-          status: "pendente", // admin will confirm
-          created_at: new Date().toISOString(),
+          ad_id: propertyId || "general",
+          user_id: user?.id || null,
+          guest_name: nome,
+          guest_email: email,
+          guest_phone: telefone,
+          visit_type: visitType === "presencial" ? "in_person" : "video",
+          scheduled_at: scheduledAt,
+          status: "requested",
+          notes: mensagem || null,
         },
       ])
       .select()
