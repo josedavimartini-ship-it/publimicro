@@ -29,9 +29,9 @@
         "STRIPE_PUBLISHABLE_KEY"
       ]
     },
-    "ui#build": {
-  "outputs": ["packages/ui/dist/**"]
-},
+    "@publimicro/ui#build": {
+      "outputs": ["dist/**"]
+    },
     "lint": {
       "dependsOn": ["^build"],
       "outputs": [],
