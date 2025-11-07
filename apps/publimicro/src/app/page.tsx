@@ -12,6 +12,7 @@ import SearchBar from "@/components/SearchBar";
 import SwipeGallery from "@/components/SwipeGallery";
 import WelcomeModal from "@/components/WelcomeModal";
 import RecentlyViewed from "@/components/RecentlyViewed";
+import BrazilTimeClock from "@/components/BrazilTimeClock";
 import { LiveCounter, ActivityFeed, Testimonials, TrustBadges } from "@/components/SocialProof";
 import { PropertyCardSkeleton } from "@/components/Skeleton";
 import { useUnsplashImages } from "@/hooks/useUnsplashImages";
@@ -754,6 +755,21 @@ export default function HomePage() {
                 O que nossos clientes dizem
               </h2>
               <Testimonials />
+            </div>
+          </div>
+        </section>
+
+        {/* Brazil Time Clock Widget */}
+        <section className="py-12 border-t-2 border-[#2a2a1a]">
+          <div className="max-w-6xl mx-auto">
+            <h2 className="text-3xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-[#E6C98B] to-[#A8C97F] text-center mb-8">
+              🕐 Horário Oficial do Brasil
+            </h2>
+            <p className="text-center text-[#A8C97F] mb-8 max-w-2xl mx-auto">
+              Acompanhe os fusos horários de todo o Brasil em tempo real
+            </p>
+            <div className="flex justify-center">
+              <BrazilTimeClock />
             </div>
           </div>
         </section>
