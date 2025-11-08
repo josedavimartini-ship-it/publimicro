@@ -78,7 +78,11 @@ export default function MeusAnunciosPage() {
       if (listingsError) throw listingsError;
       setListings(listingsData || []);
     } catch (error: any) {
-      showToast(error.message || "Erro ao carregar anúncios", "error");
+      showToast({ 
+        type: "error", 
+        title: "Erro ao carregar anúncios",
+        message: error.message 
+      });
     } finally {
       setLoading(false);
     }
@@ -94,9 +98,16 @@ export default function MeusAnunciosPage() {
       if (error) throw error;
 
       setProperties(properties.filter((p) => p.id !== id));
-      showToast("Propriedade excluída com sucesso!", "success");
+      showToast({ 
+        type: "success", 
+        title: "Propriedade excluída com sucesso!" 
+      });
     } catch (error: any) {
-      showToast(error.message || "Erro ao excluir propriedade", "error");
+      showToast({ 
+        type: "error", 
+        title: "Erro ao excluir propriedade",
+        message: error.message 
+      });
     } finally {
       setDeleting(null);
     }
@@ -112,9 +123,16 @@ export default function MeusAnunciosPage() {
       if (error) throw error;
 
       setListings(listings.filter((l) => l.id !== id));
-      showToast("Anúncio excluído com sucesso!", "success");
+      showToast({ 
+        type: "success", 
+        title: "Anúncio excluído com sucesso!" 
+      });
     } catch (error: any) {
-      showToast(error.message || "Erro ao excluir anúncio", "error");
+      showToast({ 
+        type: "error", 
+        title: "Erro ao excluir anúncio",
+        message: error.message 
+      });
     } finally {
       setDeleting(null);
     }

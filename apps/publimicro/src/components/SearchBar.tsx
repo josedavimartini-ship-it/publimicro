@@ -1,6 +1,12 @@
 "use client";
 
 import { useState, useEffect, useRef } from "react";
+import dynamic from "next/dynamic";
+// Dynamically import MapSearch for SSR safety
+const MapSearch = dynamic(() => import("./search/MapSearch"), { ssr: false });
+// For demo: use a static list, but ready for Google Places/Mapbox API
+// import usePlacesAutocomplete from 'use-places-autocomplete';
+import { motion } from "framer-motion";
 import { Search, X, MapPin, DollarSign, Maximize2, Filter, ChevronDown, SlidersHorizontal, Heart, GraduationCap, ShoppingCart, Wifi, Package } from "lucide-react";
 import { supabase } from "@/lib/supabaseClient";
 import Link from "next/link";
@@ -12,161 +18,319 @@ interface PropertyResult {
   title: string;
   location: string;
   price: number;
-  area_total: number;
-  fotos: string[];
-  type: "property";
-}
+  return (
+    <div ref={searchRef} className="relative w-full max-w-4xl mx-auto">
+      {/* Monster SearchBar - Glassmorphism, Poetic Font, Animated Icon */}
+      <motion.div
+        className="relative shadow-2xl"
+          placeholder="Busque por localização, nome, ou sonho..."
+            >
+            }`}
+    "Cristalina, GO",
+    "Aparecida de Goiânia, GO",
+        {isOpen && query && (
+          <motion.div
+            className="flex flex-wrap gap-3 mt-6 justify-center"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.3, duration: 0.7, type: "spring" }}
+            role="toolbar"
+            aria-label="Filtros de busca"
+          >
+            {/* Example filter pills - replace with real filter state */}
+            <button
+              className="px-6 py-2 rounded-full bg-gradient-to-r from-[#FFD700]/80 to-[#D4A574]/80 text-[#0a0a0a] font-bold shadow-md border-2 border-[#FFD700]/40 hover:scale-110 focus:scale-110 focus:outline-none focus:ring-4 focus:ring-[#FFD700]/30 transition-all relative group"
+              tabIndex={0}
+              aria-label="Filtrar por localização"
+            >
+              <MapPin className="inline w-5 h-5 mr-2 text-[#0a0a0a]" /> Localização
+              <span className="absolute left-1/2 -translate-x-1/2 top-full mt-2 opacity-0 group-hover:opacity-100 group-focus:opacity-100 bg-[#FFD700]/90 text-[#181818] text-xs font-serif px-4 py-2 rounded-xl shadow-lg pointer-events-none transition-all z-50 whitespace-nowrap">Encontre o lugar dos seus sonhos</span>
+            </button>
+            <button
+              className="px-6 py-2 rounded-full bg-gradient-to-r from-[#FFD700]/80 to-[#D4A574]/80 text-[#0a0a0a] font-bold shadow-md border-2 border-[#FFD700]/40 hover:scale-110 focus:scale-110 focus:outline-none focus:ring-4 focus:ring-[#FFD700]/30 transition-all relative group"
+              tabIndex={0}
+              aria-label="Filtrar por preço"
+            >
+              <DollarSign className="inline w-5 h-5 mr-2 text-[#0a0a0a]" /> Preço
+              <span className="absolute left-1/2 -translate-x-1/2 top-full mt-2 opacity-0 group-hover:opacity-100 group-focus:opacity-100 bg-[#FFD700]/90 text-[#181818] text-xs font-serif px-4 py-2 rounded-xl shadow-lg pointer-events-none transition-all z-50 whitespace-nowrap">Defina seu investimento ideal</span>
+            </button>
+            <button
+              className="px-6 py-2 rounded-full bg-gradient-to-r from-[#FFD700]/80 to-[#D4A574]/80 text-[#0a0a0a] font-bold shadow-md border-2 border-[#FFD700]/40 hover:scale-110 focus:scale-110 focus:outline-none focus:ring-4 focus:ring-[#FFD700]/30 transition-all relative group"
+              tabIndex={0}
+              aria-label="Filtrar por área"
+            >
+              <Maximize2 className="inline w-5 h-5 mr-2 text-[#0a0a0a]" /> Área
+              <span className="absolute left-1/2 -translate-x-1/2 top-full mt-2 opacity-0 group-hover:opacity-100 group-focus:opacity-100 bg-[#FFD700]/90 text-[#181818] text-xs font-serif px-4 py-2 rounded-xl shadow-lg pointer-events-none transition-all z-50 whitespace-nowrap">Escolha o tamanho do seu paraíso</span>
+            </button>
+            <button
+              className="px-6 py-2 rounded-full bg-gradient-to-r from-[#FFD700]/80 to-[#D4A574]/80 text-[#0a0a0a] font-bold shadow-md border-2 border-[#FFD700]/40 hover:scale-110 focus:scale-110 focus:outline-none focus:ring-4 focus:ring-[#FFD700]/30 transition-all relative group"
+              tabIndex={0}
+              aria-label="Mais filtros"
+            >
+              <Filter className="inline w-5 h-5 mr-2 text-[#0a0a0a]" /> Mais Filtros
+              <span className="absolute left-1/2 -translate-x-1/2 top-full mt-2 opacity-0 group-hover:opacity-100 group-focus:opacity-100 bg-[#FFD700]/90 text-[#181818] text-xs font-serif px-4 py-2 rounded-xl shadow-lg pointer-events-none transition-all z-50 whitespace-nowrap">Refine sua busca com detalhes</span>
+            </button>
+            <button
+              onClick={resetFilters}
+              className="px-6 py-2 rounded-full bg-[#1a1a1a]/60 text-[#FFD700] font-bold border-2 border-[#FFD700]/40 hover:bg-[#FFD700]/10 hover:scale-110 focus:scale-110 focus:outline-none focus:ring-4 focus:ring-[#FFD700]/30 transition-all"
+              tabIndex={0}
+              aria-label="Limpar todos os filtros"
+            >
+              Limpar Tudo
+            </button>
+          </motion.div>
+                }`}
+              >
+                🏡 Propriedades ({results.filter(r => r.type === "property").length})
+              </button>
+              <button
+                onClick={() => setSearchType("listings")}
+                className={`flex-1 px-6 py-4 text-lg font-serif font-bold transition-all ${
+                  searchType === "listings"
+                    ? "text-[#FFD700] border-b-4 border-[#FFD700] bg-[#181818]/60"
+                    : "text-[#D4A574] hover:text-[#FFD700]"
+                }`}
+              >
+                📦 AcheMeCoisas ({results.filter(r => r.type === "listing").length})
+              </button>
+            </div>
 
-interface ListingResult {
-  id: string;
-  title: string;
-  price: number;
-  location: string;
-  condition: string;
-  category_path: string;
-  photos: { url: string }[];
-  type: "listing";
-}
+            {/* Screen Reader Results Count */}
+            <div 
+              role="status" 
+              aria-live="polite" 
+              aria-atomic="true"
+              className="sr-only"
+            >
+              {loading 
+                ? "Searching..." 
+                : `${results.length} ${results.length === 1 ? 'result' : 'results'} found`}
+            </div>
 
-type SearchResult = PropertyResult | ListingResult;
+            {loading ? (
+              <div className="p-8 text-center text-[#FFD700] font-serif text-xl animate-pulse">
+                <div className="animate-spin w-10 h-10 border-4 border-[#FFD700] border-t-transparent rounded-full mx-auto mb-3"></div>
+                Buscando poesia nos campos...
+              </div>
+            ) : results.length > 0 ? (
+              <div className="max-h-96 overflow-y-auto">
+                {results.map((result, idx) => {
+                  const isProperty = result.type === "property";
+                  const href = isProperty ? `/imoveis/${result.id}` : `/acheme-coisas/${result.id}`;
+                  return (
+                    <a
+                      key={`${result.type}-${result.id}`}
+                      href={href}
+                      onClick={() => {
+                        setIsOpen(false);
+                        setQuery("");
+                      }}
+                      className={`flex items-center gap-6 p-6 transition-all border-b border-[#FFD700]/10 last:border-0 group hover:bg-[#FFD700]/5 hover:scale-[1.01] duration-200 ${idx % 2 === 0 ? 'bg-[#181818]/60' : 'bg-[#181818]/40'}`}
+                      style={{ fontFamily: 'Playfair Display, Cormorant Garamond, serif' }}
+                    >
+                      {/* Result Image or Map Pin */}
+                      <div className="w-24 h-24 bg-[#2a2a1a] rounded-2xl overflow-hidden flex-shrink-0 relative shadow-lg border-2 border-[#FFD700]/20">
+                        {isProperty ? (
+                          (result as PropertyResult).fotos && (result as PropertyResult).fotos[0] ? (
+                            <img
+                              src={(result as PropertyResult).fotos[0]}
+                              alt={isProperty ? (result as PropertyResult).title : (result as ListingResult).title}
+                              className="object-cover w-full h-full"
+                              loading="lazy"
+                            />
+                          ) : (
+                            <div className="w-full h-full flex items-center justify-center">
+                              <MapPin className="w-10 h-10 text-[#FFD700]/60" />
+                            </div>
+                          )
+                        ) : (
+                          (result as ListingResult).photos && (result as ListingResult).photos[0] ? (
+                            <img
+                              src={(result as ListingResult).photos[0].url}
+                              alt={(result as ListingResult).title}
+                              className="object-cover w-full h-full"
+                              loading="lazy"
+                            />
+                          ) : (
+                            <div className="w-full h-full flex items-center justify-center">
+                              <Package className="w-10 h-10 text-[#FFD700]/60" />
+                            </div>
+                          )
+                        )}
+                        {/* Type Badge */}
+                        <div className={`absolute top-2 right-2 px-2 py-1 rounded text-xs font-bold shadow-md ${
+                          isProperty 
+                            ? "bg-[#FFD700] text-[#0a0a0a]" 
+                            : "bg-[#D4A574] text-[#0a0a0a]"
+                        }`}>
+                          {isProperty ? "🏡" : "📦"}
+                        </div>
+                      </div>
 
-interface SearchBarProps {
-  onSearch?: (query: string) => void;
-  onFilterChange?: (filters: SearchFilters) => void;
-}
+                      {/* Result Info */}
+                      <div className="flex-1 min-w-0">
+                        <h4 className="text-[#FFD700] font-serif font-bold text-xl truncate group-hover:underline">
+                          {isProperty ? (result as PropertyResult).title : (result as ListingResult).title}
+                        </h4>
+                        <p className="text-[#D4A574] text-base flex items-center gap-2 mt-2 font-serif">
+                          <MapPin className="w-4 h-4" />
+                          {isProperty ? (result as PropertyResult).location : (result as ListingResult).location}
+                        </p>
+                        <div className="flex items-center gap-6 mt-3">
+                          <span className="text-[#FFD700] font-bold text-lg">
+                            R$ {isProperty 
+                              ? ((result as PropertyResult).price || 0).toLocaleString("pt-BR")
+                              : (result as ListingResult).price.toLocaleString("pt-BR")
+                            }
+                          </span>
+                          {isProperty && (result as PropertyResult).area_total && (
+                            <span className="text-[#D4A574] text-base font-serif">
+                              {(result as PropertyResult).area_total} ha
+                            </span>
+                          )}
+                          {!isProperty && (result as ListingResult).condition && (
+                            <span className="text-xs bg-[#FFD700]/10 text-[#FFD700] px-3 py-1 rounded-full font-serif">
+                              {(result as ListingResult).condition}
+                            </span>
+                          )}
+                        </div>
+                      </div>
+                    </a>
+                  );
+                })}
+              </div>
+            ) : (
+              <div className="p-8 text-center text-[#D4A574] font-serif text-lg">
+                Nenhum resultado encontrado para "{query}"
+              </div>
+            )}
+          </div>
+        )}
+        <button
+          className={`px-8 py-3 rounded-full font-bold text-lg shadow-lg border-2 border-[#FFD700]/40 transition-all ${showMapSearch ? "bg-gradient-to-r from-[#FFD700] to-[#D4A574] text-[#0a0a0a]" : "bg-[#1a1a1a]/60 text-[#FFD700] hover:bg-[#FFD700]/10"}`}
+          onClick={() => setShowMapSearch(true)}
+        >
+          🗺️ Busca no Mapa
+        </button>
+      </div>
 
-export interface SearchFilters {
-  query: string;
-  priceMin: number;
-  priceMax: number;
-  areaMin: number;
-  areaMax: number;
-  location: string;
-  sortBy: "relevance" | "price_asc" | "price_desc" | "area_desc" | "newest";
-  searchType: "all" | "properties" | "listings"; // NEW: Search type selector
-  // Neighborhood filters
-  maxHospitalDistance?: number | null;
-  maxSchoolDistance?: number | null;
-  internetType?: string | null;
-  roadCondition?: string | null;
-}
+      {!showMapSearch && (
+        <motion.div
+          className="relative shadow-2xl"
+          initial={{ opacity: 0, y: -30 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.7, type: "spring" }}
+        >
+        <motion.div
+          className="absolute left-8 md:left-10 top-1/2 -translate-y-1/2 z-10"
+          animate={{ scale: [1, 1.2, 1], rotate: [0, 10, -10, 0] }}
+          transition={{ repeat: Infinity, duration: 2, ease: "easeInOut" }}
+        >
+          <Search className="w-9 h-9 md:w-10 md:h-10 text-[#FFD700] drop-shadow-lg" strokeWidth={3} />
+        </motion.div>
 
-export default function SearchBar({ onSearch, onFilterChange }: SearchBarProps) {
-  const [query, setQuery] = useState("");
-  const [isOpen, setIsOpen] = useState(false);
-  const [showFilters, setShowFilters] = useState(false);
-  const [results, setResults] = useState<SearchResult[]>([]);
-  const [loading, setLoading] = useState(false);
-  const [searchType, setSearchType] = useState<"all" | "properties" | "listings">("all");
-  const searchRef = useRef<HTMLDivElement>(null);
+        {/* Main search input */}
+        <input
+          type="text"
+          value={query}
+          onChange={(e) => setQuery(e.target.value)}
+          onFocus={() => query && setIsOpen(true)}
+          placeholder="Busque por localização, nome, ou sonho..."
+          className="w-full pl-20 md:pl-24 pr-44 md:pr-40 py-7 md:py-8 bg-white/10 backdrop-blur-lg border-4 border-[#FFD700]/40 rounded-3xl text-[#FFD700] text-2xl md:text-3xl placeholder-[#D4A574] font-serif font-bold tracking-wide focus:border-[#FFD700] focus:outline-none focus:ring-4 focus:ring-[#FFD700]/20 transition-all shadow-2xl hover:shadow-[#FFD700]/20"
+          style={{ fontFamily: 'Playfair Display, Cormorant Garamond, serif' }}
+        />
 
-  // Filter states
-  const [priceMin, setPriceMin] = useState(0);
-  const [priceMax, setPriceMax] = useState(10000000);
-  const [areaMin, setAreaMin] = useState(0);
-  const [areaMax, setAreaMax] = useState(1000);
-  const [location, setLocation] = useState("");
-  const [sortBy, setSortBy] = useState<SearchFilters["sortBy"]>("relevance");
-  
-  // Neighborhood filter states
-  const [maxHospitalDistance, setMaxHospitalDistance] = useState<number | null>(null);
-  const [maxSchoolDistance, setMaxSchoolDistance] = useState<number | null>(null);
-  const [internetType, setInternetType] = useState<string | null>(null);
-  const [roadCondition, setRoadCondition] = useState<string | null>(null);
+        {/* Location autocomplete input (demo, replace with real API) */}
+        <input
+          ref={locationInputRef}
+          type="text"
+          value={locationQuery}
+          onChange={e => setLocationQuery(e.target.value)}
+          onFocus={() => setShowLocationDropdown(true)}
+          placeholder="Digite uma localização..."
+          className="absolute left-1/2 -translate-x-1/2 top-full mt-4 w-2/3 md:w-1/2 px-6 py-4 bg-white/20 backdrop-blur-lg border-2 border-[#FFD700]/30 rounded-2xl text-[#FFD700] text-lg placeholder-[#D4A574] font-serif font-semibold focus:border-[#FFD700] focus:outline-none focus:ring-2 focus:ring-[#FFD700]/20 transition-all shadow-xl z-30"
+          style={{ fontFamily: 'Playfair Display, Cormorant Garamond, serif', zIndex: 30 }}
+        />
+        {showLocationDropdown && locationResults.length > 0 && (
+          <div className="absolute left-1/2 -translate-x-1/2 top-[calc(100%+4.5rem)] w-2/3 md:w-1/2 bg-[#181818] border-2 border-[#FFD700]/30 rounded-2xl shadow-2xl z-40">
+            {locationResults.map((loc, idx) => (
+              <button
+                key={loc}
+                className="w-full flex items-center gap-4 px-4 py-3 text-[#FFD700] font-serif hover:bg-[#FFD700]/10 transition-all border-b border-[#FFD700]/10 last:border-0"
+                onClick={() => {
+                  setLocation(loc);
+                  setLocationQuery(loc);
+                  setShowLocationDropdown(false);
+                  locationInputRef.current?.blur();
+                }}
+                tabIndex={0}
+                onKeyDown={e => {
+                  if (e.key === 'Enter') {
+                    setLocation(loc);
+                    setLocationQuery(loc);
+                    setShowLocationDropdown(false);
+                    locationInputRef.current?.blur();
+                  }
+                }}
+              >
+                {/* Mini map preview (Mapbox Static API placeholder) */}
+                <img
+                  src={`https://api.mapbox.com/styles/v1/mapbox/streets-v11/static/pin-s+ffdf00(-47.9292,-15.7801)/-47.9292,-15.7801,8/120x80?access_token=pk.eyJ1IjoibWFwYm94dXNlciIsImEiOiJja2xvZ2Z2b2wwMDFwMnBvN2Z2b2Z2b2Z2In0.1234567890abcdef`}
+                  alt="Mapa"
+                  className="w-20 h-14 rounded-lg object-cover border-2 border-[#FFD700]/20 shadow-md mr-2"
+                  style={{ background: '#222' }}
+                  loading="lazy"
+                />
+                <span className="flex-1 text-left text-lg font-serif font-bold truncate">{loc}</span>
+              </button>
+            ))}
+          </div>
+        )}
 
-  // Property feature filter states
-  const [propertyStatus, setPropertyStatus] = useState<string | null>(null);
-  const [hasElectricity, setHasElectricity] = useState<boolean | null>(null);
-  const [waterSource, setWaterSource] = useState<string | null>(null);
-  const [dateFilter, setDateFilter] = useState<string | null>(null); // 'last-7' or 'last-30'
+        <div className="absolute right-6 md:right-8 top-1/2 -translate-y-1/2 flex items-center gap-3 md:gap-4">
+          {query && (
+            <button
+              onClick={clearSearch}
+              className="p-4 md:p-3 hover:bg-[#FFD700]/10 rounded-full transition-colors"
+              aria-label="Limpar busca"
+            >
+              <X className="w-7 h-7 md:w-8 md:h-8 text-[#D4A574]" strokeWidth={3} />
+            </button>
+          )}
 
-  // Available locations (you can fetch these from database)
-  const locations = [
-    "Goiás",
-    "São Paulo",
-    "Minas Gerais",
-    "Rio de Janeiro",
-    "Brasília",
-    "Caldas Novas",
-    "Pirenópolis",
-  ];
+          <button
+            onClick={() => setShowFilters(!showFilters)}
+            className={`flex items-center gap-2 px-7 py-4 rounded-full transition-all font-extrabold text-lg shadow-xl hover:scale-105 border-2 border-[#FFD700]/40 ${
+              showFilters
+                ? "bg-gradient-to-r from-[#FFD700] to-[#D4A574] text-[#0a0a0a]"
+                : "bg-[#1a1a1a]/60 text-[#FFD700] hover:bg-[#FFD700]/10"
+            }`}
+          >
+            <SlidersHorizontal className="w-6 h-6" strokeWidth={3} />
+            <span className="font-serif">Filtros</span>
+            {activeFiltersCount > 0 && (
+              <span className="ml-1 w-7 h-7 bg-[#FFD700] text-[#0a0a0a] text-base font-black rounded-full flex items-center justify-center shadow-md">
+                {activeFiltersCount}
+              </span>
+            )}
+          </button>
+        </div>
+        </motion.div>
+      )}
 
-  useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      if (searchRef.current && !searchRef.current.contains(event.target as Node)) {
-        setIsOpen(false);
-        setShowFilters(false);
-      }
-    };
-
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => document.removeEventListener("mousedown", handleClickOutside);
-  }, []);
-
-  useEffect(() => {
-    if (query.length > 0) {
-      performSearch();
-    } else {
-      setResults([]);
-      setIsOpen(false);
-    }
-  }, [query]);
-
-  // Notify parent of filter changes
-  useEffect(() => {
-    if (onFilterChange) {
-      onFilterChange({
-        query,
-        priceMin,
-        priceMax,
-        areaMin,
-        areaMax,
-        location,
-        sortBy,
-        searchType,
-        maxHospitalDistance,
-        maxSchoolDistance,
-        internetType,
-        roadCondition,
-      });
-    }
-  }, [query, priceMin, priceMax, areaMin, areaMax, location, sortBy, searchType, maxHospitalDistance, maxSchoolDistance, internetType, roadCondition]);
-
-  const performSearch = async () => {
-    setLoading(true);
-    setIsOpen(true);
-
-    try {
-      const combinedResults: SearchResult[] = [];
-
-      // Search Properties (if all or properties selected)
-      if (searchType === "all" || searchType === "properties") {
-        let propertyQuery = supabase
-          .from("properties")
-          .select("id, title, location, price, area_total, fotos");
-
-        // Text search
-        if (query) {
-          propertyQuery = propertyQuery.or(`title.ilike.%${query}%,location.ilike.%${query}%`);
-        }
-
-        // Price filter
-        if (priceMin > 0) propertyQuery = propertyQuery.gte("price", priceMin);
-        if (priceMax < 10000000) propertyQuery = propertyQuery.lte("price", priceMax);
-
-        // Area filter
-        if (areaMin > 0) propertyQuery = propertyQuery.gte("area_total", areaMin);
-        if (areaMax < 1000) propertyQuery = propertyQuery.lte("area_total", areaMax);
-
-        // Location filter
-        if (location) propertyQuery = propertyQuery.ilike("location", `%${location}%`);
-
-        // Sorting
-        switch (sortBy) {
-          case "price_asc":
-            propertyQuery = propertyQuery.order("price", { ascending: true });
-            break;
-          case "price_desc":
+      {showMapSearch && (
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.7, type: "spring" }}
+        >
+          <MapSearch onLocationSelect={(loc) => {
+            setLocation(loc.address);
+            setShowMapSearch(false);
+            setLocationQuery(loc.address);
+          }} />
+        </motion.div>
+      )}
             propertyQuery = propertyQuery.order("price", { ascending: false });
             break;
           case "area_desc":

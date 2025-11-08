@@ -16,5 +16,9 @@ export { TopNav } from "./components/TopNav";
 // Floating WhatsApp component
 export { default as FloatingWhatsApp } from "./components/FloatingWhatsApp";
 
+// Unified Property Card
+export { default as PropertyCard } from "./PropertyCard";
+export type { PropertyCardProps } from "./PropertyCard";
+
 export { theme, publimicroColors } from "./theme";
 export type { Theme } from "./theme";

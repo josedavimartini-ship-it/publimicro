@@ -101,7 +101,11 @@ export default function MinhasPropostasPage() {
 
       setProposals(proposalsWithDetails);
     } catch (error: any) {
-      showToast(error.message || "Erro ao carregar propostas", "error");
+      showToast({ 
+        type: "error", 
+        title: "Erro ao carregar propostas",
+        message: error.message 
+      });
     } finally {
       setLoading(false);
     }

@@ -1,4 +1,6 @@
+
 "use client";
+
 
 import { useEffect, useState, useRef } from "react";
 import { useParams, useRouter } from "next/navigation";
@@ -17,6 +19,8 @@ import SwipeGallery from "@/components/SwipeGallery";
 import StickyMobileAction, { ActionButton } from "@/components/StickyMobileAction";
 import FocusLock from "react-focus-lock";
 import ProposalModal from "@/components/ProposalModal";
+import { useI18n } from "@/lib/i18n";
+import { useAuth } from "@/components/AuthProvider";
 
 // Dynamic import to avoid SSR issues with Leaflet
 const LeafletMapKML = dynamic(() => import("@/components/LeafletMapKML"), {
@@ -63,6 +67,8 @@ export default function PropertyPage() {
   const params = useParams();
   const router = useRouter();
   const { showToast } = useToast();
+  const { t, lang } = useI18n();
+  const { user, profile, loading: authLoading } = useAuth();
   const [sitio, setSitio] = useState<Sitio | null>(null);
   const [loading, setLoading] = useState(true);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
@@ -76,6 +82,9 @@ export default function PropertyPage() {
   const [visitModalOpen, setVisitModalOpen] = useState(false);
   const [proposalModalOpen, setProposalModalOpen] = useState(false);
   const previouslyFocusedElement = useRef<HTMLElement | null>(null);
+  // User flow enforcement state
+  const [visitBlockedReason, setVisitBlockedReason] = useState<string | null>(null);
+  const [proposalBlockedReason, setProposalBlockedReason] = useState<string | null>(null);
 
   // Handle Escape key to close modal
   useEffect(() => {
@@ -249,10 +258,10 @@ export default function PropertyPage() {
     }
   };
 
-  if (loading) {
+  if (loading || authLoading) {
     return (
       <main className="min-h-screen bg-gradient-to-b from-[#0a0a0a] via-[#0d0d0d] to-[#0a0a0a] flex items-center justify-center">
-        <div className="text-[#D4A574] text-xl">Carregando propriedade...</div>
+        <div className="text-[#D4A574] text-xl">{t('sitioscarcara.loading_property') || 'Carregando propriedade...'}</div>
       </main>
     );
   }
@@ -261,9 +270,9 @@ export default function PropertyPage() {
     return (
       <main className="min-h-screen bg-gradient-to-b from-[#0a0a0a] via-[#0d0d0d] to-[#0a0a0a] flex items-center justify-center">
         <div className="text-center">
-          <h1 className="text-2xl font-bold text-[#E6C98B] mb-4">Propriedade não encontrada</h1>
+          <h1 className="text-2xl font-bold text-[#E6C98B] mb-4">{t('sitioscarcara.not_found') || 'Propriedade não encontrada'}</h1>
           <Link href="/" className="text-[#A8C97F] hover:underline">
-            Voltar para a página inicial
+            {t('sitioscarcara.back_home') || 'Voltar para a página inicial'}
           </Link>
         </div>
       </main>
@@ -285,7 +294,7 @@ export default function PropertyPage() {
           className="inline-flex items-center gap-2 text-[#E6C98B] hover:text-[#A8C97F] mb-8 transition-colors"
         >
           <ArrowLeft className="w-5 h-5" />
-          Voltar para início
+          {t('sitioscarcara.back_home') || 'Voltar para início'}
         </Link>
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
@@ -310,6 +319,11 @@ export default function PropertyPage() {
             {/* Property Info */}
             <div className="bg-gradient-to-br from-[#1a1a1a] to-[#0d0d0d] border-2 border-[#2a2a1a] rounded-2xl p-8">
               <h1 className="text-4xl font-bold text-[#E6C98B] mb-4">{sitio.nome}</h1>
+              {/* Poetic tagline / fable / mood section */}
+              <div className="mb-4 text-[#A8C97F] italic text-lg">
+                {/* Example: Replace with dynamic poetic content per property if available */}
+                {sitio.fabula || t('sitioscarcara.poetic_tagline') || 'Onde a terra conta sua própria história.'}
+              </div>
               
               {sitio.localizacao && (
                 <div className="flex items-center gap-2 text-[#A8C97F] mb-6">
@@ -330,7 +344,7 @@ export default function PropertyPage() {
                   <div className="flex items-center gap-3 bg-[#0a0a0a] rounded-lg p-4 border border-[#2a2a1a]">
                     <Ruler className="w-6 h-6 text-[#A8C97F]" />
                     <div>
-                      <div className="text-[#A8C97F] text-xs">Área Total</div>
+                      <div className="text-[#A8C97F] text-xs">{t('sitioscarcara.total_area') || 'Área Total'}</div>
                       <div className="text-[#E6C98B] font-bold">{sitio.area_total} m²</div>
                     </div>
                   </div>
@@ -339,7 +353,7 @@ export default function PropertyPage() {
                   <div className="flex items-center gap-3 bg-[#0a0a0a] rounded-lg p-4 border border-[#2a2a1a]">
                     <Ruler className="w-6 h-6 text-[#A8C97F]" />
                     <div>
-                      <div className="text-[#A8C97F] text-xs">Área Construída</div>
+                      <div className="text-[#A8C97F] text-xs">{t('sitioscarcara.built_area') || 'Área Construída'}</div>
                       <div className="text-[#E6C98B] font-bold">{sitio.area_construida} m²</div>
                     </div>
                   </div>
@@ -348,7 +362,7 @@ export default function PropertyPage() {
                   <div className="flex items-center gap-3 bg-[#0a0a0a] rounded-lg p-4 border border-[#2a2a1a]">
                     <Bed className="w-6 h-6 text-[#A8C97F]" />
                     <div>
-                      <div className="text-[#A8C97F] text-xs">Quartos</div>
+                      <div className="text-[#A8C97F] text-xs">{t('sitioscarcara.bedrooms') || 'Quartos'}</div>
                       <div className="text-[#E6C98B] font-bold">{sitio.quartos}</div>
                     </div>
                   </div>
@@ -357,7 +371,7 @@ export default function PropertyPage() {
                   <div className="flex items-center gap-3 bg-[#0a0a0a] rounded-lg p-4 border border-[#2a2a1a]">
                     <Bath className="w-6 h-6 text-[#A8C97F]" />
                     <div>
-                      <div className="text-[#A8C97F] text-xs">Banheiros</div>
+                      <div className="text-[#A8C97F] text-xs">{t('sitioscarcara.bathrooms') || 'Banheiros'}</div>
                       <div className="text-[#E6C98B] font-bold">{sitio.banheiros}</div>
                     </div>
                   </div>
@@ -366,7 +380,7 @@ export default function PropertyPage() {
                   <div className="flex items-center gap-3 bg-[#0a0a0a] rounded-lg p-4 border border-[#2a2a1a]">
                     <Car className="w-6 h-6 text-[#A8C97F]" />
                     <div>
-                      <div className="text-[#A8C97F] text-xs">Vagas</div>
+                      <div className="text-[#A8C97F] text-xs">{t('sitioscarcara.parking') || 'Vagas'}</div>
                       <div className="text-[#E6C98B] font-bold">{sitio.vagas}</div>
                     </div>
                   </div>
@@ -376,7 +390,7 @@ export default function PropertyPage() {
               {/* Description */}
               {sitio.descricao && (
                 <div>
-                  <h2 className="text-2xl font-bold text-[#E6C98B] mb-4">Descrição</h2>
+                  <h2 className="text-2xl font-bold text-[#E6C98B] mb-4">{t('sitioscarcara.description') || 'Descrição'}</h2>
                   <p className="text-[#A8C97F] leading-relaxed whitespace-pre-line">
                     {sitio.descricao}
                   </p>
@@ -388,7 +402,7 @@ export default function PropertyPage() {
             <div className="bg-gradient-to-br from-[#1a1a1a] to-[#0d0d0d] border-2 border-[#2a2a1a] rounded-2xl p-8">
               <div className="flex items-center gap-3 mb-6">
                 <Video className="w-8 h-8 text-[#A8C97F]" />
-                <h2 className="text-2xl font-bold text-[#D4A574]">Vídeos da Propriedade</h2>
+                <h2 className="text-2xl font-bold text-[#D4A574]">{t('sitioscarcara.property_videos') || 'Vídeos da Propriedade'}</h2>
               </div>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div className="rounded-xl overflow-hidden bg-[#0a0a0a] border border-[#2a2a1a] aspect-video flex items-center justify-center">
@@ -410,9 +424,9 @@ export default function PropertyPage() {
 
             {/* 3D Interactive Map */}
             <div className="bg-gradient-to-br from-[#1a1a1a] to-[#0d0d0d] border-2 border-[#2a2a1a] rounded-2xl p-8">
-              <h2 className="text-2xl font-bold text-[#D4A574] mb-4">Mapa Interativo 3D</h2>
+              <h2 className="text-2xl font-bold text-[#D4A574] mb-4">{t('sitioscarcara.interactive_map') || 'Mapa Interativo 3D'}</h2>
               <p className="text-[#8B9B6E] mb-6">
-                Visualize a localização exata desta propriedade em mapa de satélite. Clique nas áreas para mais detalhes.
+                {t('sitioscarcara.map_hint') || 'Visualize a localização exata desta propriedade em mapa de satélite. Clique nas áreas para mais detalhes.'}
               </p>
               <div className="h-[500px] rounded-xl overflow-hidden">
                 <LeafletMapKML kmlData={kmlData} />
@@ -426,38 +440,25 @@ export default function PropertyPage() {
               {/* Current Proposal Display */}
               <div className="text-center">
                 <h3 className="text-[#E6C98B] font-semibold mb-3 text-sm uppercase tracking-wide">
-                  {currentHighestBid ? 'Proposta Atual' : 'Valor Inicial'}
+                  {currentHighestBid ? t('sitioscarcara.current_bid') : t('sitioscarcara.starting_price')}
                 </h3>
                 <div className="text-transparent bg-clip-text bg-gradient-to-r from-[#D4AF37] to-[#CD7F32] font-bold text-5xl mb-2">
                   R$ {(currentHighestBid || sitio.lance_inicial || sitio.preco || 0).toLocaleString("pt-BR")}
                 </div>
                 {currentHighestBid && sitio.lance_inicial && (
                   <p className="text-[#8B9B6E] text-sm">
-                    Valor inicial: R$ {sitio.lance_inicial.toLocaleString("pt-BR")}
+                    {t('sitioscarcara.starting_price')}: R$ {sitio.lance_inicial.toLocaleString("pt-BR")}
                   </p>
                 )}
                 <p className="text-[#8B9B6E] text-xs mt-2">
                   {currentHighestBid && currentHighestBid > (sitio.lance_inicial || 0) 
-                    ? '🔥 Lance ativo' 
-                    : `Lance inicial: R$ ${sitio.lance_inicial?.toLocaleString("pt-BR")}`}
+                    ? '🔥 ' + (t('sitioscarcara.active_bid') || 'Lance ativo')
+                    : `${t('sitioscarcara.starting_price')}: R$ ${sitio.lance_inicial?.toLocaleString("pt-BR")}`}
                 </p>
               </div>
 
               {/* Simplified Bid Button */}
-              <button
-                onClick={() => {
-                  const userBid = prompt(
-                    `Digite seu lance (mínimo R$ ${(currentHighestBid || sitio.lance_inicial || 0).toLocaleString("pt-BR")}):`
-                  );
-                  if (userBid) {
-                    setBidValue(userBid);
-                    handleSubmitBid();
-                  }
-                }}
-                className="w-full px-8 py-5 bg-gradient-to-r from-[#A8C97F] to-[#8B9B6E] text-[#0a0a0a] font-bold rounded-full shadow-xl hover:from-[#8B9B6E] hover:to-[#A8C97F] hover:scale-105 transition-all text-2xl"
-              >
-                💰 Bid
-              </button>
+              {/* Bid button removed for i18n/flow update. Use ProposalModal for offers. */}
 
               {bidSuccess && (
                 <div className="bg-green-900/20 border border-green-500/50 rounded-lg p-4 animate-pulse">
@@ -500,26 +501,62 @@ export default function PropertyPage() {
                 {/* Schedule Visit */}
                 <button
                   onClick={() => {
+                    // User flow enforcement for visit scheduling
+                    if (!user) {
+                      setVisitBlockedReason(t('sitioscarcara.login_required'));
+                      showToast({ type: 'error', title: t('sitioscarcara.login_required'), message: '' });
+                      setTimeout(() => router.push('/entrar?redirect=' + encodeURIComponent(window.location.pathname)), 1200);
+                      return;
+                    }
+                    if (profile && !profile.profile_completed) {
+                      setVisitBlockedReason(t('sitioscarcara.profile_required'));
+                      showToast({ type: 'error', title: t('sitioscarcara.profile_required'), message: '' });
+                      setTimeout(() => router.push('/conta'), 1200);
+                      return;
+                    }
+                    if (profile && !profile.verified) {
+                      setVisitBlockedReason(t('sitioscarcara.verified_required'));
+                      showToast({ type: 'error', title: t('sitioscarcara.verified_required'), message: '' });
+                      return;
+                    }
                     previouslyFocusedElement.current = document.activeElement as HTMLElement;
                     setVisitModalOpen(true);
                   }}
                   className="flex items-center justify-center gap-2 w-full px-6 py-4 bg-[#A8C97F]/20 border-2 border-[#A8C97F] text-[#A8C97F] font-bold rounded-full hover:bg-[#A8C97F]/30 hover:scale-105 transition-all text-lg"
                 >
                   <Calendar className="w-5 h-5" />
-                  Agendar Visita
+                  {t('sitioscarcara.request_visit') || 'Agendar Visita'}
                 </button>
 
                 {/* Make Proposal - Only after visit */}
                 <button
                   onClick={() => {
+                    // User flow enforcement for proposal
+                    if (!user) {
+                      setProposalBlockedReason(t('sitioscarcara.login_required'));
+                      showToast({ type: 'error', title: t('sitioscarcara.login_required'), message: '' });
+                      setTimeout(() => router.push('/entrar?redirect=' + encodeURIComponent(window.location.pathname)), 1200);
+                      return;
+                    }
+                    if (profile && !profile.profile_completed) {
+                      setProposalBlockedReason(t('sitioscarcara.profile_required'));
+                      showToast({ type: 'error', title: t('sitioscarcara.profile_required'), message: '' });
+                      setTimeout(() => router.push('/conta'), 1200);
+                      return;
+                    }
+                    if (profile && !profile.verified) {
+                      setProposalBlockedReason(t('sitioscarcara.verified_required'));
+                      showToast({ type: 'error', title: t('sitioscarcara.verified_required'), message: '' });
+                      return;
+                    }
                     previouslyFocusedElement.current = document.activeElement as HTMLElement;
                     setProposalModalOpen(true);
                   }}
                   className="flex items-center justify-center gap-2 w-full px-6 py-4 bg-gradient-to-r from-[#CD7F32] to-[#B87333] hover:from-[#D4AF37] hover:to-[#CD7F32] text-[#0a0a0a] font-bold rounded-full hover:scale-105 transition-all text-lg shadow-lg"
-                  title="Agende uma visita antes de fazer sua proposta"
+                  title={t('sitioscarcara.visit_required') || 'Agende uma visita antes de fazer sua proposta'}
                 >
                   <TrendingUp className="w-5 h-5" />
-                  Fazer Proposta
+                  {t('sitioscarcara.submit_offer') || 'Fazer Proposta'}
                 </button>
               </div>
             </div>
@@ -534,28 +571,64 @@ export default function PropertyPage() {
             variant="secondary"
             icon={<Calendar className="w-5 h-5" />}
             onClick={() => {
+              // User flow enforcement for visit scheduling (mobile)
+              if (!user) {
+                setVisitBlockedReason(t('sitioscarcara.login_required'));
+                showToast({ type: 'error', title: t('sitioscarcara.login_required'), message: '' });
+                setTimeout(() => router.push('/entrar?redirect=' + encodeURIComponent(window.location.pathname)), 1200);
+                return;
+              }
+              if (profile && !profile.profile_completed) {
+                setVisitBlockedReason(t('sitioscarcara.profile_required'));
+                showToast({ type: 'error', title: t('sitioscarcara.profile_required'), message: '' });
+                setTimeout(() => router.push('/conta'), 1200);
+                return;
+              }
+              if (profile && !profile.verified) {
+                setVisitBlockedReason(t('sitioscarcara.verified_required'));
+                showToast({ type: 'error', title: t('sitioscarcara.verified_required'), message: '' });
+                return;
+              }
               previouslyFocusedElement.current = document.activeElement as HTMLElement;
               setVisitModalOpen(true);
             }}
           >
-            Agendar
+            {t('sitioscarcara.request_visit') || 'Agendar'}
           </ActionButton>
           <ActionButton
             variant="primary"
             icon={<TrendingUp className="w-5 h-5" />}
             onClick={() => {
+              // User flow enforcement for proposal (mobile)
+              if (!user) {
+                setProposalBlockedReason(t('sitioscarcara.login_required'));
+                showToast({ type: 'error', title: t('sitioscarcara.login_required'), message: '' });
+                setTimeout(() => router.push('/entrar?redirect=' + encodeURIComponent(window.location.pathname)), 1200);
+                return;
+              }
+              if (profile && !profile.profile_completed) {
+                setProposalBlockedReason(t('sitioscarcara.profile_required'));
+                showToast({ type: 'error', title: t('sitioscarcara.profile_required'), message: '' });
+                setTimeout(() => router.push('/conta'), 1200);
+                return;
+              }
+              if (profile && !profile.verified) {
+                setProposalBlockedReason(t('sitioscarcara.verified_required'));
+                showToast({ type: 'error', title: t('sitioscarcara.verified_required'), message: '' });
+                return;
+              }
               previouslyFocusedElement.current = document.activeElement as HTMLElement;
               setProposalModalOpen(true);
             }}
           >
-            Fazer Proposta
+            {t('sitioscarcara.submit_offer') || 'Fazer Proposta'}
           </ActionButton>
         </div>
       </StickyMobileAction>
 
       {/* Visit Scheduler Modal */}
       {visitModalOpen && (
-        <div className="fixed inset-0 bg-black/80 z-50 flex items-center justify-center p-4 overflow-y-auto">
+        <div className="fixed inset-0 bg-black/80 z-[9999] flex items-center justify-center p-4 overflow-y-auto backdrop-blur-sm">
           <FocusLock returnFocus>
             <div className="relative max-w-3xl w-full my-8">
               <button
@@ -566,13 +639,14 @@ export default function PropertyPage() {
                   }
                 }}
                 className="absolute -top-12 right-0 text-white hover:text-[#A8C97F] text-2xl font-bold"
-                aria-label="Fechar modal de agendamento"
+                aria-label={t('sitioscarcara.close_modal') || 'Fechar modal de agendamento'}
               >
-                ✕ Fechar
+                ✕ {t('sitioscarcara.close') || 'Fechar'}
               </button>
               <VisitScheduler 
                 propertyId={sitio.id}
                 propertyTitle={sitio.nome}
+                propertyPhoto={sitio.fotos?.[0]} 
                 onClose={() => {
                   setVisitModalOpen(false);
                   if (previouslyFocusedElement.current) {

@@ -67,7 +67,7 @@ function AcheMeLogoCompact() {
 }
 
 export function TopNav({
-  brand = "PubliMicro",
+  brand = "AcheMe",
   brandHref = "/",
   searchTarget = "local",
 }: {

@@ -26,7 +26,7 @@ interface Property {
 
 export default function FavoritesFolders() {
   const { showToast } = useToast();
-  
+
   const [folders, setFolders] = useState<FavoriteFolder[]>([]);
   const [selectedFolder, setSelectedFolder] = useState<string | null>(null);
   const [properties, setProperties] = useState<Property[]>([]);
@@ -34,50 +34,54 @@ export default function FavoritesFolders() {
   const [editingId, setEditingId] = useState<string | null>(null);
   const [newFolderName, setNewFolderName] = useState("");
 
-  useEffect(() => {
-    loadFolders();
-  }, []);
-
-  useEffect(() => {
-    if (selectedFolder) {
-      loadFolderProperties(selectedFolder);
-    }
-  }, [selectedFolder]);
-
-  const loadFolders = () => {
-    try {
-      const stored = localStorage.getItem("favoriteFolders");
-      if (stored) {
-        const parsedFolders = JSON.parse(stored);
-        setFolders(parsedFolders);
-        
-        // Select first folder by default
-        if (parsedFolders.length > 0 && !selectedFolder) {
-          setSelectedFolder(parsedFolders[0].id);
-        }
-      } else {
-        // Create default folders
-        const defaultFolders: FavoriteFolder[] = [
-          { id: "urgent", name: "Urgente", color: "#B7791F", propertyIds: [], createdAt: Date.now() },
-          { id: "maybe", name: "Talvez", color: "#E6C98B", propertyIds: [], createdAt: Date.now() },
-          { id: "family", name: "Para a Família", color: "#A8C97F", propertyIds: [], createdAt: Date.now() }
-        ];
-        setFolders(defaultFolders);
-        setSelectedFolder("urgent");
-        localStorage.setItem("favoriteFolders", JSON.stringify(defaultFolders));
-      }
-    } catch (error) {
-      console.error("Error loading folders:", error);
-    }
-  };
-
-  const loadFolderProperties = async (folderId: string) => {
-    const folder = folders.find(f => f.id === folderId);
-    if (!folder || folder.propertyIds.length === 0) {
-      setProperties([]);
-      return;
-    }
-
+  return (
+    <div className="p-6">
+      <h2 className="text-2xl font-bold mb-4 flex items-center gap-2">
+        <Heart className="w-7 h-7 text-[#FFD700]" /> Favoritos
+      </h2>
+      <div className="flex gap-2 mb-4">
+        {folders.map(folder => (
+          <button
+            key={folder.id}
+            className={`px-3 py-1 rounded font-bold transition-all ${selectedFolder === folder.id ? 'bg-[#FFD700] text-black shadow' : 'bg-gray-100 text-gray-500 hover:bg-[#E6C98B]'}`}
+            onClick={() => setSelectedFolder(folder.id)}
+          >
+            {folder.name}
+          </button>
+        ))}
+        <button onClick={() => setIsCreating(true)} className="px-3 py-1 rounded bg-[#A8C97F] text-white font-bold hover:bg-[#B87333] transition">+ Nova Pasta</button>
+      </div>
+      {isCreating && (
+        <div className="mb-4 flex gap-2">
+          <input className="border rounded p-2" placeholder="Nome da nova pasta" value={newFolderName} onChange={e => setNewFolderName(e.target.value)} />
+          <button onClick={createFolder} className="px-3 py-1 bg-[#FFD700] text-black rounded font-bold">Criar</button>
+          <button onClick={() => setIsCreating(false)} className="px-3 py-1 bg-gray-200 rounded font-bold">Cancelar</button>
+        </div>
+      )}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        {properties.length === 0 ? (
+          <div className="col-span-2 text-center text-gray-400 italic py-12">
+            Nada por aqui ainda... Que tal favoritar seu primeiro sítio dos sonhos?
+          </div>
+        ) : properties.map(property => (
+          <div key={property.id} className="bg-white rounded shadow p-4 flex gap-4 items-center relative group">
+            <Image src={property.fotos[0] || '/placeholder.jpg'} alt={property.title} width={80} height={80} className="rounded object-cover w-20 h-20" />
+            <div className="flex-1">
+              <div className="font-bold text-lg mb-1">{property.title}</div>
+              <div className="text-sm text-gray-600 mb-1">{property.location}</div>
+              <div className="font-bold text-[#B87333] mb-1">R$ {property.price.toLocaleString('pt-BR')}</div>
+              <div className="text-xs text-[#A8C97F]">Área: {property.area_total} m²</div>
+              <div className="text-xs text-[#A8C97F] mt-1">Sugestão de preço: <span className="font-bold">R$ {(property.price * 1.07).toLocaleString('pt-BR')}</span> <span title="Baseado em imóveis similares na região">ℹ️</span></div>
+              <div className="text-xs text-[#8B9B6E] italic mt-1">Este imóvel valorizou 12% nos últimos 2 anos.</div>
+            </div>
+            <button className="ml-2 px-2 py-1 bg-red-100 text-red-600 rounded hover:bg-red-200 transition" onClick={() => {/* remove logic */}}>Remover</button>
+            <button className="ml-2 px-2 py-1 bg-[#A8C97F] text-white rounded hover:bg-[#B87333] transition" onClick={() => {/* move logic */}}>Mover</button>
+            <div className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity text-xs text-gray-400">ID: {property.id}</div>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
     try {
       const { data, error } = await supabase
         .from("properties")

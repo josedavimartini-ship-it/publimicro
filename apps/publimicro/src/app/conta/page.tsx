@@ -49,126 +49,15 @@ export default function ContaPage() {
       setProfile(profileData);
       
       // Fetch user data
-      await Promise.all([
-        fetchProperties(user.id),
-        fetchProposals(user.id),
-        fetchVisits(user.id),
-        fetchFavorites(user.id),
-      ]);
-      
-    } catch (error) {
-      console.error('Error loading user data:', error);
-    } finally {
-      setLoading(false);
-    }
-  };
+      import AccountDashboard from "@/components/AccountDashboard";
+      import { useRouter } from "next/navigation";
+      import { useState } from "react";
 
-  const fetchProperties = async (userId: string) => {
-    const { data } = await supabase
-      .from('properties')
-      .select('*')
-      .eq('user_id', userId);
-    setProperties(data || []);
-  };
-
-  const fetchProposals = async (userId: string) => {
-    const { data } = await supabase
-      .from('proposals')
-      .select('*, properties(*)')
-      .eq('user_id', userId)
-      .order('created_at', { ascending: false });
-    setProposals(data || []);
-  };
-
-  const fetchVisits = async (userId: string) => {
-    const { data } = await supabase
-      .from('visits')
-      .select('*')
-      .eq('user_id', userId)
-      .order('scheduled_at', { ascending: false });
-    setVisits(data || []);
-  };
-
-  const fetchFavorites = async (userId: string) => {
-    const { data } = await supabase
-      .from('property_favorites')
-      .select('*, properties(*)')
-      .eq('user_id', userId);
-    setFavorites(data || []);
-  };
-
-  const handleLogout = async () => {
-    await supabase.auth.signOut();
-    router.push('/');
-  };
-
-  if (loading) {
-    return (
-      <div className="min-h-screen bg-gradient-to-b from-[#0a0a0a] via-[#1a1a1a] to-[#0a0a0a] flex items-center justify-center">
-        <div className="text-[#D4A574] text-xl">Carregando...</div>
-      </div>
-    );
-  }
-
-  return (
-    <main className="min-h-screen bg-gradient-to-b from-[#0a0a0a] via-[#1a1a1a] to-[#0a0a0a] py-12 px-6">
-      <div className="max-w-7xl mx-auto">
-        {/* Header */}
-        <div className="bg-gradient-to-r from-[#2a2a2a] to-[#1a1a1a] border-2 border-[#3a3a3a] rounded-2xl p-8 mb-8">
-          <div className="flex items-start justify-between">
-            <div className="flex items-center gap-4">
-              <div className="w-20 h-20 bg-gradient-to-br from-[#B87333] to-[#FFD700] rounded-full flex items-center justify-center">
-                <User className="w-10 h-10 text-[#0a0a0a]" />
-              </div>
-              <div>
-                <h1 className="text-3xl font-black text-transparent bg-clip-text bg-gradient-to-r from-[#B87333] to-[#FFD700]">
-                  {profile?.full_name || user?.email}
-                </h1>
-                <p className="text-[#676767]">{user?.email}</p>
-                <p className="text-[#D4A574] text-sm mt-1">
-                  Membro desde {new Date(user?.created_at).toLocaleDateString('pt-BR')}
-                </p>
-              </div>
-            </div>
-            <button
-              onClick={handleLogout}
-              className="flex items-center gap-2 px-6 py-3 bg-red-900/20 border border-red-500/50 hover:bg-red-900/30 text-red-400 rounded-lg transition"
-            >
-              <LogOut className="w-5 h-5" />
-              <span>Sair</span>
-            </button>
-          </div>
-        </div>
-
-        {/* Stats */}
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8">
-          <div className="bg-[#2a2a2a] border border-[#3a3a3a] rounded-xl p-6">
-            <Home className="w-8 h-8 text-[#B87333] mb-2" />
-            <div className="text-3xl font-bold text-[#e6c86b]">{properties.length}</div>
-            <div className="text-[#676767] text-sm">Minhas Propriedades</div>
-          </div>
-          <div className="bg-[#2a2a2a] border border-[#3a3a3a] rounded-xl p-6">
-            <TrendingUp className="w-8 h-8 text-[#A8C97F] mb-2" />
-            <div className="text-3xl font-bold text-[#e6c86b]">{proposals.length}</div>
-            <div className="text-[#676767] text-sm">Propostas Enviadas</div>
-          </div>
-          <div className="bg-[#2a2a2a] border border-[#3a3a3a] rounded-xl p-6">
-            <Calendar className="w-8 h-8 text-[#D4A574] mb-2" />
-            <div className="text-3xl font-bold text-[#e6c86b]">{visits.length}</div>
-            <div className="text-[#676767] text-sm">Visitas Agendadas</div>
-          </div>
-          <div className="bg-[#2a2a2a] border border-[#3a3a3a] rounded-xl p-6">
-            <Heart className="w-8 h-8 text-[#E6C98B] mb-2" />
-            <div className="text-3xl font-bold text-[#e6c86b]">{favorites.length}</div>
-            <div className="text-[#676767] text-sm">Gostei</div>
-          </div>
-        </div>
-
-        {/* Tabs */}
-        <div className="flex gap-2 mb-6 overflow-x-auto">
-          {[
-            { id: 'overview', label: 'Visão Geral', icon: Home },
-            { id: 'properties', label: 'Minhas Propriedades', icon: Home },
+      export default function ContaPage() {
+        const [open, setOpen] = useState(true);
+        const router = useRouter();
+        return (
+          <AccountDashboard open={open} onClose={() => { setOpen(false); router.push("/"); }} />
             { id: 'proposals', label: 'Propostas', icon: TrendingUp },
             { id: 'visits', label: 'Visitas', icon: Calendar },
             { id: 'favorites', label: 'Gostei', icon: Heart },

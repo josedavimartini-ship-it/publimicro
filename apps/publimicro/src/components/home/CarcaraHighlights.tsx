@@ -4,6 +4,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { useEffect, useState } from "react";
 import { supabase } from "@/lib/supabaseClient";
+import { PropertyCard } from "@publimicro/ui";
 
 // Get from env - this will be replaced at build time
 const SUPABASE_URL = process.env.NEXT_PUBLIC_SUPABASE_URL || "https://irrzpwzyqcubhhjeuakc.supabase.co";
@@ -45,7 +46,7 @@ function ensureAbsolute(path?: string | null): string | null {
   return `${SUPABASE_URL}/storage/v1/object/public/${clean}`;
 }
 
-export default function CarcaraHighlights(): JSX.Element {
+export default function CarcaraHighlights() {
   const [items, setItems] = useState<Item[]>([]);
 
   useEffect(() => {
@@ -101,55 +102,27 @@ export default function CarcaraHighlights(): JSX.Element {
 
       {items.length > 0 ? (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 px-6">
-          {items.map((it) => {
-            const displayImg = ensureAbsolute(it.imagem);
-
-            return (
-              <Link
-                key={it.id}
-                href={`/imoveis/${it.id}`}
-                className="block group transform transition-all duration-300 hover:scale-[1.02] rounded-xl overflow-hidden bg-[#0b0b0b] border border-amber-900/40 hover:border-amber-700/60"
-                aria-label={`Abrir detalhe ${it.titulo || "Sítio"}`}
-              >
-                <div className="relative h-56 w-full">
-                  <div className="absolute z-20 top-3 left-3 bg-gradient-to-r from-amber-600 to-orange-600 text-white text-xs px-2 py-1 rounded-md font-semibold shadow">
-                    Projeto: Sítios Carcará
-                  </div>
-
-                  {displayImg ? (
-                    <Image
-                      src={displayImg}
-                      alt={it.titulo || "Imagem do sítio"}
-                      fill
-                      className="object-cover transition-transform duration-500 group-hover:scale-105"
-                      sizes="(max-width: 768px) 100vw, 33vw"
-                    />
-                  ) : (
-                    <div className="flex items-center justify-center h-full text-amber-300 text-sm bg-[#141414]">
-                      Sem imagem
-                    </div>
-                  )}
-                </div>
-
-                <div className="p-5">
-                  <h3 className="text-xl font-semibold text-amber-200 mb-2">
-                    {it.titulo}
-                  </h3>
-                  <p className="text-[#e7d7a8] text-sm line-clamp-3">
-                    {it.descricao}
-                  </p>
-                  <div className="mt-3 flex items-center justify-between">
-                    <p className="text-amber-400 font-extrabold">
-                      R$ {Number(it.preco || 0).toLocaleString("pt-BR")}
-                    </p>
-                    <span className="inline-block text-sm bg-gradient-to-r from-amber-500 to-orange-600 text-black px-3 py-1 rounded-lg transition">
-                      Ver detalhes
-                    </span>
-                  </div>
-                </div>
-              </Link>
-            );
-          })}
+          {items.map((it) => (
+            <PropertyCard
+              key={it.id}
+              id={it.id.toString()}
+              title={it.titulo || "Sítio Carcará"}
+              description={it.descricao}
+              price={it.preco || 0}
+              featured={it.destaque}
+              location={{
+                city: "Corumbaíba",
+                state: "GO",
+                neighborhood: "Sítios Carcará"
+              }}
+              area={{
+                total: 0 // Add if available in items data
+              }}
+              photos={ensureAbsolute(it.imagem) ? [ensureAbsolute(it.imagem)!] : []}
+              link={`/imoveis/${it.id}`}
+              type="sitio"
+            />
+          ))}
         </div>
       ) : (
         <p className="text-center text-[#e7d7a8]">Nenhum imóvel em destaque no momento.</p>

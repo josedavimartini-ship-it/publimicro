@@ -4,6 +4,15 @@
 -- This table supports existing sitios data and code references
 -- Eventually can be migrated to the properties table
 
+-- First, ensure the update_updated_at function exists
+CREATE OR REPLACE FUNCTION public.update_updated_at()
+RETURNS TRIGGER AS $$
+BEGIN
+  NEW.updated_at = NOW();
+  RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
 CREATE TABLE IF NOT EXISTS public.sitios (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   created_at TIMESTAMPTZ DEFAULT NOW(),
@@ -55,6 +64,10 @@ CREATE INDEX IF NOT EXISTS idx_sitios_zona ON public.sitios(zona);
 CREATE INDEX IF NOT EXISTS idx_sitios_destaque ON public.sitios(destaque) WHERE destaque = true;
 CREATE INDEX IF NOT EXISTS idx_sitios_slug ON public.sitios(slug);
 
+-- Grant permissions first
+GRANT ALL ON public.sitios TO authenticated;
+GRANT ALL ON public.sitios TO service_role;
+
 -- RLS
 ALTER TABLE public.sitios ENABLE ROW LEVEL SECURITY;
 
@@ -68,25 +81,51 @@ CREATE POLICY "Public can view active sitios"
 DROP POLICY IF EXISTS "Users can view own sitios" ON public.sitios;
 CREATE POLICY "Users can view own sitios"
   ON public.sitios FOR SELECT
-  USING (auth.uid() = user_id);
+  USING (
+    CASE 
+      WHEN auth.uid() IS NULL THEN false
+      ELSE auth.uid() = user_id
+    END
+  );
 
 -- Users can insert own sitios
 DROP POLICY IF EXISTS "Users can insert own sitios" ON public.sitios;
 CREATE POLICY "Users can insert own sitios"
   ON public.sitios FOR INSERT
-  WITH CHECK (auth.uid() = user_id);
+  WITH CHECK (
+    CASE 
+      WHEN auth.uid() IS NULL THEN false
+      ELSE auth.uid() = user_id
+    END
+  );
 
 -- Users can update own sitios
 DROP POLICY IF EXISTS "Users can update own sitios" ON public.sitios;
 CREATE POLICY "Users can update own sitios"
   ON public.sitios FOR UPDATE
-  USING (auth.uid() = user_id);
+  USING (
+    CASE 
+      WHEN auth.uid() IS NULL THEN false
+      ELSE auth.uid() = user_id
+    END
+  )
+  WITH CHECK (
+    CASE 
+      WHEN auth.uid() IS NULL THEN false
+      ELSE auth.uid() = user_id
+    END
+  );
 
 -- Users can delete own sitios
 DROP POLICY IF EXISTS "Users can delete own sitios" ON public.sitios;
 CREATE POLICY "Users can delete own sitios"
   ON public.sitios FOR DELETE
-  USING (auth.uid() = user_id);
+  USING (
+    CASE 
+      WHEN auth.uid() IS NULL THEN false
+      ELSE auth.uid() = user_id
+    END
+  );
 
 -- Auto-update timestamp
 DROP TRIGGER IF EXISTS sitios_updated_at ON public.sitios;
@@ -127,9 +166,5 @@ CREATE TRIGGER sitios_generate_slug
   BEFORE INSERT OR UPDATE ON public.sitios
   FOR EACH ROW
   EXECUTE FUNCTION generate_sitio_slug();
-
--- Grant permissions
-GRANT ALL ON public.sitios TO authenticated;
-GRANT ALL ON public.sitios TO service_role;
 
 COMMENT ON TABLE public.sitios IS 'Legacy table for Sítios Carcará properties - can be migrated to properties table';

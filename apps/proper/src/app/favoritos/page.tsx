@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 import { useRouter } from "next/navigation";
 import { Heart, Trash2, Search } from "lucide-react";
-import PropertyCard from "../components/PropertyCard";
+import { PropertyCard } from "@publimicro/ui";
 
 export default function FavoritesPage() {
   const router = useRouter();
@@ -134,11 +134,27 @@ export default function FavoritesPage() {
               {favorites.map((favorite) => (
                 <div key={favorite.id} className="relative">
                   <PropertyCard
-                    property={favorite.property}
-                    isFavorited={true}
-                    onFavorite={() => removeFavorite(favorite.id)}
-                    showFazerProposta={true}
-                    onFazerProposta={() => handleFazerProposta(favorite.property.id)}
+                    id={favorite.property.id}
+                    title={favorite.property.title}
+                    description={favorite.property.description}
+                    price={favorite.property.price}
+                    featured={favorite.property.featured}
+                    location={{
+                      city: favorite.property.city,
+                      state: favorite.property.state,
+                      neighborhood: undefined
+                    }}
+                    area={{
+                      total: favorite.property.total_area || 0
+                    }}
+                    features={{
+                      bedrooms: favorite.property.bedrooms,
+                      bathrooms: favorite.property.bathrooms,
+                      parking: favorite.property.parking_spaces
+                    }}
+                    photos={favorite.property.property_photos?.map((p: any) => p.url) || []}
+                    link={`/property/${favorite.property.slug}`}
+                    type="property"
                   />
                   
                   {/* Remove button overlay */}

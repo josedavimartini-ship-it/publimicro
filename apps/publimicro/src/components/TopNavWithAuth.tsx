@@ -2,10 +2,11 @@
 
 import Link from "next/link";
 import {
-  Home, Search, MessageCircle, Heart, User, Menu, X,
-  TrendingUp, Award, Shield, Bell, LogOut, LayoutDashboard, FileText, Gavel, Handshake, ChevronDown,
+  Home, Search, Heart, User, Menu, X,
+  TrendingUp, Award, Shield, Bell, LogOut, LayoutDashboard, FileText, Gavel, ChevronDown,
   ThumbsUp, Megaphone, PlusCircle, Settings, Package
 } from 'lucide-react';
+import { AnimatedHandshake } from "./AnimatedHandshake";
 import { useMemo, useState, useRef, useEffect } from "react";
 import { useAuth } from "./AuthProvider";
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
@@ -28,7 +29,7 @@ const categories = [
 ];
 
 export function TopNavWithAuth({
-  brand = "PubliMicro",
+  brand = "AcheMe",
   brandHref = "/",
   searchTarget = "local",
 }: {
@@ -90,19 +91,16 @@ export function TopNavWithAuth({
               </div>
               
               <div className="flex flex-col relative z-10">
-                {/* Enhanced Typography */}
+                {/* Enhanced Typography - AcheMe Brand */}
                 <div className="text-4xl font-black tracking-tight leading-none mb-1">
                   <span className="bg-gradient-to-r from-[#B87333] via-[#D4AF37] to-[#CD7F32] bg-clip-text text-transparent drop-shadow-lg">
-                    Publi
-                  </span>
-                  <span className="bg-gradient-to-r from-[#8B9B6E] via-[#A8C97F] to-[#6B8E23] bg-clip-text text-transparent drop-shadow-lg">
-                    Micr
+                    Ache
                   </span>
                   <span className="relative inline-block">
-                    <span className="bg-gradient-to-r from-[#CD7F32] to-[#D4AF37] bg-clip-text text-transparent">o</span>
-                    {/* Sniper Target Icon */}
+                    <span className="bg-gradient-to-r from-[#8B9B6E] via-[#A8C97F] to-[#6B8E23] bg-clip-text text-transparent drop-shadow-lg">Me</span>
+                    {/* Sniper Target Icon - now on 'e' */}
                     <svg
-                      className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[28px] h-[28px] text-[#A8C97F] drop-shadow-[0_0_8px_rgba(168,201,127,0.6)]"
+                      className="absolute top-1/2 right-0 translate-x-1/2 -translate-y-1/2 w-[28px] h-[28px] text-[#D4AF37] drop-shadow-[0_0_8px_rgba(212,175,116,0.6)]"
                       viewBox="0 0 24 24"
                       fill="none"
                       stroke="currentColor"
@@ -191,24 +189,26 @@ export function TopNavWithAuth({
 
             {/* ACTIONS - Bronze/Copper Theme */}
             <nav className="flex items-center gap-4">
+              {/* Heart icon with 'gostei' */}
               <Link href={favHref} className="flex flex-col items-center text-[#E6C98B] hover:text-[#D4AF37] transition-all group transform hover:scale-110">
                 <Heart className="w-7 h-7 mb-1 drop-shadow-lg" strokeWidth={2.5} />
-                <span className="text-xs font-bold">Favoritos</span>
+                <span className="text-xs font-bold">gostei</span>
               </Link>
-              
+
+              {/* Animated Handshake for Chat/Negotiations */}
               <Link href={chatHref} className="flex flex-col items-center text-[#A8C97F] hover:text-[#8B9B6E] transition-all group transform hover:scale-110">
-                <MessageCircle className="w-7 h-7 mb-1 drop-shadow-lg" strokeWidth={2.5} />
-                <span className="text-xs font-bold">Chat</span>
+                <AnimatedHandshake size={28} className="mb-1 drop-shadow-lg" />
+                <span className="text-xs font-bold">Negociar</span>
               </Link>
-              
-              {/* Prominent Free Ad Button - Bronze/Gold Gradient */}
+
+              {/* Prominent Postar Button - Bronze/Gold Gradient */}
               <Link
                 href="/postar"
                 className="flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-[#D4AF37] via-[#CD7F32] to-[#B87333] hover:from-[#B87333] hover:via-[#CD7F32] hover:to-[#D4AF37] text-[#0a0a0a] rounded-xl transition-all hover:scale-110 shadow-2xl font-bold border-2 border-[#D4AF37]/30"
               >
                 <PlusCircle className="w-6 h-6" strokeWidth={3} />
-                <span className="hidden lg:inline text-base">Publique Grátis</span>
-                <span className="lg:hidden text-base">Anunciar</span>
+                <span className="hidden lg:inline text-base">Postar</span>
+                <span className="lg:hidden text-base">Postar</span>
               </Link>
               
               {/* User Account/Profile - CONDITIONAL RENDERING */}

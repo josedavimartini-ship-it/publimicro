@@ -7,14 +7,38 @@ import { OnboardingModal } from "./OnboardingModal";
 
 interface UserProfile {
   id: string;
+  
+  // Personal Information
   full_name: string | null;
   cpf: string | null;
   phone: string | null;
+  birth_date: string | null;
+  
+  // Address Information
+  cep: string | null;
+  street: string | null;
+  number: string | null;
+  complement: string | null;
+  neighborhood: string | null;
+  city: string | null;
+  state: string | null;
+  
+  // Profile Status
   avatar_url: string | null;
   profile_completed: boolean;
   verified: boolean;
+  
+  // Terms
+  terms_accepted: boolean;
+  terms_accepted_at: string | null;
+  
+  // Permissions
   can_schedule_visits: boolean;
   can_place_bids: boolean;
+  
+  // Timestamps
+  created_at: string;
+  updated_at: string;
 }
 
 interface AuthContextType {

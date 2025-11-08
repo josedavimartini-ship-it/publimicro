@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { supabase } from "@/lib/supabaseClient";
-import { Carcara3D } from "@publimicro/ui";
+import { Carcara3D, PropertyCard } from "@publimicro/ui";
 import Image from "next/image";
 import Link from "next/link";
 import dynamic from "next/dynamic";
@@ -71,6 +71,8 @@ interface Sitio {
   zona?: string;
   lance_inicial?: number;
   current_bid?: number; // Current highest proposal value
+  tamanho?: number; // Total area in hectares or m²
+  area_total?: number; // Alternative field name for area
 }
 
 interface Listing {
@@ -526,95 +528,28 @@ export default function HomePage() {
                   <PropertyCardSkeleton />
                 </>
               ) : (
-                sitios.map((sitio) => {
-                const fotoUrl = getFirstPhoto(sitio.fotos);
-                console.log(`Sitio ${sitio.nome} photo URL:`, fotoUrl);
-                
-                // Transform sitio data to match PropertyCard interface
-                const propertyData = {
-                  id: sitio.id,
-                  title: sitio.nome,
-                  description: sitio.localizacao || '',
-                  property_type: 'sitio',
-                  transaction_type: 'auction',
-                  price: sitio.lance_inicial || sitio.preco || 0,
-                  total_area: 0, // Add if available in sitio data
-                  city: sitio.localizacao || 'Corumbaíba',
-                  state: 'GO',
-                  country: 'Brasil',
-                  slug: sitio.id,
-                  featured: sitio.destaque || false,
-                  property_photos: sitio.fotos?.map((url: string, index: number) => ({
-                    url,
-                    is_cover: index === 0
-                  })) || [{ url: fotoUrl, is_cover: true }]
-                };
-                
-                return (
-                  <div 
+                sitios.map((sitio) => (
+                  <PropertyCard
                     key={sitio.id}
-                    className="group bg-gradient-to-br from-[#5A5E5D] to-[#3A3E3D] border-2 border-[#2a2a1a] rounded-2xl overflow-hidden hover:border-[#A8C97F] transition-all shadow-xl flex flex-col"
-                  >
-                    {/* Swipeable Image Gallery */}
-                    <div className="relative">
-                      <SwipeGallery
-                        images={sitio.fotos?.length > 0 ? sitio.fotos : [fotoUrl]}
-                        alt={sitio.nome || "Sítio"}
-                        aspectRatio="square"
-                        showThumbnails={false}
-                        showCounter={sitio.fotos?.length > 1}
-                        enableFullscreen={true}
-                      />
-                      {sitio.zona && (
-                        <div className="absolute top-3 left-3 px-3 py-1 bg-[#5A5E5D]/90 text-[#A8C97F] font-bold rounded-lg text-sm border border-[#A8C97F]/30 z-20">
-                          {sitio.zona}
-                        </div>
-                      )}
-                    </div>
-                    
-                    {/* Property Info - Clickable to detail */}
-                    <Link href={`/imoveis/${sitio.id}`} className="flex-1">
-                      <div className="p-4 flex flex-col gap-2">
-                        <h3 className="text-lg font-bold text-[#D4A574] line-clamp-1">{sitio.nome}</h3>
-                        {sitio.localizacao && <p className="text-[#8B9B6E] text-xs line-clamp-1">{sitio.localizacao}</p>}
-                        
-                        {/* Bidding Schema Box - Enhanced */}
-                        {typeof sitio.lance_inicial === "number" && (
-                          <div className="bg-[#4A4E4D] rounded-lg p-3 border border-[#A8C97F]/40 hover:border-[#A8C97F]/70 transition-all">
-                            <div className="text-[#E6C98B] text-xs font-semibold mb-1">
-                              {sitio.current_bid ? 'Proposta Atual' : 'Proposta Inicial'}
-                            </div>
-                            <div className={`font-bold text-xl ${sitio.current_bid ? 'text-[#B7791F]' : 'text-[#A8C97F]'}`}>
-                              R$ {((sitio.current_bid || sitio.lance_inicial).toLocaleString("pt-BR"))}
-                            </div>
-                            {sitio.current_bid && (
-                              <div className="text-[#8B9B6E] text-xs mt-1">
-                                Inicial: R$ {sitio.lance_inicial.toLocaleString("pt-BR")}
-                              </div>
-                            )}
-                            {sitio.preco && sitio.preco > (sitio.current_bid || sitio.lance_inicial) && (
-                              <div className="text-[#8B9B6E] text-xs mt-1">
-                                Valor: R$ {sitio.preco.toLocaleString("pt-BR")}
-                              </div>
-                            )}
-                          </div>
-                        )}
-                      </div>
-                    </Link>
-                    
-                    {/* Action Button - Link to property profile */}
-                    <div className="px-4 pb-4">
-                      <Link
-                        href={`/imoveis/${sitio.id}`}
-                        className="flex items-center justify-center gap-2 w-full px-6 py-5 bg-gradient-to-r from-[#556B2F] to-[#6B8E23] hover:from-[#6B8E23] hover:to-[#556B2F] text-[#E6C98B] font-bold rounded-lg transition-all hover:scale-105 hover:shadow-2xl shadow-lg text-base"
-                      >
-                        <Info className="w-5 h-5" />
-                        <span>Mais Informações</span>
-                      </Link>
-                    </div>
-                  </div>
-                );
-              })
+                    id={sitio.id}
+                    title={sitio.nome}
+                    description={`${sitio.zona || 'Zona Rural'} - ${sitio.localizacao || 'Corumbaíba/GO'}`}
+                    price={sitio.lance_inicial || sitio.preco || 0}
+                    currentBid={sitio.current_bid}
+                    featured={sitio.destaque}
+                    location={{
+                      city: sitio.localizacao || 'Corumbaíba',
+                      state: 'GO',
+                      neighborhood: sitio.zona
+                    }}
+                    area={{
+                      total: sitio.tamanho || sitio.area_total || 0
+                    }}
+                    photos={sitio.fotos || []}
+                    link={`/imoveis/${sitio.id}`}
+                    type="sitio"
+                  />
+                ))
               )}
             </div>
           </section>

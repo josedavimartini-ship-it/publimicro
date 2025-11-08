@@ -51,51 +51,65 @@ export async function POST(req: Request) {
         process.env.SUPABASE_SERVICE_ROLE_KEY!
       );
 
+      // Calculate expiration date (30 days)
+      const now = new Date();
+      const expiresAt = new Date(now.getTime() + 30 * 24 * 60 * 60 * 1000);
+
       // Atualizar listing com base no tipo de produto
       if (productType === "destaque") {
-        // Adicionar 30 dias de destaque
-        const featuredUntil = new Date();
-        featuredUntil.setDate(featuredUntil.getDate() + 30);
-
         const { error } = await supabase
           .from("listings")
           .update({
             is_featured: true,
-            featured_until: featuredUntil.toISOString(),
+            featured_until: expiresAt.toISOString(),
           })
           .eq("id", listingId);
 
         if (error) {
           console.error("Erro ao atualizar destaque:", error);
         } else {
-          console.log(`Listing ${listingId} destacado até ${featuredUntil}`);
+          console.log(`Listing ${listingId} destacado até ${expiresAt}`);
         }
       } else if (productType === "marketing") {
-        // Ativar campanha de marketing
         const { error } = await supabase
           .from("listings")
           .update({
             marketing_campaign_active: true,
+            marketing_activated_at: now.toISOString(),
+            marketing_expires_at: expiresAt.toISOString(),
           })
           .eq("id", listingId);
 
         if (error) {
           console.error("Erro ao ativar marketing:", error);
         } else {
-          console.log(`Marketing ativado para listing ${listingId}`);
+          console.log(`Marketing ativado para listing ${listingId} até ${expiresAt}`);
           // TODO: Adicionar à fila de marketing (email, social media, etc)
         }
       }
 
-      // Opcional: Salvar registro do pagamento
-      // await supabase.from("payments").insert({
-      //   listing_id: listingId,
-      //   user_id: userId,
-      //   stripe_session_id: session.id,
-      //   amount: session.amount_total / 100,
-      //   product_type: productType,
-      //   status: "completed",
-      // });
+      // Save payment record for audit trail
+      const { error: paymentError } = await supabase.from("payments").insert({
+        listing_id: listingId,
+        user_id: userId,
+        stripe_session_id: session.id,
+        stripe_payment_intent_id: session.payment_intent,
+        amount: session.amount_total / 100,
+        currency: session.currency?.toUpperCase() || 'BRL',
+        product_type: productType,
+        status: "completed",
+        payment_method: session.payment_method_types?.[0] || 'card',
+        receipt_url: null, // Can be fetched from payment_intent if needed
+        customer_email: session.customer_email || session.customer_details?.email,
+        activated_at: now.toISOString(),
+        expires_at: expiresAt.toISOString(),
+      });
+
+      if (paymentError) {
+        console.error("Erro ao salvar pagamento:", paymentError);
+      } else {
+        console.log(`Pagamento registrado: ${session.id}`);
+      }
     }
 
     return NextResponse.json({ received: true });

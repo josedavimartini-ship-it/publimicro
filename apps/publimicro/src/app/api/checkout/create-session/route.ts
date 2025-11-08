@@ -50,6 +50,36 @@ export async function POST(req: Request) {
       );
     }
 
+    // ============================================
+    // VERIFICAÇÃO DE IDENTIDADE OBRIGATÓRIA
+    // ============================================
+    // Check if user is verified before allowing premium purchases
+    const { data: profile, error: profileError } = await supabase
+      .from("user_profiles")
+      .select("verification_status")
+      .eq("user_id", user.id)
+      .single();
+
+    if (profileError) {
+      console.error("Error fetching user profile:", profileError);
+      return NextResponse.json(
+        { error: "Erro ao verificar perfil do usuário" },
+        { status: 500 }
+      );
+    }
+
+    // Require verification for premium features
+    if (profile?.verification_status !== "approved") {
+      return NextResponse.json(
+        { 
+          error: "Verificação de identidade necessária",
+          requiresVerification: true,
+          verificationStatus: profile?.verification_status || "not_started"
+        },
+        { status: 403 }
+      );
+    }
+
     // Verificar se o listing existe e pertence ao usuário
     const { data: listing, error: listingError } = await supabase
       .from("listings")

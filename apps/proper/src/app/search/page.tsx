@@ -9,7 +9,7 @@ import {
 } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
-import PropertyCard from "../components/PropertyCard";
+import { PropertyCard } from "@publimicro/ui";
 
 // Property type configurations
 const PROPERTY_TYPES = [
@@ -387,8 +387,27 @@ export default function SearchPage() {
                   {properties.map((property) => (
                     <PropertyCard
                       key={property.id}
-                      property={property}
-                      showFazerProposta={false}
+                      id={property.id}
+                      title={property.title}
+                      description={property.description}
+                      price={property.price}
+                      featured={property.featured}
+                      location={{
+                        city: property.city,
+                        state: property.state,
+                        neighborhood: undefined
+                      }}
+                      area={{
+                        total: property.total_area || 0
+                      }}
+                      features={{
+                        bedrooms: property.bedrooms,
+                        bathrooms: property.bathrooms,
+                        parking: property.parking_spaces
+                      }}
+                      photos={property.property_photos?.map(p => p.url) || []}
+                      link={`/property/${property.slug}`}
+                      type="property"
                     />
                   ))}
                 </div>

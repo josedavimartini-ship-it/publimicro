@@ -328,7 +328,7 @@ export function OnboardingModal({ isOpen, onComplete, userId }: OnboardingModalP
           terms_accepted_at: new Date().toISOString(),
           profile_completed: true,
           can_schedule_visits: true,
-          can_place_bids: true,
+          can_place_bids: false, // Only granted after verification
         })
         .eq("id", userId);
 

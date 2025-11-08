@@ -67,21 +67,41 @@ function EntrarContent() {
     e.preventDefault();
     setLoading(true);
     setError("");
-    
     // Validation
     if (password !== confirmPassword) {
       setError("Passwords do not match");
       setLoading(false);
       return;
     }
-    
     if (password.length < 6) {
       setError("Password must be at least 6 characters");
       setLoading(false);
       return;
     }
-    
     try {
+      // 1. Run background check before registration
+      const checkRes = await fetch("/api/background-check", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          cpf: email, // TODO: Replace with CPF if available in form
+          full_name: fullName,
+          birth_date: undefined, // TODO: Add birth_date field if required
+          email,
+        }),
+      });
+      const checkData = await checkRes.json();
+      if (!checkRes.ok || checkData.finalStatus === 'rejected') {
+        setError(checkData.rejectionReason || "Não foi possível criar a conta: restrição policial detectada.");
+        setLoading(false);
+        return;
+      }
+      if (checkData.finalStatus === 'needs_review') {
+        setError("Sua inscrição requer análise manual. Entraremos em contato.");
+        setLoading(false);
+        return;
+      }
+      // 2. Proceed with registration if approved
       const { data, error } = await supabase.auth.signUp({
         email,
         password,
@@ -92,14 +112,10 @@ function EntrarContent() {
           },
         },
       });
-      
       if (error) throw error;
-      
       setSuccess("Account created! Please check your email to verify your account.");
-      
       // Profile is auto-created by database trigger (handle_new_user)
       console.log("User created successfully:", data.user?.id);
-      
       // Switch to login mode after 3 seconds
       setTimeout(() => {
         setMode("login");
@@ -129,40 +145,6 @@ function EntrarContent() {
     }
   };
 
-  const handleMicrosoftLogin = async () => {
-    setLoading(true);
-    try {
-      const { error } = await supabase.auth.signInWithOAuth({
-        provider: 'azure',
-        options: {
-          redirectTo: `${window.location.origin}/auth/callback?redirect=${encodeURIComponent(redirectUrl)}`,
-          scopes: 'email',
-        },
-      });
-      
-      if (error) throw error;
-    } catch (err: any) {
-      setError(err.message || "Microsoft login failed");
-      setLoading(false);
-    }
-  };
-
-  const handleAppleLogin = async () => {
-    setLoading(true);
-    try {
-      const { error } = await supabase.auth.signInWithOAuth({
-        provider: 'apple',
-        options: {
-          redirectTo: `${window.location.origin}/auth/callback?redirect=${encodeURIComponent(redirectUrl)}`,
-        },
-      });
-      
-      if (error) throw error;
-    } catch (err: any) {
-      setError(err.message || "Apple login failed");
-      setLoading(false);
-    }
-  };
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-[#1a1a1a] via-[#2a2a2a] to-[#1a1a1a] flex items-center justify-center p-6">
@@ -425,33 +407,6 @@ function EntrarContent() {
                 />
               </svg>
               <span>Continuar com Google</span>
-            </button>
-
-            {/* Microsoft Login */}
-            <button
-              onClick={handleMicrosoftLogin}
-              disabled={loading}
-              className="w-full py-3 bg-[#2F2F2F] hover:bg-[#3F3F3F] text-white font-bold rounded-xl transition-all disabled:opacity-50 disabled:cursor-not-allowed shadow-lg flex items-center justify-center gap-3"
-            >
-              <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none">
-                <path d="M11.4 0H0v11.4h11.4V0z" fill="#f25022"/>
-                <path d="M24 0H12.6v11.4H24V0z" fill="#7fba00"/>
-                <path d="M11.4 12.6H0V24h11.4V12.6z" fill="#00a4ef"/>
-                <path d="M24 12.6H12.6V24H24V12.6z" fill="#ffb900"/>
-              </svg>
-              <span>Continuar com Microsoft</span>
-            </button>
-
-            {/* Apple Login */}
-            <button
-              onClick={handleAppleLogin}
-              disabled={loading}
-              className="w-full py-3 bg-black hover:bg-gray-900 text-white font-bold rounded-xl transition-all disabled:opacity-50 disabled:cursor-not-allowed shadow-lg flex items-center justify-center gap-3 border border-gray-800"
-            >
-              <svg className="w-5 h-5" viewBox="0 0 24 24" fill="currentColor">
-                <path d="M17.05 20.28c-.98.95-2.05.88-3.08.4-1.09-.5-2.08-.48-3.24 0-1.44.62-2.2.44-3.06-.4C2.79 15.25 3.51 7.59 9.05 7.31c1.35.07 2.29.74 3.08.8 1.18-.24 2.31-.93 3.57-.84 1.51.12 2.65.72 3.4 1.8-3.12 1.87-2.38 5.98.48 7.13-.57 1.5-1.31 2.99-2.54 4.09l.01-.01zM12.03 7.25c-.15-2.23 1.66-4.07 3.74-4.25.29 2.58-2.34 4.5-3.74 4.25z"/>
-              </svg>
-              <span>Continuar com Apple</span>
             </button>
           </div>
 
