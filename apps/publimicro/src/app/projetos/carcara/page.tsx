@@ -816,27 +816,16 @@ function CarcaraProjectPageContent() {
       {/* 3D Interactive Map Section */}
       <section className="py-20 px-6 max-w-7xl mx-auto bg-gradient-to-b from-[#0a0a0a] to-[#0d0d0d]">
         <h2 className="text-5xl md:text-6xl font-bold text-center text-transparent bg-clip-text bg-gradient-to-r from-[#A8C97F] to-[#E6C98B] mb-4">
-
-          export default function CarcaraProjectPage() {
-            return (
-              <I18nProvider>
-                <CarcaraProjectPageContent />
-              </I18nProvider>
-            );
-          }
-              >
-                <Phone className="w-6 h-6" />
-                WhatsApp: (34) 99261-0004
-              </a>
-              <a
-                href="mailto:contato@publimicro.com.br"
-                className="block px-8 py-5 border-2 border-[#E6C98B] text-[#E6C98B] hover:bg-[#E6C98B]/10 font-bold rounded-xl transition-all text-center flex items-center justify-center gap-3"
-              >
-                <Mail className="w-6 h-6" />
-                contato@publimicro.com.br
-              </a>
-            </div>
-          </div>
+          {t('Propriedades Disponíveis')}
+        </h2>
+        <div className="flex justify-center">
+          <a
+            href="mailto:contato@publimicro.com.br"
+            className="block px-8 py-5 border-2 border-[#E6C98B] text-[#E6C98B] hover:bg-[#E6C98B]/10 font-bold rounded-xl transition-all text-center flex items-center justify-center gap-3"
+          >
+            <Mail className="w-6 h-6" />
+            contato@publimicro.com.br
+          </a>
         </div>
       </section>
 
@@ -892,3 +881,12 @@ function CarcaraProjectPageContent() {
     </main>
   );
 }
+
+  // Wrapper to provide i18n context for the page
+  export default function CarcaraProjectPage() {
+    return (
+      <I18nProvider>
+        <CarcaraProjectPageContent />
+      </I18nProvider>
+    );
+  }

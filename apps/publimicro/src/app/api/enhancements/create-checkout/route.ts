@@ -6,7 +6,7 @@ import { getStripePriceId, getEnhancementPrice, getCategoryDisplayName, getEnhan
 import type { AnnouncementCategory, EnhancementType } from '@/lib/enhancementPricing';
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
-  apiVersion: '2024-11-20.acacia',
+  apiVersion: ('2024-11-20.acacia' as any),
 });
 
 /**
@@ -54,7 +54,8 @@ export async function POST(request: NextRequest) {
     // ============================================
     const { data: verification, error: verifyError } = await supabase
       .from('user_verifications')
-      .select('status, rejection_reason')
+      // include id so callers can reference verification.id
+      .select('id, status, rejection_reason')
       .eq('user_id', user.id)
       .single();
 

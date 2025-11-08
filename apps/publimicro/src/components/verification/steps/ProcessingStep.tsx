@@ -1,7 +1,7 @@
 'use client';
 
 interface ProcessingStepProps {
-  status: 'cpf_check' | 'criminal_check' | 'completing';
+  status: string;
 }
 
 export default function ProcessingStep({ status }: ProcessingStepProps) {

@@ -5,7 +5,7 @@ import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 import { User } from "@supabase/supabase-js";
 import { OnboardingModal } from "./OnboardingModal";
 
-interface UserProfile {
+export interface UserProfile {
   id: string;
   
   // Personal Information

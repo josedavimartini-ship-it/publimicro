@@ -1,8 +1,15 @@
 ﻿import { createServerClient } from '@supabase/ssr'
 import { cookies } from 'next/headers'
 
+// Minimal CookieStore interface used by the Supabase SSR helper
+interface CookieStore {
+  get(name: string): { value: string } | undefined;
+  set(cookie: { name: string; value: string } & Record<string, any>): void;
+}
+
 export function createServerSupabaseClient() {
-  const cookieStore = cookies()
+  // cookies() typing may differ across Next versions; narrow to a small interface instead of `any`
+  const cookieStore = cookies() as unknown as CookieStore;
   
   return createServerClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
@@ -12,14 +19,14 @@ export function createServerSupabaseClient() {
         get(name: string) {
           return cookieStore.get(name)?.value
         },
-        set(name: string, value: string, options: any) {
+        set(name: string, value: string, options: Record<string, any>) {
           try {
             cookieStore.set({ name, value, ...options })
           } catch (error) {
             // Can happen in Server Components
           }
         },
-        remove(name: string, options: any) {
+        remove(name: string, options: Record<string, any>) {
           try {
             cookieStore.set({ name, value: '', ...options })
           } catch (error) {

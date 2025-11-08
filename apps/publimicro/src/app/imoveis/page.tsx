@@ -63,19 +63,19 @@ export default function ImoveisPage() {
       }
 
       // Price filter
-      if (filters.priceMin > 0) {
-        queryBuilder = queryBuilder.gte("price", filters.priceMin);
+      if (Number(filters.priceMin) > 0) {
+        queryBuilder = queryBuilder.gte("price", Number(filters.priceMin));
       }
-      if (filters.priceMax < 10000000) {
-        queryBuilder = queryBuilder.lte("price", filters.priceMax);
+      if (Number(filters.priceMax) < 10000000) {
+        queryBuilder = queryBuilder.lte("price", Number(filters.priceMax));
       }
 
       // Area filter
-      if (filters.areaMin > 0) {
-        queryBuilder = queryBuilder.gte("area_total", filters.areaMin);
+      if (Number(filters.areaMin) > 0) {
+        queryBuilder = queryBuilder.gte("area_total", Number(filters.areaMin));
       }
-      if (filters.areaMax < 1000) {
-        queryBuilder = queryBuilder.lte("area_total", filters.areaMax);
+      if (Number(filters.areaMax) < 1000) {
+        queryBuilder = queryBuilder.lte("area_total", Number(filters.areaMax));
       }
 
       // Location filter

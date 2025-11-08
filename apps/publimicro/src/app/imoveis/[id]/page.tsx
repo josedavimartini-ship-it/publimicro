@@ -49,6 +49,7 @@ const KML_DATA_FALLBACK = `<?xml version="1.0" encoding="UTF-8"?>
 interface Sitio {
   id: string;
   nome: string;
+  fabula?: string;
   descricao?: string;
   localizacao?: string;
   preco?: number;

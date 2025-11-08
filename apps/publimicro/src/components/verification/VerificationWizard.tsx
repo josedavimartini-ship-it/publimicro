@@ -269,12 +269,21 @@ export default function VerificationWizard() {
           )}
 
           {currentStep === 'processing' && (
-            <ProcessingStep status={verificationStatus || 'checking'} />
+            // Pass the raw status string to the processing step; the component
+            // renders available steps based on known keys. Fallback to 'cpf_check'.
+            <ProcessingStep status={verificationStatus || 'cpf_check'} />
           )}
 
           {currentStep === 'result' && (
+            // Map verificationStatus to the narrow result set expected by ResultStep
             <ResultStep
-              status={verificationStatus || 'pending'}
+              status={
+                verificationStatus === 'approved'
+                  ? 'approved'
+                  : verificationStatus === 'rejected'
+                  ? 'rejected'
+                  : 'manual_review'
+              }
               onRetry={handleRetry}
             />
           )}

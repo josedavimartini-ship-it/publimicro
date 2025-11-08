@@ -155,8 +155,8 @@ export async function POST(req: Request) {
         response_data: { sent: false, reason: 'Integration not implemented' }
       });
     } else if (
-      federalPoliceStatus === 'rejected' ||
-      interpolStatus === 'rejected'
+      (federalPoliceStatus as any) === 'rejected' ||
+      (interpolStatus as any) === 'rejected'
     ) {
       finalStatus = 'rejected';
       rejectionReason = 'Background check failed: status rejected by authority.';
@@ -185,7 +185,8 @@ export async function POST(req: Request) {
           interpol_check_date: new Date().toISOString(),
           interpol_response: interpolResponse,
           verification_status: finalStatus,
-          verified_at: finalStatus !== 'pending' ? new Date().toISOString() : null,
+          // Set verified_at only when explicitly approved
+          verified_at: finalStatus === 'approved' ? new Date().toISOString() : null,
           verification_passed: finalStatus === 'approved',
           rejection_reason: rejectionReason,
           police_alert: policeAlert

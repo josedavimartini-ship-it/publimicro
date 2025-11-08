@@ -304,10 +304,12 @@ export async function canUserPost(
 
     // 6. Get current usage for this category
     const usageField = CATEGORY_TO_USAGE_FIELD[category];
-    const currentUsage = updatedCredits[usageField];
+    // Coerce usage and limit to numbers to avoid string|number union issues
+  const currentUsage = Number(updatedCredits[usageField] ?? 0);
+  const limitNum = limit === Infinity ? Infinity : Number(limit);
 
     // 7. Check if under limit
-    if (currentUsage >= limit) {
+    if (currentUsage >= limitNum) {
       const nextTier = subscription.tier === 'free' ? 'premium' : 'pro';
       const nextLimit = TIER_LIMITS[nextTier][limitField];
 
@@ -323,12 +325,12 @@ export async function canUserPost(
     }
 
     // 8. User can post
-    return {
-      allowed: true,
-      remaining: limit - currentUsage,
-      limit,
-      tier: subscription.tier,
-    };
+      return {
+        allowed: true,
+        remaining: limitNum === Infinity ? Infinity : limitNum - currentUsage,
+        limit: limitNum,
+        tier: subscription.tier,
+      };
   } catch (error) {
     console.error('Error checking posting limits:', error);
     return {
@@ -382,8 +384,8 @@ export async function incrementPostingCount(
       const { error: updateError } = await supabase
         .from('user_credits')
         .update({
-          [usageField]: credits[usageField] + 1,
-          total_posts_lifetime: credits.total_posts_lifetime + 1,
+          [usageField]: Number(credits[usageField] ?? 0) + 1,
+          total_posts_lifetime: Number(credits.total_posts_lifetime ?? 0) + 1,
           updated_at: new Date().toISOString(),
         })
         .eq('user_id', userId);

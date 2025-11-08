@@ -2,9 +2,12 @@
 
 import { useEffect, useRef } from "react";
 
+// If @types/google.maps is not installed, provide a local shim for the compiler
+declare const google: any;
+
 type MapKmlViewerProps = {
   kmlUrl: string; // e.g. "/maps/carcara.kml"
-  center?: google.maps.LatLngLiteral; // fallback center
+  center?: any; // allow any to avoid global google type dependence during triage
   zoom?: number;
 };
 
@@ -16,8 +19,8 @@ export default function MapKmlViewer({
   const ref = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
-    let map: google.maps.Map | null = null;
-    let kmlLayer: google.maps.KmlLayer | null = null;
+      let map: any = null;
+      let kmlLayer: any = null;
 
     const init = async () => {
       const apiKey = process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY;

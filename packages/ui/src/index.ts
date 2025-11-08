@@ -22,3 +22,5 @@ export type { PropertyCardProps } from "./PropertyCard";
 
 export { theme, publimicroColors } from "./theme";
 export type { Theme } from "./theme";
+// Tabs are a lightweight UI primitive used by apps; export a simple implementation.
+export { Tabs, Tab } from "./components/Tabs";

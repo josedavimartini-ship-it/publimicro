@@ -40,8 +40,13 @@
     
     // Skip Checking
     "skipLibCheck": true,
-    "skipDefaultLibCheck": true
+    "skipDefaultLibCheck": true,
+    // Ensure local type declarations are picked up by all packages
+    "typeRoots": ["./types", "./node_modules/@types"]
   },
+  "include": [
+    "types/**/*.d.ts"
+  ],
   "exclude": [
     "node_modules",
     "dist",
