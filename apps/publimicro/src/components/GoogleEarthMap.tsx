@@ -6,7 +6,7 @@ export default function GoogleEarthMap({ lat = -18.977, lng = -48.273, zoom = 15
   const mapRef = useRef(null);
 
   useEffect(() => {
-    const googleMaps = (window as any).google;
+    const googleMaps = window.google;
     if (googleMaps && mapRef.current) {
       const map = new googleMaps.maps.Map(mapRef.current, {
         center: { lat, lng },

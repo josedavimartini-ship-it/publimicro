@@ -1,12 +1,10 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { createClient } from '@supabase/supabase-js';
 import Stripe from 'stripe';
+import { stripe } from '@/lib/stripe';
 import type { EnhancementType } from '@/lib/enhancementPricing';
 
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
-  apiVersion: ('2024-11-20.acacia' as any),
-});
-
+// Use shared, pinned Stripe client from lib/stripe
 // Use service role for webhook (bypasses RLS)
 const supabase = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_URL!,

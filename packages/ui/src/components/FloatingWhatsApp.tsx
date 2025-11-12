@@ -4,21 +4,8 @@ import { useState, useEffect } from "react";
 import { Phone } from "lucide-react";
 
 export default function FloatingWhatsApp() {
-  const [isVisible, setIsVisible] = useState(false);
-
-  useEffect(() => {
-    // Show button after user scrolls down a bit
-    const handleScroll = () => {
-      if (window.scrollY > 300) {
-        setIsVisible(true);
-      } else {
-        setIsVisible(false);
-      }
-    };
-
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
+  // Always visible by default (user requested persistent presence).
+  // Keep this component client-side for window/interaction behavior.
 
   const whatsappNumber = "5534992610004";
   const defaultMessage = "Olá! Gostaria de saber mais sobre as propriedades disponíveis.";
@@ -29,20 +16,21 @@ export default function FloatingWhatsApp() {
       href={whatsappUrl}
       target="_blank"
       rel="noopener noreferrer"
-      className={`fixed bottom-6 right-6 z-50 flex items-center gap-3 px-5 py-4 bg-[#25D366] hover:bg-[#20BD5A] text-white rounded-full shadow-2xl transition-all duration-300 group ${
-        isVisible ? "translate-y-0 opacity-100" : "translate-y-20 opacity-0 pointer-events-none"
-      }`}
+      className={
+        "fixed bottom-4 right-4 z-50 flex items-center gap-3 bg-[#25D366] hover:bg-[#20BD5A] text-white rounded-full shadow-2xl transition-all duration-200 group"
+      }
       aria-label="Fale conosco no WhatsApp"
+      title="Fale conosco no WhatsApp"
     >
-      {/* WhatsApp Icon */}
-      <div className="relative">
-        <Phone className="w-6 h-6" />
-        {/* Pulse animation */}
-        <span className="absolute inset-0 rounded-full bg-[#25D366] animate-ping opacity-75"></span>
+      {/* Icon container - compact on small screens */}
+      <div className="relative flex items-center justify-center p-3 md:p-4">
+        <Phone className="w-5 h-5 md:w-6 md:h-6" />
+        {/* Pulse animation (behind icon) */}
+        <span className="absolute inset-0 rounded-full bg-[#25D366] opacity-30 animate-ping -z-10"></span>
       </div>
 
-      {/* Text - shows on hover on desktop, always on mobile */}
-      <span className="md:hidden md:group-hover:inline-block font-bold whitespace-nowrap">
+      {/* Text - hidden on small screens, visible on md+ */}
+      <span className="hidden md:inline-block pr-4 pl-1 font-bold whitespace-nowrap">
         Fale Conosco
       </span>
 

@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { supabase } from "@/lib/supabaseClient";
+import { createServerSupabaseClient } from '@/lib/supabaseServer';
 
 interface PropostaData {
   nome: string;
@@ -15,6 +15,13 @@ interface PropostaData {
 
 export async function POST(req: Request): Promise<NextResponse> {
   try {
+    const supabase = createServerSupabaseClient();
+    const { data: { user } } = await supabase.auth.getUser();
+
+    if (!user) {
+      return NextResponse.json({ error: 'Not authenticated' }, { status: 401 });
+    }
+
     const formData = await req.formData();
 
     const data: PropostaData = {
@@ -28,6 +35,52 @@ export async function POST(req: Request): Promise<NextResponse> {
       justificativa: (formData.get("justificativa")?.toString().trim() || undefined),
       prop_id: (formData.get("prop_id")?.toString().trim() || undefined),
     };
+
+    // Enforce profile and visit/auth_code requirements similar to /api/proposals
+    const { data: profile } = await supabase
+      .from('user_profiles')
+      .select('profile_completed, verified')
+      .eq('id', user.id)
+      .single();
+
+    if (!profile || !profile.profile_completed || !profile.verified) {
+      return NextResponse.json({ error: 'Profile incomplete or not verified' }, { status: 403 });
+    }
+
+    // check completed visit or optional auth_code
+    const propId = data.prop_id;
+    const { data: visits } = await supabase
+      .from('visits')
+      .select('id')
+      .eq('ad_id', propId)
+      .eq('user_id', user.id)
+      .eq('status', 'completed')
+      .limit(1);
+
+    let authCode = (formData.get('auth_code') as string) || null;
+    let authorized = visits && visits.length > 0;
+
+    if (!authorized && authCode) {
+      const { data: codeRow } = await supabase
+        .from('authorization_codes')
+        .select('id, used')
+        .eq('code', authCode)
+        .eq('property_id', propId)
+        .eq('used', false)
+        .single();
+
+      if (codeRow) {
+        await supabase
+          .from('authorization_codes')
+          .update({ used: true, used_at: new Date().toISOString() })
+          .eq('id', codeRow.id);
+        authorized = true;
+      }
+    }
+
+    if (!authorized) {
+      return NextResponse.json({ error: 'You must complete a visit or provide a valid authorization code', code: 'VISIT_REQUIRED' }, { status: 403 });
+    }
 
     // Validação mínima de campos obrigatórios
     if (!data.nome || !data.email || !data.valor) {

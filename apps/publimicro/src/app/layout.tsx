@@ -1,10 +1,11 @@
-﻿import FloatingWhatsApp from "@/components/FloatingWhatsApp";
+﻿import { FloatingWhatsApp } from "@publimicro/ui";
 import Navbar from "@/components/Navbar";
 import UserQuickPanel from "@/components/UserQuickPanel";
 import BackToTop from "@/components/BackToTop";
 import MobileBottomNav from "@/components/MobileBottomNav";
 import { ToastProvider } from "@/components/ToastNotification";
 import PWAInstallPrompt from "@/components/PWAInstallPrompt";
+import Providers from './providers';
 import ErrorBoundaryWrapper from "@/components/ErrorBoundary";
 import { AuthProvider } from "@/components/AuthProvider";
 import { TopNavWithAuth } from "@/components/TopNavWithAuth";
@@ -82,19 +83,19 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <body className="min-h-screen bg-[#0a0a0a] text-[#E6C98B] antialiased" aria-label="ACHEME Global Marketplace" role="document">
         <ErrorBoundaryWrapper>
           <AuthProvider>
-            <ToastProvider>
-              <a href="#main-content" className="skip-to-content sr-only focus:not-sr-only focus:absolute focus:left-2 focus:top-2 z-50 bg-[#A8C97F] text-black font-bold px-4 py-2 rounded focus:outline-none focus:ring-2 focus:ring-[#B7791F]" tabIndex={0} aria-label="Pular para o conteúdo principal">Pular para o conteúdo</a>
-              <TopNavWithAuth brand="ACHEME" brandHref="/" searchTarget="local" />
-              {/* Sidebar removed - will implement as dropdown menu later */}
-              <main id="main-content" role="main">
-                {children}
-              </main>
-              <UserQuickPanel />
-              <FloatingWhatsApp />
-              <BackToTop />
-              <MobileBottomNav />
-              <PWAInstallPrompt />
-            </ToastProvider>
+              <Providers>
+                <a href="#main-content" className="skip-to-content sr-only focus:not-sr-only focus:absolute focus:left-2 focus:top-2 z-50 bg-[#A8C97F] text-black font-bold px-4 py-2 rounded focus:outline-none focus:ring-2 focus:ring-[#B7791F]" tabIndex={0} aria-label="Pular para o conteúdo principal">Pular para o conteúdo</a>
+                <TopNavWithAuth brand="ACHEME" brandHref="/" searchTarget="local" />
+                {/* Sidebar removed - will implement as dropdown menu later */}
+                <main id="main-content" role="main">
+                  {children}
+                </main>
+                <UserQuickPanel />
+                <FloatingWhatsApp />
+                <BackToTop />
+                <MobileBottomNav />
+                <PWAInstallPrompt />
+              </Providers>
           </AuthProvider>
         </ErrorBoundaryWrapper>
       </body>

@@ -5,6 +5,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { supabase } from "@/lib/supabaseClient";
 import { ArrowLeft, Mail, Phone, MessageSquare, CheckCircle, AlertCircle } from "lucide-react";
+import { WhatsAppLink } from "@publimicro/ui";
 
 export default function ContatoPage() {
   const [formData, setFormData] = useState({
@@ -185,15 +186,14 @@ export default function ContatoPage() {
           <div className="mt-8 pt-6 border-t border-[#2a2a1a]">
             <p className="text-[#8B9B6E] text-sm mb-3">Ou entre em contato diretamente:</p>
             <div className="flex flex-col sm:flex-row gap-3 justify-center">
-              <a
-                href="https://wa.me/5534992610004"
-                target="_blank"
-                rel="noopener noreferrer"
+              <WhatsAppLink
+                number="5534992610004"
                 className="flex items-center justify-center gap-2 px-6 py-3 border-2 border-[#25D366] text-[#25D366] font-semibold rounded-full hover:bg-[#25D366]/10 transition-all"
+                aria-label="WhatsApp"
               >
                 <Phone className="w-5 h-5" />
                 WhatsApp
-              </a>
+              </WhatsAppLink>
               <a
                 href="mailto:contato@publimicro.com.br"
                 className="flex items-center justify-center gap-2 px-6 py-3 border-2 border-[#E6C98B] text-[#E6C98B] font-semibold rounded-full hover:bg-[#E6C98B]/10 transition-all"

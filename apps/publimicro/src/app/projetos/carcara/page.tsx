@@ -1,5 +1,5 @@
-﻿'use client';
-
+﻿"use client";
+import React from 'react';
 import { useState, useEffect } from 'react';
 import { I18nProvider, useI18n } from '@/lib/i18n';
 import { supabase } from '@/lib/supabaseClient';
@@ -10,6 +10,7 @@ import { MapPin, Home, Trees, Droplets, Zap, ShieldCheck, Calendar, TrendingUp, 
 import VisitModal from '@/components/VisitModal';
 import ProposalModal from '@/components/ProposalModal';
 import FavoritesButton from '@/components/FavoritesButton';
+import { WhatsAppLink } from '@publimicro/ui';
 import NeighborhoodInfo from '@/components/NeighborhoodInfo';
 import SwipeGallery from '@/components/SwipeGallery';
 import StickyMobileAction, { ActionButton } from '@/components/StickyMobileAction';
@@ -471,49 +472,7 @@ function CarcaraProjectPageContent() {
           🔊 Som do Carcará
         </button>
         
-        <style jsx>{`
-          @keyframes fly-continuous {
-            0% {
-              transform: translateX(110vw) translateY(0) scale(1.1) rotate(-2deg);
-            }
-            10% {
-              transform: translateX(90vw) translateY(-30px) scale(1.15) rotate(2deg);
-            }
-            20% {
-              transform: translateX(75vw) translateY(-60px) scale(1.2) rotate(-4deg);
-            }
-            30% {
-              transform: translateX(60vw) translateY(-20px) scale(1.25) rotate(3deg);
-            }
-            40% {
-              transform: translateX(50vw) translateY(-80px) scale(1.3) rotate(-3deg);
-            }
-            50% {
-              transform: translateX(40vw) translateY(-10px) scale(1.35) rotate(2deg);
-            }
-            60% {
-              transform: translateX(30vw) translateY(-60px) scale(1.3) rotate(-2deg);
-            }
-            70% {
-              transform: translateX(20vw) translateY(-30px) scale(1.25) rotate(2deg);
-            }
-            80% {
-              transform: translateX(10vw) translateY(-70px) scale(1.2) rotate(-2deg);
-            }
-            90% {
-              transform: translateX(-10vw) translateY(-20px) scale(1.15) rotate(2deg);
-            }
-            100% {
-              transform: translateX(-400px) translateY(0) scale(1.1) rotate(-2deg);
-            }
-          }
-          .animate-fly-continuous {
-            animation: fly-continuous 12s cubic-bezier(0.7,0.2,0.3,1) infinite;
-            will-change: transform;
-            z-index: 300 !important;
-            filter: drop-shadow(0 8px 32px #FFD700cc) drop-shadow(0 0 12px #fff8) drop-shadow(0 0 2px #0008);
-          }
-        `}</style>
+        {/* moved fly-continuous animation to global CSS to avoid nested styled-jsx issues */}
 
         <div className="relative z-[30] text-center px-6 max-w-6xl">
           {/* Exclusive Launch Badge - Elegant with minimal background */}
@@ -540,24 +499,7 @@ function CarcaraProjectPageContent() {
           <div className="mb-4 text-[#FFD700]/80 text-lg italic font-serif animate-fadein-slow">
             <span>Onde o voo do Carcará encontra o horizonte do seu sonho.</span>
           </div>
-          <style jsx>{`
-            @keyframes gold-pulse {
-              0%, 100% { opacity: 0.7; filter: blur(4px); }
-              50% { opacity: 1; filter: blur(0); }
-            }
-            .animate-gold-pulse { animation: gold-pulse 2.5s ease-in-out infinite; }
-            @keyframes title-glow {
-              0%, 100% { text-shadow: 0 0 40px #FFD70055, 0 8px 32px #B7791F44; }
-              50% { text-shadow: 0 0 80px #FFD70099, 0 16px 64px #B7791F88; }
-            }
-            .animate-title-glow { animation: title-glow 3.5s ease-in-out infinite; }
-            @keyframes fadein {
-              from { opacity: 0; transform: translateY(24px); }
-              to { opacity: 1; transform: none; }
-            }
-            .animate-fadein { animation: fadein 1.2s cubic-bezier(.4,0,.2,1) both; }
-            .animate-fadein-slow { animation: fadein 2.2s cubic-bezier(.4,0,.2,1) both; }
-          `}</style>
+          {/* moved gold/title/fade animations to global CSS to avoid nested styled-jsx issues */}
           
           {/* Location - Sleek minimal background */}
           <div className="bg-[#0D0D0D]/30 backdrop-blur-sm px-6 py-3 rounded-lg inline-block mb-4 border border-[#A8C97F]/20">
@@ -848,27 +790,28 @@ function CarcaraProjectPageContent() {
       )}
 
       {/* Floating WhatsApp Button - Desktop Only */}
-      <a
-        href="https://wa.me/5534992610004?text=Olá! Gostaria de conhecer os Sítios Carcará"
-        target="_blank"
-        rel="noopener noreferrer"
+      <WhatsAppLink
+        number="5534992610004"
+        message="Olá! Gostaria de conhecer os Sítios Carcará"
         className="hidden md:flex fixed bottom-8 right-8 z-50 px-8 py-6 bg-[#25D366] hover:bg-[#20BA5A] text-white text-xl font-bold rounded-full shadow-2xl transition-all hover:scale-110 items-center gap-3 animate-bounce hover:animate-none focus:outline-none focus:ring-4 focus:ring-[#25D366]"
         aria-label="Fale conosco no WhatsApp"
       >
         <Phone className="w-8 h-8" />
         <span>WhatsApp</span>
-      </a>
+      </WhatsAppLink>
 
       {/* Mobile Action Bar - Bottom Sticky */}
       <StickyMobileAction position="bottom">
         <div className="flex gap-3">
-          <ActionButton
-            variant="primary"
-            icon={<Phone className="w-5 h-5" />}
-            onClick={() => window.open('https://wa.me/5534992610004?text=Olá! Gostaria de conhecer os Sítios Carcará', '_blank')}
-          >
-            WhatsApp
-          </ActionButton>
+          <WhatsAppLink number="5534992610004" message="Olá! Gostaria de conhecer os Sítios Carcará">
+            <ActionButton
+              variant="primary"
+              icon={<Phone className="w-5 h-5" />}
+              onClick={() => {}}
+            >
+              WhatsApp
+            </ActionButton>
+          </WhatsAppLink>
           <ActionButton
             variant="secondary"
             icon={<Calendar className="w-5 h-5" />}

@@ -2,6 +2,7 @@
 
 import React from "react";
 import { AlertTriangle, RefreshCw, Home } from "lucide-react";
+import { WhatsAppLink } from "@publimicro/ui";
 
 interface ErrorBoundaryProps {
   children: React.ReactNode;
@@ -86,14 +87,13 @@ export class ErrorBoundary extends React.Component<
             <div className="mt-8 pt-6 border-t border-[#2a2a1a]">
               <p className="text-sm text-[#676767]">
                 Precisa de ajuda?{" "}
-                <a
-                  href="https://wa.me/5534992610004"
-                  target="_blank"
-                  rel="noopener noreferrer"
+                <WhatsAppLink
+                  number="5534992610004"
                   className="text-[#A8C97F] hover:underline"
+                  aria-label="Entre em contato pelo WhatsApp"
                 >
                   Entre em contato conosco
-                </a>
+                </WhatsAppLink>
               </p>
             </div>
           </div>

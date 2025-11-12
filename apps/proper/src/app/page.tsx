@@ -3,6 +3,7 @@
 import Link from "next/link";
 import Image from "next/image";
 import { Building2, Trees, MapPin, TrendingUp, Home, Phone } from "lucide-react";
+import { WhatsAppLink } from "@publimicro/ui";
 import { motion } from "framer-motion";
 
 export default function ProperPage() {
@@ -133,15 +134,14 @@ export default function ProperPage() {
                 >
                   View Properties
                 </Link>
-                <a
-                  href="https://wa.me/5534992610004?text=Hello! I'd like to know more about Sítios Carcará"
-                  target="_blank"
-                  rel="noopener noreferrer"
+                <WhatsAppLink
+                  number="5534992610004"
+                  message="Hello! I'd like to know more about Sítios Carcará"
                   className="px-8 py-4 border-2 border-[#25D366] text-[#25D366] hover:bg-[#25D366]/10 font-bold rounded-full transition-all flex items-center gap-2"
                 >
                   <Phone className="w-5 h-5" />
                   WhatsApp
-                </a>
+                </WhatsAppLink>
               </div>
             </div>
             <div className="w-full md:w-auto">

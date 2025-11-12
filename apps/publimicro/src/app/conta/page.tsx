@@ -9,20 +9,50 @@ import {
   Home, TrendingUp, CheckCircle, Clock, XCircle 
 } from 'lucide-react';
 
+// Minimal local domain types to avoid wide `any` usage in the account page
+type CurrentUser = { id: string; email?: string | null } | null;
+
+type Property = {
+  id: string;
+  nome?: string;
+  localizacao?: string;
+  preco?: number | null;
+};
+
+type Proposal = {
+  id: string;
+  amount?: number;
+  created_at?: string;
+  status?: string;
+  sitios?: { nome?: string } | null;
+};
+
+type Visit = {
+  id: string;
+  scheduled_date?: string;
+  scheduled_time?: string;
+  sitios?: { nome?: string } | null;
+};
+
+type Favorite = {
+  id: string;
+  sitios?: { id?: string; nome?: string; localizacao?: string; preco?: number } | null;
+};
+
 export default function ContaPage() {
   const router = useRouter();
   const supabase = createClientComponentClient();
 
   const [loading, setLoading] = useState(true);
-  const [user, setUser] = useState<any>(null);
-  const [profile, setProfile] = useState<any>(null);
+  const [user, setUser] = useState<CurrentUser>(null);
+  const [profile, setProfile] = useState<Record<string, any> | null>(null);
   const [activeTab, setActiveTab] = useState("overview");
 
   // Data
-  const [properties, setProperties] = useState<any[]>([]);
-  const [proposals, setProposals] = useState<any[]>([]);
-  const [visits, setVisits] = useState<any[]>([]);
-  const [favorites, setFavorites] = useState<any[]>([]);
+  const [properties, setProperties] = useState<Property[]>([]);
+  const [proposals, setProposals] = useState<Proposal[]>([]);
+  const [visits, setVisits] = useState<Visit[]>([]);
+  const [favorites, setFavorites] = useState<Favorite[]>([]);
 
   useEffect(() => {
     checkUser();
@@ -31,14 +61,14 @@ export default function ContaPage() {
   const checkUser = async () => {
     try {
       const { data } = await supabase.auth.getUser();
-      const currentUser = (data as any)?.user;
+      const currentUser = data?.user ?? null;
 
       if (!currentUser) {
         router.push("/entrar?redirect=/conta");
         return;
       }
 
-      setUser(currentUser);
+      setUser({ id: currentUser.id, email: currentUser.email ?? null });
 
       // Fetch profile
       const { data: profileData } = await supabase
@@ -50,6 +80,7 @@ export default function ContaPage() {
       setProfile(profileData);
 
       // Fetch user-related data in parallel
+
       const [propsRes, proposalsRes, visitsRes, favsRes] = await Promise.all([
         supabase.from("properties").select("*").eq("user_id", currentUser.id),
         supabase.from("proposals").select("*").eq("user_id", currentUser.id),
@@ -60,10 +91,10 @@ export default function ContaPage() {
           .eq("user_id", currentUser.id),
       ]);
 
-      setProperties((propsRes.data as any[]) || []);
-      setProposals((proposalsRes.data as any[]) || []);
-      setVisits((visitsRes.data as any[]) || []);
-      setFavorites((favsRes.data as any[]) || []);
+      setProperties((propsRes.data ?? []) as Property[]);
+      setProposals((proposalsRes.data ?? []) as Proposal[]);
+      setVisits((visitsRes.data ?? []) as Visit[]);
+      setFavorites((favsRes.data ?? []) as Favorite[]);
 
       setLoading(false);
     } catch (err) {

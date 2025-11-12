@@ -69,6 +69,7 @@ export default function PropertyCard({
 }: PropertyCardProps) {
   const displayPrice = currentBid && currentBid > price ? currentBid : price;
   const firstPhoto = photos[0] || "/placeholder-property.jpg";
+  const imageAlt = title || "Propriedade Publimicro";
 
   return (
     <Link
@@ -76,11 +77,12 @@ export default function PropertyCard({
       className="block group transform transition-all duration-300 hover:scale-[1.02] rounded-xl overflow-hidden bg-gradient-to-br from-[#1a1a1a] to-[#0d0d0d] border border-[#3a3a2a] hover:border-[#D4AF37] shadow-lg hover:shadow-[0_8px_30px_rgba(212,175,55,0.2)]"
       aria-label={`Ver detalhes de ${title}`}
     >
-      {/* Photo Section */}
-      <div className="relative h-64 overflow-hidden bg-[#0a0a0a]">
+  {/* Photo Section */}
+  {/* Reduced image height for better proportions on home and listing grids */}
+  <div className="relative h-48 overflow-hidden bg-[#0a0a0a]">
         <Image
           src={firstPhoto}
-          alt={title}
+          alt={imageAlt}
           fill
           sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
           className="object-cover group-hover:scale-110 transition-transform duration-500"

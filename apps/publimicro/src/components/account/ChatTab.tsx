@@ -47,7 +47,7 @@ export default function ChatTab({ user }: { user: any }) {
 
   return (
     <div className="p-6 max-w-4xl mx-auto">
-      <h2 className="text-2xl font-bold mb-4">Negociações / Chat</h2>
+      <h2 className="text-2xl font-bold mb-4">Chat</h2>
       <div className="flex gap-2 mb-6 border-b pb-2">
         {TABS.map(t => (
           <button
@@ -64,9 +64,9 @@ export default function ChatTab({ user }: { user: any }) {
 
       {chats.length === 0 ? (
         <div className="text-center text-gray-400 italic py-12">
-          {tab === "ativas" && "Nenhuma negociação ativa ainda... Que tal iniciar uma conversa com o coração?"}
-          {tab === "historico" && "Nenhum histórico encontrado. Suas negociações passadas aparecerão aqui."}
-          {tab === "arquivadas" && "Nenhuma conversa arquivada. Arquive negociações antigas para manter a organização."}
+          {tab === "ativas" && "Nenhuma conversa ativa ainda... Que tal iniciar um chat com o anunciante?"}
+          {tab === "historico" && "Nenhum histórico encontrado. Suas conversas passadas aparecerão aqui."}
+          {tab === "arquivadas" && "Nenhuma conversa arquivada. Arquive chats antigos para manter a organização."}
         </div>
       ) : (
         <div className="space-y-4">

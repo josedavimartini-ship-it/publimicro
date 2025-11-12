@@ -11,6 +11,7 @@ import dynamic from "next/dynamic";
 import { ArrowLeft, MapPin, Ruler, Bed, Bath, Car, Phone, ExternalLink, Video, Heart, Calendar, TrendingUp } from "lucide-react";
 import { getKMLForProperty, fetchKMLContent } from "@/lib/kmlMapping";
 import FavoritesButton from "@/components/FavoritesButton";
+import { WhatsAppLink } from "@publimicro/ui";
 import Breadcrumbs from "@/components/Breadcrumbs";
 import { addToRecentlyViewed } from "@/components/RecentlyViewed";
 import { useToast } from "@/components/ToastNotification";
@@ -488,16 +489,15 @@ export default function PropertyPage() {
                   Ver Detalhes Completos
                 </a>
 
-                {/* WhatsApp Contact */}
-                <a
-                  href="https://wa.me/5534992610004"
-                  target="_blank"
-                  rel="noopener noreferrer"
+                {/* WhatsApp Contact - centralized helper */}
+                <WhatsAppLink
+                  number="5534992610004"
                   className="flex items-center justify-center gap-2 w-full px-6 py-4 border-2 border-[#25D366] text-[#25D366] font-bold rounded-full hover:bg-[#25D366]/10 hover:scale-105 transition-all text-lg"
+                  aria-label={t('sitioscarcara.contact_whatsapp') || 'Contato via WhatsApp'}
                 >
                   <Phone className="w-5 h-5" />
                   Contato WhatsApp
-                </a>
+                </WhatsAppLink>
 
                 {/* Schedule Visit */}
                 <button

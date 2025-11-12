@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { stripe } from "@/lib/stripe";
 import { createClient } from "@supabase/supabase-js";
 import { headers } from "next/headers";
+import type Stripe from 'stripe';
 
 // Desabilitar parsing do body para webhooks
 export const runtime = "nodejs";
@@ -35,7 +36,7 @@ export async function POST(req: Request) {
 
     // Processar evento
     if (event.type === "checkout.session.completed") {
-      const session = event.data.object as any;
+      const session = event.data.object as Stripe.Checkout.Session;
       const { listingId, productType, userId } = session.metadata;
 
       console.log("Pagamento recebido:", {

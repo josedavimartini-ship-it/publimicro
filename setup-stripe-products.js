@@ -10,7 +10,8 @@
  * Run with: node setup-stripe-products.js
  */
 
-const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
+const { createStripe } = require('@publimicro/stripe');
+let stripe; // assigned in main after env check
 
 // Enhancement pricing (from enhancementPricing.ts)
 const ENHANCEMENT_PRODUCTS = [
@@ -332,6 +333,9 @@ async function main() {
     console.error('STRIPE_SECRET_KEY=sk_test_...\n');
     process.exit(1);
   }
+
+  // Create stripe client after validating environment
+  stripe = createStripe(process.env.STRIPE_SECRET_KEY);
   
   console.log('\n⚙️  Using Stripe Secret Key:', process.env.STRIPE_SECRET_KEY.substring(0, 15) + '...');
   console.log('\n📦 Creating 11 products total:');

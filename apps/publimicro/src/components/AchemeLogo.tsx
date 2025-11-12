@@ -7,7 +7,25 @@
  * Stunning bronze/copper/gold color palette with depth and shine
  */
 
+import { useState } from "react";
+
 export default function AchemeLogo({ className = "w-12 h-12", animate = false }: { className?: string; animate?: boolean }) {
+  const [svgLoadFailed, setSvgLoadFailed] = useState(false);
+
+  // Prefer external SVG at /logo-acheme.svg when available (easy to swap by replacing public file).
+  // Fallback: render the inline premium SVG defined below.
+  if (!svgLoadFailed) {
+    return (
+      // eslint-disable-next-line @next/next/no-img-element
+      <img
+        src="/logo-acheme.svg"
+        alt="AcheMe"
+        className={className}
+        onError={() => setSvgLoadFailed(true)}
+      />
+    );
+  }
+
   return (
     <svg 
       viewBox="0 0 140 140" 
@@ -333,7 +351,7 @@ export default function AchemeLogo({ className = "w-12 h-12", animate = false }:
       />
 
       {/* Glow Effect for Animation */}
-      {animate && (
+  {animate && (
         <>
           <circle
             cx="55"

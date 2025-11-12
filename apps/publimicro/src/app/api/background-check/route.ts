@@ -155,8 +155,8 @@ export async function POST(req: Request) {
         response_data: { sent: false, reason: 'Integration not implemented' }
       });
     } else if (
-      (federalPoliceStatus as any) === 'rejected' ||
-      (interpolStatus as any) === 'rejected'
+      String(federalPoliceStatus) === 'rejected' ||
+      String(interpolStatus) === 'rejected'
     ) {
       finalStatus = 'rejected';
       rejectionReason = 'Background check failed: status rejected by authority.';

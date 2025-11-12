@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import SearchBar, { SearchFilters } from "@/components/SearchBar";
+import SearchTab, { SearchFilters } from "@/components/SearchTab";
 import { supabase } from "@/lib/supabaseClient";
 import Link from "next/link";
 import Image from "next/image";
@@ -158,7 +158,7 @@ export default function ImoveisPage() {
             </p>
           </div>
           
-          <SearchBar onFilterChange={setFilters} />
+          <SearchTab onFilterChange={setFilters} />
           
           {/* Results Summary */}
           <div className="mt-6 flex items-center justify-between flex-wrap gap-4">

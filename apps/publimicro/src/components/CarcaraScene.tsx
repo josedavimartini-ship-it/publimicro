@@ -33,7 +33,7 @@ const BirdAudioToggle = dynamic(
 export function CarcaraScene() {
   const handleSoundTrigger = () => {
     try {
-      const audioController = (window as any).__publimicroCarcaraAudio;
+      const audioController = window.__publimicroCarcaraAudio;
       if (audioController?.play) {
         audioController.play();
       }

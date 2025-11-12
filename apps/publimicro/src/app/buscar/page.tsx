@@ -2,7 +2,7 @@
 
 import { useState, useEffect, Suspense } from "react";
 import { useSearchParams } from "next/navigation";
-import SearchBar, { SearchFilters } from "@/components/SearchBar";
+import SearchTab, { SearchFilters } from "@/components/SearchTab";
 import { supabase } from "@/lib/supabaseClient";
 import Link from "next/link";
 import Image from "next/image";
@@ -128,7 +128,7 @@ function SearchPageContent() {
             <h1 className="text-3xl font-bold text-[#E6C98B]">Buscar Propriedades</h1>
           </div>
           
-          <SearchBar onFilterChange={setFilters} />
+          <SearchTab onFilterChange={setFilters} />
           
           {/* Results Summary */}
           <div className="mt-6 flex items-center justify-between">

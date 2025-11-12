@@ -6,6 +6,7 @@ import { X, DollarSign, MessageSquare, ShieldCheck, AlertCircle } from 'lucide-r
 import BottomSheet from './BottomSheet';
 import { useAuth } from './AuthProvider';
 import { useI18n } from '@/lib/i18n';
+import Link from 'next/link';
 
 interface ProposalModalProps {
   adId: string;
@@ -126,6 +127,57 @@ export default function ProposalModal({
 
 
   if (!open) return null;
+
+  // If user cannot make proposals, show guidance and CTAs instead of the form
+  if (!canMakeProposal) {
+    return (
+      <div className="fixed inset-0 bg-black/70 backdrop-blur-sm flex items-center justify-center z-50 p-4">
+        <div className="bg-gradient-to-br from-[#1a1a1a] to-[#0d0d0d] border-2 border-[#2a2a1a] rounded-2xl w-full max-w-md relative shadow-2xl p-8">
+          <button
+            onClick={onClose}
+            className="absolute top-4 right-4 text-[#676767] hover:text-[#A8C97F] transition-colors z-10"
+            aria-label={t('sitioscarcara.close') || 'Close'}
+          >
+            <X className="w-6 h-6" />
+          </button>
+
+          <div className="text-center">
+            <div className="w-16 h-16 bg-[#B87333]/20 rounded-full flex items-center justify-center mx-auto mb-4">
+              <ShieldCheck className="w-8 h-8 text-[#B87333]" />
+            </div>
+            <h3 className="text-2xl font-bold text-[#E6C98B] mb-3">{t('sitioscarcara.proposal_access_needed') || 'Acesso Necessário'}</h3>
+            <p className="text-[#676767] mb-6">
+              {t('sitioscarcara.proposal_requirements') || 'Para enviar propostas, é necessário ter o perfil completo, estar verificado e ter autorização (visita realizada).'}
+            </p>
+
+            <div className="space-y-3 max-w-sm mx-auto">
+              {!profile && (
+                <a href={`/entrar?redirect=${encodeURIComponent(typeof window !== 'undefined' ? window.location.pathname : '/')}`} className="block px-6 py-3 bg-gradient-to-r from-[#B87333] to-[#FFD700] text-[#0a0a0a] font-bold rounded-xl">{t('sitioscarcara.login') || 'Fazer Login'}</a>
+              )}
+
+              {profile && !profile.profile_completed && (
+                <Link href="/conta" className="block px-6 py-3 bg-[#0f0f0f] border border-amber-500/30 text-amber-500 font-semibold rounded-lg">{t('sitioscarcara.complete_profile') || 'Completar Perfil'}</Link>
+              )}
+
+              {profile && profile.profile_completed && !profile.verified && (
+                <div className="p-4 bg-yellow-900/10 border border-yellow-500/20 rounded-lg">
+                  <p className="text-sm text-yellow-300 mb-3">{t('sitioscarcara.verification_needed') || 'Sua conta precisa ser verificada antes de enviar propostas.'}</p>
+                  <a href={`/schedule-visit?propertyId=${adId}`} className="inline-block px-6 py-3 bg-gradient-to-r from-[#0D7377] to-[#5F7161] text-white font-bold rounded-lg">{t('sitioscarcara.schedule_visit') || 'Agendar Visita'}</a>
+                </div>
+              )}
+
+              {profile && profile.profile_completed && profile.verified && !profile.can_place_bids && (
+                <div className="p-4 bg-amber-500/10 border border-amber-500/20 rounded-lg text-amber-300">
+                  <p className="text-sm">{t('sitioscarcara.visit_required_before_bids') || 'Você precisa realizar a visita e obter autorização da nossa equipe para poder dar lances.'}</p>
+                  <a href={`/schedule-visit?propertyId=${adId}`} className="mt-3 inline-block px-6 py-3 bg-gradient-to-r from-[#CD7F32] to-[#B87333] text-[#0a0a0a] font-bold rounded-lg">{t('sitioscarcara.schedule_visit') || 'Agendar Visita'}</a>
+                </div>
+              )}
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   // Desktop: Use centered modal
   return (

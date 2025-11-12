@@ -21,8 +21,15 @@ export default function DocumentUploadStep({
   onBack,
   loading,
 }: DocumentUploadStepProps) {
+  type DocumentType = 'cpf' | 'rg' | 'cnh' | 'passport';
+
+  type FormDataType = {
+    document_type: DocumentType;
+    document_number: string;
+  };
+
   const [formData, setFormData] = useState({
-    document_type: initialData.document_type || 'rg' as const,
+    document_type: initialData.document_type || 'rg' as DocumentType,
     document_number: initialData.document_number || '',
   });
 
@@ -160,7 +167,7 @@ export default function DocumentUploadStep({
               <button
                 key={doc.value}
                 type="button"
-                onClick={() => setFormData({ ...formData, document_type: doc.value as any })}
+                onClick={() => setFormData({ ...formData, document_type: doc.value as DocumentType })}
                 className={`py-3 px-4 rounded-lg border-2 font-medium transition-colors ${
                   formData.document_type === doc.value
                     ? 'border-blue-600 bg-blue-50 text-blue-700'

@@ -1,6 +1,7 @@
 ﻿import type { Metadata } from "next"
 import { Navbar, Footer } from "@publimicro/ui"
 import Link from "next/link"
+import { WhatsAppLink } from "@publimicro/ui"
 
 export const metadata: Metadata = {
   title: "Destaques Premium — Publimicro",
@@ -239,15 +240,14 @@ export default function DestaquesPage() {
                   🌟 Ver Projeto Completo + Tour 3D
                 </Link>
 
-                <a
-                  href={`https://wa.me/${carcaraProject.whatsapp}?text=Olá! Tenho interesse no projeto Sítios Carcará.`}
-                  target="_blank"
-                  rel="noopener noreferrer"
+                <WhatsAppLink
+                  number={carcaraProject.whatsapp}
+                  message={"Olá! Tenho interesse no projeto Sítios Carcará."}
                   className="block text-center px-6 py-3 bg-[#25D366] hover:bg-[#20BD5A] text-white text-sm font-bold rounded-xl transition-all hover:scale-[1.02] flex items-center justify-center gap-2"
                 >
                   <span className="text-xl">💬</span>
                   Contato via WhatsApp
-                </a>
+                </WhatsAppLink>
               </div>
             </div>
           </div>
@@ -322,15 +322,9 @@ export default function DestaquesPage() {
                     >
                       Ver Detalhes
                     </Link>
-                    <a
-                      href={`https://wa.me/${item.whatsapp}`}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="px-4 py-3 bg-[#25D366] hover:bg-[#20BD5A] text-white rounded-lg transition-all hover:scale-105 flex items-center justify-center"
-                      title="Contato via WhatsApp"
-                    >
+                    <WhatsAppLink number={item.whatsapp} className="px-4 py-3 bg-[#25D366] hover:bg-[#20BD5A] text-white rounded-lg transition-all hover:scale-105 flex items-center justify-center" aria-label="Contato via WhatsApp">
                       <span className="text-xl">💬</span>
-                    </a>
+                    </WhatsAppLink>
                   </div>
                 </div>
               </div>

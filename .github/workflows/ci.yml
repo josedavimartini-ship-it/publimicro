@@ -1,0 +1,45 @@
+name: CI
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+
+      - name: Install pnpm
+        run: npm i -g pnpm@10
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile=false
+
+      - name: Run type-check
+        run: pnpm -w -s -C . type-check
+
+      - name: Build stripe package
+        run: pnpm -w -s -C . --filter @publimicro/stripe run build
+
+      - name: Print Stripe smoke-test notice
+        run: |
+          if [ -n "${{ secrets.STRIPE_TEST_KEY }}" ] && [ -n "${{ secrets.SMOKE_STRIPE_PRICE_ID }}" ]; then
+            echo "Stripe smoke test will run in the next step.";
+          else
+            echo "Stripe smoke test will be skipped (missing STRIPE_TEST_KEY and/or SMOKE_STRIPE_PRICE_ID).";
+          fi
+
+      - name: Run Stripe smoke test
+        if: ${{ secrets.STRIPE_TEST_KEY != '' && secrets.SMOKE_STRIPE_PRICE_ID != '' }}
+        env:
+          STRIPE_TEST_KEY: ${{ secrets.STRIPE_TEST_KEY }}
+          SMOKE_STRIPE_PRICE_ID: ${{ secrets.SMOKE_STRIPE_PRICE_ID }}
+        run: node scripts/ci/smoke-stripe.js

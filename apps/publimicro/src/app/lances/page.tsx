@@ -207,7 +207,7 @@ export default function LancesPage() {
           ].map((filterOption) => (
             <button
               key={filterOption.value}
-              onClick={() => setFilter(filterOption.value as any)}
+              onClick={() => setFilter(filterOption.value as "all" | "pending" | "accepted" | "rejected")}
               className={`px-6 py-2 rounded-full font-semibold transition-all whitespace-nowrap ${
                 filter === filterOption.value
                   ? "bg-gradient-to-r from-[#A8C97F] to-[#0D7377] text-white"

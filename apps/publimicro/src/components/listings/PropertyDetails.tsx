@@ -4,6 +4,7 @@ import Image from "next/image";
 import { useState } from "react";
 import Tour3D from "./Tour3D";
 import MapSearch from "../search/MapSearch";
+import { WhatsAppLink } from "@publimicro/ui";
 
 // Get from env - this will be replaced at build time
 const SUPABASE_URL = process.env.NEXT_PUBLIC_SUPABASE_URL || "https://irrzpwzyqcubhhjeuakc.supabase.co";
@@ -186,15 +187,15 @@ export default function PropertyDetails({ item }: PropertyDetailsProps): JSX.Ele
 
               {/* Quick Contact */}
               <div className="space-y-3">
-                <a
-                  href={`https://wa.me/${whatsappNumber}?text=${encodeURIComponent(whatsappMessage)}`}
-                  target="_blank"
-                  rel="noopener noreferrer"
+                <WhatsAppLink
+                  number={whatsappNumber}
+                  message={whatsappMessage}
                   className="block text-center px-6 py-4 bg-[#25D366] hover:bg-[#20BD5A] text-white font-bold rounded-xl transition-all hover:scale-105 flex items-center justify-center gap-2"
+                  aria-label="Contato via WhatsApp"
                 >
                   <span className="text-2xl"></span>
                   Contato via WhatsApp
-                </a>
+                </WhatsAppLink>
 
                 <a
                   href={`/schedule-visit?propertyId=${item.id}&propertyTitle=${encodeURIComponent(item.titulo)}`}

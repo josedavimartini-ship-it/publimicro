@@ -11,47 +11,15 @@
     "VERCEL_URL"
   ],
   "tasks": {
-    "dev": {
-      "cache": false,
-      "persistent": true
-    },
     "build": {
-      "dependsOn": ["^build"],
       "outputs": [
-        ".next/**",
-        "dist/**",
-        "!.next/cache/**"
-      ],
-      "env": [
-        "NEXT_PUBLIC_*",
-        "DATABASE_URL",
-        "STRIPE_SECRET_KEY",
-        "STRIPE_PUBLISHABLE_KEY"
+        "packages/**/dist/**",
+        "packages/**/.next/**",
+        "apps/**/.next/**",
+        "dist/**"
       ]
     },
-    "@publimicro/ui#build": {
-      "outputs": ["dist/**"]
-    },
-    "lint": {
-      "dependsOn": ["^build"],
-      "outputs": [],
-      "cache": true
-    },
-    "type-check": {
-      "dependsOn": ["^build"],
-      "outputs": [],
-      "cache": true
-    },
-    "format": {
-      "outputs": [],
-      "cache": false
-    },
-    "test": {
-      "dependsOn": ["^build"],
-      "outputs": ["coverage/**"],
-      "cache": true
-    },
-    "clean": {
+    "dev": {
       "cache": false
     }
   }

@@ -15,6 +15,8 @@ export { TopNav } from "./components/TopNav";
 
 // Floating WhatsApp component
 export { default as FloatingWhatsApp } from "./components/FloatingWhatsApp";
+// Shared WhatsApp link helper
+export { default as WhatsAppLink } from "./components/WhatsAppLink";
 
 // Unified Property Card
 export { default as PropertyCard } from "./PropertyCard";

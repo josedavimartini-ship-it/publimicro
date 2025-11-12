@@ -27,7 +27,7 @@ export default function AccountDashboard({ open, onClose }: { open: boolean; onC
           <Tab value="post" label="Postar Novo">
             <PostTab user={user} />
           </Tab>
-          <Tab value="chat" label="Negociações">
+          <Tab value="chat" label="Chat">
             <ChatTab user={user} />
           </Tab>
         </Tabs>

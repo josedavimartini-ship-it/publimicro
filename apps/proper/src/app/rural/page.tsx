@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { Trees, MapPin, Droplets, Home } from "lucide-react";
+import { WhatsAppLink } from "@publimicro/ui";
 
 export default function RuralPage() {
   return (
@@ -58,14 +59,13 @@ export default function RuralPage() {
                 >
                   Ver Detalhes
                 </Link>
-                <a
-                  href="https://wa.me/5534992610004?text=Olá! Gostaria de agendar uma visita aos Sítios Carcará"
-                  target="_blank"
-                  rel="noopener noreferrer"
+                <WhatsAppLink
+                  number="5534992610004"
+                  message="Olá! Gostaria de agendar uma visita aos Sítios Carcará"
                   className="px-8 py-3 border-2 border-[#25D366] text-[#25D366] font-bold rounded-full hover:bg-[#25D366]/10 transition-all"
                 >
                    Agendar Visita
-                </a>
+                </WhatsAppLink>
               </div>
             </div>
           </div>

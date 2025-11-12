@@ -15,8 +15,8 @@ export default function BirdAudioToggle() {
     audioEl.volume = 0.4;
     setAudio(audioEl);
 
-    // Expose globally for Carcara3D to trigger
-    (window as any).__publimicroCarcaraAudio = {
+    // Expose globally for Carcara3D to trigger (typed)
+    window.__publimicroCarcaraAudio = {
       play: () => {
         if (!isMuted && audioEl) {
           audioEl.currentTime = 0;
@@ -27,7 +27,12 @@ export default function BirdAudioToggle() {
 
     return () => {
       audioEl.pause();
-      delete (window as any).__publimicroCarcaraAudio;
+      try {
+        // remove global controller if it matches
+        if (window.__publimicroCarcaraAudio) delete window.__publimicroCarcaraAudio;
+      } catch (e) {
+        // ignore
+      }
     };
   }, [isMuted]);
 

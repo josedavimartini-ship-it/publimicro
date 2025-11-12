@@ -2,12 +2,11 @@ import { NextRequest, NextResponse } from 'next/server';
 import { createRouteHandlerClient } from '@supabase/auth-helpers-nextjs';
 import { cookies } from 'next/headers';
 import Stripe from 'stripe';
+import { stripe } from '@/lib/stripe';
 import { getStripePriceId, getEnhancementPrice, getCategoryDisplayName, getEnhancementTypeName } from '@/lib/enhancementPricing';
 import type { AnnouncementCategory, EnhancementType } from '@/lib/enhancementPricing';
 
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
-  apiVersion: ('2024-11-20.acacia' as any),
-});
+// Use shared, pinned Stripe client from lib/stripe
 
 /**
  * POST /api/enhancements/create-checkout

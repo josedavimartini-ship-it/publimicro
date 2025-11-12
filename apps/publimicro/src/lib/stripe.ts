@@ -4,11 +4,16 @@ if (!process.env.STRIPE_SECRET_KEY) {
   throw new Error("Missing STRIPE_SECRET_KEY environment variable");
 }
 
-export const stripe = new Stripe(process.env.STRIPE_SECRET_KEY, {
-  // apiVersion may vary between environments/stripe versions; keep as string for runtime
-  apiVersion: ("2024-11-20.acacia" as any),
+import type StripeType from 'stripe';
+import { apiVersion } from '@publimicro/stripe';
+
+// Read pinned apiVersion from repo root config so scripts and app share the same value
+const stripeOptions = {
+  apiVersion: apiVersion,
   typescript: true,
-});
+} as unknown as StripeType.StripeConfig;
+
+export const stripe = new Stripe(process.env.STRIPE_SECRET_KEY, stripeOptions);
 
 // Product Price IDs
 export const STRIPE_PRICES = {

@@ -18,20 +18,52 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: 'Missing required fields' }, { status: 400 });
     }
 
-    // Check that user has completed a visit for this ad (OPTIONAL - commented out for now)
-    // const { data: visits } = await supabase
-    //   .from('visits')
-    //   .select('id, status')
-    //   .eq('ad_id', ad_id)
-    //   .eq('user_id', user.id)
-    //   .eq('status', 'completed');
+    // Verify user profile state (must have completed profile and be verified)
+    const { data: profile } = await supabase
+      .from('user_profiles')
+      .select('profile_completed, verified, can_place_bids')
+      .eq('id', user.id)
+      .single();
 
-    // if (!visits || visits.length === 0) {
-    //   return NextResponse.json(
-    //     { error: 'You must complete a visit before submitting a proposal' },
-    //     { status: 403 }
-    //   );
-    // }
+    if (!profile || !profile.profile_completed || !profile.verified) {
+      return NextResponse.json({ error: 'Profile incomplete or not verified' }, { status: 403 });
+    }
+
+    // Check for a completed visit for this ad
+    const { data: visits } = await supabase
+      .from('visits')
+      .select('id, status')
+      .eq('ad_id', ad_id)
+      .eq('user_id', user.id)
+      .eq('status', 'completed')
+      .limit(1);
+
+    let authorizedViaCode = false;
+
+    if ((!visits || visits.length === 0) && body.auth_code) {
+      // Validate authorization code (one-time use)
+      const { data: codeRow } = await supabase
+        .from('authorization_codes')
+        .select('id, used')
+        .eq('code', body.auth_code)
+        .eq('property_id', ad_id)
+        .eq('used', false)
+        .single();
+
+      if (codeRow) {
+        // mark code as used
+        await supabase
+          .from('authorization_codes')
+          .update({ used: true, used_at: new Date().toISOString() })
+          .eq('id', codeRow.id);
+
+        authorizedViaCode = true;
+      }
+    }
+
+    if ((!visits || visits.length === 0) && !authorizedViaCode) {
+      return NextResponse.json({ error: 'You must complete a visit or provide a valid authorization code', code: 'VISIT_REQUIRED' }, { status: 403 });
+    }
 
     const { data, error } = await supabase
       .from('proposals')

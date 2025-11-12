@@ -2,8 +2,7 @@
 
 import { useEffect, useRef } from "react";
 
-// If @types/google.maps is not installed, provide a local shim for the compiler
-declare const google: any;
+// Use global `window.google` declared in repo-level d.ts
 
 type MapKmlViewerProps = {
   kmlUrl: string; // e.g. "/maps/carcara.kml"
@@ -28,7 +27,7 @@ export default function MapKmlViewer({
         console.warn("Missing NEXT_PUBLIC_GOOGLE_MAPS_API_KEY");
       }
       // Load Google Maps script (one-time)
-      if (!(window as any).google?.maps) {
+      if (!window.google?.maps) {
         await new Promise<void>((resolve, reject) => {
           const script = document.createElement("script");
           script.src = `https://maps.googleapis.com/maps/api/js?key=${apiKey}&v=weekly`;
@@ -40,7 +39,7 @@ export default function MapKmlViewer({
       }
       if (!ref.current) return;
 
-      map = new google.maps.Map(ref.current, {
+      map = new window.google.maps.Map(ref.current, {
         center,
         zoom,
         mapTypeId: "satellite",
@@ -52,7 +51,7 @@ export default function MapKmlViewer({
         ],
       });
 
-      kmlLayer = new google.maps.KmlLayer({
+      kmlLayer = new window.google.maps.KmlLayer({
         url: `${location.origin}${kmlUrl}`,
         map,
         preserveViewport: false,

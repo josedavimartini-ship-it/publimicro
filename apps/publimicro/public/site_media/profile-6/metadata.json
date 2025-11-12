@@ -1,0 +1,11 @@
+{
+  "profileId": "profile-6",
+  "title": "Sítio Carcará 6 - Exemplo",
+  "hero": "/site_media/profile-6/hero.jpg",
+  "images": [
+    "/site_media/profile-6/hero.jpg",
+    "/site_media/profile-6/gallery-1.jpg"
+  ],
+  "videos": [],
+  "coordinates": { "lat": -15.05, "lng": -47.05 }
+}

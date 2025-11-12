@@ -22,7 +22,7 @@ interface Property {
 
 interface ComparisonRow {
   label: string;
-  key: string;
+  key: keyof Property | 'preco_ha';
   icon?: any;
   suffix?: string;
   format?: (value: any) => string;
@@ -239,12 +239,14 @@ export default function ComparePage() {
                     {properties.map((property) => (
                       <td key={property.id} className="p-4 text-[#E6C98B] border-b border-[#2a2a1a]">
                         {row.format
-                          ? typeof row.format === "function" && row.key === "preco_ha"
+                          ? row.key === "preco_ha"
                             ? row.format(property)
-                            : row.format((property as any)[row.key])
-                          : (property as any)[row.key]
+                            : row.format((property as unknown as Record<string, any>)[row.key as string])
+                          : row.key === "preco_ha"
+                          ? "-"
+                          : (property as unknown as Record<string, any>)[row.key as string]
                         }
-                        {row.suffix && (property as any)[row.key] && row.suffix}
+                        {row.suffix && (property as unknown as Record<string, any>)[row.key as string] && row.suffix}
                       </td>
                     ))}
                   </tr>

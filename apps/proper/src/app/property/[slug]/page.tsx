@@ -11,6 +11,7 @@ import {
   Zap, Wifi, ChevronLeft, ChevronRight, Share2, AlertCircle,
   Building2, Waves, Gavel
 } from "lucide-react";
+import { WhatsAppLink } from "@publimicro/ui";
 
 interface Property {
   id: string;
@@ -638,15 +639,14 @@ export default function PropertyDetailPage() {
                 <h3 className="text-xl font-bold text-[#B87333] mb-4">Contact Seller</h3>
                 
                 <div className="space-y-3">
-                  <a
-                    href={`https://wa.me/5534992610004?text=Hi, I'm interested in ${property.title}`}
-                    target="_blank"
-                    rel="noopener noreferrer"
+                  <WhatsAppLink
+                    number="5534992610004"
+                    message={`Hi, I'm interested in ${property.title}`}
                     className="flex items-center gap-3 p-3 bg-[#25D366] hover:bg-[#20BA5A] text-white rounded-lg transition"
                   >
                     <Phone className="w-5 h-5" />
                     <span className="font-semibold">WhatsApp</span>
-                  </a>
+                  </WhatsAppLink>
 
                   <a
                     href={`mailto:contact@acheme.com?subject=Property Inquiry: ${property.title}`}

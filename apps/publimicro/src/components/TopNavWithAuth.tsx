@@ -12,6 +12,7 @@ import { useAuth } from "./AuthProvider";
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 import { useRouter } from "next/navigation";
 import AccountModal from "./AccountModal";
+import AccountDashboard from "./AccountDashboard";
 import AchemeLogo from "./AchemeLogo";
 
 type SearchTarget = "local" | "main";
@@ -40,6 +41,7 @@ export function TopNavWithAuth({
   const [showCategories, setShowCategories] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState("all");
   const [showAccountModal, setShowAccountModal] = useState(false);
+  const [showAccountDashboard, setShowAccountDashboard] = useState(false);
   const [showUserMenu, setShowUserMenu] = useState(false);
   const userMenuRef = useRef<HTMLDivElement>(null);
 
@@ -195,10 +197,10 @@ export function TopNavWithAuth({
                 <span className="text-xs font-bold">gostei</span>
               </Link>
 
-              {/* Animated Handshake for Chat/Negotiations */}
+              {/* Animated Handshake for Chat - renamed from 'Negociar' */}
               <Link href={chatHref} className="flex flex-col items-center text-[#A8C97F] hover:text-[#8B9B6E] transition-all group transform hover:scale-110">
                 <AnimatedHandshake size={28} className="mb-1 drop-shadow-lg" />
-                <span className="text-xs font-bold">Negociar</span>
+                <span className="text-xs font-bold">Chat</span>
               </Link>
 
               {/* Prominent Postar Button - Bronze/Gold Gradient */}
@@ -215,6 +217,15 @@ export function TopNavWithAuth({
               {!loading && (
                 user && profile ? (
                   // LOGGED IN - Show user menu dropdown
+                  <>
+                  <button
+                    onClick={() => setShowAccountDashboard(true)}
+                    className="flex flex-col items-center px-3 py-1 text-[#E6C98B] hover:text-[#D4AF37] transition-all group"
+                    aria-label="Conta"
+                  >
+                    <User className="w-6 h-6 mb-1" />
+                    <span className="text-xs font-bold">Conta</span>
+                  </button>
                   <div className="relative" ref={userMenuRef}>
                     <button
                       onClick={() => setShowUserMenu(!showUserMenu)}
@@ -309,15 +320,16 @@ export function TopNavWithAuth({
                       </div>
                     )}
                   </div>
+                    </>
                 ) : (
                   // NOT LOGGED IN - Show "Entrar" button
-                  <Link
-                    href="/entrar"
-                    className="flex flex-col items-center px-4 py-2 border-2 border-[#CD7F32] text-[#E6C98B] hover:bg-[#CD7F32]/20 hover:border-[#D4AF37] hover:text-[#D4AF37] rounded-xl transition-all transform hover:scale-110 shadow-lg"
-                  >
-                    <User className="w-7 h-7 mb-1" strokeWidth={2.5} />
-                    <span className="text-xs font-bold">Entrar</span>
-                  </Link>
+                    <button
+                      onClick={() => router.push('/entrar?redirect=/conta')}
+                      className="flex flex-col items-center px-4 py-2 border-2 border-[#CD7F32] text-[#E6C98B] hover:bg-[#CD7F32]/20 hover:border-[#D4AF37] hover:text-[#D4AF37] rounded-xl transition-all transform hover:scale-110 shadow-lg"
+                    >
+                      <User className="w-7 h-7 mb-1" strokeWidth={2.5} />
+                      <span className="text-xs font-bold">Conta</span>
+                    </button>
                 )
               )}
             </nav>
@@ -337,8 +349,8 @@ export function TopNavWithAuth({
         </div>
       </header>
 
-      {/* Account Modal for non-logged users */}
-      <AccountModal open={showAccountModal} onClose={() => setShowAccountModal(false)} />
+  {/* Account Dashboard modal (open for logged users) */}
+  <AccountDashboard open={showAccountDashboard} onClose={() => setShowAccountDashboard(false)} />
     </>
   );
 }

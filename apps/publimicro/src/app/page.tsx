@@ -8,7 +8,7 @@ import Link from "next/link";
 import dynamic from "next/dynamic";
 import VisitModal from "@/components/VisitModal";
 import FavoritesButton from "@/components/FavoritesButton";
-import SearchBar from "@/components/SearchBar";
+import SearchTab from "@/components/SearchTab";
 import SwipeGallery from "@/components/SwipeGallery";
 import WelcomeModal from "@/components/WelcomeModal";
 import RecentlyViewed from "@/components/RecentlyViewed";
@@ -279,9 +279,9 @@ export default function HomePage() {
                 Use filtros avançados para buscar por preço, área, localização e muito mais
               </p>
             </div>
-            <div className="flex justify-center">
-              <SearchBar />
-            </div>
+              <div className="flex justify-center">
+                <SearchTab />
+              </div>
           </div>
         </section>
 

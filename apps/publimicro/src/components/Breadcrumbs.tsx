@@ -36,7 +36,7 @@ export default function Breadcrumbs() {
       carcara: "Sítios Carcará",
       contato: "Contato",
       favoritos: "Favoritos",
-      chat: "Conversas",
+  chat: "Chat",
       anunciar: "Publicar Anúncio",
       entrar: "Entrar",
       conta: "Minha Conta",

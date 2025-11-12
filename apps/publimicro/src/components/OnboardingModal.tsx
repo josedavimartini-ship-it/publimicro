@@ -610,10 +610,10 @@ export function OnboardingModal({ isOpen, onComplete, userId }: OnboardingModalP
                     <p className="mt-4">
                       <strong>Permissões concedidas:</strong>
                     </p>
-                    <ul className="list-disc list-inside space-y-1 ml-2">
+                      <ul className="list-disc list-inside space-y-1 ml-2">
                       <li>✓ Agendar visitas a propriedades</li>
                       <li>✓ Fazer lances em leilões e ofertas</li>
-                      <li>✓ Participar de negociações</li>
+                      <li>✓ Conversar com anunciantes via Chat</li>
                     </ul>
                     <p className="mt-4">
                       <strong>Proteção de dados:</strong> Seus dados são protegidos pela LGPD (Lei Geral de Proteção de Dados) 
@@ -650,7 +650,7 @@ export function OnboardingModal({ isOpen, onComplete, userId }: OnboardingModalP
                       <ul className="text-xs text-[#8B9B6E] space-y-1">
                         <li>• Agendar visitas a propriedades disponíveis</li>
                         <li>• Participar de leilões e fazer lances</li>
-                        <li>• Negociar diretamente com anunciantes</li>
+                        <li>• Conversar com anunciantes através do Chat</li>
                         <li>• Salvar favoritos e receber notificações</li>
                       </ul>
                     </div>

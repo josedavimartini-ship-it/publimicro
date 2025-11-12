@@ -1,0 +1,36 @@
+name: Smoke Test (manual)
+
+on:
+  workflow_dispatch:
+
+jobs:
+  smoke-dispatch:
+    runs-on: ubuntu-latest
+    environment: smoke-test
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+
+      - name: Install pnpm
+        run: npm i -g pnpm@10
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile=false
+
+      - name: Build stripe package
+        run: pnpm -w -s -C . --filter @publimicro/stripe run build
+
+      - name: Print notice
+        run: |
+          echo "This workflow runs the Stripe smoke test under the 'smoke-test' environment.";
+          echo "Ensure the environment has STRIPE_TEST_KEY and SMOKE_STRIPE_PRICE_ID set as environment secrets.";
+
+      - name: Run Stripe smoke test
+        env:
+          STRIPE_TEST_KEY: ${{ secrets.STRIPE_TEST_KEY }}
+          SMOKE_STRIPE_PRICE_ID: ${{ secrets.SMOKE_STRIPE_PRICE_ID }}
+        run: node scripts/ci/smoke-stripe.js
