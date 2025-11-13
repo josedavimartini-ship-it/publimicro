@@ -17,6 +17,7 @@ import { LiveCounter, ActivityFeed, Testimonials, TrustBadges } from "@/componen
 import { PropertyCardSkeleton } from "@/components/Skeleton";
 import { useUnsplashImages } from "@/hooks/useUnsplashImages";
 import { getFirstPhoto } from "@/lib/photoUtils";
+import CarcaraHighlights from '@/components/CarcaraHighlights';
 import { 
   Home, Car, Tractor, Ship, Globe, 
   Plane, Share2, ShoppingBag, Sparkles, Calendar, Info, Handshake
@@ -93,6 +94,14 @@ interface Listing {
 }
 
 export default function HomePage() {
+  // Hide test/demo listings by default in the home highlight areas.
+  // Set NEXT_PUBLIC_HIDE_TEST_LISTINGS='false' to disable this behavior in dev.
+  const hideTestListings = process.env.NEXT_PUBLIC_HIDE_TEST_LISTINGS !== 'false';
+
+  const isTestTitle = (t?: string) => {
+    if (!t) return false;
+    return /\b(test|demo|dummy|lorem|sample)\b/i.test(t);
+  };
   const [sitios, setSitios] = useState<Sitio[]>([]);
   const [listings, setListings] = useState<Listing[]>([]);
   const [loading, setLoading] = useState(true);
@@ -158,59 +167,31 @@ export default function HomePage() {
     });
 
     async function fetchSitios() {
+      // Use static canonical list for immediate rendering
       try {
-        let { data, error } = await supabase
-          .from("sitios")
-          .select("*")
-          .eq("destaque", true)
-          .limit(6);
-
-        if (error) {
-          console.error("Supabase error:", error);
-          setErrorMsg("Erro ao buscar propriedades em destaque.");
-        }
-        if (!data || data.length === 0) {
-          const { data: carcaraData, error: carcaraError } = await supabase
-          .from("properties")
-          .select("*")
-          .eq("status", "active")
-          .order("created_at", { ascending: false })
-          .limit(6);
-
-        if (carcaraError) {
-          console.error("Error fetching Carcará properties:", carcaraError);
-          const fallback = await supabase.from("properties").select("*").limit(6);
-          data = fallback.data;
-        } else {
-          data = carcaraData;
-        }
-        }
-        
-        // Fetch current highest bid for each property
-        if (data) {
-          const sitiosWithBids = await Promise.all(
-            data.map(async (sitio) => {
-              const { data: bids } = await supabase
-                .from('proposals')
-                .select('amount')
-                .eq('property_id', sitio.id)
-                .order('amount', { ascending: false })
-                .limit(1);
-              
-              return {
-                ...sitio,
-                current_bid: bids && bids.length > 0 ? bids[0].amount : null
-              };
-            })
-          );
-          console.log("Sitios loaded:", sitiosWithBids);
-          console.log("First sitio photos:", sitiosWithBids?.[0]?.fotos);
-          setSitios(sitiosWithBids || []);
-        }
+        const staticMapped = (CANONICAL_PROPERS || []).map((p: any) => ({
+          id: p.slug,
+          nome: p.title,
+          localizacao: p.short,
+          fotos: [],
+          destaque: false,
+          zona: undefined,
+          lance_inicial: undefined,
+          current_bid: null,
+          tamanho: undefined,
+        }));
+        setSitios(staticMapped as Sitio[]);
       } catch (err) {
-        console.error("Error fetching sitios:", err);
-        setErrorMsg("Erro inesperado ao buscar propriedades.");
-        setSitios([]);
+        console.warn('Failed to map static canonical sitios on Home:', err);
+      }
+
+      try {
+        const sitiosData = await fetchCanonicalSitios({ limit: 6, hideTestListings });
+        console.log('Sitios loaded (canonical):', sitiosData);
+        setSitios(sitiosData || []);
+      } catch (err) {
+        console.error('Error fetching canonical sitios:', err);
+        setErrorMsg('Erro inesperado ao buscar propriedades.');
       } finally {
         setLoading(false);
       }
@@ -505,55 +486,8 @@ export default function HomePage() {
           </div>
         </section>
 
-        {/* Featured Properties - Sítios Carcará with Enhanced Cards */}
-        {!loading && sitios.length > 0 && (
-          <section className="py-16">
-            <h2 className="text-4xl font-bold text-[#E6C98B] mb-12 text-center">
-              Sítios Disponíveis - Lances Abertos
-            </h2>
-            {errorMsg && (
-              <div className="text-center text-[#E6C98B] font-semibold mb-8">
-                {errorMsg}
-              </div>
-            )}
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {loading ? (
-                // Loading skeletons
-                <>
-                  <PropertyCardSkeleton />
-                  <PropertyCardSkeleton />
-                  <PropertyCardSkeleton />
-                  <PropertyCardSkeleton />
-                  <PropertyCardSkeleton />
-                  <PropertyCardSkeleton />
-                </>
-              ) : (
-                sitios.map((sitio) => (
-                  <PropertyCard
-                    key={sitio.id}
-                    id={sitio.id}
-                    title={sitio.nome}
-                    description={`${sitio.zona || 'Zona Rural'} - ${sitio.localizacao || 'Corumbaíba/GO'}`}
-                    price={sitio.lance_inicial || sitio.preco || 0}
-                    currentBid={sitio.current_bid}
-                    featured={sitio.destaque}
-                    location={{
-                      city: sitio.localizacao || 'Corumbaíba',
-                      state: 'GO',
-                      neighborhood: sitio.zona
-                    }}
-                    area={{
-                      total: sitio.tamanho || sitio.area_total || 0
-                    }}
-                    photos={sitio.fotos || []}
-                    link={`/imoveis/${sitio.id}`}
-                    type="sitio"
-                  />
-                ))
-              )}
-            </div>
-          </section>
-        )}
+        {/* Featured Properties - Sítios Carcará (centralized component) */}
+        <CarcaraHighlights limit={6} hideTestListings={hideTestListings} />
 
         {/* AcheMeCoisas - Latest Listings */}
         {listings.length > 0 && (

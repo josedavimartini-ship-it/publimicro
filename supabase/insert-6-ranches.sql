@@ -4,15 +4,15 @@
 -- Date: November 7, 2025
 -- ═══════════════════════════════════════════════════════════
 
--- Delete existing test data if any
-DELETE FROM properties WHERE id IN ('buriti', 'cedro', 'ipe', 'jatoba', 'pequi', 'sucupira');
+-- Delete existing Carcará rows if any (safe: remove by projeto)
+DELETE FROM properties WHERE projeto = 'Sítios Carcará';
 
 -- ═══════════════════════════════════════════════════════════
--- SÍTIO 1: BURITI
+-- SÍTIO 1: ABARE (Abaré)
 -- Coordinates from KML: -18.2791310466666, -48.8309658761111
 -- ═══════════════════════════════════════════════════════════
 INSERT INTO properties (
-  id, title, description, location, city, state, country,
+  title, description, location, city, state, country,
   price, area_total, bedrooms, bathrooms,
   property_type, transaction_type, status, published_at,
   featured, projeto, user_id,
@@ -20,8 +20,7 @@ INSERT INTO properties (
   fotos,
   amenities, nearby_facilities
 ) VALUES (
-  'buriti',
-  'Sítio Buriti - Refúgio no Lago das Brisas',
+  'Sítio Abaré - Refúgio do Rio',
   'Terra onde o buriti cresce forte e livre, símbolo de resistência e fartura. O Sítio Buriti oferece 2 hectares de puro potencial, com solo fértil e acesso privilegiado ao Lago das Brisas. Perfeito para quem busca construir um lar sustentável em harmonia com a natureza. Localizado em área de preservação com fauna rica (capivaras, garças, tucanos) e flora exuberante. Terreno plano facilita construção. Água cristalina do lago a apenas 800m. Ideal para permacultura, criação de pequenos animais ou simplesmente contemplação.',
   'Lago das Brisas, Buriti Alegre, GO',
   'Buriti Alegre',
@@ -66,11 +65,11 @@ INSERT INTO properties (
 );
 
 -- ═══════════════════════════════════════════════════════════
--- SÍTIO 2: CEDRO
+-- SÍTIO 2: BIGUA (Biguá)
 -- Coordinates from KML: -18.2791936430556, -48.8310930494445
 -- ═══════════════════════════════════════════════════════════
 INSERT INTO properties (
-  id, title, description, location, city, state, country,
+  title, description, location, city, state, country,
   price, area_total, bedrooms, bathrooms,
   property_type, transaction_type, status, published_at,
   featured, projeto, user_id,
@@ -78,8 +77,7 @@ INSERT INTO properties (
   fotos,
   amenities, nearby_facilities
 ) VALUES (
-  'cedro',
-  'Sítio Cedro - Majestade do Cerrado',
+  'Sítio Biguá - Majestade da Água',
   'Como o cedro que resiste ao tempo, este sítio é sinônimo de solidez e valor duradouro. Com 2 hectares de terreno ondulado, o Sítio Cedro oferece vistas panorâmicas do Lago das Brisas e do pôr do sol que tingem o céu de dourado. Vegetação nativa preservada com cedros centenários. Solo rico para cultivo orgânico. Microclima agradável devido à elevação. Privacidade garantida com cercamento natural. Potencial para eco-turismo ou retiro particular. Acesso por estrada de terra batida bem conservada.',
   'Lago das Brisas, Buriti Alegre, GO',
   'Buriti Alegre',
@@ -123,11 +121,11 @@ INSERT INTO properties (
 );
 
 -- ═══════════════════════════════════════════════════════════
--- SÍTIO 3: IPÊ
+-- SÍTIO 3: MERGULHÃO (Mergulhão)
 -- Coordinates from KML: -18.2793276161111, -48.8325552202778
 -- ═══════════════════════════════════════════════════════════
 INSERT INTO properties (
-  id, title, description, location, city, state, country,
+  title, description, location, city, state, country,
   price, area_total, bedrooms, bathrooms,
   property_type, transaction_type, status, published_at,
   featured, projeto, user_id,
@@ -135,8 +133,7 @@ INSERT INTO properties (
   fotos,
   amenities, nearby_facilities
 ) VALUES (
-  'ipe',
-  'Sítio Ipê - Cores da Natureza',
+  'Sítio Mergulhão - Guardião das Águas',
   'Quando o ipê floresce, a paisagem se transforma num espetáculo de amarelo vibrante. O Sítio Ipê celebra a beleza efêmera e intensa da vida no cerrado. 2 hectares de terra fértil com dezenas de ipês-amarelos que florescem entre agosto e setembro. Nascente natural nos fundos da propriedade garante água durante todo o ano. Topografia mista com áreas planas e pequenas elevações. Ideal para agricultura familiar, pomar diversificado ou projeto de permacultura. Cercado por mata ciliar preservada. Avistamento frequente de animais silvestres.',
   'Lago das Brisas, Buriti Alegre, GO',
   'Buriti Alegre',
@@ -177,11 +174,11 @@ INSERT INTO properties (
 );
 
 -- ═══════════════════════════════════════════════════════════
--- SÍTIO 4: JATOBÁ
+-- SÍTIO 4: SERIEMA (Seriema)
 -- Coordinates from KML: -18.2800180394444, -48.8317861494444
 -- ═══════════════════════════════════════════════════════════
 INSERT INTO properties (
-  id, title, description, location, city, state, country,
+  title, description, location, city, state, country,
   price, area_total, bedrooms, bathrooms,
   property_type, transaction_type, status, published_at,
   featured, projeto, user_id,
@@ -189,8 +186,7 @@ INSERT INTO properties (
   fotos,
   amenities, nearby_facilities
 ) VALUES (
-  'jatoba',
-  'Sítio Jatobá - Força da Terra',
+  'Sítio Seriema - A Voz do Cerrado',
   'O jatobá, árvore imponente e generosa, representa a conexão profunda com a terra. Este sítio de 2 hectares abriga jatobás centenários cujos frutos alimentam a fauna local. Solo argiloso excelente para retenção de água. Localização estratégica com acesso facilitado e privacidade. Topografia predominantemente plana com leve inclinação natural para drenagem. Potencial apícola com floradas constantes. Área ideal para construção de residência sustentável com captação de água da chuva. Vista desobstruída do nascer do sol.',
   'Lago das Brisas, Buriti Alegre, GO',
   'Buriti Alegre',
@@ -231,11 +227,11 @@ INSERT INTO properties (
 );
 
 -- ═══════════════════════════════════════════════════════════
--- SÍTIO 5: PEQUI
+-- SÍTIO 5: JURITI (Juriti)
 -- Coordinates from KML: -18.2814622908333, -48.8341412847223
 -- ═══════════════════════════════════════════════════════════
 INSERT INTO properties (
-  id, title, description, location, city, state, country,
+  title, description, location, city, state, country,
   price, area_total, bedrooms, bathrooms,
   property_type, transaction_type, status, published_at,
   featured, projeto, user_id,
@@ -243,8 +239,7 @@ INSERT INTO properties (
   fotos,
   amenities, nearby_facilities
 ) VALUES (
-  'pequi',
-  'Sítio Pequi - Essência do Cerrado',
+  'Sítio Juriti - A Canção do Entardecer',
   'O pequi, fruto dourado do cerrado, carrega em si toda a essência desta terra abençoada. Com 2 hectares repletos de pequizeiros nativos, este sítio é um convite à abundância e ao retiro. Colheita anual de pequi garante renda extra sazonal. Solo profundo ideal para fruticultura diversificada. Proximidade ao lago favorece microclima mais ameno. Acesso por via secundária garante tranquilidade absoluta. Terreno com declive suave facilita projetos de agricultura em curva de nível. Potencial para agroflorestas e sistemas agroflorestais. Biodiversidade notável com mais de 50 espécies de aves catalogadas.',
   'Lago das Brisas, Buriti Alegre, GO',
   'Buriti Alegre',
@@ -286,11 +281,11 @@ INSERT INTO properties (
 );
 
 -- ═══════════════════════════════════════════════════════════
--- SÍTIO 6: SUCUPIRA
+-- SÍTIO 6: SURUCUA (Surucuá)
 -- Coordinates from KML: -18.2810795708333, -48.8319018936111
 -- ═══════════════════════════════════════════════════════════
 INSERT INTO properties (
-  id, title, description, location, city, state, country,
+  title, description, location, city, state, country,
   price, area_total, bedrooms, bathrooms,
   property_type, transaction_type, status, published_at,
   featured, projeto, user_id,
@@ -298,8 +293,7 @@ INSERT INTO properties (
   fotos,
   amenities, nearby_facilities
 ) VALUES (
-  'sucupira',
-  'Sítio Sucupira - Portal da Serenidade',
+  'Sítio Surucuá - A Joia da Floresta',
   'A sucupira, árvore medicinal e sagrada, empresta seu nome a este refúgio de paz. 2 hectares de cerrado preservado com sucupiras de mais de 100 anos. Este é o sítio com melhor posicionamento solar, recebendo luz plena durante todo o dia. Ideal para projetos de energia solar. Acesso direto pela via principal facilita logística. Terreno alto e seco, livre de alagamentos. Vista privilegiada do conjunto dos outros sítios e do vale. Potencial para construção de mirante natural. Solo pedregoso mas com bolsões de terra preta. Silêncio absoluto interrompido apenas pelo canto dos pássaros.',
   'Lago das Brisas, Buriti Alegre, GO',
   'Buriti Alegre',

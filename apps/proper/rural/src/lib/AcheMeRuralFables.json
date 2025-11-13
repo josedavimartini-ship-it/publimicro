@@ -1,0 +1,146 @@
+{
+  "abare": {
+    "pt": {
+      "subtitle": "A companheira do rio",
+      "tagline": "Onde a amizade encontra a brisa do rio.",
+      "fable": "Abaré foi a ave que fez amizade com todas as correntes. Seguia as águas e ajudava os que haviam perdido o caminho a retornarem à fonte. Sua terra é onde floresta e rio se abraçam — um lugar de conexão e paz.",
+      "symbols": "🕊️ Amizade • Espiritualidade • Equilíbrio",
+      "color": "from-[#d6c3a1] to-[#829b7b]",
+      "estimated": "R$3.200.000",
+      "opening": "R$2.120.000",
+      "mood": "Golden light, riverbank, soft greens",
+      "purpose": "Riverside residence or eco-retreat"
+    },
+    "en": {
+      "subtitle": "The River’s Companion",
+      "tagline": "Where friendship meets the river breeze.",
+      "fable": "Abaré was the bird who befriended every current. She followed the waters, helping those who had lost their way back to the source. Her land lies where forest and river embrace — a place of connection and peace.",
+      "symbols": "🕊️ Friendship • Spirituality • Balance",
+      "color": "from-[#d6c3a1] to-[#829b7b]",
+      "estimated": "R$3.200.000",
+      "opening": "R$2.120.000",
+      "mood": "Golden light, riverbank, soft greens",
+      "purpose": "Riverside residence or eco-retreat"
+    }
+  },
+  "bigua": {
+    "pt": {
+      "subtitle": "O mergulhador incansável",
+      "tagline": "Resiliência em movimento — onde a água encontra a vontade.",
+      "fable": "Biguá mergulha, não por esporte, mas por propósito. Sabe que a verdade mora debaixo da superfície. Um sítio para quem vive com resiliência e graça.",
+      "symbols": "🐟 Resiliência • Foco • Propósito",
+      "color": "from-[#829b7b] to-[#486b4e]",
+      "estimated": "R$2.750.000",
+      "opening": "R$1.920.000",
+      "mood": "Green-blue reflections, morning light, wooden pier",
+      "purpose": "Sustainable tourism or aquatic leisure"
+    },
+    "en": {
+      "subtitle": "The Tireless Diver",
+      "tagline": "Resilience in motion — where water meets will.",
+      "fable": "Biguá dives deep, not for sport, but for purpose. He knows that truth lies below the surface. A site for those who live with resilience and grace.",
+      "symbols": "🐟 Resilience • Focus • Purpose",
+      "color": "from-[#829b7b] to-[#486b4e]",
+      "estimated": "R$2.750.000",
+      "opening": "R$1.920.000",
+      "mood": "Green-blue reflections, morning light, wooden pier",
+      "purpose": "Sustainable tourism or aquatic leisure"
+    }
+  },
+  "mergulhao": {
+    "pt": {
+      "subtitle": "O guardião das águas profundas",
+      "tagline": "Profundidade é a coragem de enfrentar o silêncio.",
+      "fable": "Quando o vento mexe, o Mergulhão mergulha. Ele escuta o fundo, onde calma e força nascem. Seu lar é para quem valoriza introspecção e paisagens atemporais.",
+      "symbols": "🌊 Introspecção • Sabedoria • Serenidade",
+      "color": "from-[#5c4631] to-[#486b4e]",
+      "estimated": "R$2.500.000",
+      "opening": "R$1.620.000",
+      "mood": "Deep lake tones, slate stones, silver light",
+      "purpose": "Private retreat, artistic or spiritual projects"
+    },
+    "en": {
+      "subtitle": "The Guardian of Deep Waters",
+      "tagline": "Depth is the courage to face silence.",
+      "fable": "When the wind stirs, the Mergulhão dives. He listens to the deep, where calm and strength are born. His home belongs to those who value introspection and timeless landscapes.",
+      "symbols": "🌊 Introspection • Wisdom • Serenity",
+      "color": "from-[#5c4631] to-[#486b4e]",
+      "estimated": "R$2.500.000",
+      "opening": "R$1.620.000",
+      "mood": "Deep lake tones, slate stones, silver light",
+      "purpose": "Private retreat, artistic or spiritual projects"
+    }
+  },
+  "seriema": {
+    "pt": {
+      "subtitle": "A voz do Cerrado",
+      "tagline": "Onde a coragem caminha com elegância.",
+      "fable": "Seriema ergue-se nos campos abertos; seu canto ecoa e guarda o equilíbrio entre o selvagem e o sereno. Um sítio para liderar com força tranquila.",
+      "symbols": "🪶 Coragem • Liderança • Renascimento",
+      "color": "from-[#d6c3a1] to-[#b7a86e]",
+      "estimated": "R$2.000.000",
+      "opening": "R$1.312.000",
+      "mood": "Warm ochres, dry grass, terracotta",
+      "purpose": "Agroforestry, organic cattle, or sustainable homestead"
+    },
+    "en": {
+      "subtitle": "The Voice of the Cerrado",
+      "tagline": "Where courage walks with elegance.",
+      "fable": "Seriema stands tall in the open fields. Her song echoes far, guarding the balance between wild and serene. A site for those who lead with quiet strength.",
+      "symbols": "🪶 Courage • Leadership • Renewal",
+      "color": "from-[#d6c3a1] to-[#b7a86e]",
+      "estimated": "R$2.000.000",
+      "opening": "R$1.312.000",
+      "mood": "Warm ochres, dry grass, terracotta",
+      "purpose": "Agroforestry, organic cattle, or sustainable homestead"
+    }
+  },
+  "juriti": {
+    "pt": {
+      "subtitle": "A canção do entardecer",
+      "tagline": "Paz, tradição e a música da simplicidade.",
+      "fable": "Ao entardecer, a Juriti canta. Sua melodia lembra os primeiros moradores — a harmonia com a terra. Um lugar que carrega calor, memória e serenidade.",
+      "symbols": "🕊️ Paz • Tradição • Memória",
+      "color": "from-[#b7a86e] to-[#d6c3a1]",
+      "estimated": "R$1.700.000",
+      "opening": "R$1.012.000",
+      "mood": "Amber sunset, rustic wood, soft pastels",
+      "purpose": "Family refuge or organic farming"
+    },
+    "en": {
+      "subtitle": "The Song of the Countryside Soul",
+      "tagline": "Peace, tradition, and the music of simplicity.",
+      "fable": "At dusk, the Juriti sings. Her melody recalls the first settlers and their harmony with the earth. A place that carries warmth, memory, and serenity.",
+      "symbols": "🕊️ Peace • Tradition • Memory",
+      "color": "from-[#b7a86e] to-[#d6c3a1]",
+      "estimated": "R$1.700.000",
+      "opening": "R$1.012.000",
+      "mood": "Amber sunset, rustic wood, soft pastels",
+      "purpose": "Family refuge or organic farming"
+    }
+  },
+  "surucua": {
+    "pt": {
+      "subtitle": "A joia da floresta",
+      "tagline": "Cor, calma e o ritmo sagrado da natureza.",
+      "fable": "Surucuá traz as cores dos sonhos. Vive onde silêncio e sombra se encontram. Um santuário para quem vê beleza no equilíbrio e paz na privacidade.",
+      "symbols": "🌺 Beleza • Calma • Equilíbrio",
+      "color": "from-[#486b4e] to-[#2b2b2b]",
+      "estimated": "R$1.400.000",
+      "opening": "R$912.000",
+      "mood": "Forest greens, dappled light, deep wood",
+      "purpose": "Reforestation, conservation, or luxury eco-home"
+    },
+    "en": {
+      "subtitle": "The Hidden Jewel of the Forest",
+      "tagline": "Colour, calm, and the sacred rhythm of nature.",
+      "fable": "Surucuá wears the colours of dreams. He lives where silence and shadow meet. A sanctuary for those who see beauty in balance and peace in privacy.",
+      "symbols": "🌺 Inner beauty • Simplicity • Natural elegance",
+      "color": "from-[#486b4e] to-[#2b2b2b]",
+      "estimated": "R$1.400.000",
+      "opening": "R$912.000",
+      "mood": "Forest greens, dappled light, deep wood",
+      "purpose": "Reforestation, conservation, or luxury eco-home"
+    }
+  }
+}

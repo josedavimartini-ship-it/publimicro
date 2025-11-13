@@ -190,25 +190,31 @@ export function TopNavWithAuth({
             </form>
 
             {/* ACTIONS - Bronze/Copper Theme */}
-            <nav className="flex items-center gap-4">
+            <nav className="flex items-center gap-6">
               {/* Heart icon with 'gostei' */}
-              <Link href={favHref} className="flex flex-col items-center text-[#E6C98B] hover:text-[#D4AF37] transition-all group transform hover:scale-110">
-                <Heart className="w-7 h-7 mb-1 drop-shadow-lg" strokeWidth={2.5} />
-                <span className="text-xs font-bold">gostei</span>
+              <Link href={favHref} className="relative flex flex-col items-center text-[#E6C98B] hover:text-[#D4AF37] transition-all group">
+                <div className="p-2 rounded-lg bg-gradient-to-br from-black/30 to-transparent shadow-lg transform-gpu transition-transform hover:-translate-y-1 hover:scale-105">
+                  <Heart className="w-7 h-7 mb-1 drop-shadow-[0_6px_18px_rgba(0,0,0,0.6)]" strokeWidth={2.5} />
+                </div>
+                <span className="text-xs font-bold mt-1">gostei</span>
               </Link>
 
               {/* Animated Handshake for Chat - renamed from 'Negociar' */}
-              <Link href={chatHref} className="flex flex-col items-center text-[#A8C97F] hover:text-[#8B9B6E] transition-all group transform hover:scale-110">
-                <AnimatedHandshake size={28} className="mb-1 drop-shadow-lg" />
-                <span className="text-xs font-bold">Chat</span>
+              <Link href={chatHref} className="relative flex flex-col items-center text-[#A8C97F] hover:text-[#8B9B6E] transition-all group">
+                <div className="p-2 rounded-lg bg-gradient-to-br from-black/25 to-transparent shadow-2xl transform-gpu transition-transform hover:-translate-y-1 hover:scale-105">
+                  <AnimatedHandshake size={28} className="mb-1 drop-shadow-[0_8px_24px_rgba(0,0,0,0.6)]" />
+                </div>
+                <span className="text-xs font-bold mt-1">Chat</span>
               </Link>
 
               {/* Prominent Postar Button - Bronze/Gold Gradient */}
               <Link
                 href="/postar"
-                className="flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-[#D4AF37] via-[#CD7F32] to-[#B87333] hover:from-[#B87333] hover:via-[#CD7F32] hover:to-[#D4AF37] text-[#0a0a0a] rounded-xl transition-all hover:scale-110 shadow-2xl font-bold border-2 border-[#D4AF37]/30"
+                className="relative flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-[#D4AF37] via-[#CD7F32] to-[#B87333] hover:from-[#B87333] hover:via-[#CD7F32] hover:to-[#D4AF37] text-[#0a0a0a] rounded-xl transition-all transform-gpu hover:-translate-y-1 hover:scale-105 shadow-[0_10px_30px_rgba(212,165,116,0.12)] font-bold border-2 border-[#D4AF37]/30"
               >
-                <PlusCircle className="w-6 h-6" strokeWidth={3} />
+                <div className="p-1 rounded-md bg-black/10 backdrop-blur-sm">
+                  <PlusCircle className="w-6 h-6" strokeWidth={3} />
+                </div>
                 <span className="hidden lg:inline text-base">Postar</span>
                 <span className="lg:hidden text-base">Postar</span>
               </Link>
@@ -223,7 +229,9 @@ export function TopNavWithAuth({
                     className="flex flex-col items-center px-3 py-1 text-[#E6C98B] hover:text-[#D4AF37] transition-all group"
                     aria-label="Conta"
                   >
-                    <User className="w-6 h-6 mb-1" />
+                    <div className="p-1 rounded-md bg-gradient-to-br from-black/20 to-transparent shadow-md transform-gpu transition-transform hover:-translate-y-0.5">
+                      <User className="w-6 h-6 mb-1" />
+                    </div>
                     <span className="text-xs font-bold">Conta</span>
                   </button>
                   <div className="relative" ref={userMenuRef}>

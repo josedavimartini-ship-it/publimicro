@@ -66,13 +66,55 @@ export default function AdminPage() {
   const [activeTab, setActiveTab] = useState<Tab>("dashboard");
   const [stats, setStats] = useState<AdminStats | null>(null);
   const [properties, setProperties] = useState<Property[]>([]);
+  const [selectedPropertyId, setSelectedPropertyId] = useState<string | null>(null);
+  const [selectedFilesInput, setSelectedFilesInput] = useState<FileList | null>(null);
+  const [selectedKmlInput, setSelectedKmlInput] = useState<File | null>(null);
+  const [uploadingMedia, setUploadingMedia] = useState(false);
+  const [adminEmails, setAdminEmails] = useState<string[]>([]);
+  const [editingAdminEmails, setEditingAdminEmails] = useState(false);
+  const [adminEmailsInput, setAdminEmailsInput] = useState('');
   const [bids, setBids] = useState<Bid[]>([]);
   const [contacts, setContacts] = useState<Contact[]>([]);
   const [isAdmin, setIsAdmin] = useState(false);
+  const [biddingOpen, setBiddingOpen] = useState<boolean | null>(null);
+  const [biddingLoading, setBiddingLoading] = useState(false);
 
   useEffect(() => {
     checkAdminAccess();
   }, []);
+
+  useEffect(() => {
+    if (isAdmin) fetchBiddingStatus();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isAdmin]);
+
+  const fetchBiddingStatus = async () => {
+    try {
+      const res = await fetch('/api/admin/bidding/proxy');
+      const j = await res.json();
+      if (res.ok) setBiddingOpen(Boolean(j.bidding_open));
+    } catch (err) {
+      console.error('Error fetching bidding status', err);
+    }
+  };
+
+  const toggleBidding = async (val: boolean) => {
+    setBiddingLoading(true);
+    try {
+      const res = await fetch('/api/admin/bidding/proxy', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ bidding_open: val }),
+      });
+      const j = await res.json();
+      if (res.ok) setBiddingOpen(Boolean(j.bidding_open));
+      else throw new Error(j.error || 'Failed');
+    } catch (err: any) {
+      alert('Erro ao atualizar status de bidding: ' + (err.message || String(err)));
+    } finally {
+      setBiddingLoading(false);
+    }
+  };
 
   const checkAdminAccess = async () => {
     try {
@@ -156,6 +198,95 @@ export default function AdminPage() {
       .limit(20);
     
     setProperties(data || []);
+  };
+
+  const handleMediaFilesChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setSelectedFilesInput(e.target.files);
+  };
+
+  const handleKmlFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const f = e.target.files && e.target.files[0];
+    setSelectedKmlInput(f || null);
+  };
+
+  const readFileAsBase64 = (file: File) => new Promise<string>((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = () => {
+      const result = reader.result as string;
+      const base64 = result.split(',')[1] || '';
+      resolve(base64);
+    };
+    reader.onerror = reject;
+    reader.readAsDataURL(file);
+  });
+
+  const uploadPropertyMedia = async () => {
+    if (!selectedPropertyId) return alert('Selecione uma propriedade');
+    if (!selectedFilesInput && !selectedKmlInput) return alert('Selecione fotos ou um arquivo KML');
+    setUploadingMedia(true);
+    try {
+      const filesArr: any[] = [];
+      if (selectedFilesInput) {
+        for (let i = 0; i < selectedFilesInput.length; i++) {
+          const f = selectedFilesInput[i];
+          const base64 = await readFileAsBase64(f);
+          filesArr.push({ name: f.name, base64, mime: f.type });
+        }
+      }
+
+      let kmlObj = null;
+      if (selectedKmlInput) {
+        const base64 = await readFileAsBase64(selectedKmlInput);
+        kmlObj = { name: selectedKmlInput.name, base64, mime: selectedKmlInput.type };
+      }
+
+      const res = await fetch('/api/admin/property-media/proxy', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ property_id: selectedPropertyId, files: filesArr, kmlFile: kmlObj }),
+      });
+      const j = await res.json();
+      if (!res.ok) throw new Error(j.error || 'Upload failed');
+      alert('Upload completo');
+      // reload properties
+      await loadProperties();
+      setSelectedFilesInput(null);
+      setSelectedKmlInput(null);
+      // clear file inputs if present
+      const fileInputs = document.querySelectorAll('input[type=file]') as NodeListOf<HTMLInputElement>;
+      fileInputs.forEach(fi => fi.value = '');
+    } catch (err: any) {
+      alert('Erro no upload: ' + (err.message || String(err)));
+    } finally {
+      setUploadingMedia(false);
+    }
+  };
+
+  const fetchAdminEmails = async () => {
+    try {
+      const res = await fetch('/api/admin/settings/proxy');
+      const j = await res.json();
+      if (res.ok) setAdminEmails(Array.isArray(j.admin_emails) ? j.admin_emails : []);
+    } catch (err) {
+      console.error('Error fetching admin emails', err);
+    }
+  };
+
+  const saveAdminEmails = async () => {
+    try {
+      const arr = adminEmailsInput.split(',').map(s => s.trim()).filter(Boolean);
+      const res = await fetch('/api/admin/settings/proxy', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ admin_emails: arr }) });
+      const j = await res.json();
+      if (res.ok) {
+        setAdminEmails(arr);
+        setEditingAdminEmails(false);
+        alert('Admin emails updated');
+      } else {
+        throw new Error(j.error || 'Failed');
+      }
+    } catch (err: any) {
+      alert('Erro ao salvar admin emails: ' + (err.message || String(err)));
+    }
   };
 
   const loadBids = async () => {
@@ -353,6 +484,27 @@ export default function AdminPage() {
             </button>
           </nav>
 
+          {/* Quick Bidding toggle */}
+          <div className="mt-4">
+            <div className="px-3 py-3 bg-[#121212] rounded-lg border border-[#2a2a1a]">
+              <div className="flex items-center justify-between">
+                <div>
+                  <p className="text-sm text-[#8B9B6E]">Bidding Season</p>
+                  <p className="text-sm font-semibold text-[#E6C98B]">{biddingOpen === null ? 'Loading...' : biddingOpen ? 'Open' : 'Closed'}</p>
+                </div>
+                <div>
+                  <button
+                    disabled={biddingLoading || biddingOpen === null}
+                    onClick={() => toggleBidding(!Boolean(biddingOpen))}
+                    className={`px-4 py-2 rounded-full font-semibold transition-all ${biddingOpen ? 'bg-green-500/80 text-black' : 'bg-gray-700 text-white'} ${biddingLoading ? 'opacity-60 cursor-wait' : 'hover:scale-105'}`}
+                  >
+                    {biddingLoading ? 'Updating...' : biddingOpen ? 'Close' : 'Open'}
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+
           <button
             onClick={handleSignOut}
             className="w-full flex items-center gap-3 px-4 py-3 rounded-lg text-red-400 hover:bg-red-900/20 transition-all mt-4"
@@ -472,6 +624,64 @@ export default function AdminPage() {
                   Nova Propriedade
                 </Link>
               </div>
+
+              {/* Media upload small form */}
+              <div className="mt-6 mb-6 p-4 bg-[#121212] border border-[#2a2a1a] rounded-lg">
+                <h3 className="text-lg font-semibold text-[#E6C98B] mb-2">Upload de Fotos / KML</h3>
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-4 items-end">
+                  <div>
+                    <label className="text-sm text-[#8B9B6E]">Propriedade</label>
+                    <select value={selectedPropertyId || ''} onChange={(e) => setSelectedPropertyId(e.target.value)} className="w-full mt-1 p-2 bg-[#0a0a0a] border border-[#2a2a1a] rounded">
+                      <option value="">-- Selecionar --</option>
+                      {properties.map(p => (
+                        <option key={p.id} value={p.id}>{p.title}</option>
+                      ))}
+                    </select>
+                  </div>
+
+                  <div>
+                    <label className="text-sm text-[#8B9B6E]">Fotos (múltiplas)</label>
+                    <input type="file" accept="image/*" multiple onChange={handleMediaFilesChange} className="w-full mt-1" />
+                  </div>
+
+                  <div>
+                    <label className="text-sm text-[#8B9B6E]">Arquivo KML (opcional)</label>
+                    <input type="file" accept=".kml,application/vnd.google-earth.kml+xml" onChange={handleKmlFileChange} className="w-full mt-1" />
+                  </div>
+                </div>
+
+                <div className="mt-4">
+                  <button onClick={uploadPropertyMedia} disabled={uploadingMedia} className="px-4 py-2 bg-gradient-to-r from-[#A8C97F] to-[#0D7377] rounded font-semibold">
+                    {uploadingMedia ? 'Enviando...' : 'Enviar'}
+                  </button>
+                </div>
+              </div>
+
+                {/* Admin Emails editor */}
+                <div className="mt-6 p-4 bg-[#121212] border border-[#2a2a1a] rounded-lg">
+                  <h3 className="text-lg font-semibold text-[#E6C98B] mb-2">Admin Allowlist</h3>
+                  {!editingAdminEmails && (
+                    <div>
+                      <p className="text-sm text-[#8B9B6E]">Emails allowed to use admin UI:</p>
+                      <ul className="mt-2 text-[#E6C98B] list-disc pl-6">
+                        {adminEmails.map(e => <li key={e}>{e}</li>)}
+                      </ul>
+                      <div className="mt-2">
+                        <button onClick={() => { setEditingAdminEmails(true); setAdminEmailsInput(adminEmails.join(', ')); fetchAdminEmails(); }} className="px-3 py-1 bg-gray-700 rounded">Edit</button>
+                      </div>
+                    </div>
+                  )}
+
+                  {editingAdminEmails && (
+                    <div>
+                      <textarea value={adminEmailsInput} onChange={(e) => setAdminEmailsInput(e.target.value)} className="w-full bg-[#0a0a0a] p-2 rounded h-24" />
+                      <div className="mt-2">
+                        <button onClick={saveAdminEmails} className="px-3 py-1 bg-green-600 rounded mr-2">Save</button>
+                        <button onClick={() => setEditingAdminEmails(false)} className="px-3 py-1 bg-gray-700 rounded">Cancel</button>
+                      </div>
+                    </div>
+                  )}
+                </div>
 
               <div className="bg-[#1a1a1a] border-2 border-[#2a2a1a] rounded-2xl overflow-hidden">
                 <div className="overflow-x-auto">
