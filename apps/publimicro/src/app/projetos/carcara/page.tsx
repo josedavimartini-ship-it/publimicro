@@ -16,6 +16,13 @@ import SwipeGallery from '@/components/SwipeGallery';
 import StickyMobileAction, { ActionButton } from '@/components/StickyMobileAction';
 import { Carcara3D } from '@publimicro/ui';
 import { getFirstPhoto } from '@/lib/photoUtils';
+import { fetchCanonicalSitios, mapIdToFableKey, mapIdToDisplayName, mapCanonicalPropersToSitios } from '@/lib/carcaraHelpers';
+
+// Static canonical fallback (fast, deterministic UI). This imports the
+// canonical six Sítios Carcará created under `apps/proper/rural`.
+// We use it as an immediate client-side fallback and then attempt a
+// live Supabase refresh via `fetchCanonicalSitios()`.
+import CANONICAL_PROPERS from '../../../../../../apps/proper/rural/src/lib/AcheMeRuralPropers.json';
 
 // Note: Metadata must be exported from a Server Component or page.tsx file in the same directory
 // For client components, SEO is handled via layout.tsx or a parallel route
@@ -55,229 +62,7 @@ interface Sitio {
   current_bid?: number; // Current highest proposal value
 }
 
-// Internationalized fables, taglines, and property data for each Sítio
-const PROPERTY_FABLES: Record<string, Record<'pt'|'en'|'es', {
-  subtitle: string;
-  tagline: string;
-  fable: string;
-  symbols: string;
-  color: string;
-  estimated: string;
-  opening: string;
-  mood: string;
-  purpose: string;
-}>> = {
-  abare: {
-    pt: {
-      subtitle: 'A companheira do rio',
-      tagline: 'Onde a amizade encontra a brisa do rio.',
-      fable: 'Conta-se que nas veredas antigas, uma ave de penas cor de alvorada acompanhava os viajantes pelas margens do rio Corumbá. Diziam que seu canto trazia boas novas e proteção para quem respeitasse a terra e as águas. Chamavam-na Abaré — a "amiga", em tupi. E assim, o Sítio Abaré se tornou refúgio para quem busca harmonia com o fluxo natural da vida: onde o rio fala, e a terra responde.',
-      symbols: '🕊️ Amizade • Espiritualidade • Equilíbrio com a água',
-      color: 'from-[#5F9EA0] to-[#A8C97F]',
-      estimated: '£270.000',
-      opening: '£185.000',
-      mood: 'Reflexos d’água, ouro do entardecer, verdes suaves.',
-      purpose: 'Viver à beira do rio, meditação, eco-retreat.'
-    },
-    en: {
-      subtitle: 'The River’s Companion',
-      tagline: 'Where friendship meets the river breeze.',
-      fable: 'Once upon a time, Abaré was the bird who befriended every current. She followed the winding waters, helping those who lost their way back to the source. Her home lies where the forest bends to the river — a place of communion and inner peace.',
-      symbols: '🕊️ Friendship • Spirituality • Water balance',
-      color: 'from-[#5F9EA0] to-[#A8C97F]',
-      estimated: '£270,000',
-      opening: '£185,000',
-      mood: 'Water reflections, late afternoon gold, soft greens.',
-      purpose: 'Riverside living, meditation, eco-retreat.'
-    },
-    es: {
-      subtitle: 'La compañera del río',
-      tagline: 'Donde la amistad encuentra la brisa del río.',
-      fable: 'Se cuenta que en los antiguos senderos, un ave de plumas color alba acompañaba a los viajeros por las orillas del río Corumbá. Decían que su canto traía buenas nuevas y protección a quienes respetaban la tierra y las aguas. La llamaban Abaré — la "amiga", en tupi. Así, el Sítio Abaré se volvió refugio para quienes buscan armonía con el flujo natural de la vida: donde el río habla y la tierra responde.',
-      symbols: '🕊️ Amistad • Espiritualidad • Equilibrio con el agua',
-      color: 'from-[#5F9EA0] to-[#A8C97F]',
-      estimated: '£270,000',
-      opening: '£185,000',
-      mood: 'Reflejos de agua, oro del atardecer, verdes suaves.',
-      purpose: 'Vida junto al río, meditación, eco-retreat.'
-    }
-  },
-  bigua: {
-    pt: {
-      subtitle: 'O mergulhador incansável',
-      tagline: 'Resiliência em movimento — onde a água encontra a vontade.',
-      fable: 'Certa vez, um pescador observou um Biguá que mergulhava e emergia repetidas vezes, sem desistir. Intrigado, perguntou-lhe o segredo. O Biguá respondeu: "A persistência é o que faz da água minha casa." O pescador entendeu — e nunca mais abandonou seus sonhos. Assim é o Sítio Biguá: para quem mergulha de corpo e alma na vida, encontrando beleza na constância e na profundidade.',
-      symbols: '🐟 Resiliência • Foco • Trabalho com propósito',
-      color: 'from-[#4682B4] to-[#0D7377]',
-      estimated: '£300.000',
-      opening: '£210.000',
-      mood: 'Azul-esverdeado do lago ao amanhecer, reflexos, ondulações sutis.',
-      purpose: 'Ecoturismo, recreação aquática sustentável.'
-    },
-    en: {
-      subtitle: 'The Tireless Diver',
-      tagline: 'Resilience in motion — where water meets will.',
-      fable: 'Biguá dives deep, not for sport but for wisdom. He knows that clarity lies below the surface — in the still silence of purpose. This site belongs to those who embrace the challenge of living deeply and truly.',
-      symbols: '🐟 Resilience • Focus • Purposeful work',
-      color: 'from-[#4682B4] to-[#0D7377]',
-      estimated: '£300,000',
-      opening: '£210,000',
-      mood: 'Blue-green hues of the lake at dawn, reflections, subtle ripples.',
-      purpose: 'Eco-tourism, sustainable aquatic recreation.'
-    },
-    es: {
-      subtitle: 'El buceador incansable',
-      tagline: 'Resiliencia en movimiento — donde el agua encuentra la voluntad.',
-      fable: 'Biguá se sumerge profundo, no por deporte sino por sabiduría. Sabe que la claridad está bajo la superficie — en el silencio quieto del propósito. Este sitio es para quienes abrazan el desafío de vivir profunda y verdaderamente.',
-      symbols: '🐟 Resiliencia • Enfoque • Trabajo con propósito',
-      color: 'from-[#4682B4] to-[#0D7377]',
-      estimated: '£300,000',
-      opening: '£210,000',
-      mood: 'Tonos azul-verde del lago al amanecer, reflejos, ondas sutiles.',
-      purpose: 'Ecoturismo, recreación acuática sostenible.'
-    }
-  },
-  mergulhao: {
-    pt: {
-      subtitle: 'O guardião das águas profundas',
-      tagline: 'O espírito da contemplação e coragem.',
-      fable: 'Dizem que o Mergulhão, ave arisca e silenciosa, conhece todos os segredos do fundo da represa. Ele mergulha em silêncio e retorna apenas quando as águas estão calmas. Quem o vê entende: sabedoria é saber o momento certo de agir e o momento certo de esperar. O Sítio Mergulhão é assim — um abrigo para quem busca profundidade e contemplação.',
-      symbols: '🌊 Introspecção • Sabedoria • Serenidade',
-      color: 'from-[#2F4F4F] to-[#5F7161]',
-      estimated: '£420.000',
-      opening: '£275.000',
-      mood: 'Azul profundo, reflexos prateados, texturas de pedra.',
-      purpose: 'Retiro espiritual, residência criativa, turismo ecológico.'
-    },
-    en: {
-      subtitle: 'The Guardian of Deep Waters',
-      tagline: 'The spirit of contemplation and courage.',
-      fable: 'When danger nears, the Mergulhão dives — not to flee, but to listen. He disappears beneath the calm, and when he resurfaces, he brings new strength. This site is a refuge for those who seek depth, solitude, and timeless horizons.',
-      symbols: '🌊 Introspection • Wisdom • Serenity',
-      color: 'from-[#2F4F4F] to-[#5F7161]',
-      estimated: '£420,000',
-      opening: '£275,000',
-      mood: 'Deep blue tones, silver reflections, stone textures.',
-      purpose: 'Spiritual retreats, creative residencies, eco-conscious tourism.'
-    },
-    es: {
-      subtitle: 'El guardián de las aguas profundas',
-      tagline: 'El espíritu de la contemplación y el coraje.',
-      fable: 'Dicen que el Mergulhão, ave arisca y silenciosa, conoce todos los secretos del fondo de la represa. Se sumerge en silencio y solo regresa cuando las aguas están calmas. Quien lo ve entiende: la sabiduría es saber cuándo actuar y cuándo esperar. El Sítio Mergulhão es así — un refugio para quienes buscan profundidad y contemplación.',
-      symbols: '🌊 Introspección • Sabiduría • Serenidad',
-      color: 'from-[#2F4F4F] to-[#5F7161]',
-      estimated: '£420,000',
-      opening: '£275,000',
-      mood: 'Azul profundo, reflejos plateados, texturas de piedra.',
-      purpose: 'Retiro espiritual, residencia creativa, turismo ecológico.'
-    }
-  },
-  seriema: {
-    pt: {
-      subtitle: 'A voz do Cerrado',
-      tagline: 'Onde a coragem caminha com elegância.',
-      fable: 'Certa manhã, quando o sol tocava as serras, a Seriema soltou seu grito. Foi um chamado à vida — e todos os animais despertaram. Desde então, dizem que quem escuta o grito da Seriema sente renascer o desejo de recomeçar. O Sítio Seriema é a morada dos que buscam reerguer-se, falar alto seus sonhos e deixar ecoar a liberdade.',
-      symbols: '🪶 Coragem • Liderança • Renascimento',
-      color: 'from-[#B7791F] to-[#D4A574]',
-      estimated: '£450.000',
-      opening: '£300.000',
-      mood: 'Campos dourados, gramíneas secas, terracota.',
-      purpose: 'Agrofloresta, silvipastoril, residência rural.'
-    },
-    en: {
-      subtitle: 'The Voice of the Cerrado',
-      tagline: 'Where courage walks with elegance.',
-      fable: 'The Seriema stands tall upon the open field — her song echoes across the horizon. She is both strength and grace, reminding the land to be proud of its roots. This site invites visionaries — those who lead by quiet example.',
-      symbols: '🪶 Courage • Leadership • Renewal',
-      color: 'from-[#B7791F] to-[#D4A574]',
-      estimated: '£450,000',
-      opening: '£300,000',
-      mood: 'Golden fields, dry grasses, terracotta.',
-      purpose: 'Agroforestry, silvopastoral, rural residence.'
-    },
-    es: {
-      subtitle: 'La voz del Cerrado',
-      tagline: 'Donde el coraje camina con elegancia.',
-      fable: 'Una mañana, cuando el sol tocaba las sierras, la Seriema lanzó su grito. Fue un llamado a la vida — y todos los animales despertaron. Desde entonces, dicen que quien escucha el grito de la Seriema siente renacer el deseo de recomenzar. El Sítio Seriema es el hogar de quienes buscan levantarse, decir en voz alta sus sueños y dejar que la libertad resuene.',
-      symbols: '🪶 Coraje • Liderazgo • Renacimiento',
-      color: 'from-[#B7791F] to-[#D4A574]',
-      estimated: '£450,000',
-      opening: '£300,000',
-      mood: 'Campos dorados, pastos secos, terracota.',
-      purpose: 'Agroforestería, silvopastoril, residencia rural.'
-    }
-  },
-  juriti: {
-    pt: {
-      subtitle: 'A canção da alma rural',
-      tagline: 'Paz, tradição e a música da simplicidade.',
-      fable: 'No entardecer, quando o céu se cobre de ouro, ouve-se o canto suave da Juriti. Reza a lenda que é a voz da saudade, lembrando aos homens o valor das raízes e da simplicidade. O Sítio Juriti é o lar da paz: um canto de aconchego, onde o tempo desacelera e o coração volta a escutar.',
-      symbols: '🕊️ Paz • Tradição • Amor pelo interior',
-      color: 'from-[#E6C98B] to-[#DDA15E]',
-      estimated: '£380.000',
-      opening: '£230.000',
-      mood: 'Tons de entardecer, madeira quente, luz âmbar.',
-      purpose: 'Refúgio familiar, horta orgânica, produção artesanal.'
-    },
-    en: {
-      subtitle: 'The Song of the Countryside Soul',
-      tagline: 'Peace, tradition, and the music of simplicity.',
-      fable: 'At dusk, the Juriti sings. Her song is the memory of the first settlers — of hands that sowed with faith and hearts that listened. This site holds the warmth of home and the patience of time.',
-      symbols: '🕊️ Peace • Tradition • Love for the countryside',
-      color: 'from-[#E6C98B] to-[#DDA15E]',
-      estimated: '£380,000',
-      opening: '£230,000',
-      mood: 'Dusk tones, warm wood, amber light.',
-      purpose: 'Family refuge, organic gardens, artisanal production.'
-    },
-    es: {
-      subtitle: 'La canción del alma rural',
-      tagline: 'Paz, tradición y la música de la sencillez.',
-      fable: 'Al atardecer, la Juriti canta. Su canción es la memoria de los primeros colonos — de manos que sembraron con fe y corazones que escucharon. Este sitio guarda el calor del hogar y la paciencia del tiempo.',
-      symbols: '🕊️ Paz • Tradición • Amor por el interior',
-      color: 'from-[#E6C98B] to-[#DDA15E]',
-      estimated: '£380,000',
-      opening: '£230,000',
-      mood: 'Tonos de atardecer, madera cálida, luz ámbar.',
-      purpose: 'Refugio familiar, huerta orgánica, producción artesanal.'
-    }
-  },
-  surucua: {
-    pt: {
-      subtitle: 'A joia discreta da floresta',
-      tagline: 'Cor, calma e o ritmo sagrado da natureza.',
-      fable: 'No meio da mata, vive o Surucuá — ave de cores vivas, mas que raramente se mostra. Dizem que quem o encontra é abençoado com o dom de enxergar a beleza nas pequenas coisas. O Sítio Surucuá é um convite à vida simples, à contemplação e ao encanto que existe no silêncio da natureza.',
-      symbols: '🌺 Beleza interior • Simplicidade • Elegância natural',
-      color: 'from-[#9B59B6] to-[#A8C97F]',
-      estimated: '£325.000',
-      opening: '£200.000',
-      mood: 'Esmeralda, madeira escura, luz filtrada.',
-      purpose: 'Rewilding, conservação, eco-luxo.'
-    },
-    en: {
-      subtitle: 'The Hidden Jewel of the Forest',
-      tagline: 'Colour, calm, and the sacred rhythm of nature.',
-      fable: 'Surucuá wears the colours of dreams — unseen until the forest chooses to reveal him. He lives where shade and silence meet. His land is for those who value beauty in discretion and peace in abundance.',
-      symbols: '🌺 Inner beauty • Simplicity • Natural elegance',
-      color: 'from-[#9B59B6] to-[#A8C97F]',
-      estimated: '£325,000',
-      opening: '£200,000',
-      mood: 'Emerald, dark wood, filtered sunlight.',
-      purpose: 'Rewilding, conservation, luxury eco-homes.'
-    },
-    es: {
-      subtitle: 'La joya discreta del bosque',
-      tagline: 'Color, calma y el ritmo sagrado de la naturaleza.',
-      fable: 'Surucuá viste los colores de los sueños — invisible hasta que el bosque decide revelarlo. Vive donde la sombra y el silencio se encuentran. Su tierra es para quienes valoran la belleza en la discreción y la paz en la abundancia.',
-      symbols: '🌺 Belleza interior • Sencillez • Elegancia natural',
-      color: 'from-[#9B59B6] to-[#A8C97F]',
-      estimated: '£325,000',
-      opening: '£200,000',
-      mood: 'Esmeralda, madera oscura, luz filtrada.',
-      purpose: 'Rewilding, conservación, eco-lujo.'
-    }
-  }
-};
+import FABLES from '../../../../../../apps/proper/rural/src/lib/AcheMeRuralFables.json';
 
 function CarcaraProjectPageContent() {
   const [sitios, setSitios] = useState<Sitio[]>([]);
@@ -289,68 +74,25 @@ function CarcaraProjectPageContent() {
 
   useEffect(() => {
     async function fetchSitios() {
-      // Fetch all properties from Sítios Carcará project
-      const { data, error } = await supabase
-        .from('properties')
-        .select('*')
-        .eq('projeto', 'Sítios Carcará') // Filter by project name
-        .order('price', { ascending: true });
-
-      // If no properties found with project filter, try the specific IDs as fallback
-      if (!data || data.length === 0) {
-        const { data: fallbackData, error: fallbackError } = await supabase
-          .from('properties')
-          .select('*')
-          .in('id', ['buriti', 'cedro', 'ipe', 'jatoba', 'pequi', 'sucupira'])
-          .order('price', { ascending: true });
-        
-        if (fallbackData && fallbackData.length > 0) {
-          console.log('Fallback properties loaded:', fallbackData);
-          const sitiosWithBids = await Promise.all(
-            fallbackData.map(async (sitio) => {
-              const { data: bids } = await supabase
-                .from('proposals')
-                .select('amount')
-                .eq('property_id', sitio.id)
-                .order('amount', { ascending: false })
-                .limit(1);
-              
-              // Debug photo data
-              console.log(`Sítio ${sitio.id} photos:`, sitio.fotos);
-              
-              return {
-                ...sitio,
-                current_bid: bids && bids.length > 0 ? bids[0].amount : null
-              };
-            })
-          );
-          setSitios(sitiosWithBids);
-        }
-      } else if (data) {
-        console.log('Project properties loaded:', data);
-        // Fetch current highest bid for each property
-        const sitiosWithBids = await Promise.all(
-          data.map(async (sitio) => {
-            const { data: bids } = await supabase
-              .from('proposals')
-              .select('amount')
-              .eq('property_id', sitio.id)
-              .order('amount', { ascending: false })
-              .limit(1);
-            
-            // Debug photo data
-            console.log(`Sítio ${sitio.id} photos:`, sitio.fotos);
-            
-            return {
-              ...sitio,
-              current_bid: bids && bids.length > 0 ? bids[0].amount : null
-            };
-          })
-        );
-        setSitios(sitiosWithBids);
+      // Use shared helper to map the canonical JSON and then refresh from Supabase
+      try {
+        const staticMapped = mapCanonicalPropersToSitios((CANONICAL_PROPERS as any) || []).slice(0, 6);
+        setSitios(staticMapped as Sitio[]);
+      } catch (err) {
+        console.warn('Failed to map static canonical sitios:', err);
       }
-      setLoading(false);
+
+      try {
+        const sitiosData = await fetchCanonicalSitios({ limit: 6, hideTestListings: false });
+        console.log('Carcará page sitios loaded (live):', sitiosData);
+        if (sitiosData && sitiosData.length > 0) setSitios(sitiosData || []);
+      } catch (err) {
+        console.error('Error loading canonical sitios on Carcará page:', err);
+      } finally {
+        setLoading(false);
+      }
     }
+
     fetchSitios();
     // Get current user from Supabase auth
     supabase.auth.getUser().then(({ data }) => {
@@ -611,9 +353,25 @@ function CarcaraProjectPageContent() {
         <h2 className="text-5xl md:text-6xl font-bold text-center text-transparent bg-clip-text bg-gradient-to-r from-[#A8C97F] to-[#E6C98B] mb-4">
           {t('Propriedades Disponíveis')}
         </h2>
-        <p className="text-center text-[#E6C98B] text-xl mb-16 max-w-2xl mx-auto">
+        <p className="text-center text-[#E6C98B] text-xl mb-6 max-w-2xl mx-auto">
           {t('Escolha sua propriedade ideal. Agende uma visita presencial ou por videoconferência.')}
         </p>
+
+        {/* Bidding Season / Sales System Info */}
+        <div className="max-w-4xl mx-auto mb-12 p-6 rounded-xl bg-gradient-to-br from-[#121212]/60 to-[#0d0d0d]/60 border border-[#A8C97F]/20">
+          <h3 className="text-2xl font-bold text-[#A8C97F] mb-2">Private Offer System — Sealed Bids</h3>
+          <p className="text-[#E6C98B] leading-relaxed">
+            Each Sítio is offered under a private sealed-bid process. Interested parties should
+            request a visit first and then submit an offer during the announced Bidding Season.
+            Offers are evaluated by value and by intended use (conservation, agroforestry, rural
+            residence, etc.). Visits and offers remain private; shortlisted buyers are contacted
+            directly.
+          </p>
+          <p className="text-sm text-[#A8C97F] mt-3">
+            The page shows the "Opening Offer" (starting price) and the current highest proposal when available.
+            Bidding season status: <strong className="ml-1">{process.env.NEXT_PUBLIC_BIDDING_OPEN === 'true' ? 'Open' : 'Closed'}</strong>
+          </p>
+        </div>
 
         {loading ? (
           <div className="flex justify-center py-20">
@@ -622,7 +380,10 @@ function CarcaraProjectPageContent() {
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
             {sitios.map((sitio) => {
-              const fable = PROPERTY_FABLES[sitio.id.toLowerCase()]?.[lang] || PROPERTY_FABLES[sitio.id.toLowerCase()]?.pt;
+              // Map the canonical DB id (e.g. 'buriti') to the fable key (e.g. 'abare')
+              const fableKey = mapIdToFableKey(sitio.slug || sitio.id);
+              const fable = (FABLES as any)[fableKey]?.[lang] || (FABLES as any)[fableKey]?.pt;
+              const displayName = mapIdToDisplayName(sitio.slug || sitio.id);
               return (
                 <article
                   key={sitio.id}
@@ -652,7 +413,7 @@ function CarcaraProjectPageContent() {
                       {/* Name and Poetic Subtitle */}
                       <div className="mb-6">
                         <h3 className="text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-[#A8C97F] to-[#E6C98B] mb-2">
-                          Sítio {sitio.title}
+                          Sítio {displayName}
                         </h3>
                         {fable && (
                           <p className="text-[#D4A574] text-lg font-semibold italic">

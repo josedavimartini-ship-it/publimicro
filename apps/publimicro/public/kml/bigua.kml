@@ -24,5 +24,21 @@
     </outerBoundaryIs>
   </Polygon>
 </Placemark>
+  <Placemark>
+    <name>Label: Sítio Biguá</name>
+    <description>Sítio Biguá — one of the 14 sites. For sale: yes.</description>
+    <Style>
+      <IconStyle>
+        <scale>1.0</scale>
+      </IconStyle>
+    </Style>
+    <Point>
+      <coordinates>-48.833594018436,-18.280674561260,0</coordinates>
+    </Point>
+    <ExtendedData>
+      <Data name="for_sale"><value>true</value></Data>
+      <Data name="project"><value>Sítios Carcará</value></Data>
+    </ExtendedData>
+  </Placemark>
 </Document>
 </kml>
