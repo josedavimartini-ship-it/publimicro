@@ -77,12 +77,12 @@ export async function POST(req: NextRequest) {
             if (data && data.length > 0) {
               for (const r of data) {
                 // Normalize the candidate value server-side in JS and ensure the digits match
-                const val = String(r[col] ?? "");
+                const val = String((r as any)[col] ?? "");
                 const digits = val.replace(/\D/g, "");
                 if (digits && (digits.includes(phone) || phone.includes(digits) || digits.endsWith(phone.slice(-8)))) {
                   // attach entire row object for inspection
-                  const exists = found.find((f) => f.id === r.id);
-                  if (!exists) found.push({ id: r.id, column: col, value: val, row: r });
+                  const exists = found.find((f) => (f as any).id === (r as any).id);
+                  if (!exists) found.push({ id: (r as any).id, column: col, value: val, row: r });
                 }
               }
             }

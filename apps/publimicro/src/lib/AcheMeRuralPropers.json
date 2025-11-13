@@ -1,0 +1,80 @@
+[
+  {
+    "slug": "abare",
+    "title": "Sítio Abaré - Refúgio do Rio",
+    "short": "Refúgio com lago e área plana",
+    "tagline": "Where friendship meets the river breeze.",
+    "estimatedMarketValue": 3200000,
+    "openingOffer": 2120000,
+    "moodboard": "Golden light, riverbank, soft greens",
+    "purpose": "Riverside residence or eco-retreat",
+    "kml_url": "/kml/abare.kml",
+    "latitude": -18.2791310466666,
+    "longitude": -48.8309658761111
+  },
+  {
+    "slug": "bigua",
+    "title": "Sítio Biguá - Majestade da Água",
+    "short": "Vista panorâmica e vegetação preservada",
+    "tagline": "Resilience in motion — where water meets will.",
+    "estimatedMarketValue": 2750000,
+    "openingOffer": 1920000,
+    "moodboard": "Green-blue reflections, morning light, wooden pier",
+    "purpose": "Sustainable tourism or aquatic leisure",
+    "kml_url": "/kml/bigua.kml",
+    "latitude": -18.2791936430556,
+    "longitude": -48.8310930494445
+  },
+  {
+    "slug": "mergulhao",
+    "title": "Sítio Mergulhão - Guardião das Águas",
+    "short": "Ipês, nascente natural e terreno misto",
+    "tagline": "Depth is the courage to face silence.",
+    "estimatedMarketValue": 2500000,
+    "openingOffer": 1620000,
+    "moodboard": "Deep lake tones, slate stones, silver light",
+    "purpose": "Private retreat, artistic or spiritual projects",
+    "kml_url": "/kml/mergulhao.kml",
+    "latitude": -18.2793276161111,
+    "longitude": -48.8325552202778
+  },
+  {
+    "slug": "seriema",
+    "title": "Sítio Seriema - A Voz do Cerrado",
+    "short": "Jatobás centenários e solo argiloso",
+    "tagline": "Where courage walks with elegance.",
+    "estimatedMarketValue": 2000000,
+    "openingOffer": 1312000,
+    "moodboard": "Warm ochres, dry grass, terracotta",
+    "purpose": "Agroforestry, organic cattle, or sustainable homestead",
+    "kml_url": "/kml/seriema.kml",
+    "latitude": -18.2800180394444,
+    "longitude": -48.8317861494444
+  },
+  {
+    "slug": "juriti",
+    "title": "Sítio Juriti - A Canção do Entardecer",
+    "short": "Pequizeiros abundantes e microclima ameno",
+    "tagline": "Peace, tradition, and the music of simplicity.",
+    "estimatedMarketValue": 1700000,
+    "openingOffer": 1012000,
+    "moodboard": "Amber sunset, rustic wood, soft pastels",
+    "purpose": "Family refuge or organic farming",
+    "kml_url": "/kml/juriti.kml",
+    "latitude": -18.2814622908333,
+    "longitude": -48.8341412847223
+  },
+  {
+    "slug": "surucua",
+    "title": "Sítio Surucuá - A Joia da Floresta",
+    "short": "Sucupiras centenárias e ótima incidência solar",
+    "tagline": "Colour, calm, and the sacred rhythm of nature.",
+    "estimatedMarketValue": 1400000,
+    "openingOffer": 912000,
+    "moodboard": "Forest greens, dappled light, deep wood",
+    "purpose": "Reforestation, conservation, or luxury eco-home",
+    "kml_url": "/kml/surucua.kml",
+    "latitude": -18.2810795708333,
+    "longitude": -48.8319018936111
+  }
+]
