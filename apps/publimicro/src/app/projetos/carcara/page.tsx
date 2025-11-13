@@ -22,7 +22,7 @@ import { fetchCanonicalSitios, mapIdToFableKey, mapIdToDisplayName, mapCanonical
 // canonical six Sítios Carcará created under `apps/proper/rural`.
 // We use it as an immediate client-side fallback and then attempt a
 // live Supabase refresh via `fetchCanonicalSitios()`.
-import CANONICAL_PROPERS from '../../../../../../apps/proper/rural/src/lib/AcheMeRuralPropers.json';
+import CANONICAL_PROPERS from '@/lib/AcheMeRuralPropers.json';
 
 // Note: Metadata must be exported from a Server Component or page.tsx file in the same directory
 // For client components, SEO is handled via layout.tsx or a parallel route
@@ -56,13 +56,14 @@ interface Sitio {
   title: string;
   location: string;
   price: number;
+  slug?: string;
   fotos: string[];
   description?: string;
   total_area?: number;
   current_bid?: number; // Current highest proposal value
 }
 
-import FABLES from '../../../../../../apps/proper/rural/src/lib/AcheMeRuralFables.json';
+import FABLES from '@/lib/AcheMeRuralFables.json';
 
 function CarcaraProjectPageContent() {
   const [sitios, setSitios] = useState<Sitio[]>([]);
@@ -77,7 +78,7 @@ function CarcaraProjectPageContent() {
       // Use shared helper to map the canonical JSON and then refresh from Supabase
       try {
         const staticMapped = mapCanonicalPropersToSitios((CANONICAL_PROPERS as any) || []).slice(0, 6);
-        setSitios(staticMapped as Sitio[]);
+        setSitios(staticMapped as unknown as Sitio[]);
       } catch (err) {
         console.warn('Failed to map static canonical sitios:', err);
       }

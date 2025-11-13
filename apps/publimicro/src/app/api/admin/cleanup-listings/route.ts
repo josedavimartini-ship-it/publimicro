@@ -36,7 +36,7 @@ export async function POST(req: NextRequest) {
           if (data && data.length > 0) {
             // append unique ids
             for (const r of data) {
-              if (!found.find((f) => f.id === r.id)) found.push(r);
+              if (!found.find((f) => (f as any).id === (r as any).id)) found.push(r);
             }
           }
         } catch (err) {

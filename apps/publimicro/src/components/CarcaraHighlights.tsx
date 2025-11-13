@@ -1,6 +1,6 @@
 "use client";
 import React, { useEffect, useState } from 'react';
-import CANONICAL_PROPERS from '../../../../../../apps/proper/rural/src/lib/AcheMeRuralPropers.json';
+import CANONICAL_PROPERS from '@/lib/AcheMeRuralPropers.json';
 import { fetchCanonicalSitios, mapCanonicalPropersToSitios } from '@/lib/carcaraHelpers';
 import { PropertyCard } from '@publimicro/ui';
 

@@ -18,6 +18,8 @@ import { PropertyCardSkeleton } from "@/components/Skeleton";
 import { useUnsplashImages } from "@/hooks/useUnsplashImages";
 import { getFirstPhoto } from "@/lib/photoUtils";
 import CarcaraHighlights from '@/components/CarcaraHighlights';
+import CANONICAL_PROPERS from '@/lib/AcheMeRuralPropers.json';
+import { fetchCanonicalSitios } from '@/lib/carcaraHelpers';
 import { 
   Home, Car, Tractor, Ship, Globe, 
   Plane, Share2, ShoppingBag, Sparkles, Calendar, Info, Handshake
@@ -171,12 +173,14 @@ export default function HomePage() {
       try {
         const staticMapped = (CANONICAL_PROPERS || []).map((p: any) => ({
           id: p.slug,
+          slug: p.slug,
           nome: p.title,
           localizacao: p.short,
           fotos: [],
           destaque: false,
           zona: undefined,
-          lance_inicial: undefined,
+          lance_inicial: p.openingOffer || undefined,
+          price: p.openingOffer || 0,
           current_bid: null,
           tamanho: undefined,
         }));
