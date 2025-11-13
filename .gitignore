@@ -84,4 +84,4 @@ debug/
 .stylelintcache
 *.pid
 *.seed
-*.pid.lock
+*.pid.lock# Ignore large uploaded videos\n/uploads/**/*.mp4
