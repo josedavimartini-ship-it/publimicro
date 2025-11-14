@@ -86,3 +86,7 @@ debug/
 *.pid
 *.seed
 *.pid.lock# Ignore large uploaded videos\n/uploads/**/*.mp4
+
+# Build markers created by build scripts (should not be committed)
+.next-build-complete
+.build-complete
