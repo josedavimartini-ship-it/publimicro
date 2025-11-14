@@ -9,8 +9,7 @@
     "isolatedModules": true,
     "skipLibCheck": true,
     "noEmit": true,
-    "incremental": true,
-    "tsBuildInfoFile": ".next/tsbuildinfo",
+    "incremental": false,
     "baseUrl": ".",
     "paths": {
       "@/*": ["./src/*"],

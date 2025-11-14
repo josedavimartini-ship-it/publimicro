@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { stripe } from "@/lib/stripeClient";
+import { getStripeClient } from "@/lib/stripeClient";
 
 interface CheckoutRequestBody {
   price: number;
@@ -16,6 +16,11 @@ export async function POST(req: Request): Promise<NextResponse> {
 
     if (!price || isNaN(price)) {
       return NextResponse.json({ error: "Preço inválido" }, { status: 400 });
+    }
+
+    const stripe = getStripeClient();
+    if (!stripe) {
+      return NextResponse.json({ error: 'Stripe not configured on server' }, { status: 500 });
     }
 
     const session = await stripe.checkout.sessions.create({

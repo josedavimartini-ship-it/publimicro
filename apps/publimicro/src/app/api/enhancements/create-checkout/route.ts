@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { createRouteHandlerClient } from '@supabase/auth-helpers-nextjs';
 import { cookies } from 'next/headers';
 import Stripe from 'stripe';
-import { stripe } from '@/lib/stripe';
+import { getStripe } from '@/lib/stripe';
 import { getStripePriceId, getEnhancementPrice, getCategoryDisplayName, getEnhancementTypeName } from '@/lib/enhancementPricing';
 import type { AnnouncementCategory, EnhancementType } from '@/lib/enhancementPricing';
 
@@ -124,6 +124,7 @@ export async function POST(request: NextRequest) {
     const enhancementName = getEnhancementTypeName(enhancement_type);
 
     // Create Stripe Checkout Session
+    const stripe = getStripe();
     const session = await stripe.checkout.sessions.create({
       mode: 'payment',
       payment_method_types: ['card'],

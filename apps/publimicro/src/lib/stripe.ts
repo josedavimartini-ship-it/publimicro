@@ -1,11 +1,6 @@
-import Stripe from "stripe";
-
-if (!process.env.STRIPE_SECRET_KEY) {
-  throw new Error("Missing STRIPE_SECRET_KEY environment variable");
-}
-
+import Stripe from 'stripe';
 import type StripeType from 'stripe';
-import { apiVersion } from '@publimicro/stripe';
+import { apiVersion } from '../../../../packages/stripe/dist/src';
 
 // Read pinned apiVersion from repo root config so scripts and app share the same value
 const stripeOptions = {
@@ -13,15 +8,27 @@ const stripeOptions = {
   typescript: true,
 } as unknown as StripeType.StripeConfig;
 
-export const stripe = new Stripe(process.env.STRIPE_SECRET_KEY, stripeOptions);
+let stripeInstance: Stripe | null = null;
 
-// Product Price IDs
+export function getStripe(): Stripe {
+  if (stripeInstance) return stripeInstance;
+
+  const key = process.env.STRIPE_SECRET_KEY;
+  if (!key) {
+    throw new Error('Missing STRIPE_SECRET_KEY environment variable');
+  }
+
+  stripeInstance = new Stripe(key, stripeOptions);
+  return stripeInstance;
+}
+
+// Product Price IDs (public values can be read at build time)
 export const STRIPE_PRICES = {
-  DESTAQUE: process.env.NEXT_PUBLIC_STRIPE_PRICE_DESTAQUE || "",
-  MARKETING: process.env.NEXT_PUBLIC_STRIPE_PRICE_MARKETING || "",
+  DESTAQUE: process.env.NEXT_PUBLIC_STRIPE_PRICE_DESTAQUE || '',
+  MARKETING: process.env.NEXT_PUBLIC_STRIPE_PRICE_MARKETING || '',
 };
 
-// Helper function to create checkout session
+// Helper function to create checkout session using lazy-initialized Stripe
 export async function createCheckoutSession({
   priceId,
   listingId,
@@ -35,9 +42,11 @@ export async function createCheckoutSession({
   successUrl: string;
   cancelUrl: string;
 }) {
+  const stripe = getStripe();
+
   const session = await stripe.checkout.sessions.create({
-    mode: "payment",
-    payment_method_types: ["card", "pix"], // Enable Pix for Brazil
+    mode: 'payment',
+    payment_method_types: ['card', 'pix'], // Enable Pix for Brazil
     line_items: [
       {
         price: priceId,
@@ -50,7 +59,7 @@ export async function createCheckoutSession({
       listingId,
       userId,
     },
-    locale: "pt-BR", // Brazilian Portuguese
+    locale: 'pt-BR',
   });
 
   return session;

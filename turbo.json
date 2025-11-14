@@ -16,7 +16,16 @@
         "packages/**/dist/**",
         "packages/**/.next/**",
         "apps/**/.next/**",
-        "dist/**"
+        "dist/**",
+        "apps/global/.next/**",
+        "apps/journey/.next/**",
+        "apps/machina/.next/**",
+        "apps/motors/.next/**",
+        "apps/outdoor/.next/**",
+        "apps/publimicro/.next/**",
+        "apps/share/.next/**",
+        "apps/tudo/.next/**",
+        "apps/proper/.next/**"
       ]
     },
     "dev": {

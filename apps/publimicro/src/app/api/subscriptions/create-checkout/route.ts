@@ -1,7 +1,7 @@
 import { createRouteHandlerClient } from '@supabase/auth-helpers-nextjs';
 import { cookies } from 'next/headers';
 import { NextResponse } from 'next/server';
-import { stripe } from '@/lib/stripe';
+import { getStripe } from '@/lib/stripe';
 
 export async function POST(request: Request) {
   try {
@@ -55,6 +55,8 @@ export async function POST(request: Request) {
       customerId = existingCustomer.stripe_customer_id;
     } else {
       // Create new Stripe customer
+      const stripe = getStripe();
+
       const customer = await stripe.customers.create({
         email: profile.email || session.user.email,
         name: profile.full_name,
@@ -73,6 +75,8 @@ export async function POST(request: Request) {
     }
 
     // Create Stripe Checkout Session for subscription
+    const stripe = getStripe();
+
     const checkoutSession = await stripe.checkout.sessions.create({
       customer: customerId,
       mode: 'subscription',
