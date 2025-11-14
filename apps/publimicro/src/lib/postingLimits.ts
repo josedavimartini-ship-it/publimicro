@@ -116,10 +116,20 @@ const CATEGORY_TO_USAGE_FIELD: Record<AnnouncementCategory, keyof UserCredits> =
  */
 function getSupabaseClient() {
   const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
-  const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
+  // Prefer the service role key for server/admin operations, but fall back
+  // to the public anon key when building locally or in environments where
+  // the service role key is intentionally withheld. This keeps builds
+  // deterministic while preserving full functionality when the service key
+  // is supplied at runtime.
+  const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY ?? process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
 
   if (!supabaseUrl || !supabaseKey) {
-    throw new Error('Missing Supabase credentials');
+    throw new Error('Missing Supabase credentials (NEXT_PUBLIC_SUPABASE_URL and a supabase key)');
+  }
+
+  if (!process.env.SUPABASE_SERVICE_ROLE_KEY) {
+    // eslint-disable-next-line no-console
+    console.warn('SUPABASE_SERVICE_ROLE_KEY not set — falling back to anon key for build-time operations. Admin operations will require the service role key at runtime.');
   }
 
   return createClient(supabaseUrl, supabaseKey);
@@ -141,6 +151,16 @@ async function checkAndResetMonthlyLimits(
   const lastResetMonth = new Date(lastResetDate).getMonth();
 
   if (todayMonth !== lastResetMonth) {
+    // Only run resets when a server/service role key is present. During
+    // build-time or in environments without the service key we skip the
+    // reset to avoid failing builds. The service role key is required for
+    // privileged writes.
+    if (!process.env.SUPABASE_SERVICE_ROLE_KEY) {
+      // eslint-disable-next-line no-console
+      console.warn('Skipping monthly reset because SUPABASE_SERVICE_ROLE_KEY is not set');
+      return false;
+    }
+
     const supabase = getSupabaseClient();
 
     // Reset monthly counters

@@ -26,8 +26,12 @@
     "tailwindcss": "^4.1.16",
     "typescript": "^5.9.3"
   },
+  "turbo": {
+    "outputs": [".next/**"]
+  },
   "engines": {
     "node": ">=18.18.0",
     "pnpm": ">=8.0.0"
   }
+
 }

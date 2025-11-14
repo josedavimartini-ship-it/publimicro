@@ -1,7 +1,7 @@
 {
   "extends": "../../tsconfig.base.json",
   "compilerOptions": {
-    "composite": true,
+    "composite": false,
     "module": "ESNext",
     "moduleResolution": "bundler",
     "jsx": "react-jsx",
@@ -16,8 +16,7 @@
       "@publimicro/ui": ["../../packages/ui/src"]
     },
     "types": ["react", "react-dom", "node"],
-    "incremental": true,
-    "tsBuildInfoFile": ".next/tsbuildinfo",
+    "incremental": false,
     "plugins": [
       {
         "name": "next"

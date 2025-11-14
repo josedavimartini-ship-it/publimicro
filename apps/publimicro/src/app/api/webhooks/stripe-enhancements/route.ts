@@ -1,15 +1,10 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { createClient } from '@supabase/supabase-js';
 import Stripe from 'stripe';
-import { stripe } from '@/lib/stripe';
+import { getStripe } from '@/lib/stripe';
 import type { EnhancementType } from '@/lib/enhancementPricing';
 
-// Use shared, pinned Stripe client from lib/stripe
-// Use service role for webhook (bypasses RLS)
-const supabase = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  process.env.SUPABASE_SERVICE_ROLE_KEY!
-);
+// Note: Stripe and Supabase service client are created lazily inside the handler
 
 /**
  * POST /api/webhooks/stripe-enhancements
@@ -35,12 +30,21 @@ export async function POST(request: NextRequest) {
   let event: Stripe.Event;
 
   try {
-    // Verify webhook signature
-    event = stripe.webhooks.constructEvent(
-      body,
-      signature,
-      process.env.STRIPE_WEBHOOK_SECRET!
-    );
+      // Lazy-initialize Stripe (throws if not configured)
+      let stripeInstance: Stripe;
+      try {
+        stripeInstance = getStripe();
+      } catch (err: any) {
+        console.error('Stripe not configured for webhooks:', err?.message || err);
+        return NextResponse.json({ error: 'Server misconfigured' }, { status: 500 });
+      }
+
+      // Verify webhook signature
+      event = stripeInstance.webhooks.constructEvent(
+        body,
+        signature,
+        process.env.STRIPE_WEBHOOK_SECRET!
+      );
   } catch (err: any) {
     console.error('Webhook signature verification failed:', err.message);
     return NextResponse.json(
@@ -49,19 +53,31 @@ export async function POST(request: NextRequest) {
     );
   }
 
-  // Handle the event
+    // Create a service-role Supabase client for privileged updates
+    // Create a Supabase service client at runtime. This avoids requiring
+    // the service role key at module import time during builds.
+    if (!process.env.SUPABASE_SERVICE_ROLE_KEY) {
+      console.error('SUPABASE_SERVICE_ROLE_KEY not set — cannot write enhancement records');
+      throw new Error('Server not configured');
+    }
+
+    const supabase = createClient(
+      process.env.NEXT_PUBLIC_SUPABASE_URL!,
+      process.env.SUPABASE_SERVICE_ROLE_KEY!
+    );
+
   try {
     switch (event.type) {
       case 'checkout.session.completed':
-        await handleCheckoutCompleted(event.data.object as Stripe.Checkout.Session);
+        await handleCheckoutCompleted(event.data.object as Stripe.Checkout.Session, supabase);
         break;
 
       case 'payment_intent.succeeded':
-        await handlePaymentSucceeded(event.data.object as Stripe.PaymentIntent);
+        await handlePaymentSucceeded(event.data.object as Stripe.PaymentIntent, supabase);
         break;
 
       case 'payment_intent.payment_failed':
-        await handlePaymentFailed(event.data.object as Stripe.PaymentIntent);
+        await handlePaymentFailed(event.data.object as Stripe.PaymentIntent, supabase);
         break;
 
       default:
@@ -82,7 +98,7 @@ export async function POST(request: NextRequest) {
 /**
  * Handle successful checkout session
  */
-async function handleCheckoutCompleted(session: Stripe.Checkout.Session) {
+async function handleCheckoutCompleted(session: Stripe.Checkout.Session, supabase: any) {
   console.log('Processing checkout.session.completed:', session.id);
 
   const {
@@ -127,10 +143,10 @@ async function handleCheckoutCompleted(session: Stripe.Checkout.Session) {
   };
 
   const { data: enhancement, error: insertError } = await supabase
-    .from('listing_enhancements')
-    .insert(enhancementData)
-    .select()
-    .single();
+     .from('listing_enhancements')
+     .insert(enhancementData)
+     .select()
+     .single();
 
   if (insertError) {
     console.error('Error creating enhancement record:', insertError);
@@ -174,7 +190,7 @@ async function handleCheckoutCompleted(session: Stripe.Checkout.Session) {
 /**
  * Handle successful payment intent
  */
-async function handlePaymentSucceeded(paymentIntent: Stripe.PaymentIntent) {
+async function handlePaymentSucceeded(paymentIntent: Stripe.PaymentIntent, supabase: any) {
   console.log('Processing payment_intent.succeeded:', paymentIntent.id);
 
   const { announcement_id } = paymentIntent.metadata || {};
@@ -201,7 +217,7 @@ async function handlePaymentSucceeded(paymentIntent: Stripe.PaymentIntent) {
 /**
  * Handle failed payment intent
  */
-async function handlePaymentFailed(paymentIntent: Stripe.PaymentIntent) {
+async function handlePaymentFailed(paymentIntent: Stripe.PaymentIntent, supabase: any) {
   console.log('Processing payment_intent.payment_failed:', paymentIntent.id);
 
   const { announcement_id } = paymentIntent.metadata || {};

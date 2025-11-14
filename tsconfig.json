@@ -1,28 +1,9 @@
 {
+  "extends": "./tsconfig.base.json",
   "compilerOptions": {
-    "composite": true,
-    "skipLibCheck": true,
-    "module": "ESNext",
-    "moduleResolution": "bundler",
-    "allowSyntheticDefaultImports": true,
-    "esModuleInterop": true,
-    "forceConsistentCasingInFileNames": true,
-    "incremental": true,
+    "incremental": false,
     "tsBuildInfoFile": "./.cache/tsbuildinfo.json"
   },
-  "files": [],
-  "references": [
-    { "path": "./packages/ui" },
-    { "path": "./apps/publimicro" },
-    { "path": "./apps/journey" },
-    { "path": "./apps/proper" },
-    { "path": "./apps/motors" },
-    { "path": "./apps/share" },
-    { "path": "./apps/global" },
-    { "path": "./apps/machina" },
-    { "path": "./apps/outdoor" },
-    { "path": "./apps/tudo" }
-  ],
   "exclude": [
     "node_modules",
     ".next",

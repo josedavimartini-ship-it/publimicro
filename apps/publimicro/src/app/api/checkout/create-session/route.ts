@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { stripe, STRIPE_PRICES } from "@/lib/stripe";
+import { getStripe, STRIPE_PRICES } from "@/lib/stripe";
 import { createClient } from "@supabase/supabase-js";
 
 export async function POST(req: Request) {
@@ -115,6 +115,7 @@ export async function POST(req: Request) {
     }
 
     // Criar sessão de checkout do Stripe
+    const stripe = getStripe();
     const session = await stripe.checkout.sessions.create({
       payment_method_types: ["card"], // Pix será adicionado depois
       line_items: [
