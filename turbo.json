@@ -23,6 +23,7 @@
         "apps/motors/.next/**",
         "apps/outdoor/.next/**",
         "apps/publimicro/.next/**",
+        "apps/publimicro/.next-build-complete",
         "apps/share/.next/**",
         "apps/tudo/.next/**",
         "apps/proper/.next/**"
