@@ -4,6 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "next dev -p 3000",
+    "admin-upload-cli": "node ./scripts/admin-upload-cli.js",
     "build": "next build",
     "start": "next start",
     "lint": "eslint . --ext .js,.jsx,.ts,.tsx",
@@ -16,7 +17,7 @@
     "@publimicro/stripe": "workspace:*",
     "@publimicro/ui": "workspace:*",
     "@radix-ui/react-dialog": "^1.1.15",
-    "@supabase/auth-helpers-nextjs": "^0.11.0",
+    "@supabase/auth-helpers-nextjs": "^0.10.0",
     "@supabase/ssr": "^0.7.0",
     "@supabase/supabase-js": "^2.76.1",
     "@tailwindcss/postcss": "^4.1.16",
@@ -32,6 +33,10 @@
     "react-icons": "^5.5.0",
     "react-leaflet": "^5.0.0",
     "stripe": "^19.1.0",
+    "adm-zip": "^0.5.9",
+    "fluent-ffmpeg": "^2.1.2",
+    "@ffmpeg-installer/ffmpeg": "^1.1.0",
+    "fs-extra": "^11.1.1",
     "tailwind-variants": "^3.1.1",
     "unsplash-js": "^7.0.20",
     "zustand": "^5.0.8"
@@ -51,6 +56,14 @@
     "prettier": "^3.6.2",
     "tailwindcss": "^4.1.16",
     "typescript": "^5.9.3"
+  },
+  "turbo": {
+    "outputs": [
+      ".next/**",
+      ".next/static/**",
+      ".next/server/**",
+      "public/**"
+    ]
   },
   "engines": {
     "node": ">=18.0.0",
