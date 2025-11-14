@@ -9,15 +9,18 @@ interface CarcaraModelProps {
   scale?: number;
   onAnimationStart?: () => void;
   onAnimationComplete?: () => void;
+  autoRotate?: boolean;
+  rotationSpeed?: number;
+  modelPath?: string;
 }
 
-function CarcaraModel({ scale = 2.5, onAnimationStart, onAnimationComplete }: CarcaraModelProps) {
+function CarcaraModel({ scale = 2.5, onAnimationStart, onAnimationComplete, autoRotate = false, rotationSpeed: rotationSpeedProp = 0.3, modelPath = '/models/carcara.glb' }: CarcaraModelProps) {
   const modelRef = useRef<Group | null>(null);
-  const rotationSpeed = useRef(0.3);
+  const rotationSpeed = useRef(rotationSpeedProp);
   const isAnimating = useRef(false);
   const flightOffset = useRef(0);
 
-  const { scene } = useGLTF("/models/carcara.glb");
+  const { scene } = useGLTF(modelPath);
 
   useEffect(() => {
     if (modelRef.current) {
@@ -30,8 +33,8 @@ function CarcaraModel({ scale = 2.5, onAnimationStart, onAnimationComplete }: Ca
     const obj = modelRef.current;
     if (!obj) return;
 
-    // gentle rotation
-    obj.rotation.y += delta * rotationSpeed.current;
+    // gentle rotation (only when autoRotate enabled)
+    if (autoRotate) obj.rotation.y += delta * rotationSpeed.current;
 
     // drift upward slightly and reduce bobbing over first 6 seconds
     flightOffset.current += delta * 1.2;
@@ -69,11 +72,26 @@ export interface Carcara3DProps {
   className?: string;
   onSoundTrigger?: () => void;
   scale?: number;
+  autoRotate?: boolean;
+  rotationSpeed?: number;
+  modelPath?: string;
+  ariaLabel?: string;
 }
 
-export function Carcara3D({ className = "", onSoundTrigger, scale = 2.5 }: Carcara3DProps) {
+export function Carcara3D({ className = "", onSoundTrigger, scale = 2.5, autoRotate = false, rotationSpeed = 0.3, modelPath = '/models/carcara.glb', ariaLabel = 'Carcará 3D model' }: Carcara3DProps) {
+  // preload the model path to reduce visual load when first shown
+  useEffect(() => {
+    try {
+      // @ts-ignore - three/drei exposes preload in runtime
+      useGLTF.preload?.(modelPath);
+    } catch (err) {
+      // eslint-disable-next-line no-console
+      console.warn('carcara model preload failed', modelPath, err);
+    }
+  }, [modelPath]);
+
   return (
-    <div className={`w-full h-full ${className}`}>
+    <div className={`w-full h-full ${className}`} aria-label={ariaLabel} role="img">
       <Canvas
         shadows
         camera={{ position: [0, 1, 6], fov: 50, near: 0.1, far: 1000 }}
@@ -90,7 +108,7 @@ export function Carcara3D({ className = "", onSoundTrigger, scale = 2.5 }: Carca
             <shadowMaterial transparent opacity={0.15} />
           </mesh>
 
-          <CarcaraModel scale={scale} onAnimationStart={onSoundTrigger} />
+          <CarcaraModel scale={scale} onAnimationStart={onSoundTrigger} autoRotate={autoRotate} rotationSpeed={rotationSpeed} modelPath={modelPath} />
 
           <OrbitControls
             enableZoom={true}
