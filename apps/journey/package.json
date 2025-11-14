@@ -7,7 +7,7 @@
     "dev": "next dev -p 3100",
     "build": "next build && node ./scripts/mark-next-built.js",
     "start": "next start",
-    "lint": "eslint . --ext .ts,.tsx",
+    "lint": "eslint --config ../../.eslintrc.cjs . --ext .ts,.tsx",
     "type-check": "tsc --noEmit"
   },
   "dependencies": {
