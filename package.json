@@ -8,7 +8,7 @@
     "build": "turbo run build",
     "build:app": "next build",
     "start": "next start",
-    "lint": "eslint . --ext .js,.jsx,.ts,.tsx",
+    "lint": "eslint --config .eslintrc.cjs . --ext .js,.jsx,.ts,.tsx",
     "format": "prettier --write .",
     "type-check": "tsc --noEmit"
   },
