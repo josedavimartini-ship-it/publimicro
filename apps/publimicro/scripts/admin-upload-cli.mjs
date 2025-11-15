@@ -1,12 +1,7 @@
 #!/usr/bin/env node
-/**
- * Simple CLI to upload a ZIP (base64) to the admin ZIP endpoint.
- * Usage: node admin-upload-cli.js <zip-path> <property-id> --admin-key <key>
- */
 import fs from 'fs';
-import path from 'path';
 import fetch from 'node-fetch';
-import logger = require('../../../scripts/logger.cjs');
+import logger from '../../../scripts/logger.mjs';
 
 async function main() {
   const argv = process.argv.slice(2);

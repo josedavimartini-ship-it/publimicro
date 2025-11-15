@@ -1,6 +1,6 @@
 import Stripe from 'stripe';
 import type StripeType from 'stripe';
-import { apiVersion } from '../../../../packages/stripe/dist/src';
+import { apiVersion } from '@publimicro/stripe';
 
 // Read pinned apiVersion from repo root config so scripts and app share the same value
 const stripeOptions = {

@@ -5,9 +5,9 @@
   "scripts": {
     "dev": "next dev -p 3000",
     "admin-upload-cli": "node ./scripts/admin-upload-cli.js",
-    "build": "next build && node ./scripts/mark-next-built.js",
+    "build": "next build && node ./scripts/mark-next-built.mjs",
     "start": "next start",
-    "lint": "eslint . --ext .js,.jsx,.ts,.tsx",
+    "lint": "eslint --config ../../.eslintrc.cjs . --ext .js,.jsx,.ts,.tsx",
     "format": "prettier --write .",
     "type-check": "tsc --noEmit"
   },
