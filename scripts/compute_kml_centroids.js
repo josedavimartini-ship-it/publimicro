@@ -1,12 +1,13 @@
 const fs = require('fs');
 const path = require('path');
+const logger = require('./logger.cjs');
 
 function parseCoordinates(coordText) {
   return coordText
     .trim()
     .split(/\s+/)
     .map(pair => {
-      const [lon, lat, z] = pair.split(',').map(Number);
+      const [lon, lat] = pair.split(',').map(Number);
       return { lat, lon };
     });
 }
@@ -47,10 +48,10 @@ for (const file of files) {
   const content = fs.readFileSync(p, 'utf8');
   const m = content.match(/<coordinates>([\s\S]*?)<\/coordinates>/);
   if (!m) {
-    console.error('No coordinates found in', file);
+    logger.error('No coordinates found in', file);
     continue;
   }
   const coords = parseCoordinates(m[1]);
   const c = polygonCentroid(coords);
-  console.log(`${file}: ${c.lon.toFixed(12)},${c.lat.toFixed(12)}`);
+  logger.info(`${file}: ${c.lon.toFixed(12)},${c.lat.toFixed(12)}`);
 }

@@ -9,12 +9,13 @@
 const fs = require('fs');
 const path = require('path');
 const { createClient } = require('@supabase/supabase-js');
+const logger = require('./logger.cjs');
 
 const SUPABASE_URL = process.env.SUPABASE_URL;
 const SUPABASE_SERVICE_ROLE_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY;
 
 if (!SUPABASE_URL || !SUPABASE_SERVICE_ROLE_KEY) {
-  console.error('Missing SUPABASE_URL or SUPABASE_SERVICE_ROLE_KEY environment variables.');
+  logger.error('Missing SUPABASE_URL or SUPABASE_SERVICE_ROLE_KEY environment variables.');
   process.exit(1);
 }
 
@@ -28,7 +29,7 @@ function readJson(p) {
 }
 
 async function main() {
-  const repoRoot = path.join(__dirname, '..');
+  // repo root not needed here
   const mappingPath = path.join(__dirname, 'canonical-sitios-mapping.json');
   const externalPath = path.join(__dirname, 'external-videos.json');
 
@@ -38,29 +39,29 @@ async function main() {
   const mapping = canonical && canonical.mapping ? canonical.mapping : canonical;
   const targetTable = canonical && canonical.target_table ? canonical.target_table : 'properties';
 
-  console.log('Target table detected:', targetTable);
+  logger.info('Target table detected:', targetTable);
 
   for (const slug of Object.keys(external)) {
     const url = external[slug];
     const id = mapping[slug];
     if (!id) {
-      console.warn('No id for', slug, '- skipping');
+      logger.warn('No id for', slug, '- skipping');
       continue;
     }
 
     if (targetTable === 'properties') {
       const { error } = await supabase.from('properties').update({ video_url: url }).eq('id', id);
-      if (error) console.error('Failed to set video_url for', slug, error.message || error);
-      else console.log('Set video_url for', slug, url);
+      if (error) logger.error('Failed to set video_url for', slug, error.message || error);
+      else logger.info('Set video_url for', slug, url);
     } else {
       const { error } = await supabase.from('sitios').update({ video_url: url }).eq('id', id);
-      if (error) console.error('Failed to set video_url for', slug, error.message || error);
-      else console.log('Set video_url for', slug, url);
+      if (error) logger.error('Failed to set video_url for', slug, error.message || error);
+      else logger.info('Set video_url for', slug, url);
     }
   }
 }
 
 main().catch(err => {
-  console.error('Failed', err && err.message ? err.message : err);
+  logger.error('Failed', err && err.message ? err.message : err);
   process.exit(1);
 });
