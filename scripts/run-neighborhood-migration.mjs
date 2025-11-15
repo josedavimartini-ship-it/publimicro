@@ -6,7 +6,6 @@ import { info, warn, error } from './logger.mjs';
 // load .env from apps/publimicro if present
 try {
   const dotenvPath = path.join(new URL('.', import.meta.url).pathname, '..', 'apps', 'publimicro', '.env.local');
-  // eslint-disable-next-line node/no-extraneous-require
   await import('dotenv/config');
 } catch (e) {
   // ignore

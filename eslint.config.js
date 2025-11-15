@@ -1,16 +1,48 @@
 // Flat ESLint configuration (ESLint v9+)
 // Migrated from legacy `.eslintrc.cjs` to the new flat config format.
 module.exports = [
-  // Global ignores
+  // Global ignores (migrated from .eslintignore)
   {
     ignores: [
-      '**/node_modules/**',
-      '**/.next/**',
-      '**/out/**',
-      '**/build/**',
-      '**/dist/**',
-      '**/.turbo/**',
+      'node_modules/',
+      '.pnp/',
+      '.pnp.js',
+      '.next/',
+      'out/',
+      'dist/',
+      'build/',
       '.turbo/',
+      '.cache/',
+      '*.tsbuildinfo',
+      'next-env.d.ts',
+      '.env',
+      '.env.*',
+      '*.config.js',
+      '*.config.ts',
+      '*.config.mjs',
+      '*.config.cjs',
+      'tailwind.config.*',
+      'postcss.config.*',
+      'next.config.*',
+      'prisma/generated/',
+      'coverage/',
+      '.nyc_output/',
+      '*.log',
+      'logs/',
+      '.DS_Store',
+      'Thumbs.db',
+      '.vscode/',
+      '.idea/',
+      '.vercel/',
+      'public/',
+      '**/public/models/',
+      '**/public/sounds/',
+      '**/public/images/',
+      'pnpm-lock.yaml',
+      'package-lock.json',
+      'yarn.lock',
+      '.storybook/',
+      'storybook-static/',
     ],
   },
 
@@ -124,46 +156,13 @@ module.exports = [
         try {
           const cfg = require('eslint-config-next');
           const rules = (cfg && cfg.configs && cfg.configs['core-web-vitals'] && cfg.configs['core-web-vitals'].rules) || {};
-            '**/node_modules/**',
-            '**/.pnp/**',
-            '**/.pnp.js',
-            '**/.next/**',
-            '**/out/**',
-            '**/dist/**',
-            '**/build/**',
-            '**/.turbo/**',
-            '.turbo/',
-            '**/.cache/**',
-            '*.tsbuildinfo',
-            'next-env.d.ts',
-            '.env',
-            '.env.*',
-            '*.config.js',
-            '*.config.ts',
-            '*.config.mjs',
-            '*.config.cjs',
-            'tailwind.config.*',
-            'postcss.config.*',
-            'next.config.*',
-            'prisma/generated/**',
-            'coverage/**',
-            '.nyc_output/**',
-            '*.log',
-            'logs/**',
-            '.DS_Store',
-            'Thumbs.db',
-            '.vscode/**',
-            '.idea/**',
-            '.vercel/**',
-            'public/**',
-            '**/public/models/**',
-            '**/public/sounds/**',
-            '**/public/images/**',
-            'pnpm-lock.yaml',
-            'package-lock.json',
-            'yarn.lock',
-            '.storybook/**',
-            'storybook-static/**',
+          // Filter out rules that reference the @next plugin namespace because
+          // the plugin is not a separate installable package; keep only the
+          // plain rule entries to avoid plugin-not-found errors.
+          return Object.fromEntries(Object.entries(rules).filter(([k]) => !k.startsWith('@next/')));
+        } catch (e) {
+          return {};
+        }
       })(),
       {
         // App-specific rule overrides (from previous .eslintrc.cjs)
