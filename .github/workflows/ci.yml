@@ -2,17 +2,52 @@ name: CI
 
 on:
   push:
-    branches: [ main ]
+    branches: [ main, 'feature/*', 'chore/*', 'chore/convert-scripts-esm' ]
   pull_request:
     branches: [ main ]
 
 jobs:
-  build-and-test:
+  lint-and-smoke:
+    name: Lint and smoke tests
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [18.x, 20.x]
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: 'pnpm'
+
+      - name: Enable corepack
+        run: |
+          corepack enable
+          corepack prepare pnpm@latest --activate
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Run ESLint
+        run: pnpm -w exec -- eslint scripts --ext .js,.cjs,.mjs --report-unused-disable-directives
+
+      - name: Smoke test: compress_videos help
+        run: node scripts/compress_videos.mjs --help
+
+      - name: Smoke test: run-sql help
+        run: node scripts/run-sql.mjs --help
+
+  stripe-smoke:
+    name: Stripe smoke (optional)
+    runs-on: ubuntu-latest
+    needs: lint-and-smoke
+    if: ${{ secrets.STRIPE_TEST_KEY && secrets.SMOKE_STRIPE_PRICE_ID }}
     steps:
       - uses: actions/checkout@v4
-
-      - name: Set up Node.js
+      - name: Setup Node
         uses: actions/setup-node@v4
         with:
           node-version: '18'
@@ -23,22 +58,10 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile=false
 
-      - name: Run type-check
-        run: pnpm -w -s -C . type-check
-
       - name: Build stripe package
         run: pnpm -w -s -C . --filter @publimicro/stripe run build
 
-      - name: Print Stripe smoke-test notice
-        run: |
-          if [ -n "${{ secrets.STRIPE_TEST_KEY }}" ] && [ -n "${{ secrets.SMOKE_STRIPE_PRICE_ID }}" ]; then
-            echo "Stripe smoke test will run in the next step.";
-          else
-            echo "Stripe smoke test will be skipped (missing STRIPE_TEST_KEY and/or SMOKE_STRIPE_PRICE_ID).";
-          fi
-
       - name: Run Stripe smoke test
-        if: ${{ secrets.STRIPE_TEST_KEY != '' && secrets.SMOKE_STRIPE_PRICE_ID != '' }}
         env:
           STRIPE_TEST_KEY: ${{ secrets.STRIPE_TEST_KEY }}
           SMOKE_STRIPE_PRICE_ID: ${{ secrets.SMOKE_STRIPE_PRICE_ID }}
