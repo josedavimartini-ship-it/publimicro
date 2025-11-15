@@ -1,0 +1,24 @@
+name: CI Smoke
+
+on:
+  push:
+    branches: [ chore/convert-scripts-esm ]
+  workflow_dispatch: {}
+
+jobs:
+  smoke:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up Node 20
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - name: Print environment
+        run: |
+          node -v
+          npm -v
+          npm exec -y pnpm -v || echo 'pnpm not available'
+          echo "Runner: $RUNNER_OS"
+      - name: Smoke success
+        run: echo "CI smoke job completed"
