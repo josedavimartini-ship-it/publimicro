@@ -9,12 +9,13 @@
 const fs = require('fs');
 const path = require('path');
 const { createClient } = require('@supabase/supabase-js');
+const logger = require('./logger.cjs');
 
 const SUPABASE_URL = process.env.SUPABASE_URL;
 const SUPABASE_SERVICE_ROLE_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY;
 
 if (!SUPABASE_URL || !SUPABASE_SERVICE_ROLE_KEY) {
-  console.error('Missing SUPABASE_URL or SUPABASE_SERVICE_ROLE_KEY environment variables.');
+  logger.error('Missing SUPABASE_URL or SUPABASE_SERVICE_ROLE_KEY environment variables.');
   process.exit(1);
 }
 
@@ -25,17 +26,17 @@ const supabase = createClient(SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY, {
 async function detectTargetTable() {
   // Try a minimal select against the `properties` table.
   try {
-    const { data, error } = await supabase.from('properties').select('id,slug').limit(1);
+    const { error } = await supabase.from('properties').select('id,slug').limit(1);
     if (!error) return 'properties';
     // If error exists, fallthrough to try sitios
-  } catch (err) {
+  } catch {
     // ignore and try sitios
   }
 
   try {
-    const { data, error } = await supabase.from('sitios').select('id,slug').limit(1);
+    const { error } = await supabase.from('sitios').select('id,slug').limit(1);
     if (!error) return 'sitios';
-  } catch (err) {
+  } catch {
     // ignore
   }
 
@@ -105,14 +106,14 @@ async function upsertProperties(targetTable, properties) {
           const m = msg.match(/null value in column "([^"]+)"/i);
           if (!m) {
             // Unknown error — stop retrying
-            console.error('Upsert properties error for', p.slug, msg);
+            logger.error('Upsert properties error for', p.slug, msg);
             break;
           }
 
           const col = m[1];
           if (triedCols.has(col)) {
             // Already tried to fill this column — avoid infinite loop
-            console.error('Repeated NOT NULL for', col, 'for', p.slug, msg);
+            logger.error('Repeated NOT NULL for', col, 'for', p.slug, msg);
             break;
           }
 
@@ -131,12 +132,12 @@ async function upsertProperties(targetTable, properties) {
         }
 
         if (!finalData) {
-          console.error('Failed to upsert properties for', p.slug, lastError && (lastError.message || lastError));
+          logger.error('Failed to upsert properties for', p.slug, lastError && (lastError.message || lastError));
           mapping[p.slug] = null;
         } else {
           const id = finalData && finalData[0] && finalData[0].id;
           mapping[p.slug] = id || null;
-          console.log('Upserted properties', p.slug, '->', id);
+          logger.info('Upserted properties', p.slug, '->', id);
         }
       } else {
         // sitios
@@ -162,16 +163,16 @@ async function upsertProperties(targetTable, properties) {
           .select('id,slug');
 
         if (error) {
-          console.error('Upsert sitios error for', p.slug, error.message || error);
+          logger.error('Upsert sitios error for', p.slug, error.message || error);
           continue;
         }
 
         const id = data && data[0] && data[0].id;
         mapping[p.slug] = id || null;
-        console.log('Upserted sitios', p.slug, '->', id);
+        logger.info('Upserted sitios', p.slug, '->', id);
       }
     } catch (err) {
-      console.error('Unexpected error for', p.slug, err && err.message ? err.message : err);
+      logger.error('Unexpected error for', p.slug, err && err.message ? err.message : err);
     }
   }
 
@@ -179,18 +180,18 @@ async function upsertProperties(targetTable, properties) {
 }
 
 async function main() {
-  console.log('Detecting target table...');
+  logger.info('Detecting target table...');
   const target = await detectTargetTable();
   if (!target) {
-    console.error('Could not detect target table `properties` or `sitios`. Check your Supabase credentials and schema.');
+    logger.error('Could not detect target table `properties` or `sitios`. Check your Supabase credentials and schema.');
     process.exit(1);
   }
 
-  console.log('Detected target table:', target);
+  logger.info('Detected target table:', target);
 
   const properties = readCanonical();
   if (!Array.isArray(properties) || properties.length === 0) {
-    console.error('No canonical properties found in JSON.');
+    logger.error('No canonical properties found in JSON.');
     process.exit(1);
   }
 
@@ -198,10 +199,10 @@ async function main() {
 
   const outPath = path.join(__dirname, 'canonical-sitios-mapping.json');
   fs.writeFileSync(outPath, JSON.stringify({ target_table: target, mapping }, null, 2), 'utf8');
-  console.log('Wrote mapping to', outPath);
+  logger.info('Wrote mapping to', outPath);
 }
 
 main().catch((err) => {
-  console.error('Seed failed', err && err.message ? err.message : err);
+  logger.error('Seed failed', err && err.message ? err.message : err);
   process.exit(1);
 });

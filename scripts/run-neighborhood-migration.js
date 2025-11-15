@@ -3,7 +3,6 @@
  * This script creates the neighborhood_data table in Supabase
  */
 
-const { createClient } = require('@supabase/supabase-js');
 const fs = require('fs');
 const path = require('path');
 
@@ -12,16 +11,17 @@ require('dotenv').config({ path: path.join(__dirname, '../apps/publimicro/.env.l
 
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
 const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
+const logger = require('./logger.cjs');
 
 if (!supabaseUrl || !supabaseServiceKey) {
-  console.error('❌ Missing Supabase credentials in .env.local');
+  logger.error('❌ Missing Supabase credentials in .env.local');
   process.exit(1);
 }
 
-const supabase = createClient(supabaseUrl, supabaseServiceKey);
+// Supabase client creation not required for this migration path (we use REST RPC or manual SQL).
 
 async function runMigration() {
-  console.log('📊 Running neighborhood data migration...\n');
+  logger.info('📊 Running neighborhood data migration...\n');
   
   try {
     // Read the SQL migration file
@@ -29,8 +29,8 @@ async function runMigration() {
     const sql = fs.readFileSync(sqlPath, 'utf8');
     
     // Split into individual statements (rough split, Supabase will handle it)
-    console.log('✅ Migration file loaded');
-    console.log(`📝 SQL length: ${sql.length} characters\n`);
+    logger.info('✅ Migration file loaded');
+    logger.info(`📝 SQL length: ${sql.length} characters\n`);
     
     // Execute using Supabase SQL editor equivalent
     // Note: Supabase JS client doesn't support raw SQL execution directly
@@ -47,28 +47,28 @@ async function runMigration() {
     
     if (!response.ok) {
       // If rpc endpoint doesn't exist, try direct database connection approach
-      console.log('⚠️  RPC endpoint not available, using table creation approach...\n');
+      logger.info('⚠️  RPC endpoint not available, using table creation approach...\n');
       
       // Create the table using individual Supabase operations
       // This is a simplified version - the full migration should be run via Supabase CLI
-      console.log('ℹ️  To run the full migration, use Supabase CLI:');
-      console.log('   npx supabase db push\n');
-      console.log('   OR manually run the SQL in Supabase Dashboard > SQL Editor\n');
-      console.log(`   Migration file: supabase/migrations/20250105000001_add_neighborhood_data.sql\n`);
+      logger.info('ℹ️  To run the full migration, use Supabase CLI:');
+      logger.info('   npx supabase db push\n');
+      logger.info('   OR manually run the SQL in Supabase Dashboard > SQL Editor\n');
+      logger.info(`   Migration file: supabase/migrations/20250105000001_add_neighborhood_data.sql\n`);
       
       return;
     }
     
     const data = await response.json();
-    console.log('✅ Migration executed successfully!');
-    console.log(data);
+    logger.info('✅ Migration executed successfully!');
+    logger.info(data);
     
   } catch (error) {
-    console.error('❌ Migration failed:', error.message);
-    console.log('\n💡 Manual steps:');
-    console.log('1. Go to Supabase Dashboard > SQL Editor');
-    console.log('2. Copy the contents of: supabase/migrations/20250105000001_add_neighborhood_data.sql');
-    console.log('3. Paste and run the SQL');
+    logger.error('❌ Migration failed:', error.message);
+    logger.info('\n💡 Manual steps:');
+    logger.info('1. Go to Supabase Dashboard > SQL Editor');
+    logger.info('2. Copy the contents of: supabase/migrations/20250105000001_add_neighborhood_data.sql');
+    logger.info('3. Paste and run the SQL');
     process.exit(1);
   }
 }
