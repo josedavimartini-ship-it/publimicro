@@ -17,7 +17,8 @@ function verifyEvent(req: Request): Stripe.Event | null {
   const sig = req.headers['stripe-signature'] as string | undefined;
   if (!sig) throw new Error('Missing stripe-signature header');
 
-  const rawBody = (req as any).rawBody ?? JSON.stringify(req.body);
+  interface RawBodyReq { rawBody?: string }
+  const rawBody = ((req as unknown) as RawBodyReq).rawBody ?? JSON.stringify(req.body);
   return stripe.webhooks.constructEvent(rawBody, sig, webhookSecret);
 }
 
@@ -60,7 +61,6 @@ export async function handleStripeWebhook(req: Request, res: Response) {
       case 'customer.subscription.updated':
       case 'customer.subscription.deleted': {
         const subscription = event.data.object as Stripe.Subscription;
-        const _userId = (subscription.metadata && (subscription.metadata.user_id as string)) ?? null; // prefer server-side mapping
 
         // Idempotent reconciliation pattern:
         // 1) Fetch subscription by stripe_subscription_id
