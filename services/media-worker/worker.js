@@ -1,4 +1,5 @@
 #!/usr/bin/env node
+/* eslint-disable no-console */
 // Simple media worker scaffold.
 // Usage (local):
 // 1) Install deps: `cd services/media-worker && npm install`
@@ -14,11 +15,11 @@ try {
   // prefer @ffmpeg-installer/ffmpeg, fallback to ffmpeg-static
   const ffInst = require('@ffmpeg-installer/ffmpeg')
   if (ffInst && ffInst.path) ffmpeg.setFfmpegPath(ffInst.path)
-} catch (e) {
+} catch (_e) {
   try {
     const ffStatic = require('ffmpeg-static')
     if (ffStatic) ffmpeg.setFfmpegPath(ffStatic)
-  } catch (e2) {
+  } catch (_e2) {
     console.warn('No embedded ffmpeg binary found; ensure ffmpeg is on PATH')
   }
 }
@@ -56,11 +57,8 @@ let bucketsConfig = {}
 try {
   const cfgPath = path.join(__dirname, '..', '..', 'config', 'media-buckets.json')
   if (fs.existsSync(cfgPath)) bucketsConfig = JSON.parse(fs.readFileSync(cfgPath, 'utf8'))
-} catch (e) { console.warn('Could not load media-buckets.json', e && e.message) }
+} catch (_e) { console.warn('Could not load media-buckets.json', (_e && _e.message) || String(_e)) }
 
-function escapeRemotePath(p) {
-  return encodeURIComponent(p).replace(/%2F/g, '/')
-}
 
 async function uploadToSupabase(bucket, remotePath, localFile, contentType) {
   if (!SUPABASE_SERVICE_ROLE_KEY) throw new Error('SUPABASE_SERVICE_ROLE_KEY required to upload')
@@ -93,7 +91,8 @@ async function insertPropertyPhoto(propertyId, publicUrl, filename) {
     const q = `${base}/rest/v1/property_photos?url=eq.${encodeURIComponent(publicUrl)}`
     const exist = await axios.get(q, { headers })
     if (exist && Array.isArray(exist.data) && exist.data.length > 0) {
-      console.log('property_photos row already exists for', publicUrl)
+      // Non-error informational: only log in debug mode
+      if (process.env.DEBUG === '1' || process.env.DEBUG === 'true') console.log('property_photos row already exists for', publicUrl)
       return exist.data
     }
   } catch (e) {
@@ -112,7 +111,9 @@ async function main() {
   if (!fs.existsSync(tmpDir)) fs.mkdirSync(tmpDir, { recursive: true })
 
   async function processJob(job) {
-    console.log('Processing job:', job)
+    const debug = process.env.DEBUG === '1' || process.env.DEBUG === 'true'
+    const debugLog = (...args) => { if (debug) console.log(...args) }
+    debugLog('Processing job:', job)
     const rawUrl = job.rawUrl
     const key = job.key
     const slug = job.slug || (key && key.split('/')[0]) || 'unknown'
@@ -121,14 +122,14 @@ async function main() {
     if (!rawUrl) {
       // Support local rawPath for scaffolded ingest server
       if (job.rawPath && fs.existsSync(job.rawPath)) {
-        console.log('Using local rawPath', job.rawPath)
-        var tmpFile = job.rawPath
+        debugLog('Using local rawPath', job.rawPath)
+        tmpFile = job.rawPath
       } else {
         throw new Error('Job must include rawUrl or rawPath')
       }
     } else {
       const tmpFile = path.join(tmpDir, `${Date.now()}-${path.basename(key || rawUrl)}`)
-      console.log('Downloading', rawUrl, '->', tmpFile)
+      debugLog('Downloading', rawUrl, '->', tmpFile)
       const resp = await axios.get(rawUrl, { responseType: 'stream', maxContentLength: Infinity, maxBodyLength: Infinity })
       await new Promise((resolve, reject) => {
         const w = fs.createWriteStream(tmpFile)
@@ -142,13 +143,13 @@ async function main() {
     const localFile = job._tmpFile || job.rawPath
     const ext = path.extname(localFile).toLowerCase()
 
-    let uploadedUrls = []
+    const uploadedUrls = []
 
     // If image -> create optimized webp + thumbnail, upload
     if (['.jpg', '.jpeg', '.png', '.webp', '.heic'].includes(ext)) {
       const outWebp = localFile + '.webp'
       const thumb = localFile + '.thumb.jpg'
-      console.log('Optimizing image ->', outWebp)
+      debugLog('Optimizing image ->', outWebp)
       await sharp(localFile).resize({ width: 1920 }).webp({ quality: 80 }).toFile(outWebp)
       await sharp(localFile).resize({ width: 400 }).jpeg({ quality: 70 }).toFile(thumb)
       // Upload derivatives to processed buckets
@@ -166,7 +167,7 @@ async function main() {
     // If video -> transcode to mp4 H.264 and create poster, upload
     if (['.mp4', '.mov', '.mkv', '.avi', '.webm'].includes(ext)) {
       const outMp4 = localFile + '.processed.mp4'
-      console.log('Transcoding video ->', outMp4)
+      debugLog('Transcoding video ->', outMp4)
       await new Promise((resolve, reject) => {
         ffmpeg(localFile)
           .outputOptions(['-c:v libx264', '-preset medium', '-crf 23', '-c:a aac', '-b:a 128k', '-movflags +faststart'])
@@ -202,7 +203,7 @@ async function main() {
         const filename = path.basename(uploadedUrls[0])
         const caption = moderation.flagged ? `[FLAGGED] ${filename}` : filename
         const inserted = await insertPropertyPhoto(propertyId, uploadedUrls[0], caption)
-        console.log('Inserted property_photos row, result:', inserted, 'moderation:', moderation)
+          debugLog('Inserted property_photos row, result:', inserted, 'moderation:', moderation)
       } catch (err) { console.warn('DB insert failed:', err && err.message) }
     }
 
@@ -213,7 +214,7 @@ async function main() {
 
     // If REDIS_URL provided, run BullMQ worker consuming jobs from 'media-jobs' queue
     if (REDIS_URL) {
-      console.log('Starting Redis-backed worker (BullMQ v5) using REDIS_URL')
+      if (process.env.DEBUG === '1' || process.env.DEBUG === 'true') console.log('Starting Redis-backed worker (BullMQ v5) using REDIS_URL')
       // Create ioredis client with options compatible with BullMQ v5
       const redisClient = new IORedis(REDIS_URL, { maxRetriesPerRequest: null })
       const { Queue } = require('bullmq')
@@ -225,9 +226,9 @@ async function main() {
       }, { connection: redisClient, concurrency })
 
       // Worker lifecycle logs
-      console.log('Worker started; awaiting jobs on queue "media-jobs"')
-      worker.on('active', job => console.log('Job active', job.id, job.name))
-      worker.on('completed', (job) => console.log('Job completed', job.id))
+      if (process.env.DEBUG === '1' || process.env.DEBUG === 'true') console.log('Worker started; awaiting jobs on queue "media-jobs"')
+      worker.on('active', job => { if (process.env.DEBUG === '1' || process.env.DEBUG === 'true') console.log('Job active', job.id, job.name) })
+      worker.on('completed', (job) => { if (process.env.DEBUG === '1' || process.env.DEBUG === 'true') console.log('Job completed', job.id) })
       worker.on('failed', async (job, err) => {
         try {
           console.error('Job failed', job.id, err && err.message)
@@ -243,7 +244,7 @@ async function main() {
 
       // Graceful shutdown
       const shutdown = async () => {
-        console.log('Shutting down worker...')
+        if (process.env.DEBUG === '1' || process.env.DEBUG === 'true') console.log('Shutting down worker...')
         try { await worker.close() } catch (e) { console.warn('Error closing worker', e && e.message) }
         try { await redisClient.quit() } catch (e) { redisClient.disconnect() }
         process.exit(0)
@@ -259,7 +260,7 @@ async function main() {
   const job = JSON.parse(fs.readFileSync(jobFile, 'utf8'))
   try {
     const res = await processJob(job)
-    console.log('Job result:', res)
+    if (process.env.DEBUG === '1' || process.env.DEBUG === 'true') console.log('Job result:', res)
   } catch (err) {
     console.error('Processing failed:', err)
     process.exit(1)

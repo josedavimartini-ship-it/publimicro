@@ -3,7 +3,7 @@
  * Checks if user can post based on subscription tier and monthly limits
  */
 
-import { createClient } from '@supabase/supabase-js';
+import { createClient, type SupabaseClient } from '@supabase/supabase-js';
 
 // Types
 export type AnnouncementCategory = 
@@ -114,7 +114,7 @@ const CATEGORY_TO_USAGE_FIELD: Record<AnnouncementCategory, keyof UserCredits> =
 /**
  * Initialize Supabase client
  */
-function getSupabaseClient() {
+function getSupabaseClient(): SupabaseClient {
   const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
   // Prefer the service role key for server/admin operations, but fall back
   // to the public anon key when building locally or in environments where
@@ -128,7 +128,7 @@ function getSupabaseClient() {
   }
 
   if (!process.env.SUPABASE_SERVICE_ROLE_KEY) {
-    // eslint-disable-next-line no-console
+     
     console.warn('SUPABASE_SERVICE_ROLE_KEY not set — falling back to anon key for build-time operations. Admin operations will require the service role key at runtime.');
   }
 
@@ -156,7 +156,7 @@ async function checkAndResetMonthlyLimits(
     // reset to avoid failing builds. The service role key is required for
     // privileged writes.
     if (!process.env.SUPABASE_SERVICE_ROLE_KEY) {
-      // eslint-disable-next-line no-console
+       
       console.warn('Skipping monthly reset because SUPABASE_SERVICE_ROLE_KEY is not set');
       return false;
     }
@@ -220,7 +220,7 @@ async function getUserSubscription(
 async function getUserCredits(userId: string): Promise<UserCredits | null> {
   const supabase = getSupabaseClient();
 
-  let { data, error } = await supabase
+  const { data, error } = await supabase
     .from('user_credits')
     .select('*')
     .eq('user_id', userId)
@@ -426,7 +426,24 @@ export async function incrementPostingCount(
 /**
  * Get user's posting stats (for dashboard display)
  */
-export async function getUserPostingStats(userId: string) {
+export async function getUserPostingStats(userId: string): Promise<
+  | {
+      tier: SubscriptionTier;
+      status: string;
+      is_trial: boolean;
+      trial_ends_at: string | null;
+      current_period_end: string;
+      usage: {
+        items: { current: number; limit: number | typeof Infinity; remaining: number | typeof Infinity };
+        properties: { current: number; limit: number | typeof Infinity; remaining: number | typeof Infinity };
+        vehicles: { current: number; limit: number | typeof Infinity; remaining: number | typeof Infinity };
+      };
+      credits: { total: number; free: number; paid: number };
+      lifetime_posts: number;
+      last_reset: string;
+    }
+  | null
+> {
   try {
     const subscription = await getUserSubscription(userId);
     const credits = await getUserCredits(userId);

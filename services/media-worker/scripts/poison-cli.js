@@ -1,4 +1,5 @@
 #!/usr/bin/env node
+/* eslint-disable no-console */
 // Simple CLI to inspect and manage jobs in the media-poison queue
 // Usage:
 //   node scripts/poison-cli.js list

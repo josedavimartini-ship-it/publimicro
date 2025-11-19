@@ -17,7 +17,7 @@ function verifyEvent(req: Request): Stripe.Event | null {
   const sig = req.headers['stripe-signature'] as string | undefined;
   if (!sig) throw new Error('Missing stripe-signature header');
 
-  const rawBody = (req as any).rawBody || JSON.stringify(req.body);
+  const rawBody = (req as any).rawBody ?? JSON.stringify(req.body);
   return stripe.webhooks.constructEvent(rawBody, sig, webhookSecret);
 }
 
@@ -25,9 +25,10 @@ export async function handleStripeWebhook(req: Request, res: Response) {
   let event: Stripe.Event;
   try {
     event = verifyEvent(req) as Stripe.Event;
-  } catch (err: any) {
-    console.error('Webhook signature verification failed:', err.message);
-    return res.status(400).send(`Webhook Error: ${err.message}`);
+  } catch (err: unknown) {
+    const msg = err instanceof Error ? err.message : String(err);
+    console.error('Webhook signature verification failed:', msg);
+    return res.status(400).send(`Webhook Error: ${msg}`);
   }
 
   try {
@@ -44,8 +45,14 @@ export async function handleStripeWebhook(req: Request, res: Response) {
       case 'invoice.payment_succeeded':
       case 'checkout.session.completed': {
         // Handle successful payments if needed (grant benefits, mark invoices)
-        const invoice = event.data.object as any;
-        console.log(event.type, invoice.id);
+        const obj = event.data.object as Stripe.Invoice | Stripe.Checkout.Session;
+        const getObjectId = (o: unknown): string => {
+          if (!o || typeof o !== 'object') return '<unknown>';
+          const maybe = o as { id?: string };
+          return maybe.id ?? '<unknown>';
+        };
+        const id = getObjectId(obj);
+        console.log(event.type, id);
         break;
       }
 
@@ -53,7 +60,7 @@ export async function handleStripeWebhook(req: Request, res: Response) {
       case 'customer.subscription.updated':
       case 'customer.subscription.deleted': {
         const subscription = event.data.object as Stripe.Subscription;
-        const userId = subscription.metadata?.user_id || null; // prefer server-side mapping
+        const _userId = (subscription.metadata && (subscription.metadata.user_id as string)) ?? null; // prefer server-side mapping
 
         // Idempotent reconciliation pattern:
         // 1) Fetch subscription by stripe_subscription_id
@@ -77,8 +84,9 @@ export async function handleStripeWebhook(req: Request, res: Response) {
     }
 
     res.json({ received: true });
-  } catch (err: any) {
-    console.error('Webhook handler error:', err.message);
+  } catch (err: unknown) {
+    const msg = err instanceof Error ? err.message : String(err);
+    console.error('Webhook handler error:', msg);
     res.status(500).send('Internal error');
   }
 }
