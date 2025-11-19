@@ -58,7 +58,7 @@ export const SUBSCRIPTION_PLANS: Record<SubscriptionTier, SubscriptionFeatures> 
   premium: {
     tier: 'premium',
     name: 'Premium',
-    price: 39.90,
+    price: 28.00,
     billing: 'monthly',
     trial_days: 7,
     max_properties: 50,
@@ -116,8 +116,8 @@ export const SUBSCRIPTION_PLANS: Record<SubscriptionTier, SubscriptionFeatures> 
  * Stripe Price IDs for subscriptions (generated from setup-stripe-products.js)
  */
 export const SUBSCRIPTION_PRICE_IDS: Record<Exclude<SubscriptionTier, 'free'>, string> = {
-  premium: 'price_1SVAiBJtHEENVe7mEYMVprtW',
-  pro: 'price_1SVAiCJtHEENVe7mzCtb8qY8'
+  premium: 'price_1SVCoMJtHEENVe7m519P29xB',
+  pro: 'price_1SVCoNJtHEENVe7mwVinYHKY'
 };
 
 /**

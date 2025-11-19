@@ -216,24 +216,24 @@ export function getEnhancementFeatures(type: EnhancementType): string[] {
  */
 export const STRIPE_PRICE_IDS: Record<AnnouncementCategory, Record<EnhancementType, string>> = {
   items: {
-    highlight: 'price_1SVAhzJtHEENVe7mhcUlf0rM',
-    organic_marketing: 'price_1SVAcCJtHEENVe7miMNkPrja',
-    bundle: 'price_1SVAi1JtHEENVe7mu9eOlSHj'
+    highlight: 'price_1SVCoBJtHEENVe7m4s7TmZxk',
+    organic_marketing: 'price_1SVCoCJtHEENVe7mvuFHFi40',
+    bundle: 'price_1SVCoDJtHEENVe7msqs6octi'
   },
   vehicles: {
-    highlight: 'price_1SVAcHJtHEENVe7mlOLZJ2vd',
-    organic_marketing: 'price_1SVAcJJtHEENVe7mVL0KbOXa',
-    bundle: 'price_1SVAcKJtHEENVe7mADY3MPUB'
+    highlight: 'price_1SVCoFJtHEENVe7mmVgV04fK',
+    organic_marketing: 'price_1SVCoGJtHEENVe7m7cK8ZI2Z',
+    bundle: 'price_1SVCoHJtHEENVe7mc5URby3C'
   },
   machinery: {
-    highlight: 'price_1SQsWhFTa31reGpfjOIz5v98', // Same as vehicles
-    organic_marketing: 'price_1SQsWiFTa31reGpfu83iTmAB',
-    bundle: 'price_1SQsWjFTa31reGpf7aW1O1kB'
+    highlight: 'price_1SVCoFJtHEENVe7mmVgV04fK',
+    organic_marketing: 'price_1SVCoGJtHEENVe7m7cK8ZI2Z',
+    bundle: 'price_1SVCoHJtHEENVe7mc5URby3C'
   },
   marine: {
-    highlight: 'price_1SQsWhFTa31reGpfjOIz5v98', // Same as vehicles
-    organic_marketing: 'price_1SQsWiFTa31reGpfu83iTmAB',
-    bundle: 'price_1SQsWjFTa31reGpf7aW1O1kB'
+    highlight: 'price_1SVCoFJtHEENVe7mmVgV04fK',
+    organic_marketing: 'price_1SVCoGJtHEENVe7m7cK8ZI2Z',
+    bundle: 'price_1SVCoHJtHEENVe7mc5URby3C'
   },
   properties: {
     highlight: 'price_1SVAcMJtHEENVe7mUh3nvjSn',
@@ -241,24 +241,24 @@ export const STRIPE_PRICE_IDS: Record<AnnouncementCategory, Record<EnhancementTy
     bundle: 'price_1SVAiAJtHEENVe7mcSmpJtCS'
   },
   outdoor: {
-    highlight: 'price_1SQsWeFTa31reGpf9cqoamZK', // Same as items
-    organic_marketing: 'price_1SQsWfFTa31reGpfIUCCZCgB',
-    bundle: 'price_1SQsWgFTa31reGpf2U52sdTG'
+    highlight: 'price_1SVCoBJtHEENVe7m4s7TmZxk',
+    organic_marketing: 'price_1SVCoCJtHEENVe7mvuFHFi40',
+    bundle: 'price_1SVCoDJtHEENVe7msqs6octi'
   },
   travel: {
-    highlight: 'price_1SQsWeFTa31reGpf9cqoamZK', // Same as items
-    organic_marketing: 'price_1SQsWfFTa31reGpfIUCCZCgB',
-    bundle: 'price_1SQsWgFTa31reGpf2U52sdTG'
+    highlight: 'price_1SVCoBJtHEENVe7m4s7TmZxk',
+    organic_marketing: 'price_1SVCoCJtHEENVe7mvuFHFi40',
+    bundle: 'price_1SVCoDJtHEENVe7msqs6octi'
   },
   global: {
-    highlight: 'price_1SQsWeFTa31reGpf9cqoamZK', // Same as items
-    organic_marketing: 'price_1SQsWfFTa31reGpfIUCCZCgB',
-    bundle: 'price_1SQsWgFTa31reGpf2U52sdTG'
+    highlight: 'price_1SVCoBJtHEENVe7m4s7TmZxk',
+    organic_marketing: 'price_1SVCoCJtHEENVe7mvuFHFi40',
+    bundle: 'price_1SVCoDJtHEENVe7msqs6octi'
   },
   shared: {
-    highlight: 'price_1SQsWeFTa31reGpf9cqoamZK', // Same as items
-    organic_marketing: 'price_1SQsWfFTa31reGpfIUCCZCgB',
-    bundle: 'price_1SQsWgFTa31reGpf2U52sdTG'
+    highlight: 'price_1SVCoBJtHEENVe7m4s7TmZxk',
+    organic_marketing: 'price_1SVCoCJtHEENVe7mvuFHFi40',
+    bundle: 'price_1SVCoDJtHEENVe7msqs6octi'
   }
 };
 

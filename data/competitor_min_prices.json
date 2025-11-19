@@ -5,7 +5,7 @@
     "notes": "Partial — public minima where available. Many portals require commercial contact (prices behind login/contact forms)."
   },
 
-  "subscription.premium": 990,
+  "subscription.premium": 3990,
 
   "sources_checked": {
     "mercadolivre.melimais": {
@@ -17,6 +17,11 @@
       "url": "https://www.mercadolibre.com.ar/",
       "found": ["subscription.premium = 3490 ARS/month (marketing banner)"],
       "notes": "Homepage marketing shows 'BENEFICIOS EXCLUSIVOS DESDE 3490 PESOS POR MES' — recorded as ARS 3490. Currency is ARS; no automatic conversion applied."
+    },
+    "mercadolivre.melimais": {
+      "url": "https://www.mercadolivre.com.br/assinaturas/melimais",
+      "found": ["subscription.premium = 3990 BRL/month (marketing banner and plan page)", "promo variants showing R$39,90 or R$19,90 in some bundles"],
+      "notes": "Public marketing shows R$39,90 for Meli+ variants; recorded as BRL 3990 cents. Manual verification recommended for promotional tiers and regional variants."
     },
     "zapimoveis.anuncie": {
       "url": "https://anuncie.zapimoveis.com.br/planos-profissionais/",

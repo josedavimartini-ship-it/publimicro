@@ -1,0 +1,73 @@
+{
+  "generated_at": "2025-11-19T00:00:00Z",
+  "created_live_at": "2025-11-19T00:00:00Z",
+  "notes": "Best-effort mapping between legacy (built) Stripe price IDs and the new price IDs created by `setup-stripe-products.js`. These old IDs were observed inside built assets under `.next/server/chunks` and other generated bundles. Validate each mapping by listing prices in the live Stripe account before applying changes.",
+  "mappings": [
+    {
+      "logical": "enhancement.items.highlight",
+      "old": "price_1SQsWeFTa31reGpf9cqoamZK",
+      "new": "price_1SVCoBJtHEENVe7m4s7TmZxk",
+      "note": "Items - Highlight: old ID found in built bundle mapping 'k.items.highlight'"
+    },
+    {
+      "logical": "enhancement.items.organic_marketing",
+      "old": "price_1SQsWfFTa31reGpfIUCCZCgB",
+      "new": "price_1SVCoCJtHEENVe7mvuFHFi40",
+      "note": "Items - Organic Marketing"
+    },
+    {
+      "logical": "enhancement.items.bundle",
+      "old": "price_1SQsWgFTa31reGpf2U52sdTG",
+      "new": "price_1SVCoDJtHEENVe7msqs6octi",
+      "note": "Items - Bundle"
+    },
+    {
+      "logical": "enhancement.vehicles.highlight",
+      "old": "price_1SQsWhFTa31reGpfjOIz5v98",
+      "new": "price_1SVCoFJtHEENVe7mmVgV04fK",
+      "note": "Vehicles - Highlight"
+    },
+    {
+      "logical": "enhancement.vehicles.organic_marketing",
+      "old": "price_1SQsWiFTa31reGpfu83iTmAB",
+      "new": "price_1SVCoGJtHEENVe7m7cK8ZI2Z",
+      "note": "Vehicles - Organic Marketing"
+    },
+    {
+      "logical": "enhancement.vehicles.bundle",
+      "old": "price_1SQsWjFTa31reGpf7aW1O1kB",
+      "new": "price_1SVCoHJtHEENVe7mc5URby3C",
+      "note": "Vehicles - Bundle"
+    },
+    {
+      "logical": "enhancement.properties.highlight",
+      "old": "price_1SQsWkFTa31reGpfcvHEZ3Ns",
+      "new": "price_1SVCoIJtHEENVe7mVjuJY7Eh",
+      "note": "Properties - Highlight"
+    },
+    {
+      "logical": "enhancement.properties.organic_marketing",
+      "old": "price_1SQsWlFTa31reGpfESfDzwk4",
+      "new": "price_1SVCoJJtHEENVe7mpZf2rbIv",
+      "note": "Properties - Organic Marketing"
+    },
+    {
+      "logical": "enhancement.properties.bundle",
+      "old": "price_1SQsWlFTa31reGpfTgbF5xHA",
+      "new": "price_1SVCoLJtHEENVe7mGp5xS7jj",
+      "note": "Properties - Bundle"
+    },
+    {
+      "logical": "subscription.premium",
+      "old": "price_1SQXY4FTa31reGpf1w2KTfGA",
+      "new": "price_1SVCoMJtHEENVe7m519P29xB",
+      "note": "Subscription Premium - new live price created on 2025-11-19 via setup script. Validate before switching production traffic."
+    },
+    {
+      "logical": "subscription.pro",
+      "old": "price_1SQXZxFTa31reGpf7HGHw8In",
+      "new": "price_1SVCoNJtHEENVe7mwVinYHKY",
+      "note": "Subscription Pro - new live price created on 2025-11-19 via setup script."
+    }
+  ]
+}
