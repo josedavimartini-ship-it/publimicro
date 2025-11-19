@@ -24,17 +24,26 @@ function verifyEvent(req: Request): Stripe.Event | null {
 
 // Lightweight debug logger: enable with DEBUG=1 or DEBUG=true
 const _isDebug = process.env.DEBUG === '1' || process.env.DEBUG === 'true';
+/* eslint-disable no-console */
 function dbg(...args: unknown[]) {
-  if (_isDebug) console.log(...args);
+  if (_isDebug) console.log(...(args as [unknown, ...unknown[]]));
 }
+/* eslint-enable no-console */
+
+/* Allow a single console.error usage inside the error wrapper */
+/* eslint-disable no-console */
+function err(...args: unknown[]) {
+  console.error(...(args as [unknown, ...unknown[]]));
+}
+/* eslint-enable no-console */
 
 export async function handleStripeWebhook(req: Request, res: Response) {
   let event: Stripe.Event;
   try {
     event = verifyEvent(req) as Stripe.Event;
-  } catch (err: unknown) {
-    const msg = err instanceof Error ? err.message : String(err);
-    console.error('Webhook signature verification failed:', msg);
+  } catch (e: unknown) {
+    const msg = e instanceof Error ? e.message : String(e);
+    err('Webhook signature verification failed:', msg);
     return res.status(400).send(`Webhook Error: ${msg}`);
   }
 
@@ -90,9 +99,9 @@ export async function handleStripeWebhook(req: Request, res: Response) {
     }
 
     res.json({ received: true });
-  } catch (err: unknown) {
-    const msg = err instanceof Error ? err.message : String(err);
-    console.error('Webhook handler error:', msg);
+  } catch (e: unknown) {
+    const msg = e instanceof Error ? e.message : String(e);
+    err('Webhook handler error:', msg);
     res.status(500).send('Internal error');
   }
 }
