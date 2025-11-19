@@ -320,6 +320,7 @@ async function createEnhancementProducts() {
   
   const enhancementPriceIds = {};
   const competitorMin = loadCompetitorMinPrices();
+  const DRY_RUN = process.env.DRY_RUN === '1' || process.argv.includes('--dry-run');
 
   for (const product of ENHANCEMENT_PRODUCTS) {
     try {
@@ -328,16 +329,21 @@ async function createEnhancementProducts() {
       const existing = await stripe.products.list({ limit: 100 });
       stripeProduct = existing.data.find(p => p.name === product.name) || null;
       if (!stripeProduct) {
-        stripeProduct = await stripe.products.create({
-          name: product.name,
-          description: product.description,
-          metadata: {
-            category: product.category,
-            enhancement_type: product.type,
-            features: JSON.stringify(product.features),
-            free_ads_included: FREE_ADS_PER_NEW_USER
-          }
-        });
+        if (DRY_RUN) {
+          console.log(`DRY-RUN: would create product '${product.name}' (category=${product.category} enhancement_type=${product.type})`);
+          stripeProduct = { id: `dryprod_${product.category}_${product.type}` };
+        } else {
+          stripeProduct = await stripe.products.create({
+            name: product.name,
+            description: product.description,
+            metadata: {
+              category: product.category,
+              enhancement_type: product.type,
+              features: JSON.stringify(product.features),
+              free_ads_included: FREE_ADS_PER_NEW_USER
+            }
+          });
+        }
       }
 
       // Determine target price (30% cheaper than competitor min if present, otherwise 30% cheaper than current value)
@@ -349,16 +355,21 @@ async function createEnhancementProducts() {
       const prices = await stripe.prices.list({ product: stripeProduct.id, limit: 100 });
       let stripePrice = prices.data.find(p => p.unit_amount === targetAmount && p.currency === 'brl');
       if (!stripePrice) {
-        stripePrice = await stripe.prices.create({
-          product: stripeProduct.id,
-          unit_amount: targetAmount,
-          currency: 'brl',
-          metadata: {
-            category: product.category,
-            enhancement_type: product.type,
-            pricing_source: compVal ? 'competitor_min' : 'current_base'
-          }
-        });
+        if (DRY_RUN) {
+          console.log(`DRY-RUN: would create price for product ${stripeProduct.id}: unit_amount=${targetAmount} BRL cents`);
+          stripePrice = { id: `dryprice_${stripeProduct.id}_${targetAmount}`, unit_amount: targetAmount, currency: 'brl' };
+        } else {
+          stripePrice = await stripe.prices.create({
+            product: stripeProduct.id,
+            unit_amount: targetAmount,
+            currency: 'brl',
+            metadata: {
+              category: product.category,
+              enhancement_type: product.type,
+              pricing_source: compVal ? 'competitor_min' : 'current_base'
+            }
+          });
+        }
       }
       
       // Store price ID for code generation
@@ -386,6 +397,7 @@ async function createSubscriptionProducts() {
   const subscriptionPriceIds = {};
   // load competitor minima (optional)
   const competitorMin = loadCompetitorMinPrices();
+  const DRY_RUN = process.env.DRY_RUN === '1' || process.argv.includes('--dry-run');
 
   for (const sub of SUBSCRIPTION_PRODUCTS) {
     try {
@@ -394,14 +406,19 @@ async function createSubscriptionProducts() {
       const existing = await stripe.products.list({ limit: 100 });
       stripeProduct = existing.data.find(p => p.name === sub.name) || null;
       if (!stripeProduct) {
-        stripeProduct = await stripe.products.create({
-          name: sub.name,
-          description: sub.description,
-          metadata: {
-            tier: sub.tier,
-            features: JSON.stringify(sub.features)
-          }
-        });
+        if (DRY_RUN) {
+          console.log(`DRY-RUN: would create product '${sub.name}' (tier=${sub.tier})`);
+          stripeProduct = { id: `dryprod_subscription_${sub.tier}` };
+        } else {
+          stripeProduct = await stripe.products.create({
+            name: sub.name,
+            description: sub.description,
+            metadata: {
+              tier: sub.tier,
+              features: JSON.stringify(sub.features)
+            }
+          });
+        }
       }
 
       // Determine target price for subscription (use competitor minima if available)
@@ -413,19 +430,24 @@ async function createSubscriptionProducts() {
       const prices = await stripe.prices.list({ product: stripeProduct.id, limit: 100 });
       let stripePrice = prices.data.find(p => p.unit_amount === targetAmount && p.recurring && p.recurring.interval === sub.interval && p.currency === 'brl');
       if (!stripePrice) {
-        stripePrice = await stripe.prices.create({
-          product: stripeProduct.id,
-          unit_amount: targetAmount,
-          currency: 'brl',
-          recurring: {
-            interval: sub.interval,
-            trial_period_days: sub.trial_days
-          },
-          metadata: {
-            tier: sub.tier,
-            pricing_source: compVal ? 'competitor_min' : 'current_base'
-          }
-        });
+        if (DRY_RUN) {
+          console.log(`DRY-RUN: would create recurring price for product ${stripeProduct.id}: unit_amount=${targetAmount} BRL cents interval=${sub.interval}`);
+          stripePrice = { id: `dryprice_${stripeProduct.id}_${targetAmount}`, unit_amount: targetAmount, currency: 'brl', recurring: { interval: sub.interval } };
+        } else {
+          stripePrice = await stripe.prices.create({
+            product: stripeProduct.id,
+            unit_amount: targetAmount,
+            currency: 'brl',
+            recurring: {
+              interval: sub.interval,
+              trial_period_days: sub.trial_days
+            },
+            metadata: {
+              tier: sub.tier,
+              pricing_source: compVal ? 'competitor_min' : 'current_base'
+            }
+          });
+        }
       }
       
       subscriptionPriceIds[sub.tier] = stripePrice.id;
