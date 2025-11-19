@@ -1,0 +1,42 @@
+{
+  "metadata": {
+    "source_collected_at": "2025-11-19T00:00:00Z",
+    "collected_by": "automation+manual",
+    "notes": "Partial — public minima where available. Many portals require commercial contact (prices behind login/contact forms)."
+  },
+
+  "subscription.premium": 990,
+
+  "sources_checked": {
+    "mercadolivre.melimais": {
+      "url": "https://www.mercadolivre.com.br/assinaturas/melimais",
+      "found": ["subscription.premium = 990 (R$9.90/month)"],
+      "notes": "Public marketing mentions R$9,90; treat as verified minimum for subscription offers."
+    },
+    "mercadolibre.ar": {
+      "url": "https://www.mercadolibre.com.ar/",
+      "found": ["subscription.premium = 3490 ARS/month (marketing banner)"],
+      "notes": "Homepage marketing shows 'BENEFICIOS EXCLUSIVOS DESDE 3490 PESOS POR MES' — recorded as ARS 3490. Currency is ARS; no automatic conversion applied."
+    },
+    "zapimoveis.anuncie": {
+      "url": "https://anuncie.zapimoveis.com.br/planos-profissionais/",
+      "found": [],
+      "notes": "Plans listed (Multiportais Padrão/Superior/Exclusivo) but prices require login/contact (WhatsApp/phone)."
+    },
+    "webmotors.ads": {
+      "url": "https://www.webmotors.com.br/solutions/ads/",
+      "found": [],
+      "notes": "Advertising/solutions page — pricing provided by sales (contact via publicidade@webmotors.com.br)."
+    },
+    "zonaprop.anuncie": {
+      "url": "https://www.zonaprop.com.ar/anuncie",
+      "found": [],
+      "notes": "Blocked by Cloudflare challenge during automated fetch; requires manual visit or bypass."
+    },
+    "olx.anunciar": {
+      "url": "https://www.olx.com.br/anunciar",
+      "found": [],
+      "notes": "OLX provides free listings; promoted/paid options require business pages or are sold via Group OLX channels."
+    }
+  }
+}

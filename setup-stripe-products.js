@@ -10,8 +10,137 @@
  * Run with: node setup-stripe-products.js
  */
 
-const { createStripe } = require('@publimicro/stripe');
+const fs = require('fs');
+const path = require('path');
+let createStripe;
+try {
+  // prefer workspace package if node resolution is configured
+  createStripe = require('@publimicro/stripe').createStripe;
+} catch (e) {
+  // fallback to local package build (dist)
+  // eslint-disable-next-line global-require
+  createStripe = require(path.join(__dirname, 'packages', 'stripe', 'dist', 'src', 'index.js')).createStripe;
+}
 let stripe; // assigned in main after env check
+let fetchClient;
+
+// Operational constants
+const DISCOUNT_PERCENT = 30; // target: 30% cheaper than competitor or current price
+const FREE_ADS_PER_NEW_USER = 2;
+
+// Path to competitor minima file (populated by research)
+const COMPETITOR_MIN_FILE = path.join(__dirname, 'data', 'competitor_min_prices.json');
+// FX cache for exchangerate.host responses
+const FX_CACHE_FILE = path.join(__dirname, 'data', 'fx-cache.json');
+const FX_TTL_MS = 1000 * 60 * 60 * 12; // 12 hours
+
+function loadCompetitorMinPrices() {
+  try {
+    if (fs.existsSync(COMPETITOR_MIN_FILE)) {
+      const raw = fs.readFileSync(COMPETITOR_MIN_FILE, 'utf8');
+      return JSON.parse(raw || '{}');
+    }
+  } catch (e) {
+    console.warn('Could not read competitor minima file:', e.message);
+  }
+  return {};
+}
+
+function computeTargetPrice(baseCents, competitorMinCents) {
+  const source = typeof competitorMinCents === 'number' && competitorMinCents > 0 ? competitorMinCents : baseCents;
+  const discounted = Math.round(source * (1 - DISCOUNT_PERCENT / 100));
+  // Round to whole BRL (no cents) as requested: nearest 100 cents
+  const rounded = Math.round(discounted / 100) * 100;
+  return Math.max(100, rounded);
+}
+
+// Async helpers to support competitor minima expressed in foreign currencies
+async function asyncComputeTargetPrice(baseCents, competitorVal) {
+  // competitorVal may be a number (BRL cents) or an object { amount: number, currency: 'ARS' }
+  let sourceCents = baseCents;
+
+  if (typeof competitorVal === 'number' && competitorVal > 0) {
+    sourceCents = competitorVal;
+  } else if (competitorVal && typeof competitorVal === 'object' && competitorVal.amount) {
+    try {
+      const brlCents = await convertToBRLCents(competitorVal.amount, competitorVal.currency);
+      if (brlCents > 0) sourceCents = brlCents;
+    } catch (e) {
+      console.warn('FX conversion failed, falling back to base price:', e.message);
+    }
+  }
+
+  const discounted = Math.round(sourceCents * (1 - DISCOUNT_PERCENT / 100));
+  // Round to whole BRL (no cents): nearest 100 cents
+  const rounded = Math.round(discounted / 100) * 100;
+  return Math.max(100, rounded);
+}
+
+function getFetch() {
+  if (fetchClient) return fetchClient;
+  if (typeof fetch !== 'undefined') {
+    fetchClient = fetch.bind(global);
+  } else {
+    try {
+      // eslint-disable-next-line global-require
+      fetchClient = require('node-fetch');
+    } catch (e) {
+      throw new Error('No fetch available. Please run on Node 18+ or install node-fetch.');
+    }
+  }
+  return fetchClient;
+}
+
+function readFxCache() {
+  try {
+    if (fs.existsSync(FX_CACHE_FILE)) {
+      return JSON.parse(fs.readFileSync(FX_CACHE_FILE, 'utf8') || '{}');
+    }
+  } catch (e) {
+    return {};
+  }
+  return {};
+}
+
+function writeFxCache(cache) {
+  try {
+    fs.writeFileSync(FX_CACHE_FILE, JSON.stringify(cache, null, 2));
+  } catch (e) {
+    // ignore write errors
+  }
+}
+
+async function getFxRate(from, to) {
+  from = (from || '').toUpperCase();
+  to = (to || '').toUpperCase();
+  if (!from || !to || from === to) return 1;
+  const key = `${from}_${to}`;
+  const cache = readFxCache();
+  const now = Date.now();
+  if (cache[key] && (now - cache[key].ts) < FX_TTL_MS) return cache[key].rate;
+
+  const fetch = getFetch();
+  const base = `https://api.exchangerate.host/convert?from=${encodeURIComponent(from)}&to=${encodeURIComponent(to)}&amount=1`;
+  const apikey = process.env.FX_API_KEY;
+  const url = apikey ? `${base}&apikey=${encodeURIComponent(apikey)}` : base;
+
+  const res = await fetch(url, { method: 'GET' });
+  if (!res.ok) throw new Error(`FX fetch failed: ${res.status} ${res.statusText}`);
+  const body = await res.json();
+  const rate = (body && (body.info && body.info.rate)) ? body.info.rate : (body && body.result ? body.result : null);
+  if (!rate) throw new Error('FX rate not found in response');
+  cache[key] = { rate, ts: now };
+  writeFxCache(cache);
+  return rate;
+}
+
+async function convertToBRLCents(amountMajor, currency) {
+  if (!currency) throw new Error('currency required');
+  const rate = await getFxRate(currency, 'BRL');
+  const brlMajor = amountMajor * rate; // in BRL major units
+  const brlCents = Math.round(brlMajor * 100);
+  return brlCents;
+}
 
 // Enhancement pricing (from enhancementPricing.ts)
 const ENHANCEMENT_PRODUCTS = [
@@ -189,88 +318,122 @@ const SUBSCRIPTION_PRODUCTS = [
 async function createEnhancementProducts() {
   console.log('\n🎨 Creating Enhancement Products...\n');
   
-  const priceIds = {};
-  
+  const enhancementPriceIds = {};
+  const competitorMin = loadCompetitorMinPrices();
+
   for (const product of ENHANCEMENT_PRODUCTS) {
     try {
-      // Create product
-      const stripeProduct = await stripe.products.create({
-        name: product.name,
-        description: product.description,
-        metadata: {
-          category: product.category,
-          enhancement_type: product.type,
-          features: JSON.stringify(product.features)
-        }
-      });
-      
-      // Create price
-      const stripePrice = await stripe.prices.create({
-        product: stripeProduct.id,
-        unit_amount: product.price,
-        currency: 'brl',
-        metadata: {
-          category: product.category,
-          enhancement_type: product.type
-        }
-      });
+      // Idempotent product creation: try to reuse by name
+      let stripeProduct;
+      const existing = await stripe.products.list({ limit: 100 });
+      stripeProduct = existing.data.find(p => p.name === product.name) || null;
+      if (!stripeProduct) {
+        stripeProduct = await stripe.products.create({
+          name: product.name,
+          description: product.description,
+          metadata: {
+            category: product.category,
+            enhancement_type: product.type,
+            features: JSON.stringify(product.features),
+            free_ads_included: FREE_ADS_PER_NEW_USER
+          }
+        });
+      }
+
+      // Determine target price (30% cheaper than competitor min if present, otherwise 30% cheaper than current value)
+      const compKey = `${product.category}.${product.type}`;
+      const compVal = (competitorMin && competitorMin[compKey]) ? competitorMin[compKey] : null;
+      const targetAmount = await asyncComputeTargetPrice(product.price, compVal);
+
+      // Reuse existing price if same amount exists for this product
+      const prices = await stripe.prices.list({ product: stripeProduct.id, limit: 100 });
+      let stripePrice = prices.data.find(p => p.unit_amount === targetAmount && p.currency === 'brl');
+      if (!stripePrice) {
+        stripePrice = await stripe.prices.create({
+          product: stripeProduct.id,
+          unit_amount: targetAmount,
+          currency: 'brl',
+          metadata: {
+            category: product.category,
+            enhancement_type: product.type,
+            pricing_source: compVal ? 'competitor_min' : 'current_base'
+          }
+        });
+      }
       
       // Store price ID for code generation
-      if (!priceIds[product.category]) {
-        priceIds[product.category] = {};
+      if (!enhancementPriceIds[product.category]) {
+        enhancementPriceIds[product.category] = {};
       }
-      priceIds[product.category][product.type] = stripePrice.id;
+      enhancementPriceIds[product.category][product.type] = stripePrice.id;
       
       console.log(`✅ ${product.name}`);
       console.log(`   Product ID: ${stripeProduct.id}`);
       console.log(`   Price ID: ${stripePrice.id}`);
-      console.log(`   Amount: R$ ${(product.price / 100).toFixed(2)}\n`);
+      console.log(`   Amount: R$ ${(stripePrice.unit_amount / 100).toFixed(2)}\n`);
       
     } catch (error) {
       console.error(`❌ Error creating ${product.name}:`, error.message);
     }
   }
   
-  return priceIds;
+  return enhancementPriceIds;
 }
 
 async function createSubscriptionProducts() {
   console.log('\n💳 Creating Subscription Products...\n');
   
   const subscriptionPriceIds = {};
-  
+  // load competitor minima (optional)
+  const competitorMin = loadCompetitorMinPrices();
+
   for (const sub of SUBSCRIPTION_PRODUCTS) {
     try {
-      // Create product
-      const stripeProduct = await stripe.products.create({
-        name: sub.name,
-        description: sub.description,
-        metadata: {
-          tier: sub.tier,
-          features: JSON.stringify(sub.features)
-        }
-      });
-      
-      // Create price (recurring)
-      const stripePrice = await stripe.prices.create({
-        product: stripeProduct.id,
-        unit_amount: sub.price,
-        currency: 'brl',
-        recurring: {
-          interval: sub.interval,
-          trial_period_days: sub.trial_days
-        },
-        metadata: {
-          tier: sub.tier
-        }
-      });
+      // Idempotent product creation: try to reuse by name
+      let stripeProduct;
+      const existing = await stripe.products.list({ limit: 100 });
+      stripeProduct = existing.data.find(p => p.name === sub.name) || null;
+      if (!stripeProduct) {
+        stripeProduct = await stripe.products.create({
+          name: sub.name,
+          description: sub.description,
+          metadata: {
+            tier: sub.tier,
+            features: JSON.stringify(sub.features)
+          }
+        });
+      }
+
+      // Determine target price for subscription (use competitor minima if available)
+      const compKey = `subscription.${sub.tier}`;
+      const compVal = (competitorMin && competitorMin[compKey]) ? competitorMin[compKey] : null;
+      const targetAmount = await asyncComputeTargetPrice(sub.price, compVal);
+
+      // Reuse existing recurring price if same exists for this product
+      const prices = await stripe.prices.list({ product: stripeProduct.id, limit: 100 });
+      let stripePrice = prices.data.find(p => p.unit_amount === targetAmount && p.recurring && p.recurring.interval === sub.interval && p.currency === 'brl');
+      if (!stripePrice) {
+        stripePrice = await stripe.prices.create({
+          product: stripeProduct.id,
+          unit_amount: targetAmount,
+          currency: 'brl',
+          recurring: {
+            interval: sub.interval,
+            trial_period_days: sub.trial_days
+          },
+          metadata: {
+            tier: sub.tier,
+            pricing_source: compVal ? 'competitor_min' : 'current_base'
+          }
+        });
+      }
       
       subscriptionPriceIds[sub.tier] = stripePrice.id;
       
       console.log(`✅ ${sub.name}`);
       console.log(`   Product ID: ${stripeProduct.id}`);
       console.log(`   Price ID: ${stripePrice.id}`);
-      console.log(`   Amount: R$ ${(sub.price / 100).toFixed(2)}/${sub.interval}`);
+      console.log(`   Amount: R$ ${(stripePrice.unit_amount / 100).toFixed(2)}/${sub.interval}`);
       console.log(`   Trial: ${sub.trial_days} days\n`);
       
     } catch (error) {

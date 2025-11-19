@@ -216,14 +216,14 @@ export function getEnhancementFeatures(type: EnhancementType): string[] {
  */
 export const STRIPE_PRICE_IDS: Record<AnnouncementCategory, Record<EnhancementType, string>> = {
   items: {
-    highlight: 'price_1SQsWeFTa31reGpf9cqoamZK',
-    organic_marketing: 'price_1SQsWfFTa31reGpfIUCCZCgB',
-    bundle: 'price_1SQsWgFTa31reGpf2U52sdTG'
+    highlight: 'price_1SVAhzJtHEENVe7mhcUlf0rM',
+    organic_marketing: 'price_1SVAcCJtHEENVe7miMNkPrja',
+    bundle: 'price_1SVAi1JtHEENVe7mu9eOlSHj'
   },
   vehicles: {
-    highlight: 'price_1SQsWhFTa31reGpfjOIz5v98',
-    organic_marketing: 'price_1SQsWiFTa31reGpfu83iTmAB',
-    bundle: 'price_1SQsWjFTa31reGpf7aW1O1kB'
+    highlight: 'price_1SVAcHJtHEENVe7mlOLZJ2vd',
+    organic_marketing: 'price_1SVAcJJtHEENVe7mVL0KbOXa',
+    bundle: 'price_1SVAcKJtHEENVe7mADY3MPUB'
   },
   machinery: {
     highlight: 'price_1SQsWhFTa31reGpfjOIz5v98', // Same as vehicles
@@ -236,9 +236,9 @@ export const STRIPE_PRICE_IDS: Record<AnnouncementCategory, Record<EnhancementTy
     bundle: 'price_1SQsWjFTa31reGpf7aW1O1kB'
   },
   properties: {
-    highlight: 'price_1SQsWkFTa31reGpfcvHEZ3Ns',
-    organic_marketing: 'price_1SQsWlFTa31reGpfESfDzwk4',
-    bundle: 'price_1SQsWlFTa31reGpfTgbF5xHA'
+    highlight: 'price_1SVAcMJtHEENVe7mUh3nvjSn',
+    organic_marketing: 'price_1SVAcNJtHEENVe7m0cn3ZLd8',
+    bundle: 'price_1SVAiAJtHEENVe7mcSmpJtCS'
   },
   outdoor: {
     highlight: 'price_1SQsWeFTa31reGpf9cqoamZK', // Same as items

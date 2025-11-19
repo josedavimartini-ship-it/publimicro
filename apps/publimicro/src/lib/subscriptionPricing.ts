@@ -116,8 +116,8 @@ export const SUBSCRIPTION_PLANS: Record<SubscriptionTier, SubscriptionFeatures> 
  * Stripe Price IDs for subscriptions (generated from setup-stripe-products.js)
  */
 export const SUBSCRIPTION_PRICE_IDS: Record<Exclude<SubscriptionTier, 'free'>, string> = {
-  premium: 'price_1SQsWoFTa31reGpfgeoyCXZL',
-  pro: 'price_1SQsWpFTa31reGpfKboHtx4H'
+  premium: 'price_1SVAiBJtHEENVe7mEYMVprtW',
+  pro: 'price_1SVAiCJtHEENVe7mzCtb8qY8'
 };
 
 /**
