@@ -15,11 +15,11 @@ try {
   // prefer @ffmpeg-installer/ffmpeg, fallback to ffmpeg-static
   const ffInst = require('@ffmpeg-installer/ffmpeg')
   if (ffInst && ffInst.path) ffmpeg.setFfmpegPath(ffInst.path)
-} catch (_e) {
+} catch {
   try {
     const ffStatic = require('ffmpeg-static')
     if (ffStatic) ffmpeg.setFfmpegPath(ffStatic)
-  } catch (_e2) {
+  } catch {
     console.warn('No embedded ffmpeg binary found; ensure ffmpeg is on PATH')
   }
 }
@@ -57,7 +57,7 @@ let bucketsConfig = {}
 try {
   const cfgPath = path.join(__dirname, '..', '..', 'config', 'media-buckets.json')
   if (fs.existsSync(cfgPath)) bucketsConfig = JSON.parse(fs.readFileSync(cfgPath, 'utf8'))
-} catch (_e) { console.warn('Could not load media-buckets.json', (_e && _e.message) || String(_e)) }
+  } catch { console.warn('Could not load media-buckets.json') }
 
 
 async function uploadToSupabase(bucket, remotePath, localFile, contentType) {
@@ -208,7 +208,7 @@ async function main() {
     }
 
     // Cleanup temporary files produced by worker (but keep originals in archive if desired)
-    if (job._tmpFile && fs.existsSync(job._tmpFile)) { try { fs.unlinkSync(job._tmpFile) } catch (e) {} }
+    if (job._tmpFile && fs.existsSync(job._tmpFile)) { try { fs.unlinkSync(job._tmpFile) } catch { /* ignore */ } }
     return { ok: true, uploaded: uploadedUrls }
   }
 
@@ -246,7 +246,7 @@ async function main() {
       const shutdown = async () => {
         if (process.env.DEBUG === '1' || process.env.DEBUG === 'true') console.log('Shutting down worker...')
         try { await worker.close() } catch (e) { console.warn('Error closing worker', e && e.message) }
-        try { await redisClient.quit() } catch (e) { redisClient.disconnect() }
+        try { await redisClient.quit() } catch { redisClient.disconnect(); }
         process.exit(0)
       }
       process.on('SIGINT', shutdown)

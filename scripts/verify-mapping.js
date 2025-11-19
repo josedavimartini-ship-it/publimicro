@@ -1,5 +1,4 @@
 #!/usr/bin/env node
-/* eslint-disable no-console */
 const fs = require('fs');
 const path = require('path');
 // simple argv parsing (avoid external dependency)
@@ -7,7 +6,7 @@ const path = require('path');
 let createStripe;
 try {
   createStripe = require('@publimicro/stripe').createStripe;
-} catch (_e) {
+} catch {
   createStripe = require(path.join(__dirname, '..', 'packages', 'stripe', 'dist', 'src', 'index.js')).createStripe;
 }
 

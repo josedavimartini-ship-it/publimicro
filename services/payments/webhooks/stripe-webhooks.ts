@@ -22,6 +22,12 @@ function verifyEvent(req: Request): Stripe.Event | null {
   return stripe.webhooks.constructEvent(rawBody, sig, webhookSecret);
 }
 
+// Lightweight debug logger: enable with DEBUG=1 or DEBUG=true
+const _isDebug = process.env.DEBUG === '1' || process.env.DEBUG === 'true';
+function dbg(...args: unknown[]) {
+  if (_isDebug) console.log(...args);
+}
+
 export async function handleStripeWebhook(req: Request, res: Response) {
   let event: Stripe.Event;
   try {
@@ -39,7 +45,7 @@ export async function handleStripeWebhook(req: Request, res: Response) {
         // Example: idempotent DB upsert: ensure user record exists and free_ads_remaining set
         // TODO: replace with actual DB client (Supabase or pg client)
         // await db.users.upsert({ stripe_customer_id: customer.id }, { free_ads_remaining: 2 });
-        console.log('customer.created -> ensure free_ads_remaining for', customer.id);
+        dbg('customer.created -> ensure free_ads_remaining for', customer.id);
         break;
       }
 
@@ -53,7 +59,7 @@ export async function handleStripeWebhook(req: Request, res: Response) {
           return maybe.id ?? '<unknown>';
         };
         const id = getObjectId(obj);
-        console.log(event.type, id);
+        dbg(event.type, id);
         break;
       }
 
@@ -75,12 +81,12 @@ export async function handleStripeWebhook(req: Request, res: Response) {
         //   }
         // });
 
-        console.log('subscription event for', subscription.id, 'status', subscription.status);
+        dbg('subscription event for', subscription.id, 'status', subscription.status);
         break;
       }
 
       default:
-        console.log('Unhandled event type', event.type);
+        dbg('Unhandled event type', event.type);
     }
 
     res.json({ received: true });
