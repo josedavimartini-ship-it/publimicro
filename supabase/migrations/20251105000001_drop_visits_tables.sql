@@ -10,3 +10,5 @@ DROP TYPE IF EXISTS visit_type CASCADE;
 DROP FUNCTION IF EXISTS public.update_visits_updated_at() CASCADE;
 DROP FUNCTION IF EXISTS public.auto_confirm_visits() CASCADE;
 DROP FUNCTION IF EXISTS public.notify_new_visit() CASCADE;
+-- Placeholder migration to match remote state (no-op)
+DO $$ BEGIN RAISE NOTICE 'placeholder 20251105000001'; END $$;

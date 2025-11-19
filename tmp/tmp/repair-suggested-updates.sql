@@ -1,0 +1,8 @@
+UPDATE property_photos SET url = 'https://irrzpwzyqcubhhjeuakc.supabase.co/storage/v1/object/public/imagens-sitios/juriti%2Fcompressed%2F20251107_162422_compressed.mp4' WHERE id = '1385b2e9-f84c-4088-877a-62f3b5ba5355';
+UPDATE property_photos SET url = 'https://irrzpwzyqcubhhjeuakc.supabase.co/storage/v1/object/public/imagens-sitios/juriti%2Fphotos%2F20251113_164219.jpg' WHERE id = '64aa0e58-8dd9-4965-8c62-40f92bfa774f';
+UPDATE property_photos SET url = 'https://irrzpwzyqcubhhjeuakc.supabase.co/storage/v1/object/public/imagens-sitios/juriti%2Fcompressed%2F20251107_162422_compressed.mp4' WHERE id = '3eda1d55-8089-49b1-a1ae-bce2ae56852f';
+UPDATE property_photos SET url = 'https://irrzpwzyqcubhhjeuakc.supabase.co/storage/v1/object/public/imagens-sitios/juriti%2Fphotos%2F20251113_164219.jpg' WHERE id = 'c3ac817b-0410-471f-b550-68619f4712fb';
+UPDATE property_photos SET url = 'https://irrzpwzyqcubhhjeuakc.supabase.co/storage/v1/object/public/imagens-sitios/mergulhao%2Fcompressed%2F20251107_163934_compressed.mp4' WHERE id = '4f9909dd-b9c1-4bdc-9b28-c56b19eb2c94';
+UPDATE property_photos SET url = 'https://irrzpwzyqcubhhjeuakc.supabase.co/storage/v1/object/public/imagens-sitios/juriti%2Fcompressed%2F20251107_162422_compressed.mp4' WHERE id = 'd18e4fc1-1df8-42d9-864c-1f3f38011902';
+UPDATE property_photos SET url = 'https://irrzpwzyqcubhhjeuakc.supabase.co/storage/v1/object/public/imagens-sitios/juriti%2Fphotos%2F20251113_164219.jpg' WHERE id = 'a7ea8af0-208b-4d61-b02f-6f7bbd2f4328';
+UPDATE property_photos SET url = 'https://irrzpwzyqcubhhjeuakc.supabase.co/storage/v1/object/public/imagens-sitios/mergulhao%2Fcompressed%2F20251107_163934_compressed.mp4' WHERE id = '452b912f-84ec-4feb-a3a8-aed26a0e2e53';

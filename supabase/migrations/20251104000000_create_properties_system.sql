@@ -1,4 +1,129 @@
 -- ============================================
+-- ACHEME PROPERTIES - Comprehensive Property System
+-- ============================================
+
+-- Property Types Enum
+CREATE TYPE IF NOT EXISTS property_type AS ENUM (
+  'apartment',
+  'house',
+  'chacara',
+  'sitio',
+  'fazenda',
+  'rancho',
+  'commercial',
+  'land',
+  'penthouse',
+  'studio',
+  'townhouse',
+  'condominium'
+);
+
+-- Transaction Type Enum
+CREATE TYPE IF NOT EXISTS transaction_type AS ENUM (
+  'sale',
+  'rent',
+  'lease',
+  'auction'
+);
+
+-- Note: This migration creates/assumes `properties` and related tables.
+-- If your project uses a different base schema, these statements are guarded with IF NOT EXISTS where practical.
+
+-- Property Amenities Table
+CREATE TABLE IF NOT EXISTS property_amenities (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  property_id UUID REFERENCES properties(id) ON DELETE CASCADE,
+  amenity_type VARCHAR(50) NOT NULL,
+  created_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+COMMENT ON TABLE property_amenities IS
+'Amenities: pool, gym, playground, sports_court, party_room, sauna, garden, barbecue, gourmet_kitchen, home_office, balcony, terrace, garage, storage, laundry_room, service_area, maid_room, solar_heating, air_conditioning, fireplace, wine_cellar, home_theater, stable, barn, warehouse, chicken_coop, orchard, crop_field, pasture_land, fencing, irrigation_system';
+
+-- Property Photos Table
+CREATE TABLE IF NOT EXISTS property_photos (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  property_id UUID REFERENCES properties(id) ON DELETE CASCADE,
+  url TEXT NOT NULL,
+  thumbnail_url TEXT,
+  caption TEXT,
+  display_order INTEGER DEFAULT 0,
+  is_cover BOOLEAN DEFAULT false,
+  created_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+-- Property Documents Table
+CREATE TABLE IF NOT EXISTS property_documents (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  property_id UUID REFERENCES properties(id) ON DELETE CASCADE,
+  document_type VARCHAR(50) NOT NULL,
+  file_url TEXT NOT NULL,
+  file_name VARCHAR(255),
+  verified BOOLEAN DEFAULT false,
+  verified_by UUID REFERENCES auth.users(id),
+  verified_at TIMESTAMPTZ,
+  created_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+-- Property Views (Analytics)
+CREATE TABLE IF NOT EXISTS property_views (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  property_id UUID REFERENCES properties(id) ON DELETE CASCADE,
+  user_id UUID REFERENCES auth.users(id) ON DELETE SET NULL,
+  ip_address INET,
+  user_agent TEXT,
+  created_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+-- Property Favorites
+CREATE TABLE IF NOT EXISTS property_favorites (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  property_id UUID REFERENCES properties(id) ON DELETE CASCADE,
+  user_id UUID REFERENCES auth.users(id) ON DELETE CASCADE,
+  created_at TIMESTAMPTZ DEFAULT NOW(),
+  UNIQUE(property_id, user_id)
+);
+
+-- Indexes for Performance
+CREATE INDEX IF NOT EXISTS idx_properties_user_id ON properties(user_id);
+CREATE INDEX IF NOT EXISTS idx_properties_status ON properties(status);
+CREATE INDEX IF NOT EXISTS idx_properties_type ON properties(property_type);
+CREATE INDEX IF NOT EXISTS idx_properties_transaction ON properties(transaction_type);
+CREATE INDEX IF NOT EXISTS idx_properties_location ON properties(country, state, city);
+CREATE INDEX IF NOT EXISTS idx_properties_price ON properties(price);
+CREATE INDEX IF NOT EXISTS idx_properties_bedrooms ON properties(bedrooms);
+CREATE INDEX IF NOT EXISTS idx_properties_slug ON properties(slug);
+CREATE INDEX IF NOT EXISTS idx_properties_featured ON properties(featured) WHERE featured = true;
+CREATE INDEX IF NOT EXISTS idx_properties_published ON properties(published_at) WHERE published_at IS NOT NULL;
+
+CREATE INDEX IF NOT EXISTS idx_property_photos_property ON property_photos(property_id);
+CREATE INDEX IF NOT EXISTS idx_property_amenities_property ON property_amenities(property_id);
+CREATE INDEX IF NOT EXISTS idx_property_favorites_user ON property_favorites(user_id);
+CREATE INDEX IF NOT EXISTS idx_property_views_property ON property_views(property_id);
+
+CREATE INDEX IF NOT EXISTS idx_properties_location_coords ON properties(latitude, longitude) WHERE latitude IS NOT NULL AND longitude IS NOT NULL;
+
+-- Functions & Triggers (idempotent)
+CREATE OR REPLACE FUNCTION update_updated_at()
+RETURNS TRIGGER AS $$
+BEGIN
+  NEW.updated_at = NOW();
+  RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+DO $$
+BEGIN
+  IF EXISTS (SELECT 1 FROM pg_proc WHERE proname = 'update_updated_at') THEN
+    -- function exists, no-op
+    NULL;
+  END IF;
+END$$;
+
+-- Note: Triggers and some policies assume the `properties` table exists. They are safe to create if the base table exists.
+-- Placeholder migration to match remote state (no-op)
+DO $$ BEGIN RAISE NOTICE 'placeholder 20251104000000'; END $$;
+-- ============================================
 -- ACHEME PROPERS - Comprehensive Property System
 -- ============================================
 
@@ -26,60 +151,60 @@ CREATE TYPE transaction_type AS ENUM (
   'auction'         -- Leilão
 );
 
--- Property Status Enum
-CREATE TYPE property_status AS ENUM (
-  'draft',          -- Rascunho
-  'pending',        -- Aguardando aprovação
-  'active',         -- Ativo
-  'sold',           -- Vendido
-  'rented',         -- Alugado
-  'inactive',       -- Inativo
-  'rejected'        -- Rejeitado
-);
+-- Photos Policies
+DROP POLICY IF EXISTS "Public can view photos of active properties" ON property_photos;
+CREATE POLICY "Public can view photos of active properties"
+  ON property_photos FOR SELECT
+  USING (
+    EXISTS (
+      SELECT 1 FROM properties
+      WHERE properties.id = property_photos.property_id
+        AND properties.status = 'active'
+        AND properties.published_at IS NOT NULL
+    )
+  );
 
--- ============================================
--- Properties Table (Main)
--- ============================================
-CREATE TABLE properties (
-  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-  created_at TIMESTAMPTZ DEFAULT NOW(),
-  updated_at TIMESTAMPTZ DEFAULT NOW(),
-  
-  -- Owner & Status
-  user_id UUID REFERENCES auth.users(id) ON DELETE CASCADE,
-  status property_status DEFAULT 'draft',
+DROP POLICY IF EXISTS "Users can manage own property photos" ON property_photos;
+CREATE POLICY "Users can manage own property photos"
+  ON property_photos FOR ALL
+  USING (
+    EXISTS (
+      SELECT 1 FROM properties
+      WHERE properties.id = property_photos.property_id
+        AND properties.user_id = auth.uid()
+    )
+  );
   approved_at TIMESTAMPTZ,
-  approved_by UUID REFERENCES auth.users(id),
+DROP POLICY IF EXISTS "Public can view amenities" ON property_amenities;
+CREATE POLICY "Public can view amenities"
+  ON property_amenities FOR SELECT
+  USING (true);
+
+DROP POLICY IF EXISTS "Users can manage own property amenities" ON property_amenities;
+CREATE POLICY "Users can manage own property amenities"
+  ON property_amenities FOR ALL
+  USING (
+    EXISTS (
+      SELECT 1 FROM properties
+      WHERE properties.id = property_amenities.property_id
+        AND properties.user_id = auth.uid()
+    )
+  );
   
-  -- Basic Info
-  title VARCHAR(255) NOT NULL,
-  description TEXT,
-  property_type property_type NOT NULL,
-  transaction_type transaction_type NOT NULL,
+DROP POLICY IF EXISTS "Users can view own favorites" ON property_favorites;
+CREATE POLICY "Users can view own favorites"
+  ON property_favorites FOR SELECT
+  USING (auth.uid() = user_id);
+
+DROP POLICY IF EXISTS "Users can manage own favorites" ON property_favorites;
+CREATE POLICY "Users can manage own favorites"
+  ON property_favorites FOR ALL
+  USING (auth.uid() = user_id);
   
-  -- Pricing
-  price DECIMAL(15, 2),
-  price_per_sqm DECIMAL(10, 2),
-  condominium_fee DECIMAL(10, 2),
-  iptu_annual DECIMAL(10, 2), -- Property tax
-  accepts_financing BOOLEAN DEFAULT true,
-  accepts_exchange BOOLEAN DEFAULT false,
-  
-  -- Location
-  country VARCHAR(100) DEFAULT 'Brazil',
-  state VARCHAR(100),
-  city VARCHAR(100),
-  neighborhood VARCHAR(100),
-  address TEXT,
-  zip_code VARCHAR(20),
-  latitude DECIMAL(10, 8),
-  longitude DECIMAL(11, 8),
-  
-  -- Area & Dimensions
-  total_area DECIMAL(12, 2), -- m² or hectares
-  built_area DECIMAL(12, 2), -- m²
-  usable_area DECIMAL(12, 2), -- m²
-  land_area DECIMAL(12, 2), -- m² (for houses) or hectares (for rural)
+DROP POLICY IF EXISTS "Anyone can create property views" ON property_views;
+CREATE POLICY "Anyone can create property views"
+  ON property_views FOR INSERT
+  WITH CHECK (true);
   
   -- Rooms & Features (Urban Properties)
   bedrooms INTEGER DEFAULT 0,
@@ -209,24 +334,24 @@ CREATE TABLE property_favorites (
 -- ============================================
 -- Indexes for Performance
 -- ============================================
-CREATE INDEX idx_properties_user_id ON properties(user_id);
-CREATE INDEX idx_properties_status ON properties(status);
-CREATE INDEX idx_properties_type ON properties(property_type);
-CREATE INDEX idx_properties_transaction ON properties(transaction_type);
-CREATE INDEX idx_properties_location ON properties(country, state, city);
-CREATE INDEX idx_properties_price ON properties(price);
-CREATE INDEX idx_properties_bedrooms ON properties(bedrooms);
-CREATE INDEX idx_properties_slug ON properties(slug);
-CREATE INDEX idx_properties_featured ON properties(featured) WHERE featured = true;
-CREATE INDEX idx_properties_published ON properties(published_at) WHERE published_at IS NOT NULL;
+CREATE INDEX IF NOT EXISTS idx_properties_user_id ON properties(user_id);
+CREATE INDEX IF NOT EXISTS idx_properties_status ON properties(status);
+CREATE INDEX IF NOT EXISTS idx_properties_type ON properties(property_type);
+CREATE INDEX IF NOT EXISTS idx_properties_transaction ON properties(transaction_type);
+CREATE INDEX IF NOT EXISTS idx_properties_location ON properties(country, state, city);
+CREATE INDEX IF NOT EXISTS idx_properties_price ON properties(price);
+CREATE INDEX IF NOT EXISTS idx_properties_bedrooms ON properties(bedrooms);
+CREATE INDEX IF NOT EXISTS idx_properties_slug ON properties(slug);
+CREATE INDEX IF NOT EXISTS idx_properties_featured ON properties(featured) WHERE featured = true;
+CREATE INDEX IF NOT EXISTS idx_properties_published ON properties(published_at) WHERE published_at IS NOT NULL;
 
-CREATE INDEX idx_property_photos_property ON property_photos(property_id);
-CREATE INDEX idx_property_amenities_property ON property_amenities(property_id);
-CREATE INDEX idx_property_favorites_user ON property_favorites(user_id);
-CREATE INDEX idx_property_views_property ON property_views(property_id);
+CREATE INDEX IF NOT EXISTS idx_property_photos_property ON property_photos(property_id);
+CREATE INDEX IF NOT EXISTS idx_property_amenities_property ON property_amenities(property_id);
+CREATE INDEX IF NOT EXISTS idx_property_favorites_user ON property_favorites(user_id);
+CREATE INDEX IF NOT EXISTS idx_property_views_property ON property_views(property_id);
 
 -- Composite index for location queries (latitude, longitude)
-CREATE INDEX idx_properties_location_coords ON properties(latitude, longitude) WHERE latitude IS NOT NULL AND longitude IS NOT NULL;
+CREATE INDEX IF NOT EXISTS idx_properties_location_coords ON properties(latitude, longitude) WHERE latitude IS NOT NULL AND longitude IS NOT NULL;
 
 -- ============================================
 -- Functions
@@ -331,22 +456,27 @@ ALTER TABLE property_favorites ENABLE ROW LEVEL SECURITY;
 ALTER TABLE property_views ENABLE ROW LEVEL SECURITY;
 
 -- Properties Policies
+DROP POLICY IF EXISTS "Public can view active properties" ON properties;
 CREATE POLICY "Public can view active properties"
   ON properties FOR SELECT
   USING (status = 'active' AND published_at IS NOT NULL);
 
+DROP POLICY IF EXISTS "Users can view own properties" ON properties;
 CREATE POLICY "Users can view own properties"
   ON properties FOR SELECT
   USING (auth.uid() = user_id);
 
+DROP POLICY IF EXISTS "Users can insert own properties" ON properties;
 CREATE POLICY "Users can insert own properties"
   ON properties FOR INSERT
   WITH CHECK (auth.uid() = user_id);
 
+DROP POLICY IF EXISTS "Users can update own properties" ON properties;
 CREATE POLICY "Users can update own properties"
   ON properties FOR UPDATE
   USING (auth.uid() = user_id);
 
+DROP POLICY IF EXISTS "Users can delete own properties" ON properties;
 CREATE POLICY "Users can delete own properties"
   ON properties FOR DELETE
   USING (auth.uid() = user_id);

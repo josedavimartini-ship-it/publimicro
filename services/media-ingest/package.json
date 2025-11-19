@@ -1,0 +1,16 @@
+{
+  "name": "publimicro-media-ingest",
+  "version": "0.1.0",
+  "description": "Simple ingest server to accept uploads and enqueue processing jobs",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "express": "^4.18.2",
+    "multer": "^2.0.0",
+    "axios": "^1.6.0",
+    "bullmq": "^5.63.2",
+    "ioredis": "^5.8.2"
+  }
+}

@@ -1,3 +1,5 @@
+-- Placeholder migration to match remote state (no-op)
+DO $$ BEGIN RAISE NOTICE 'placeholder 20251107000006'; END $$;
 -- PubliMicro Listing Enhancements System
 -- Migration: Add per-listing enhancement products (Highlight + Organic Marketing)
 -- Date: 2025-11-07
@@ -77,27 +79,21 @@ CREATE TABLE IF NOT EXISTS public.listing_enhancements (
   updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
 );
 
--- Indexes for Performance
-CREATE INDEX idx_listing_enhancements_announcement ON listing_enhancements(announcement_id);
-CREATE INDEX idx_listing_enhancements_user ON listing_enhancements(user_id);
-CREATE INDEX idx_listing_enhancements_type ON listing_enhancements(enhancement_type);
-CREATE INDEX idx_listing_enhancements_category ON listing_enhancements(category);
-CREATE INDEX idx_listing_enhancements_payment_status ON listing_enhancements(payment_status);
+CREATE INDEX IF NOT EXISTS idx_listing_enhancements_announcement ON listing_enhancements(announcement_id);
+CREATE INDEX IF NOT EXISTS idx_listing_enhancements_user ON listing_enhancements(user_id);
+CREATE INDEX IF NOT EXISTS idx_listing_enhancements_type ON listing_enhancements(enhancement_type);
+CREATE INDEX IF NOT EXISTS idx_listing_enhancements_category ON listing_enhancements(category);
+CREATE INDEX IF NOT EXISTS idx_listing_enhancements_payment_status ON listing_enhancements(payment_status);
 
--- Active highlights (for homepage queries)
--- Note: Cannot use NOW() in index predicate due to immutability
--- Filter will be handled at application level
-CREATE INDEX idx_listing_enhancements_active_highlights 
+CREATE INDEX IF NOT EXISTS idx_listing_enhancements_active_highlights 
   ON listing_enhancements(highlight_active, highlight_ends_at, created_at DESC) 
   WHERE highlight_active = TRUE;
 
--- Pending marketing campaigns (for admin dashboard)
-CREATE INDEX idx_listing_enhancements_marketing_pending 
+CREATE INDEX IF NOT EXISTS idx_listing_enhancements_marketing_pending 
   ON listing_enhancements(marketing_status, created_at) 
   WHERE marketing_status IN ('pending', 'in_progress');
 
--- User's enhancement history
-CREATE INDEX idx_listing_enhancements_user_history 
+CREATE INDEX IF NOT EXISTS idx_listing_enhancements_user_history 
   ON listing_enhancements(user_id, created_at DESC);
 
 -- =============================================
@@ -107,16 +103,19 @@ CREATE INDEX idx_listing_enhancements_user_history
 ALTER TABLE listing_enhancements ENABLE ROW LEVEL SECURITY;
 
 -- Users can view their own enhancements
+DROP POLICY IF EXISTS "Users can view own enhancements" ON listing_enhancements;
 CREATE POLICY "Users can view own enhancements" ON listing_enhancements
   FOR SELECT TO authenticated
   USING (auth.uid() = user_id);
 
 -- Users can insert enhancements (via Stripe webhook)
+DROP POLICY IF EXISTS "Users can insert own enhancements" ON listing_enhancements;
 CREATE POLICY "Users can insert own enhancements" ON listing_enhancements
   FOR INSERT TO authenticated
   WITH CHECK (auth.uid() = user_id);
 
 -- Users can view enhancements for announcements they own
+DROP POLICY IF EXISTS "Users can view enhancements for own announcements" ON listing_enhancements;
 CREATE POLICY "Users can view enhancements for own announcements" ON listing_enhancements
   FOR SELECT TO authenticated
   USING (
@@ -169,6 +168,10 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
+
+-- Ensure trigger doesn't already exist (idempotent)
+DROP TRIGGER IF EXISTS activate_highlight_on_payment ON listing_enhancements;
+
 CREATE TRIGGER activate_highlight_on_payment
   BEFORE INSERT OR UPDATE ON listing_enhancements
   FOR EACH ROW EXECUTE FUNCTION activate_highlight();
@@ -215,6 +218,10 @@ BEGIN
   RETURN NEW;
 END;
 $$ LANGUAGE plpgsql;
+
+
+-- Ensure trigger doesn't already exist (idempotent)
+DROP TRIGGER IF EXISTS calculate_conversion_rate ON listing_enhancements;
 
 CREATE TRIGGER calculate_conversion_rate
   BEFORE UPDATE ON listing_enhancements

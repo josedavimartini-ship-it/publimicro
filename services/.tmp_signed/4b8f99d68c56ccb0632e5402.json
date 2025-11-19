@@ -1,0 +1,9 @@
+{
+  "id": "4b8f99d68c56ccb0632e5402",
+  "segment": "default",
+  "bucket": "imagens-default-raw",
+  "remotePath": "e2e-demo/raw/test-1763333568569.txt",
+  "contentType": "text/plain",
+  "sizeBytes": null,
+  "expiresAt": 1763337168970
+}

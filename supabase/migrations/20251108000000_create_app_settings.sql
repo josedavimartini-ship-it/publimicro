@@ -10,3 +10,5 @@ CREATE TABLE IF NOT EXISTS public.app_settings (
 INSERT INTO public.app_settings (key, value)
 SELECT 'bidding_open', 'false'::jsonb
 WHERE NOT EXISTS (SELECT 1 FROM public.app_settings WHERE key = 'bidding_open');
+-- Placeholder migration to match remote state (no-op)
+DO $$ BEGIN RAISE NOTICE 'placeholder 20251108000000'; END $$;

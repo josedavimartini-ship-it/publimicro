@@ -1,0 +1,2 @@
+-- MOVED: This migration was restored into `supabase/migrations/20251107000002_add_verification_fields.sql` and
+-- should no longer be applied from `_pending`. Kept as inert marker to avoid accidental double-application.

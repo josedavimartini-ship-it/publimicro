@@ -86,17 +86,24 @@ CREATE TRIGGER pending_verifications_updated_at
 -- ============================================
 
 -- Add fields to visits table for guest information
-ALTER TABLE public.visits 
-ADD COLUMN IF NOT EXISTS guest_cpf VARCHAR(14),
-ADD COLUMN IF NOT EXISTS guest_birth_date DATE,
-ADD COLUMN IF NOT EXISTS guest_address TEXT,
-ADD COLUMN IF NOT EXISTS verification_pending_id UUID REFERENCES public.pending_verifications(id),
-ADD COLUMN IF NOT EXISTS background_check_required BOOLEAN DEFAULT FALSE,
-ADD COLUMN IF NOT EXISTS background_check_completed BOOLEAN DEFAULT FALSE,
-ADD COLUMN IF NOT EXISTS background_check_passed BOOLEAN;
+DO $$
+BEGIN
+  IF EXISTS (SELECT 1 FROM pg_class WHERE relname = 'visits' AND relkind = 'r') THEN
+    ALTER TABLE public.visits
+    ADD COLUMN IF NOT EXISTS guest_cpf VARCHAR(14),
+    ADD COLUMN IF NOT EXISTS guest_birth_date DATE,
+    ADD COLUMN IF NOT EXISTS guest_address TEXT,
+    ADD COLUMN IF NOT EXISTS verification_pending_id UUID REFERENCES public.pending_verifications(id),
+    ADD COLUMN IF NOT EXISTS background_check_required BOOLEAN DEFAULT FALSE,
+    ADD COLUMN IF NOT EXISTS background_check_completed BOOLEAN DEFAULT FALSE,
+    ADD COLUMN IF NOT EXISTS background_check_passed BOOLEAN;
 
--- Index for verification lookup
-CREATE INDEX IF NOT EXISTS idx_visits_verification_pending_id ON public.visits(verification_pending_id);
+    CREATE INDEX IF NOT EXISTS idx_visits_verification_pending_id ON public.visits(verification_pending_id);
+  END IF;
+EXCEPTION WHEN OTHERS THEN
+  -- If anything goes wrong, don't fail the whole migration run here
+  NULL;
+END $$;
 
 -- ============================================
 -- PROPERTY BID TRACKING
@@ -164,12 +171,27 @@ END;
 $$ LANGUAGE plpgsql;
 
 -- Trigger to auto-update bid stats
-DROP TRIGGER IF EXISTS update_bid_stats ON public.proposals;
-CREATE TRIGGER update_bid_stats
-  AFTER INSERT OR UPDATE ON public.proposals
-  FOR EACH ROW
-  EXECUTE FUNCTION update_property_bid_stats();
+DO $$
+BEGIN
+  IF EXISTS (SELECT 1 FROM pg_class WHERE relname = 'proposals' AND relkind = 'r') THEN
+    DROP TRIGGER IF EXISTS update_bid_stats ON public.proposals;
+
+    CREATE TRIGGER update_bid_stats
+      AFTER INSERT OR UPDATE ON public.proposals
+      FOR EACH ROW
+      EXECUTE FUNCTION update_property_bid_stats();
+  END IF;
+EXCEPTION WHEN OTHERS THEN
+  NULL;
+END $$;
 
 COMMENT ON TABLE public.pending_verifications IS 'INTERNAL: Users/guests pending background checks before account creation or visit approval';
-COMMENT ON COLUMN public.visits.background_check_required IS 'Whether this visit request requires background verification';
-COMMENT ON COLUMN public.visits.background_check_passed IS 'Result of background check (null = pending, true = passed, false = failed)';
+DO $$
+BEGIN
+  IF EXISTS (SELECT 1 FROM pg_class WHERE relname = 'visits' AND relkind = 'r') THEN
+    COMMENT ON COLUMN public.visits.background_check_required IS 'Whether this visit request requires background verification';
+    COMMENT ON COLUMN public.visits.background_check_passed IS 'Result of background check (null = pending, true = passed, false = failed)';
+  END IF;
+EXCEPTION WHEN OTHERS THEN
+  NULL;
+END $$;

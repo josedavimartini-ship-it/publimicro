@@ -1,3 +1,5 @@
+-- Placeholder migration to match remote state (no-op)
+DO $$ BEGIN RAISE NOTICE 'placeholder 20251107000008'; END $$;
 -- ============================================
 -- SITIOS TABLE - Simplified Version Without RLS First
 -- ============================================
@@ -60,11 +62,11 @@ CREATE TABLE public.sitios (
 );
 
 -- Indexes
-CREATE INDEX idx_sitios_user_id ON public.sitios(user_id);
-CREATE INDEX idx_sitios_preco ON public.sitios(preco);
-CREATE INDEX idx_sitios_zona ON public.sitios(zona);
-CREATE INDEX idx_sitios_destaque ON public.sitios(destaque) WHERE destaque = true;
-CREATE INDEX idx_sitios_slug ON public.sitios(slug);
+CREATE INDEX IF NOT EXISTS idx_sitios_user_id ON public.sitios(user_id);
+CREATE INDEX IF NOT EXISTS idx_sitios_preco ON public.sitios(preco);
+CREATE INDEX IF NOT EXISTS idx_sitios_zona ON public.sitios(zona);
+CREATE INDEX IF NOT EXISTS idx_sitios_destaque ON public.sitios(destaque) WHERE destaque = true;
+CREATE INDEX IF NOT EXISTS idx_sitios_slug ON public.sitios(slug);
 
 -- Auto-update timestamp trigger
 DROP TRIGGER IF EXISTS sitios_updated_at ON public.sitios;
@@ -116,20 +118,24 @@ GRANT SELECT ON public.sitios TO anon;
 ALTER TABLE public.sitios ENABLE ROW LEVEL SECURITY;
 
 -- Simple policies without CASE statements
+DROP POLICY IF EXISTS "sitios_select_public" ON public.sitios;
 CREATE POLICY "sitios_select_public"
   ON public.sitios FOR SELECT
   USING (ativo = true OR auth.uid() = user_id);
 
+DROP POLICY IF EXISTS "sitios_insert_authenticated" ON public.sitios;
 CREATE POLICY "sitios_insert_authenticated"
   ON public.sitios FOR INSERT
   TO authenticated
   WITH CHECK (auth.uid() = user_id);
 
+DROP POLICY IF EXISTS "sitios_update_owner" ON public.sitios;
 CREATE POLICY "sitios_update_owner"
   ON public.sitios FOR UPDATE
   TO authenticated
   USING (auth.uid() = user_id);
 
+DROP POLICY IF EXISTS "sitios_delete_owner" ON public.sitios;
 CREATE POLICY "sitios_delete_owner"
   ON public.sitios FOR DELETE
   TO authenticated

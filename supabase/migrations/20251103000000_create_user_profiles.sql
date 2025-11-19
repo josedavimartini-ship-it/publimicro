@@ -4,18 +4,18 @@ CREATE TABLE IF NOT EXISTS public.user_profiles (
   
   -- Personal Information
   full_name TEXT,
-  cpf VARCHAR(14) UNIQUE, -- Format: 000.000.000-00
-  phone VARCHAR(20), -- Format: +55 (00) 00000-0000
+  cpf VARCHAR(14) UNIQUE,
+  phone VARCHAR(20),
   birth_date DATE,
   
   -- Address Information
-  cep VARCHAR(9), -- Format: 00000-000
+  cep VARCHAR(9),
   street TEXT,
   number VARCHAR(10),
   complement TEXT,
   neighborhood TEXT,
   city TEXT,
-  state VARCHAR(2), -- Brazilian state abbreviation (SP, RJ, etc)
+  state VARCHAR(2),
   
   -- Profile Status
   profile_completed BOOLEAN DEFAULT FALSE,
@@ -50,21 +50,18 @@ DROP POLICY IF EXISTS "Admins can view all profiles" ON public.user_profiles;
 DROP POLICY IF EXISTS "Admins can update all profiles" ON public.user_profiles;
 
 -- RLS Policies
--- Users can view their own profile
 CREATE POLICY "Users can view own profile"
   ON public.user_profiles
   FOR SELECT
   TO authenticated
   USING (auth.uid() = id);
 
--- Users can insert their own profile (once)
 CREATE POLICY "Users can insert own profile"
   ON public.user_profiles
   FOR INSERT
   TO authenticated
   WITH CHECK (auth.uid() = id);
 
--- Users can update their own profile
 CREATE POLICY "Users can update own profile"
   ON public.user_profiles
   FOR UPDATE
@@ -155,3 +152,136 @@ END $$;
 -- Grant permissions
 GRANT ALL ON public.user_profiles TO authenticated;
 GRANT ALL ON public.user_profiles TO service_role;
+-- Create user_profiles table for extended user information
+CREATE TABLE IF NOT EXISTS public.user_profiles (
+  id UUID PRIMARY KEY REFERENCES auth.users(id) ON DELETE CASCADE,
+  full_name TEXT,
+  cpf VARCHAR(14) UNIQUE,
+  phone VARCHAR(20),
+  birth_date DATE,
+  cep VARCHAR(9),
+  street TEXT,
+  number VARCHAR(10),
+  complement TEXT,
+  neighborhood TEXT,
+  city TEXT,
+  state VARCHAR(2),
+  profile_completed BOOLEAN DEFAULT FALSE,
+  verified BOOLEAN DEFAULT FALSE,
+  terms_accepted BOOLEAN DEFAULT FALSE,
+  terms_accepted_at TIMESTAMP WITH TIME ZONE,
+  can_schedule_visits BOOLEAN DEFAULT FALSE,
+  can_place_bids BOOLEAN DEFAULT FALSE,
+  created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
+  updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+);
+
+CREATE INDEX IF NOT EXISTS idx_user_profiles_cpf ON public.user_profiles(cpf);
+CREATE INDEX IF NOT EXISTS idx_user_profiles_phone ON public.user_profiles(phone);
+CREATE INDEX IF NOT EXISTS idx_user_profiles_profile_completed ON public.user_profiles(profile_completed);
+
+ALTER TABLE public.user_profiles ENABLE ROW LEVEL SECURITY;
+
+DROP POLICY IF EXISTS "Users can view own profile" ON public.user_profiles;
+DROP POLICY IF EXISTS "Users can insert own profile" ON public.user_profiles;
+DROP POLICY IF EXISTS "Users can update own profile" ON public.user_profiles;
+DROP POLICY IF EXISTS "Admins can view all profiles" ON public.user_profiles;
+DROP POLICY IF EXISTS "Admins can update all profiles" ON public.user_profiles;
+
+CREATE POLICY "Users can view own profile"
+  ON public.user_profiles
+  FOR SELECT
+  TO authenticated
+  USING (auth.uid() = id);
+
+CREATE POLICY "Users can insert own profile"
+  ON public.user_profiles
+  FOR INSERT
+  TO authenticated
+  WITH CHECK (auth.uid() = id);
+
+CREATE POLICY "Users can update own profile"
+  ON public.user_profiles
+  FOR UPDATE
+  TO authenticated
+  USING (auth.uid() = id)
+  WITH CHECK (auth.uid() = id);
+
+DO $$
+BEGIN
+  IF EXISTS (SELECT FROM pg_tables WHERE schemaname = 'public' AND tablename = 'admin_users') THEN
+    EXECUTE '
+      CREATE POLICY "Admins can view all profiles"
+        ON public.user_profiles
+        FOR SELECT
+        TO authenticated
+        USING (
+          EXISTS (
+            SELECT 1 FROM public.admin_users
+            WHERE admin_users.id = auth.uid()
+          )
+        )';
+  END IF;
+END $$;
+
+DO $$
+BEGIN
+  IF EXISTS (SELECT FROM pg_tables WHERE schemaname = 'public' AND tablename = 'admin_users') THEN
+    EXECUTE '
+      CREATE POLICY "Admins can update all profiles"
+        ON public.user_profiles
+        FOR UPDATE
+        TO authenticated
+        USING (
+          EXISTS (
+            SELECT 1 FROM public.admin_users
+            WHERE admin_users.id = auth.uid()
+          )
+        )';
+  END IF;
+END $$;
+
+CREATE OR REPLACE FUNCTION public.handle_updated_at()
+RETURNS TRIGGER AS $$
+BEGIN
+  NEW.updated_at = NOW();
+  RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+DO $$
+BEGIN
+  DROP TRIGGER IF EXISTS set_updated_at ON public.user_profiles;
+  CREATE TRIGGER set_updated_at
+    BEFORE UPDATE ON public.user_profiles
+    FOR EACH ROW
+    EXECUTE FUNCTION public.handle_updated_at();
+END $$;
+
+CREATE OR REPLACE FUNCTION public.handle_new_user()
+RETURNS TRIGGER AS $$
+BEGIN
+  INSERT INTO public.user_profiles (id, full_name, phone)
+  VALUES (
+    NEW.id,
+    NEW.raw_user_meta_data->>'full_name',
+    NEW.raw_user_meta_data->>'phone'
+  )
+  ON CONFLICT (id) DO NOTHING;
+  RETURN NEW;
+END;
+$$ LANGUAGE plpgsql SECURITY DEFINER;
+
+DO $$
+BEGIN
+  DROP TRIGGER IF EXISTS on_auth_user_created ON auth.users;
+  CREATE TRIGGER on_auth_user_created
+    AFTER INSERT ON auth.users
+    FOR EACH ROW
+    EXECUTE FUNCTION public.handle_new_user();
+END $$;
+
+GRANT ALL ON public.user_profiles TO authenticated;
+GRANT ALL ON public.user_profiles TO service_role;
+-- Placeholder migration to match remote state (no-op)
+DO $$ BEGIN RAISE NOTICE 'placeholder 20251103000000'; END $$;

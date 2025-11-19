@@ -2,21 +2,476 @@
 -- VISITS SYSTEM - Property Visit Scheduling
 -- ============================================
 
--- Visit Status Enum
-CREATE TYPE visit_status AS ENUM (
-  'requested',      -- Solicitação enviada
-  'confirmed',      -- Confirmada
-  'completed',      -- Realizada
-  'cancelled',      -- Cancelada
-  'no_show'         -- Não compareceu
+DO $$
+BEGIN
+  IF NOT EXISTS (SELECT 1 FROM pg_type WHERE typname = 'visit_status') THEN
+    CREATE TYPE visit_status AS ENUM (
+      'requested',
+      'confirmed',
+      'completed',
+      'cancelled',
+      'no_show'
+    );
+  END IF;
+END$$;
+
+DO $$
+BEGIN
+  IF NOT EXISTS (SELECT 1 FROM pg_type WHERE typname = 'visit_type') THEN
+    CREATE TYPE visit_type AS ENUM (
+      'in_person',
+      'video',
+      'both'
+    );
+  END IF;
+END$$;
+
+CREATE TABLE IF NOT EXISTS public.visits (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  created_at TIMESTAMPTZ DEFAULT NOW(),
+  updated_at TIMESTAMPTZ DEFAULT NOW(),
+  ad_id TEXT NOT NULL,
+  user_id UUID REFERENCES auth.users(id) ON DELETE CASCADE,
+  guest_name TEXT,
+  guest_email TEXT,
+  guest_phone TEXT,
+  visit_type visit_type DEFAULT 'in_person',
+  scheduled_at TIMESTAMPTZ NOT NULL,
+  status visit_status DEFAULT 'requested',
+  verification_passed BOOLEAN DEFAULT FALSE,
+  notes TEXT,
+  admin_notes TEXT,
+  confirmed_by UUID REFERENCES auth.users(id),
+  confirmed_at TIMESTAMPTZ,
+  completed_at TIMESTAMPTZ,
+  cancelled_at TIMESTAMPTZ,
+  cancellation_reason TEXT,
+  CONSTRAINT valid_scheduled_time CHECK (scheduled_at > NOW())
 );
 
--- Visit Type Enum
-CREATE TYPE visit_type AS ENUM (
-  'in_person',      -- Presencial
-  'video',          -- Vídeo chamada
-  'both'            -- Ambos
+CREATE INDEX IF NOT EXISTS idx_visits_user_id ON public.visits(user_id);
+CREATE INDEX IF NOT EXISTS idx_visits_ad_id ON public.visits(ad_id);
+CREATE INDEX IF NOT EXISTS idx_visits_status ON public.visits(status);
+CREATE INDEX IF NOT EXISTS idx_visits_scheduled_at ON public.visits(scheduled_at);
+
+ALTER TABLE public.visits ENABLE ROW LEVEL SECURITY;
+
+DROP POLICY IF EXISTS "Users can read own visits" ON public.visits;
+CREATE POLICY "Users can read own visits"
+  ON public.visits FOR SELECT
+  USING (auth.uid() = user_id);
+
+DROP POLICY IF EXISTS "Users can insert own visits" ON public.visits;
+CREATE POLICY "Users can insert own visits"
+  ON public.visits FOR INSERT
+  WITH CHECK (auth.uid() = user_id);
+
+DROP POLICY IF EXISTS "Users can cancel own visits" ON public.visits;
+CREATE POLICY "Users can cancel own visits"
+  ON public.visits FOR UPDATE
+  USING (auth.uid() = user_id)
+  WITH CHECK (
+    auth.uid() = user_id 
+    AND status IN ('requested', 'confirmed')
+  );
+
+-- Admin policies (guarded via existence of admin_users table)
+DO $$
+BEGIN
+  IF EXISTS (SELECT FROM pg_tables WHERE schemaname = 'public' AND tablename = 'admin_users') THEN
+    EXECUTE '
+      CREATE POLICY "Admins can read all visits"
+        ON public.visits FOR SELECT
+        USING (
+          EXISTS (
+            SELECT 1 FROM public.admin_users
+            WHERE admin_users.id = auth.uid()
+          )
+        )';
+  END IF;
+END $$;
+
+DO $$
+BEGIN
+  IF EXISTS (SELECT FROM pg_tables WHERE schemaname = 'public' AND tablename = 'admin_users') THEN
+    EXECUTE '
+      CREATE POLICY "Admins can update all visits"
+        ON public.visits FOR UPDATE
+        USING (
+          EXISTS (
+            SELECT 1 FROM public.admin_users
+            WHERE admin_users.id = auth.uid()
+          )
+        )';
+  END IF;
+END $$;
+
+-- Triggers & functions
+CREATE OR REPLACE FUNCTION public.update_visits_updated_at()
+RETURNS TRIGGER AS $$
+BEGIN
+  NEW.updated_at = NOW();
+  RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+DROP TRIGGER IF EXISTS trg_update_visits_updated_at ON public.visits;
+CREATE TRIGGER trg_update_visits_updated_at
+  BEFORE UPDATE ON public.visits
+  FOR EACH ROW EXECUTE FUNCTION public.update_visits_updated_at();
+
+CREATE OR REPLACE FUNCTION public.auto_confirm_visits()
+RETURNS TRIGGER AS $$
+BEGIN
+  IF NEW.verification_passed = TRUE 
+     AND NEW.status = 'requested' 
+     AND NEW.scheduled_at > NOW() + INTERVAL '24 hours' THEN
+    NEW.status = 'confirmed';
+    NEW.confirmed_at = NOW();
+  END IF;
+  RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+DROP TRIGGER IF EXISTS trg_auto_confirm_visits ON public.visits;
+CREATE TRIGGER trg_auto_confirm_visits
+  BEFORE INSERT ON public.visits
+  FOR EACH ROW EXECUTE FUNCTION public.auto_confirm_visits();
+
+CREATE OR REPLACE FUNCTION public.notify_new_visit()
+RETURNS TRIGGER AS $$
+BEGIN
+  PERFORM pg_notify('new_visit', json_build_object(
+    'visit_id', NEW.id,
+    'user_id', NEW.user_id,
+    'ad_id', NEW.ad_id,
+    'scheduled_at', NEW.scheduled_at,
+    'status', NEW.status
+  )::TEXT);
+  RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+DROP TRIGGER IF EXISTS trg_notify_new_visit ON public.visits;
+CREATE TRIGGER trg_notify_new_visit
+  AFTER INSERT ON public.visits
+  FOR EACH ROW EXECUTE FUNCTION public.notify_new_visit();
+
+-- Proposals table
+CREATE TABLE IF NOT EXISTS public.proposals (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  created_at TIMESTAMPTZ DEFAULT NOW(),
+  updated_at TIMESTAMPTZ DEFAULT NOW(),
+  property_id TEXT NOT NULL,
+  user_id UUID REFERENCES auth.users(id) ON DELETE CASCADE NOT NULL,
+  amount DECIMAL(15, 2) NOT NULL CHECK (amount > 0),
+  message TEXT,
+  financing BOOLEAN DEFAULT FALSE,
+  down_payment DECIMAL(15, 2),
+  status TEXT DEFAULT 'pending' CHECK (status IN ('pending', 'accepted', 'rejected', 'counter')),
+  admin_response TEXT,
+  counter_offer DECIMAL(15, 2),
+  visit_completed BOOLEAN DEFAULT FALSE,
+  visit_id UUID REFERENCES public.visits(id),
+  responded_at TIMESTAMPTZ,
+  expires_at TIMESTAMPTZ DEFAULT (NOW() + INTERVAL '30 days')
 );
+
+CREATE INDEX IF NOT EXISTS idx_proposals_user_id ON public.proposals(user_id);
+CREATE INDEX IF NOT EXISTS idx_proposals_property_id ON public.proposals(property_id);
+CREATE INDEX IF NOT EXISTS idx_proposals_status ON public.proposals(status);
+CREATE INDEX IF NOT EXISTS idx_proposals_visit_id ON public.proposals(visit_id);
+
+ALTER TABLE public.proposals ENABLE ROW LEVEL SECURITY;
+
+DROP POLICY IF EXISTS "Users can read own proposals" ON public.proposals;
+CREATE POLICY "Users can read own proposals"
+  ON public.proposals FOR SELECT
+  USING (auth.uid() = user_id);
+
+DROP POLICY IF EXISTS "Users can create proposals" ON public.proposals;
+CREATE POLICY "Users can create proposals"
+  ON public.proposals FOR INSERT
+  WITH CHECK (
+    auth.uid() = user_id
+  );
+
+-- Admins policy (guarded)
+DO $$
+BEGIN
+  IF EXISTS (SELECT FROM pg_tables WHERE schemaname = 'public' AND tablename = 'admin_users') THEN
+    EXECUTE '
+      CREATE POLICY "Admins can manage proposals"
+        ON public.proposals FOR ALL
+        USING (
+          EXISTS (
+            SELECT 1 FROM public.admin_users
+            WHERE admin_users.id = auth.uid()
+          )
+        )';
+  END IF;
+END $$;
+
+-- Auto-update proposals timestamp trigger
+DROP TRIGGER IF EXISTS trg_update_proposals_updated_at ON public.proposals;
+CREATE TRIGGER trg_update_proposals_updated_at
+  BEFORE UPDATE ON public.proposals
+  FOR EACH ROW EXECUTE FUNCTION public.update_visits_updated_at();
+
+COMMENT ON TABLE public.visits IS 'Property visit scheduling and tracking';
+COMMENT ON TABLE public.proposals IS 'Property purchase proposals/bids with visit requirement';
+-- ============================================
+-- VISITS SYSTEM - Property Visit Scheduling
+-- ============================================
+
+DO $$
+BEGIN
+  IF NOT EXISTS (SELECT 1 FROM pg_type WHERE typname = 'visit_status') THEN
+    CREATE TYPE visit_status AS ENUM (
+      'requested',
+      'confirmed',
+      'completed',
+      'cancelled',
+      'no_show'
+    );
+  END IF;
+END$$;
+
+DO $$
+BEGIN
+  IF NOT EXISTS (SELECT 1 FROM pg_type WHERE typname = 'visit_type') THEN
+    CREATE TYPE visit_type AS ENUM (
+      'in_person',
+      'video',
+      'both'
+    );
+  END IF;
+END$$;
+
+CREATE TABLE IF NOT EXISTS public.visits (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  created_at TIMESTAMPTZ DEFAULT NOW(),
+  updated_at TIMESTAMPTZ DEFAULT NOW(),
+  ad_id TEXT NOT NULL,
+  user_id UUID REFERENCES auth.users(id) ON DELETE CASCADE,
+  guest_name TEXT,
+  guest_email TEXT,
+  guest_phone TEXT,
+  visit_type visit_type DEFAULT 'in_person',
+  scheduled_at TIMESTAMPTZ NOT NULL,
+  status visit_status DEFAULT 'requested',
+  verification_passed BOOLEAN DEFAULT FALSE,
+  notes TEXT,
+  admin_notes TEXT,
+  confirmed_by UUID REFERENCES auth.users(id),
+  confirmed_at TIMESTAMPTZ,
+  completed_at TIMESTAMPTZ,
+  cancelled_at TIMESTAMPTZ,
+  cancellation_reason TEXT,
+  CONSTRAINT valid_scheduled_time CHECK (scheduled_at > NOW())
+);
+
+CREATE INDEX IF NOT EXISTS idx_visits_user_id ON public.visits(user_id);
+CREATE INDEX IF NOT EXISTS idx_visits_ad_id ON public.visits(ad_id);
+CREATE INDEX IF NOT EXISTS idx_visits_status ON public.visits(status);
+CREATE INDEX IF NOT EXISTS idx_visits_scheduled_at ON public.visits(scheduled_at);
+
+ALTER TABLE public.visits ENABLE ROW LEVEL SECURITY;
+
+DROP POLICY IF EXISTS "Users can read own visits" ON public.visits;
+CREATE POLICY "Users can read own visits"
+  ON public.visits FOR SELECT
+  USING (auth.uid() = user_id);
+
+DROP POLICY IF EXISTS "Users can insert own visits" ON public.visits;
+CREATE POLICY "Users can insert own visits"
+  ON public.visits FOR INSERT
+  WITH CHECK (auth.uid() = user_id);
+
+DROP POLICY IF EXISTS "Users can cancel own visits" ON public.visits;
+CREATE POLICY "Users can cancel own visits"
+  ON public.visits FOR UPDATE
+  USING (auth.uid() = user_id)
+  WITH CHECK (
+    auth.uid() = user_id
+    AND status IN ('requested', 'confirmed')
+  );
+
+DROP POLICY IF EXISTS "Admins can read all visits" ON public.visits;
+DO $$
+BEGIN
+  IF EXISTS (SELECT FROM pg_tables WHERE schemaname = 'public' AND tablename = 'admin_users') THEN
+    EXECUTE '
+      CREATE POLICY "Admins can read all visits"
+        ON public.visits FOR SELECT
+        USING (
+          EXISTS (
+            SELECT 1 FROM public.admin_users
+            WHERE admin_users.id = auth.uid()
+          )
+        )';
+  END IF;
+END $$;
+
+DROP POLICY IF EXISTS "Admins can update all visits" ON public.visits;
+DO $$
+BEGIN
+  IF EXISTS (SELECT FROM pg_tables WHERE schemaname = 'public' AND tablename = 'admin_users') THEN
+    EXECUTE '
+      CREATE POLICY "Admins can update all visits"
+        ON public.visits FOR UPDATE
+        USING (
+          EXISTS (
+            SELECT 1 FROM public.admin_users
+            WHERE admin_users.id = auth.uid()
+          )
+        )';
+  END IF;
+END $$;
+
+CREATE OR REPLACE FUNCTION public.update_visits_updated_at()
+RETURNS TRIGGER AS $$
+BEGIN
+  NEW.updated_at = NOW();
+  RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+DROP TRIGGER IF EXISTS trg_update_visits_updated_at ON public.visits;
+CREATE TRIGGER trg_update_visits_updated_at
+  BEFORE UPDATE ON public.visits
+  FOR EACH ROW EXECUTE FUNCTION public.update_visits_updated_at();
+
+CREATE OR REPLACE FUNCTION public.auto_confirm_visits()
+RETURNS TRIGGER AS $$
+BEGIN
+  IF NEW.verification_passed = TRUE
+     AND NEW.status = 'requested'
+     AND NEW.scheduled_at > NOW() + INTERVAL '24 hours' THEN
+    NEW.status = 'confirmed';
+    NEW.confirmed_at = NOW();
+  END IF;
+  RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+DROP TRIGGER IF EXISTS trg_auto_confirm_visits ON public.visits;
+CREATE TRIGGER trg_auto_confirm_visits
+  BEFORE INSERT ON public.visits
+  FOR EACH ROW EXECUTE FUNCTION public.auto_confirm_visits();
+
+CREATE OR REPLACE FUNCTION public.notify_new_visit()
+RETURNS TRIGGER AS $$
+BEGIN
+  PERFORM pg_notify('new_visit', json_build_object(
+    'visit_id', NEW.id,
+    'user_id', NEW.user_id,
+    'ad_id', NEW.ad_id,
+    'scheduled_at', NEW.scheduled_at,
+    'status', NEW.status
+  )::TEXT);
+  RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+DROP TRIGGER IF EXISTS trg_notify_new_visit ON public.visits;
+CREATE TRIGGER trg_notify_new_visit
+  AFTER INSERT ON public.visits
+  FOR EACH ROW EXECUTE FUNCTION public.notify_new_visit();
+
+CREATE TABLE IF NOT EXISTS public.proposals (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  created_at TIMESTAMPTZ DEFAULT NOW(),
+  updated_at TIMESTAMPTZ DEFAULT NOW(),
+  property_id TEXT NOT NULL,
+  user_id UUID REFERENCES auth.users(id) ON DELETE CASCADE NOT NULL,
+  amount DECIMAL(15, 2) NOT NULL CHECK (amount > 0),
+  message TEXT,
+  financing BOOLEAN DEFAULT FALSE,
+  down_payment DECIMAL(15, 2),
+  status TEXT DEFAULT 'pending' CHECK (status IN ('pending', 'accepted', 'rejected', 'counter')),
+  admin_response TEXT,
+  counter_offer DECIMAL(15, 2),
+  visit_completed BOOLEAN DEFAULT FALSE,
+  visit_id UUID REFERENCES public.visits(id),
+  responded_at TIMESTAMPTZ,
+  expires_at TIMESTAMPTZ DEFAULT (NOW() + INTERVAL '30 days')
+);
+
+CREATE INDEX IF NOT EXISTS idx_proposals_user_id ON public.proposals(user_id);
+CREATE INDEX IF NOT EXISTS idx_proposals_property_id ON public.proposals(property_id);
+CREATE INDEX IF NOT EXISTS idx_proposals_status ON public.proposals(status);
+CREATE INDEX IF NOT EXISTS idx_proposals_visit_id ON public.proposals(visit_id);
+
+ALTER TABLE public.proposals ENABLE ROW LEVEL SECURITY;
+
+DROP POLICY IF EXISTS "Users can read own proposals" ON public.proposals;
+CREATE POLICY "Users can read own proposals"
+  ON public.proposals FOR SELECT
+  USING (auth.uid() = user_id);
+
+DROP POLICY IF EXISTS "Users can create proposals" ON public.proposals;
+CREATE POLICY "Users can create proposals"
+  ON public.proposals FOR INSERT
+  WITH CHECK (
+    auth.uid() = user_id
+  );
+
+DROP POLICY IF EXISTS "Admins can manage proposals" ON public.proposals;
+DO $$
+BEGIN
+  IF EXISTS (SELECT FROM pg_tables WHERE schemaname = 'public' AND tablename = 'admin_users') THEN
+    EXECUTE '
+      CREATE POLICY "Admins can manage proposals"
+        ON public.proposals FOR ALL
+        USING (
+          EXISTS (
+            SELECT 1 FROM public.admin_users
+            WHERE admin_users.id = auth.uid()
+          )
+        )';
+  END IF;
+END $$;
+
+DROP TRIGGER IF EXISTS trg_update_proposals_updated_at ON public.proposals;
+CREATE TRIGGER trg_update_proposals_updated_at
+  BEFORE UPDATE ON public.proposals
+  FOR EACH ROW EXECUTE FUNCTION public.update_visits_updated_at();
+
+COMMENT ON TABLE public.visits IS 'Property visit scheduling and tracking';
+COMMENT ON TABLE public.proposals IS 'Property purchase proposals/bids with visit requirement';
+COMMENT ON COLUMN public.visits.ad_id IS 'Property identifier - can be UUID or legacy sitio slug (surucua, abare, etc)';
+COMMENT ON COLUMN public.visits.verification_passed IS 'Whether user has completed profile verification';
+COMMENT ON COLUMN public.proposals.visit_completed IS 'User must complete a visit before making a proposal';
+-- Placeholder migration to match remote state (no-op)
+DO $$ BEGIN RAISE NOTICE 'placeholder 20251105000000'; END $$;
+-- ============================================
+-- VISITS SYSTEM - Property Visit Scheduling
+-- ============================================
+
+DO $$
+BEGIN
+  IF NOT EXISTS (SELECT 1 FROM pg_type WHERE typname = 'visit_status') THEN
+    CREATE TYPE visit_status AS ENUM (
+      'requested',      -- Solicitação enviada
+      'confirmed',      -- Confirmada
+      'completed',      -- Realizada
+      'cancelled',      -- Cancelada
+      'no_show'         -- Não compareceu
+    );
+  END IF;
+END$$;
+
+DO $$
+BEGIN
+  IF NOT EXISTS (SELECT 1 FROM pg_type WHERE typname = 'visit_type') THEN
+    CREATE TYPE visit_type AS ENUM (
+      'in_person',      -- Presencial
+      'video',          -- Vídeo chamada
+      'both'            -- Ambos
+    );
+  END IF;
+END$$;
 
 -- ============================================
 -- VISITS Table

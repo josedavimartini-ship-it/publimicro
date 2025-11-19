@@ -1,5 +1,11 @@
--- Add neighborhood data table for storing Points of Interest (POI) information
--- This table stores distances and information about nearby amenities for each property
+-- Placeholder migration to match remote state (no-op)
+DO $$ BEGIN RAISE NOTICE 'placeholder 20250105000001'; END $$;
+
+-- Ensure any columns referenced by later comments exist (idempotent)
+ALTER TABLE public.neighborhood_data
+  ADD COLUMN IF NOT EXISTS data_quality TEXT CHECK (data_quality IN ('verified', 'estimated', 'user_reported')) DEFAULT 'estimated',
+  ADD COLUMN IF NOT EXISTS internet_type TEXT CHECK (internet_type IN ('fiber', 'cable', 'satellite', '4G', '5G', 'none')),
+  ADD COLUMN IF NOT EXISTS road_condition TEXT CHECK (road_condition IN ('paved', 'gravel', 'dirt', 'mixed'));
 
 -- Create neighborhood_data table
 CREATE TABLE IF NOT EXISTS public.neighborhood_data (
@@ -58,6 +64,11 @@ CREATE TABLE IF NOT EXISTS public.neighborhood_data (
   updated_at TIMESTAMPTZ DEFAULT NOW()
 );
 
+  COMMENT ON TABLE public.neighborhood_data IS 'Stores Points of Interest and infrastructure data for properties';
+  COMMENT ON COLUMN public.neighborhood_data.data_quality IS 'Indicates if data is verified by staff, estimated algorithmically, or reported by users';
+  COMMENT ON COLUMN public.neighborhood_data.internet_type IS 'Type of internet connection available at the property';
+  COMMENT ON COLUMN public.neighborhood_data.road_condition IS 'Surface type of the main access road to the property';
+
 -- Add unique constraint to ensure one record per property
 CREATE UNIQUE INDEX IF NOT EXISTS idx_neighborhood_data_property 
   ON public.neighborhood_data(property_id);
@@ -75,6 +86,11 @@ CREATE INDEX IF NOT EXISTS idx_neighborhood_data_internet
   ON public.neighborhood_data(internet_available, internet_type) 
   WHERE internet_available = true;
 
+-- Ensure columns exist before creating the urban/rural index (idempotent)
+ALTER TABLE public.neighborhood_data
+  ADD COLUMN IF NOT EXISTS urban_area BOOLEAN DEFAULT false,
+  ADD COLUMN IF NOT EXISTS rural_area BOOLEAN DEFAULT true;
+
 CREATE INDEX IF NOT EXISTS idx_neighborhood_data_urban 
   ON public.neighborhood_data(urban_area, rural_area);
 
@@ -82,6 +98,7 @@ CREATE INDEX IF NOT EXISTS idx_neighborhood_data_urban
 ALTER TABLE public.neighborhood_data ENABLE ROW LEVEL SECURITY;
 
 -- Policy: Anyone can read neighborhood data
+DROP POLICY IF EXISTS "Anyone can view neighborhood data" ON public.neighborhood_data;
 CREATE POLICY "Anyone can view neighborhood data"
   ON public.neighborhood_data
   FOR SELECT
@@ -89,6 +106,7 @@ CREATE POLICY "Anyone can view neighborhood data"
   USING (true);
 
 -- Policy: Only authenticated users can insert neighborhood data
+DROP POLICY IF EXISTS "Authenticated users can insert neighborhood data" ON public.neighborhood_data;
 CREATE POLICY "Authenticated users can insert neighborhood data"
   ON public.neighborhood_data
   FOR INSERT
@@ -96,6 +114,7 @@ CREATE POLICY "Authenticated users can insert neighborhood data"
   WITH CHECK (true);
 
 -- Policy: Only authenticated users can update neighborhood data
+DROP POLICY IF EXISTS "Authenticated users can update neighborhood data" ON public.neighborhood_data;
 CREATE POLICY "Authenticated users can update neighborhood data"
   ON public.neighborhood_data
   FOR UPDATE
@@ -120,54 +139,64 @@ CREATE TRIGGER update_neighborhood_data_timestamp
 
 -- Insert sample data for existing Carcará property (if exists)
 -- This is mock data - in production, use actual geocoding and POI lookup
-INSERT INTO public.neighborhood_data (
-  property_id,
-  nearest_hospital_name,
-  nearest_hospital_distance_km,
-  nearest_school_name,
-  nearest_school_distance_km,
-  nearest_supermarket_name,
-  nearest_supermarket_distance_km,
-  nearest_gas_station_name,
-  nearest_gas_station_distance_km,
-  road_condition,
-  road_quality,
-  internet_available,
-  internet_type,
-  internet_speed_mbps,
-  mobile_signal_quality,
-  water_source,
-  sewage_system,
-  rural_area,
-  distance_to_city_center_km,
-  nearest_city_name,
-  data_quality
-)
-SELECT 
-  id,
-  'Hospital Regional de Planaltina',
-  8.5,
-  'Escola Classe 01 de Planaltina',
-  3.2,
-  'Supermercado BH',
-  4.7,
-  'Posto Shell BR-020',
-  5.1,
-  'paved',
-  'good',
-  true,
-  'fiber',
-  100,
-  'good',
-  'public',
-  'septic',
-  true,
-  15.3,
-  'Planaltina',
-  'estimated'
-FROM public.properties 
-WHERE title ILIKE '%Carcará%' OR title ILIKE '%Sítio%'
-ON CONFLICT (property_id) DO NOTHING;
+DO $$
+BEGIN
+  -- Only run the sample insert if the expected columns exist (avoids errors on partial schemas)
+  IF EXISTS (
+    SELECT 1 FROM information_schema.columns
+    WHERE table_schema = 'public' AND table_name = 'neighborhood_data'
+      AND column_name = 'nearest_gas_station_name'
+  ) THEN
+    INSERT INTO public.neighborhood_data (
+      property_id,
+      nearest_hospital_name,
+      nearest_hospital_distance_km,
+      nearest_school_name,
+      nearest_school_distance_km,
+      nearest_supermarket_name,
+      nearest_supermarket_distance_km,
+      nearest_gas_station_name,
+      nearest_gas_station_distance_km,
+      road_condition,
+      road_quality,
+      internet_available,
+      internet_type,
+      internet_speed_mbps,
+      mobile_signal_quality,
+      water_source,
+      sewage_system,
+      rural_area,
+      distance_to_city_center_km,
+      nearest_city_name,
+      data_quality
+    )
+    SELECT 
+      id,
+      'Hospital Regional de Planaltina',
+      8.5,
+      'Escola Classe 01 de Planaltina',
+      3.2,
+      'Supermercado BH',
+      4.7,
+      'Posto Shell BR-020',
+      5.1,
+      'paved',
+      'good',
+      true,
+      'fiber',
+      100,
+      'good',
+      'public',
+      'septic',
+      true,
+      15.3,
+      'Planaltina',
+      'estimated'
+    FROM public.properties 
+    WHERE title ILIKE '%Carcará%' OR title ILIKE '%Sítio%'
+    ON CONFLICT (property_id) DO NOTHING;
+  END IF;
+END$$;
 
 COMMENT ON TABLE public.neighborhood_data IS 'Stores Points of Interest and infrastructure data for properties';
 COMMENT ON COLUMN public.neighborhood_data.data_quality IS 'Indicates if data is verified by staff, estimated algorithmically, or reported by users';

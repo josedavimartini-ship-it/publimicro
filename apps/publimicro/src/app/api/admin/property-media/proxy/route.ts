@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { createServerSupabaseClient, createServiceSupabaseClient } from '@/lib/supabaseServer';
+import { randomUUID } from 'crypto';
 
 // Proxy for in-app admin UI to upload property media (photos/videos) and optional KML
 // Requires session-auth and admin email allowlist (reads app_settings.admin_emails)
@@ -79,14 +80,31 @@ export async function POST(req: NextRequest) {
       }
     }
 
-    // Update property_photos table for successful uploads
+    // Insert into unified media table when feature flag enabled, otherwise legacy property_photos
+    const USE_PLACEHOLDERS = process.env.FEATURE_MEDIA_PLACEHOLDERS === 'true';
     const successful = uploads.filter(u => u.publicUrl);
     for (let i = 0; i < successful.length; i++) {
       const u = successful[i];
       try {
-        await svc.from('property_photos').insert({ property_id: propertyId, url: u.publicUrl, thumbnail_url: null, caption: u.name || null, display_order: 0, is_cover: false });
+        if (USE_PLACEHOLDERS) {
+          const placeholderId = randomUUID();
+          await svc.from('media').insert({
+            resource_type: 'property',
+            resource_id: propertyId,
+            placeholder_id: placeholderId,
+            url: u.publicUrl,
+            thumbnail_url: u.thumbnail || null,
+            caption_pt: u.name || null,
+            status: 'processing',
+            display_order: i,
+            is_cover: i === 0
+          });
+          u.placeholderId = placeholderId;
+        } else {
+          await svc.from('property_photos').insert({ property_id: propertyId, url: u.publicUrl, thumbnail_url: null, caption: u.name || null, display_order: 0, is_cover: false });
+        }
       } catch (err) {
-        console.error('Failed to insert property_photos row', err);
+        console.error('Failed to insert property_photos/media row', err);
       }
     }
 

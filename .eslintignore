@@ -1,4 +1,11 @@
-﻿# Dependencies
+﻿node_modules/
+.next/
+dist/
+build/
+coverage/
+public/.next/
+**/*.d.ts
+supabase/migrations/# Dependencies
 node_modules/
 .pnp/
 .pnp.js

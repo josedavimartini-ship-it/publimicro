@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { createServiceSupabaseClient } from '@/lib/supabaseServer';
+import { randomUUID } from 'crypto';
 
 const ADMIN_HEADER = 'x-admin-key';
 const DEFAULT_MAX_BYTES = 50 * 1024 * 1024; // 50 MB
@@ -106,12 +107,29 @@ export async function POST(req: NextRequest) {
       }
     }
 
+    const USE_PLACEHOLDERS = process.env.FEATURE_MEDIA_PLACEHOLDERS === 'true';
     const successful = uploads.filter((u: any) => u.publicUrl);
     for (const u of successful) {
       try {
-        await svc.from('property_photos').insert({ property_id: propertyId, url: u.publicUrl, thumbnail_url: null, caption: u.name || null, display_order: 0, is_cover: false });
+        if (USE_PLACEHOLDERS) {
+          const placeholderId = randomUUID();
+          await svc.from('media').insert({
+            resource_type: 'property',
+            resource_id: propertyId,
+            placeholder_id: placeholderId,
+            url: u.publicUrl,
+            thumbnail_url: u.thumbnail || null,
+            caption_pt: u.name || null,
+            status: 'processing',
+            display_order: 0,
+            is_cover: false
+          });
+          u.placeholderId = placeholderId;
+        } else {
+          await svc.from('property_photos').insert({ property_id: propertyId, url: u.publicUrl, thumbnail_url: null, caption: u.name || null, display_order: 0, is_cover: false });
+        }
       } catch (err) {
-        console.error('Failed to insert property_photos row', err);
+        console.error('Failed to insert property_photos/media row', err);
       }
     }
 
