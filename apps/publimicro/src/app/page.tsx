@@ -191,7 +191,7 @@ export default function HomePage() {
 
       try {
         const sitiosData = await fetchCanonicalSitios({ limit: 6, hideTestListings });
-        console.log('Sitios loaded (canonical):', sitiosData);
+        // console.log('Sitios loaded (canonical):', sitiosData);
         setSitios(sitiosData || []);
       } catch (err) {
         console.error('Error fetching canonical sitios:', err);
@@ -710,6 +710,7 @@ export default function HomePage() {
     </main>
   );
 }
+
 
 
 

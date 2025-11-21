@@ -15,7 +15,7 @@ export default function MapSearch({ _onLocationSelect }: MapSearchProps): JSX.El
     e.preventDefault();
     setShowMap(true);
     // TODO: Implement actual geocoding and map display
-    console.log("Searching for:", searchQuery);
+    // console.log("Searching for:", searchQuery);
   };
 
   return (
@@ -144,5 +144,6 @@ export default function MapSearch({ _onLocationSelect }: MapSearchProps): JSX.El
     </div>
   );
 }
+
 
 

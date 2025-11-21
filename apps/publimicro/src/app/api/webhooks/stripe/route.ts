@@ -40,7 +40,7 @@ export async function POST(req: Request) {
       const session = event.data.object as Stripe.Checkout.Session;
       const { listingId, productType, userId } = session.metadata;
 
-      console.log("Pagamento recebido:", {
+      // console.log("Pagamento recebido:", {
         listingId,
         productType,
         userId,
@@ -70,7 +70,7 @@ export async function POST(req: Request) {
         if (error) {
           console.error("Erro ao atualizar destaque:", error);
         } else {
-          console.log(`Listing ${listingId} destacado até ${expiresAt}`);
+          // console.log(`Listing ${listingId} destacado até ${expiresAt}`);
         }
       } else if (productType === "marketing") {
         const { error } = await supabase
@@ -85,7 +85,7 @@ export async function POST(req: Request) {
         if (error) {
           console.error("Erro ao ativar marketing:", error);
         } else {
-          console.log(`Marketing ativado para listing ${listingId} até ${expiresAt}`);
+          // console.log(`Marketing ativado para listing ${listingId} até ${expiresAt}`);
           // TODO: Adicionar à fila de marketing (email, social media, etc)
         }
       }
@@ -110,7 +110,7 @@ export async function POST(req: Request) {
       if (paymentError) {
         console.error("Erro ao salvar pagamento:", paymentError);
       } else {
-        console.log(`Pagamento registrado: ${session.id}`);
+        // console.log(`Pagamento registrado: ${session.id}`);
       }
     }
 
@@ -123,3 +123,4 @@ export async function POST(req: Request) {
     );
   }
 }
+

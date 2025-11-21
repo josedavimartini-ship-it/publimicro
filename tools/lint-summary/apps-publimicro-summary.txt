@@ -1,13 +1,12 @@
 Files: 195
-Errors: 142
-Warnings: 168
+Errors: 143
+Warnings: 144
 Top rules:
-  @typescript-eslint/no-explicit-any: 121
-  @typescript-eslint/no-unused-vars: 85
+  @typescript-eslint/no-explicit-any: 119
+  @typescript-eslint/no-unused-vars: 88
   @typescript-eslint/no-misused-promises: 33
   react-hooks/exhaustive-deps: 23
-  no-console: 22
-  @typescript-eslint/no-non-null-assertion: 13
+  @typescript-eslint/no-non-null-assertion: 10
   prefer-const: 2
   @typescript-eslint/no-floating-promises: 1
   @next/next/no-img-element: 1

@@ -85,7 +85,7 @@ function CarcaraProjectPageContent() {
 
       try {
         const sitiosData = await fetchCanonicalSitios({ limit: 6, hideTestListings: false });
-        console.log('Carcará page sitios loaded (live):', sitiosData);
+        // console.log('Carcará page sitios loaded (live):', sitiosData);
         if (sitiosData && sitiosData.length > 0) setSitios(sitiosData || []);
       } catch (err) {
         console.error('Error loading canonical sitios on Carcará page:', err);
@@ -193,7 +193,7 @@ function CarcaraProjectPageContent() {
               if (audio.paused) {
                 audio.volume = 0.7; // Set volume
                 audio.play().catch(err => {
-                  console.log('Audio play failed (normal for first click):', err);
+                  // console.log('Audio play failed (normal for first click):', err);
                   // Show friendly message
                   const btn = document.querySelector('[aria-label="Reproduzir som do Carcará"]');
                   if (btn) {
@@ -595,6 +595,7 @@ function CarcaraProjectPageContent() {
       </I18nProvider>
     );
   }
+
 
 
 

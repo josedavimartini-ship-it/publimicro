@@ -81,7 +81,7 @@ export async function POST(request: NextRequest) {
         break;
 
       default:
-        console.log(`Unhandled event type: ${event.type}`);
+        // console.log(`Unhandled event type: ${event.type}`);
     }
 
     return NextResponse.json({ received: true });
@@ -99,7 +99,7 @@ export async function POST(request: NextRequest) {
  * Handle successful checkout session
  */
 async function handleCheckoutCompleted(session: Stripe.Checkout.Session, supabase: any) {
-  console.log('Processing checkout.session.completed:', session.id);
+  // console.log('Processing checkout.session.completed:', session.id);
 
   const {
     user_id,
@@ -153,7 +153,7 @@ async function handleCheckoutCompleted(session: Stripe.Checkout.Session, supabas
     throw insertError;
   }
 
-  console.log('Enhancement created:', enhancement.id);
+  // console.log('Enhancement created:', enhancement.id);
 
   // If it's a bundle, create both highlight and marketing records
   if (enhancement_type === 'bundle') {
@@ -191,7 +191,7 @@ async function handleCheckoutCompleted(session: Stripe.Checkout.Session, supabas
  * Handle successful payment intent
  */
 async function handlePaymentSucceeded(paymentIntent: Stripe.PaymentIntent, supabase: any) {
-  console.log('Processing payment_intent.succeeded:', paymentIntent.id);
+  // console.log('Processing payment_intent.succeeded:', paymentIntent.id);
 
   const { announcement_id } = paymentIntent.metadata || {};
 
@@ -218,7 +218,7 @@ async function handlePaymentSucceeded(paymentIntent: Stripe.PaymentIntent, supab
  * Handle failed payment intent
  */
 async function handlePaymentFailed(paymentIntent: Stripe.PaymentIntent, supabase: any) {
-  console.log('Processing payment_intent.payment_failed:', paymentIntent.id);
+  // console.log('Processing payment_intent.payment_failed:', paymentIntent.id);
 
   const { announcement_id } = paymentIntent.metadata || {};
 
@@ -253,6 +253,8 @@ export async function GET() {
     { status: 405 }
   );
 }
+
+
 
 
 

@@ -124,8 +124,8 @@ export default function PropertyPage() {
           return;
         }
 
-        console.log("Sitio data loaded:", data);
-        console.log("Photos array:", data?.fotos);
+        // console.log("Sitio data loaded:", data);
+        // console.log("Photos array:", data?.fotos);
         setSitio(data);
         if (data?.lance_inicial) {
           setBidValue(data.lance_inicial.toString());
@@ -147,10 +147,10 @@ export default function PropertyPage() {
           if (kmlPath) {
             const kmlContent = await fetchKMLContent(kmlPath);
             if (kmlContent) {
-              console.log(`Loaded individual KML for ${data.nome}`);
+              // console.log(`Loaded individual KML for ${data.nome}`);
               setKmlData(kmlContent);
             } else {
-              console.log('Using fallback KML (all properties)');
+              // console.log('Using fallback KML (all properties)');
             }
           }
         }
@@ -679,3 +679,4 @@ export default function PropertyPage() {
     </main>
   );
 }
+

@@ -15,13 +15,13 @@ export default function ContactVisitForm({
 
   useEffect(() => {
     if (propId) {
-      console.log('Formulário carregado para o imóvel:', propId);
+      // console.log('Formulário carregado para o imóvel:', propId);
     }
   }, [propId]);
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>): void => {
     e.preventDefault();
-    console.log('Dados enviados:', { nome, email, telefone, propId });
+    // console.log('Dados enviados:', { nome, email, telefone, propId });
   };
 
   return (
@@ -73,3 +73,4 @@ export default function ContactVisitForm({
     </form>
   );
 }
+

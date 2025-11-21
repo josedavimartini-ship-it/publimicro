@@ -38,7 +38,7 @@ const FALLBACK_IMAGES: Record<CategoryKey, string> = {
 export async function getRandomCategoryImage(category: CategoryKey): Promise<string | null> {
   // If no API key, return fallback immediately
   if (!unsplash) {
-    console.log(`Using fallback image for ${category} (no API key configured)`);
+    // console.log(`Using fallback image for ${category} (no API key configured)`);
     return FALLBACK_IMAGES[category];
   }
 
@@ -57,7 +57,7 @@ export async function getRandomCategoryImage(category: CategoryKey): Promise<str
     }
 
     // If API call fails, return fallback
-    console.log(`Using fallback image for ${category} (API call failed)`);
+    // console.log(`Using fallback image for ${category} (API call failed)`);
     return FALLBACK_IMAGES[category];
   } catch (error) {
     console.error(`Error fetching Unsplash image for ${category}:`, error);
@@ -99,3 +99,4 @@ export async function trackDownload(downloadLocation: string): Promise<void> {
     console.error('Error tracking Unsplash download:', error);
   }
 }
+

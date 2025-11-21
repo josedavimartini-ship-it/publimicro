@@ -186,7 +186,7 @@ export default function PostarCoisasPage() {
       }
 
       setSuccess("Anúncio publicado com sucesso! Redirecionando...");
-      console.log("Listing created:", data);
+      // console.log("Listing created:", data);
       setTimeout(() => {
         router.push(`/acheme-coisas/publicado?id=${data.id}`);
       }, 1500);
@@ -596,6 +596,8 @@ export default function PostarCoisasPage() {
     </div>
   );
 }
+
+
 
 
 

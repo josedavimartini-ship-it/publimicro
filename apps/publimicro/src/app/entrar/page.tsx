@@ -115,7 +115,7 @@ function EntrarContent() {
       if (error) throw error;
       setSuccess("Account created! Please check your email to verify your account.");
       // Profile is auto-created by database trigger (handle_new_user)
-      console.log("User created successfully:", data.user?.id);
+      // console.log("User created successfully:", data.user?.id);
       // Switch to login mode after 3 seconds
       setTimeout(() => {
         setMode("login");
@@ -438,6 +438,8 @@ export default function EntrarPage() {
     </Suspense>
   );
 }
+
+
 
 
 

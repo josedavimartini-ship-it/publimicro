@@ -46,7 +46,7 @@ export default function PWAInstallPrompt() {
     deferredPrompt.prompt();
     const { outcome } = await deferredPrompt.userChoice;
     
-    console.log(`PWA install ${outcome}`);
+    // console.log(`PWA install ${outcome}`);
     setDeferredPrompt(null);
     setShowPrompt(false);
   };
@@ -117,6 +117,8 @@ export default function PWAInstallPrompt() {
 // .animate-slide-up {
 //   animation: slide-up 0.3s ease-out;
 // }
+
+
 
 
 
