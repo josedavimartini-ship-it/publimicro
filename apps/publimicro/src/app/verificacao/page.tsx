@@ -12,7 +12,7 @@ export default function VerificationPage() {
   const supabase = createClientComponentClient();
 
   useEffect(() => {
-    checkAuth();
+    void checkAuth();
   }, []);
 
   const checkAuth = async () => {
@@ -204,3 +204,4 @@ export default function VerificationPage() {
     </div>
   );
 }
+

@@ -33,7 +33,7 @@ async function ensureAdmin() {
         const list = Array.isArray(setting.value) ? setting.value : JSON.parse(setting.value);
         const normalized = list.map((e) => String(e).toLowerCase());
         if (normalized.includes(email)) return { ok: true, user };
-      } catch (err) {
+      } catch (_err) {
         // ignore parse errors and fall back
       }
     }
@@ -46,7 +46,7 @@ async function ensureAdmin() {
   return { ok: false };
 }
 
-export async function GET(req: NextRequest) {
+export async function GET(_req: NextRequest) {
   const auth = await ensureAdmin();
   if (!auth.ok) return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
 
@@ -116,3 +116,6 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: err.message || String(err) }, { status: 500 });
   }
 }
+
+
+

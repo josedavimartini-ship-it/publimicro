@@ -33,7 +33,7 @@ export default function LancesPage() {
   const [userId, setUserId] = useState<string | null>(null);
 
   useEffect(() => {
-    loadUserAndBids();
+    void loadUserAndBids();
   }, [filter]);
 
   const loadUserAndBids = async () => {
@@ -366,3 +366,7 @@ export default function LancesPage() {
     </div>
   );
 }
+
+
+
+

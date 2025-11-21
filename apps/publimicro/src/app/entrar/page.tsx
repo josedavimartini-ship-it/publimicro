@@ -36,7 +36,7 @@ function EntrarContent() {
         router.push(redirectUrl);
       }
     };
-    checkUser();
+    void checkUser();
   }, [supabase, router, redirectUrl]);
 
   const handleLogin = async (e: React.FormEvent) => {
@@ -438,3 +438,8 @@ export default function EntrarPage() {
     </Suspense>
   );
 }
+
+
+
+
+

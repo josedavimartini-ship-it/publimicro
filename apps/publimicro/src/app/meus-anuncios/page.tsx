@@ -49,7 +49,7 @@ export default function MeusAnunciosPage() {
 
   useEffect(() => {
     if (user) {
-      loadUserData();
+      void loadUserData();
     }
   }, [user]);
 
@@ -345,3 +345,9 @@ export default function MeusAnunciosPage() {
     </main>
   );
 }
+
+
+
+
+
+

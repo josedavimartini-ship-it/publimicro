@@ -55,7 +55,7 @@ export default function ContaPage() {
   const [favorites, setFavorites] = useState<Favorite[]>([]);
 
   useEffect(() => {
-    checkUser();
+    void checkUser();
   }, []);
 
   const checkUser = async () => {
@@ -288,3 +288,6 @@ export default function ContaPage() {
     </main>
   );
 }
+
+
+

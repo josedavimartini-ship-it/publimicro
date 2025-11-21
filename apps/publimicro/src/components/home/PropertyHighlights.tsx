@@ -2,7 +2,7 @@ import Link from "next/link";
 
 export default function PropertyHighlights() {
   // This will be replaced with real data from Supabase
-  const highlights = [
+
     {
       id: 1,
       title: "Casa com 3 quartos",
@@ -82,3 +82,4 @@ export default function PropertyHighlights() {
     </section>
   );
 }
+

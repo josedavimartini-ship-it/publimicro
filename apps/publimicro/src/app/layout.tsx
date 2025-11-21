@@ -1,4 +1,4 @@
-﻿import { FloatingWhatsApp } from "@publimicro/ui";
+import { FloatingWhatsApp } from "@publimicro/ui";
 import Navbar from "@/components/Navbar";
 import UserQuickPanel from "@/components/UserQuickPanel";
 import BackToTop from "@/components/BackToTop";
@@ -102,3 +102,6 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     </html>
   );
 }
+
+
+

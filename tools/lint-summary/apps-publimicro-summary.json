@@ -1,0 +1,52 @@
+{
+  "warnings": 168.0,
+  "topRules": [
+    {
+      "Key": "@typescript-eslint/no-explicit-any",
+      "Value": 121,
+      "Name": "@typescript-eslint/no-explicit-any"
+    },
+    {
+      "Key": "@typescript-eslint/no-unused-vars",
+      "Value": 85,
+      "Name": "@typescript-eslint/no-unused-vars"
+    },
+    {
+      "Key": "@typescript-eslint/no-misused-promises",
+      "Value": 33,
+      "Name": "@typescript-eslint/no-misused-promises"
+    },
+    {
+      "Key": "react-hooks/exhaustive-deps",
+      "Value": 23,
+      "Name": "react-hooks/exhaustive-deps"
+    },
+    {
+      "Key": "no-console",
+      "Value": 22,
+      "Name": "no-console"
+    },
+    {
+      "Key": "@typescript-eslint/no-non-null-assertion",
+      "Value": 13,
+      "Name": "@typescript-eslint/no-non-null-assertion"
+    },
+    {
+      "Key": "prefer-const",
+      "Value": 2,
+      "Name": "prefer-const"
+    },
+    {
+      "Key": "@typescript-eslint/no-floating-promises",
+      "Value": 1,
+      "Name": "@typescript-eslint/no-floating-promises"
+    },
+    {
+      "Key": "@next/next/no-img-element",
+      "Value": 1,
+      "Name": "@next/next/no-img-element"
+    }
+  ],
+  "files": 195,
+  "errors": 142.0
+}

@@ -22,7 +22,7 @@ export function useCategories() {
           setLoading(false);
           return;
         }
-      } catch (err) {
+      } catch (_err) {
         // fallback to local manifest
       }
 
@@ -32,7 +32,7 @@ export function useCategories() {
       }
     }
 
-    fetchCategories();
+    void fetchCategories();
 
     return () => {
       mounted = false;
@@ -43,3 +43,7 @@ export function useCategories() {
 }
 
 export default useCategories;
+
+
+
+

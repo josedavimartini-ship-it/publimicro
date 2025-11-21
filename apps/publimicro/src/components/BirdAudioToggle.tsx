@@ -30,8 +30,8 @@ export default function BirdAudioToggle() {
       try {
         // remove global controller if it matches
         if (window.__publimicroCarcaraAudio) delete window.__publimicroCarcaraAudio;
-      } catch (e) {
-        // ignore
+      } catch {
+        // ignore any removal errors
       }
     };
   }, [isMuted]);
@@ -56,3 +56,5 @@ export default function BirdAudioToggle() {
   );
 }
 // ...existing code...
+
+

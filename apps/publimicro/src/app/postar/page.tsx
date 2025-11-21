@@ -49,7 +49,7 @@ export default function PostarPage() {
   const [success, setSuccess] = useState('');
 
   useEffect(() => {
-    checkAuth();
+    void checkAuth();
   }, []);
 
   const checkAuth = async () => {
@@ -446,3 +446,9 @@ export default function PostarPage() {
     </main>
   );
 }
+
+
+
+
+
+

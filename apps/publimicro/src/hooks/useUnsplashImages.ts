@@ -49,7 +49,7 @@ export function useUnsplashImages() {
       }
     }
 
-    loadImages();
+    void loadImages();
   }, []);
 
   return { images, loading, error };

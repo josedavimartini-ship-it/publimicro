@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import dynamic from "next/dynamic";
-import { MapPin, List, Layers, ZoomIn, ZoomOut, Maximize2, Filter } from "lucide-react";
+import { MapPin, List, ZoomIn, ZoomOut, Maximize2, Filter } from "lucide-react";
 import { supabase } from "@/lib/supabaseClient";
 
 // Dynamic import to avoid SSR issues
@@ -34,7 +34,7 @@ export default function MapSearch({ onPropertySelect, initialProperties = [] }: 
 
   useEffect(() => {
     if (initialProperties.length === 0) {
-      loadProperties();
+      void loadProperties();
     }
   }, []);
 
@@ -51,7 +51,7 @@ export default function MapSearch({ onPropertySelect, initialProperties = [] }: 
       if (error) throw error;
       
       // Mock coordinates for demonstration - in production, geocode addresses
-      const propertiesWithCoords = (data || []).map((property, index) => ({
+
         ...property,
         latitude: -15.8267 + (Math.random() - 0.5) * 0.1,
         longitude: -47.9218 + (Math.random() - 0.5) * 0.1,
@@ -202,3 +202,6 @@ export default function MapSearch({ onPropertySelect, initialProperties = [] }: 
     </div>
   );
 }
+
+
+

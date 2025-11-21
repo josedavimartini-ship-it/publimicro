@@ -22,7 +22,7 @@ export function addToComparison(propertyId: string): boolean {
   }
 }
 
-export function removeFromComparison(propertyId: string): void {
+export function removeFromComparison(propertyId: string): {
   try {
     const stored = localStorage.getItem('comparison');
     const ids: string[] = stored ? JSON.parse(stored) : [];
@@ -43,7 +43,7 @@ export function getComparisonIds(): string[] {
   }
 }
 
-export function clearComparison(): void {
+export function clearComparison(): {
   localStorage.removeItem('comparison');
 }
 
@@ -57,3 +57,4 @@ export function isInComparison(propertyId: string): boolean {
   const ids = getComparisonIds();
   return ids.includes(propertyId);
 }
+

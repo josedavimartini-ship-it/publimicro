@@ -100,7 +100,7 @@ export default function HomePage() {
   // Set NEXT_PUBLIC_HIDE_TEST_LISTINGS='false' to disable this behavior in dev.
   const hideTestListings = process.env.NEXT_PUBLIC_HIDE_TEST_LISTINGS !== 'false';
 
-  const isTestTitle = (t?: string) => {
+
     if (!t) return false;
     return /\b(test|demo|dummy|lorem|sample)\b/i.test(t);
   };
@@ -116,7 +116,7 @@ export default function HomePage() {
   const { images: unsplashImages, loading: imagesLoading } = useUnsplashImages();
 
   // Handler for Fazer Proposta button
-  const handleFazerProposta = async (propertyId: string, propertyTitle: string) => {
+
     // Play auction sound
     const audioContext = new (window.AudioContext || (window as any).webkitAudioContext)();
     const oscillator = audioContext.createOscillator();
@@ -164,7 +164,7 @@ export default function HomePage() {
 
   useEffect(() => {
     // Get current user
-    supabase.auth.getUser().then(({ data }) => {
+    void supabase.auth.getUser().then(({ data }) => {
       setUserId(data?.user?.id || null);
     });
 
@@ -246,8 +246,8 @@ export default function HomePage() {
       }
     }
 
-    fetchSitios();
-    fetchListings();
+    void fetchSitios();
+    void fetchListings();
   }, []);
 
   return (
@@ -710,3 +710,6 @@ export default function HomePage() {
     </main>
   );
 }
+
+
+

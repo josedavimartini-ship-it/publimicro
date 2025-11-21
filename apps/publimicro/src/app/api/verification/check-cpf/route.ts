@@ -11,7 +11,7 @@ import { cookies } from 'next/headers';
  * 
  * API Docs: https://www.serpro.gov.br/menu/quem-somos/governanca/certificado-digital/apis
  */
-export async function POST(request: NextRequest) {
+export async function POST(_request: NextRequest) {
   try {
     const supabase = createRouteHandlerClient({ cookies });
 
@@ -164,3 +164,5 @@ export async function POST(request: NextRequest) {
     );
   }
 }
+
+

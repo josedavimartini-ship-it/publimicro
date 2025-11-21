@@ -38,7 +38,7 @@ export default function MinhasPropostasPage() {
 
   useEffect(() => {
     if (user) {
-      loadProposals();
+      void loadProposals();
     }
   }, [user]);
 
@@ -285,3 +285,4 @@ export default function MinhasPropostasPage() {
     </main>
   );
 }
+

@@ -117,7 +117,7 @@ export async function POST(request: NextRequest) {
  * GET /api/verification/start
  * Get current verification status for authenticated user
  */
-export async function GET(request: NextRequest) {
+export async function GET(_request: NextRequest) {
   try {
     const supabase = createRouteHandlerClient({ cookies });
 
@@ -159,3 +159,5 @@ export async function GET(request: NextRequest) {
     );
   }
 }
+
+

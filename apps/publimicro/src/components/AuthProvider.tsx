@@ -104,11 +104,11 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   useEffect(() => {
     // Get initial session
-    supabase.auth.getSession().then(({ data: { session } }) => {
+    void supabase.auth.getSession().then(({ data: { session } }) => {
       setUser(session?.user ?? null);
       
       if (session?.user) {
-        loadProfile(session.user.id).then((profileData) => {
+        void loadProfile(session.user.id).then((profileData) => {
           setProfile(profileData);
           
           // Show onboarding if profile not completed
@@ -166,3 +166,9 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     </AuthContext.Provider>
   );
 }
+
+
+
+
+
+

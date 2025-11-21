@@ -8,7 +8,7 @@ export default function GoogleEarthMap({ lat = -18.977, lng = -48.273, zoom = 15
   useEffect(() => {
     const googleMaps = window.google;
     if (googleMaps && mapRef.current) {
-      const map = new googleMaps.maps.Map(mapRef.current, {
+
         center: { lat, lng },
         zoom,
         mapTypeId: "satellite",
@@ -23,3 +23,5 @@ export default function GoogleEarthMap({ lat = -18.977, lng = -48.273, zoom = 15
     </div>
   );
 }
+
+

@@ -280,6 +280,8 @@ export function isEnhancementAvailable(
   category: AnnouncementCategory,
   type: EnhancementType
 ): boolean {
-  // All enhancements available for all categories
-  return true;
+  // Return true only if the category exists and the enhancement type is defined for it
+  const pricing = ENHANCEMENT_PRICING[category];
+  if (!pricing) return false;
+  return Object.prototype.hasOwnProperty.call(pricing, type);
 }

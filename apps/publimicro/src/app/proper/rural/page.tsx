@@ -32,7 +32,7 @@ export default function ProperRuralPage() {
       }
       setLoading(false);
     }
-    fetchProperties();
+    void fetchProperties();
   }, []);
   return (
     <main className="min-h-screen bg-gradient-to-b from-[#0a0a0a] via-[#0d0d0d] to-[#0a0a0a] py-20 px-6">
@@ -164,3 +164,6 @@ export default function ProperRuralPage() {
     </main>
   );
 }
+
+
+

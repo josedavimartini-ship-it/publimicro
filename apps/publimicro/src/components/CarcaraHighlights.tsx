@@ -21,7 +21,7 @@ export default function CarcaraHighlights({ limit = 6, hideTestListings = true }
     }
 
     // Attempt live refresh
-    (async () => {
+    void (async () => {
       try {
         const live = await fetchCanonicalSitios({ limit, hideTestListings });
         if (live && live.length > 0) setSitios(live as Sitio[]);
@@ -37,7 +37,7 @@ export default function CarcaraHighlights({ limit = 6, hideTestListings = true }
     try {
       if (!v && v !== 0) return undefined;
       return new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(v as number);
-    } catch (e) {
+    } catch (_e) {
       return undefined;
     }
   };
@@ -81,3 +81,7 @@ export default function CarcaraHighlights({ limit = 6, hideTestListings = true }
     </section>
   );
 }
+
+
+
+

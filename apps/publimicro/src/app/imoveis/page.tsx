@@ -42,7 +42,7 @@ export default function ImoveisPage() {
   const [totalResults, setTotalResults] = useState(0);
 
   useEffect(() => {
-    loadProperties();
+    void loadProperties();
   }, [filters]);
 
   const loadProperties = async () => {
@@ -381,3 +381,7 @@ export default function ImoveisPage() {
     </div>
   );
 }
+
+
+
+

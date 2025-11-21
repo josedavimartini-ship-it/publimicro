@@ -29,7 +29,7 @@ export default function AccountModal({ open, onClose }: AccountModalProps) {
       const origin = typeof window !== 'undefined' ? window.location.origin : '';
       const redirectUrl = `${origin}/api/auth/callback`;
       
-      const { data, error } = await supabase.auth.signInWithOAuth({
+      const { data: _data, error } = await supabase.auth.signInWithOAuth({
         provider,
         options: {
           redirectTo: redirectUrl,
@@ -46,9 +46,17 @@ export default function AccountModal({ open, onClose }: AccountModalProps) {
       }
       
       // The modal will close automatically when auth state changes
-    } catch (err: any) {
+    } catch (err: unknown) {
       console.error('Sign in error:', err);
-      setError(err.message || 'Failed to sign in. Please try again.');
+      const msg = ((): string => {
+        if (typeof err === 'string') return err;
+        if (err && typeof err === 'object' && 'message' in err) {
+          const m = (err as Record<string, unknown>)['message'];
+          if (typeof m === 'string') return m;
+        }
+        return 'Failed to sign in. Please try again.';
+      })();
+      setError(msg);
     } finally {
       setLoading(false);
     }
@@ -67,8 +75,9 @@ export default function AccountModal({ open, onClose }: AccountModalProps) {
 
       if (error) throw error;
       onClose();
-    } catch (err: any) {
-      setError(err.message);
+    } catch (err: unknown) {
+      const m = (err && typeof err === 'object' && 'message' in err) ? (err as Record<string, unknown>)['message'] : undefined;
+      setError(typeof m === 'string' ? m : 'Erro ao entrar.');
     } finally {
       setLoading(false);
     }
@@ -96,8 +105,9 @@ export default function AccountModal({ open, onClose }: AccountModalProps) {
       setTimeout(() => {
         onClose();
       }, 3000);
-    } catch (err: any) {
-      setError(err.message);
+    } catch (err: unknown) {
+      const m = (err && typeof err === 'object' && 'message' in err) ? (err as Record<string, unknown>)['message'] : undefined;
+      setError(typeof m === 'string' ? m : 'Erro ao criar conta.');
     } finally {
       setLoading(false);
     }
@@ -129,8 +139,9 @@ export default function AccountModal({ open, onClose }: AccountModalProps) {
         if (error) throw error;
         onClose();
       }
-    } catch (err: any) {
-      setError(err.message);
+    } catch (err: unknown) {
+      const m = (err && typeof err === 'object' && 'message' in err) ? (err as Record<string, unknown>)['message'] : undefined;
+      setError(typeof m === 'string' ? m : 'Erro ao processar código.');
       setOtpSent(false);
     } finally {
       setLoading(false);
@@ -351,3 +362,8 @@ export default function AccountModal({ open, onClose }: AccountModalProps) {
     </div>
   );
 }
+
+
+
+
+

@@ -17,7 +17,7 @@ function AnuncioPublicadoContent() {
 
   useEffect(() => {
     if (listingId) {
-      fetchListing();
+      void fetchListing();
     }
   }, [listingId]);
 
@@ -328,3 +328,9 @@ export default function AnuncioPublicadoPage() {
     </Suspense>
   );
 }
+
+
+
+
+
+

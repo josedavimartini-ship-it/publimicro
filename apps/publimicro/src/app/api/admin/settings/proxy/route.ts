@@ -28,7 +28,7 @@ async function ensureAdmin() {
   return { ok: false };
 }
 
-export async function GET(req: NextRequest) {
+export async function GET(_req: NextRequest) {
   const auth = await ensureAdmin();
   if (!auth.ok) return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
 
@@ -70,3 +70,5 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: err.message || String(err) }, { status: 500 });
   }
 }
+
+

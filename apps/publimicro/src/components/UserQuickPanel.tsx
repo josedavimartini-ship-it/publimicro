@@ -10,7 +10,7 @@ export default function UserQuickPanel() {
   const [proposals, setProposals] = useState<any[]>([]);
 
   useEffect(() => {
-    supabase.auth.getUser().then(({ data }) => {
+    void supabase.auth.getUser().then(({ data }) => {
       if (data?.user) {
         setUser(data.user);
         supabase
@@ -65,3 +65,4 @@ export default function UserQuickPanel() {
     </div>
   );
 }
+

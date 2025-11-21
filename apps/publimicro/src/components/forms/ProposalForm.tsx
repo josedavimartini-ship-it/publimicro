@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import { useState, useEffect } from "react";
 
@@ -46,7 +46,7 @@ export default function ProposalForm({
       }
     };
 
-    checkAuthorization();
+    void checkAuthorization();
   }, [propId]);
 
   const handleAuthCodeSubmit = async (e: React.FormEvent) => {
@@ -366,3 +366,9 @@ export default function ProposalForm({
     </div>
   );
 }
+
+
+
+
+
+

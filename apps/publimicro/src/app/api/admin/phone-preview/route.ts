@@ -87,7 +87,7 @@ export async function POST(req: NextRequest) {
               }
             }
           }
-        } catch (err) {
+        } catch (_err) {
           // ignore and continue with next column
           continue;
         }
@@ -109,3 +109,6 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: err.message || String(err) }, { status: 500 });
   }
 }
+
+
+

@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import { useState } from "react";
 
@@ -6,7 +6,7 @@ interface MapSearchProps {
   onLocationSelect?: (location: { lat: number; lng: number; address: string }) => void;
 }
 
-export default function MapSearch({ onLocationSelect }: MapSearchProps): JSX.Element {
+export default function MapSearch({ _onLocationSelect }: MapSearchProps): JSX.Element {
   const [searchQuery, setSearchQuery] = useState("");
   const [mapView, setMapView] = useState<"map" | "satellite">("map");
   const [showMap, setShowMap] = useState(false);
@@ -144,3 +144,5 @@ export default function MapSearch({ onLocationSelect }: MapSearchProps): JSX.Ele
     </div>
   );
 }
+
+

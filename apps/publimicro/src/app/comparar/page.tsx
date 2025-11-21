@@ -40,7 +40,7 @@ export default function ComparePage() {
     setSelectedIds(ids);
     
     if (ids.length > 0) {
-      loadProperties(ids);
+      void loadProperties(ids);
     } else {
       setLoading(false);
     }
@@ -75,7 +75,7 @@ export default function ComparePage() {
 
   const shareComparison = () => {
     const url = window.location.href;
-    navigator.clipboard.writeText(url);
+    void navigator.clipboard.writeText(url);
     alert("Link copiado! Compartilhe com sua família ou sócio.");
   };
 
@@ -301,3 +301,4 @@ export default function ComparePage() {
     </div>
   );
 }
+

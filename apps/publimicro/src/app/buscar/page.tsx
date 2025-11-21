@@ -36,7 +36,7 @@ function SearchPageContent() {
   const [totalResults, setTotalResults] = useState(0);
 
   useEffect(() => {
-    performSearch();
+    void performSearch();
   }, [filters]);
 
   const performSearch = async () => {
@@ -299,3 +299,4 @@ export default function SearchPage() {
     </Suspense>
   );
 }
+

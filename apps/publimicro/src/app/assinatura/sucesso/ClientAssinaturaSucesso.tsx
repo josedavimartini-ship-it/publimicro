@@ -8,12 +8,12 @@ export default function ClientAssinaturaSucesso() {
   const [loading, setLoading] = useState(true);
   const [verified, setVerified] = useState(false);
   const searchParams = useSearchParams();
-  const router = useRouter();
+
   const sessionId = searchParams?.get('session_id');
 
   useEffect(() => {
     if (sessionId) {
-      verifySession();
+      void verifySession();
     } else {
       setLoading(false);
     }
@@ -151,3 +151,7 @@ export default function ClientAssinaturaSucesso() {
     </div>
   );
 }
+
+
+
+

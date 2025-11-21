@@ -48,7 +48,7 @@ export default function Breadcrumbs() {
     };
 
     let currentPath = "";
-    paths.forEach((path, index) => {
+    paths.forEach((path, _index) => {
       currentPath += `/${path}`;
       
       // Skip dynamic segments (IDs)
@@ -102,3 +102,5 @@ export default function Breadcrumbs() {
     </nav>
   );
 }
+
+

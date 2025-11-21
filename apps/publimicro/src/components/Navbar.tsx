@@ -7,7 +7,7 @@ import { Scale, TrendingUp } from "lucide-react";
 export default function Navbar() {
   const router = useRouter();
 
-  function handlePostar(): void {
+  function handlePostar(): {
     const logged = false; // 🔸 Futuro: integrar com Supabase Auth
     if (!logged) {
       router.push("/login");
@@ -97,3 +97,4 @@ export default function Navbar() {
     </nav>
   );
 }
+

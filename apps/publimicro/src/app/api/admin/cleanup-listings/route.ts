@@ -39,7 +39,7 @@ export async function POST(req: NextRequest) {
               if (!found.find((f) => (f as any).id === (r as any).id)) found.push(r);
             }
           }
-        } catch (err) {
+        } catch (_err) {
           // ignore and continue
           continue;
         }
@@ -76,3 +76,6 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: err.message || String(err) }, { status: 500 });
   }
 }
+
+
+

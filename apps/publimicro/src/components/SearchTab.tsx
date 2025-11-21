@@ -62,7 +62,7 @@ export default function SearchTab({ onFilterChange, initialSection = DEFAULT_SEC
       return;
     }
 
-    const t = setTimeout(async () => {
+    const t = setTimeout(void async () => {
       try {
         const url = new URL("/api/search", location.origin);
         url.searchParams.set("q", query);
@@ -223,3 +223,4 @@ export default function SearchTab({ onFilterChange, initialSection = DEFAULT_SEC
     </div>
   );
 }
+

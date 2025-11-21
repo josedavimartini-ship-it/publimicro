@@ -1,0 +1,76 @@
+{
+  "version": "1.0",
+  "updated_at": "2025-11-19T00:00:00Z",
+  "categories": [
+    {
+      "id": "items",
+      "name": "Itens",
+      "i18n": { "pt": "Itens", "es": "Artículos", "en": "Items" },
+      "subcategories": [
+        { "id": "electronics", "name": "Eletrônicos", "i18n": {"pt":"Eletrônicos","es":"Electrónicos","en":"Electronics"} },
+        { "id": "furniture", "name": "Móveis", "i18n": {"pt":"Móveis","es":"Muebles","en":"Furniture"} },
+        { "id": "fashion", "name": "Moda", "i18n": {"pt":"Moda","es":"Moda","en":"Fashion"} },
+        { "id": "home_garden", "name": "Casa & Jardim", "i18n": {"pt":"Casa & Jardim","es":"Casa y Jardín","en":"Home & Garden"} },
+        { "id": "sports", "name": "Esportes", "i18n": {"pt":"Esportes","es":"Deportes","en":"Sports"} }
+      ]
+    },
+    {
+      "id": "vehicles",
+      "name": "Veículos",
+      "i18n": { "pt": "Veículos", "es": "Vehículos", "en": "Vehicles" },
+      "subcategories": [
+        { "id": "cars", "name": "Carros", "i18n": {"pt":"Carros","es":"Autos","en":"Cars"} },
+        { "id": "motorcycles", "name": "Motos", "i18n": {"pt":"Motos","es":"Motos","en":"Motorcycles"} },
+        { "id": "trucks", "name": "Caminhões", "i18n": {"pt":"Caminhões","es":"Camiones","en":"Trucks"} },
+        { "id": "machinery", "name": "Máquinas & Equipamentos", "i18n": {"pt":"Máquinas","es":"Maquinaria","en":"Machinery"} }
+      ]
+    },
+    {
+      "id": "properties",
+      "name": "Imóveis",
+      "i18n": { "pt": "Imóveis", "es": "Inmuebles", "en": "Properties" },
+      "subcategories": [
+        { "id": "apartments", "name": "Apartamentos", "i18n": {"pt":"Apartamentos","es":"Apartamentos","en":"Apartments"} },
+        { "id": "houses", "name": "Casas", "i18n": {"pt":"Casas","es":"Casas","en":"Houses"} },
+        { "id": "rentals", "name": "Aluguéis", "i18n": {"pt":"Aluguéis","es":"Alquileres","en":"Rentals"} },
+        { "id": "commercial", "name": "Comercial", "i18n": {"pt":"Comercial","es":"Comercial","en":"Commercial"} }
+      ]
+    },
+    {
+      "id": "services",
+      "name": "Serviços",
+      "i18n": { "pt": "Serviços", "es": "Servicios", "en": "Services" },
+      "subcategories": [
+        { "id": "home_repair", "name": "Reparos Domésticos", "i18n": {"pt":"Reparos","es":"Reparaciones","en":"Home Repair"} },
+        { "id": "professional", "name": "Profissionais", "i18n": {"pt":"Profissionais","es":"Profesionales","en":"Professional"} }
+      ]
+    },
+    {
+      "id": "jobs",
+      "name": "Empregos",
+      "i18n": { "pt": "Empregos", "es": "Empleos", "en": "Jobs" },
+      "subcategories": [
+        { "id": "full_time", "name": "Tempo Integral", "i18n": {"pt":"Tempo Integral","es":"Tiempo Completo","en":"Full Time"} },
+        { "id": "part_time", "name": "Meio Período", "i18n": {"pt":"Meio Período","es":"Medio Tiempo","en":"Part Time"} }
+      ]
+    },
+    {
+      "id": "community",
+      "name": "Comunidade",
+      "i18n": { "pt": "Comunidade", "es": "Comunidad", "en": "Community" },
+      "subcategories": [
+        { "id": "events", "name": "Eventos", "i18n": {"pt":"Eventos","es":"Eventos","en":"Events"} },
+        { "id": "volunteers", "name": "Voluntariado", "i18n": {"pt":"Voluntariado","es":"Voluntariado","en":"Volunteers"} }
+      ]
+    },
+    {
+      "id": "misc",
+      "name": "Outros",
+      "i18n": { "pt": "Outros", "es": "Otros", "en": "Other" },
+      "subcategories": [
+        { "id": "pets", "name": "Animais", "i18n": {"pt":"Animais","es":"Mascotas","en":"Pets"} },
+        { "id": "tickets", "name": "Ingressos", "i18n": {"pt":"Ingressos","es":"Entradas","en":"Tickets"} }
+      ]
+    }
+  ]
+}

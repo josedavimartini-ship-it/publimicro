@@ -40,7 +40,7 @@ export default function FavoritesButton({ propertyId, userId, size = 'md' }: Fav
       setIsFavorite(!!data);
     }
 
-    checkFavorite();
+    void checkFavorite();
   }, [propertyId, userId]);
 
   const handleToggleFavorite = async (e: React.MouseEvent) => {
@@ -95,3 +95,9 @@ export default function FavoritesButton({ propertyId, userId, size = 'md' }: Fav
     </button>
   );
 }
+
+
+
+
+
+

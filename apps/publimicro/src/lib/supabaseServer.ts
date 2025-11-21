@@ -1,4 +1,4 @@
-﻿import { createServerClient } from '@supabase/ssr'
+import { createServerClient } from '@supabase/ssr'
 import { cookies } from 'next/headers'
 
 // Minimal CookieStore interface used by the Supabase SSR helper
@@ -22,14 +22,14 @@ export function createServerSupabaseClient() {
         set(name: string, value: string, options: Record<string, any>) {
           try {
             cookieStore.set({ name, value, ...options })
-          } catch (error) {
+          } catch (_error) {
             // Can happen in Server Components
           }
         },
         remove(name: string, options: Record<string, any>) {
           try {
             cookieStore.set({ name, value: '', ...options })
-          } catch (error) {
+          } catch (_error) {
             // Can happen in Server Components
           }
         },
@@ -63,3 +63,6 @@ export function createServiceSupabaseClient() {
     }
   )
 }
+
+
+

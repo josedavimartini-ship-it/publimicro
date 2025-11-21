@@ -51,7 +51,7 @@ export default function PostarCoisasPage() {
 
   // Check authentication on mount
   useEffect(() => {
-    checkAuth();
+    void checkAuth();
   }, []);
 
   const checkAuth = async () => {
@@ -64,13 +64,13 @@ export default function PostarCoisasPage() {
     
     setIsAuthenticated(true);
     setAuthChecked(true);
-    fetchCategories();
+    void fetchCategories();
   };
 
   // Fetch categories on mount
   useEffect(() => {
     if (isAuthenticated) {
-      fetchCategories();
+      void fetchCategories();
     }
   }, [isAuthenticated]);
 
@@ -596,3 +596,9 @@ export default function PostarCoisasPage() {
     </div>
   );
 }
+
+
+
+
+
+

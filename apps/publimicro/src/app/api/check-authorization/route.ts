@@ -1,4 +1,4 @@
-﻿import { NextResponse } from "next/server";
+import { NextResponse } from "next/server";
 import { supabase } from "@/lib/supabaseClient";
 
 export async function GET(req: Request): Promise<NextResponse> {
@@ -29,3 +29,6 @@ export async function GET(req: Request): Promise<NextResponse> {
     return NextResponse.json({ authorized: false }, { status: 200 });
   }
 }
+
+
+

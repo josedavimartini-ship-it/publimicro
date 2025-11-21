@@ -1,0 +1,37 @@
+{
+  "items": [
+    "electronics",
+    "furniture",
+    "fashion",
+    "home_garden",
+    "sports"
+  ],
+  "vehicles": [
+    "cars",
+    "motorcycles",
+    "trucks",
+    "machinery"
+  ],
+  "properties": [
+    "apartments",
+    "houses",
+    "rentals",
+    "commercial"
+  ],
+  "services": [
+    "home_repair",
+    "professional"
+  ],
+  "jobs": [
+    "full_time",
+    "part_time"
+  ],
+  "community": [
+    "events",
+    "volunteers"
+  ],
+  "misc": [
+    "pets",
+    "tickets"
+  ]
+}

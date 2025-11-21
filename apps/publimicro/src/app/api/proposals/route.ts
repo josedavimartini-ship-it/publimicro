@@ -89,7 +89,7 @@ export async function POST(req: Request) {
 }
 
 // GET /api/proposals - Get user's proposals
-export async function GET(req: Request) {
+export async function GET(_req: Request) {
   const supabase = createServerSupabaseClient();
   const { data: { user } } = await supabase.auth.getUser();
   
@@ -109,3 +109,5 @@ export async function GET(req: Request) {
 
   return NextResponse.json(data);
 }
+
+

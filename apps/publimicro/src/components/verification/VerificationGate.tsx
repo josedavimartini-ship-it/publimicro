@@ -20,7 +20,7 @@ export function useVerificationStatus(): VerificationStatus {
   const supabase = createClientComponentClient();
 
   useEffect(() => {
-    checkVerification();
+    void checkVerification();
   }, []);
 
   const checkVerification = async () => {
@@ -61,7 +61,7 @@ export function VerificationGate({
   requireVerification = true,
 }: VerificationGateProps) {
   const { verified, status, loading } = useVerificationStatus();
-  const router = useRouter();
+
 
   if (loading) {
     return (
@@ -194,3 +194,6 @@ export function VerificationBadge({ status, size = 'md' }: VerificationBadgeProp
     </span>
   );
 }
+
+
+

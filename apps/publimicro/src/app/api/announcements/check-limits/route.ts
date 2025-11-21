@@ -94,7 +94,7 @@ export async function POST(request: NextRequest) {
 /**
  * GET endpoint to check limits without category (get all limits)
  */
-export async function GET(request: NextRequest) {
+export async function GET(_request: NextRequest) {
   try {
     // Get authenticated user
     const supabase = createRouteHandlerClient({ cookies });
@@ -152,3 +152,5 @@ function getCategoryDisplayName(category: AnnouncementCategory): string {
 
   return names[category] || category;
 }
+
+

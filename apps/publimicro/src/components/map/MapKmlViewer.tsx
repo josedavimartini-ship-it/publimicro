@@ -64,7 +64,7 @@ export default function MapKmlViewer({
       });
     };
 
-    init();
+    void init();
     return () => {
       // Maps API cleans itself when element is removed; just null refs
       map = null;

@@ -21,11 +21,11 @@ const ALLOWED_EXT_TO_MIME: Record<string, string> = {
   '.kml': 'application/vnd.google-earth.kml+xml'
 };
 
-function sanitizeFileName(name: string) {
+function sanitizeFileName(name: string): string {
   return (name || 'file').replace(/[^a-zA-Z0-9-_.]/g, '_').slice(0, 180);
 }
 
-export async function POST(req: NextRequest) {
+export async function POST(req: NextRequest): Promise<NextResponse> {
   const adminKey = process.env.ADMIN_API_KEY;
   if (!adminKey) return NextResponse.json({ error: 'ADMIN_API_KEY not configured' }, { status: 500 });
   const provided = req.headers.get(ADMIN_HEADER) || '';
@@ -46,7 +46,16 @@ export async function POST(req: NextRequest) {
     const buffer = Buffer.from(zipObj.base64, 'base64');
     const zip = new AdmZip(buffer);
     const entries = zip.getEntries();
-    const uploads: any[] = [];
+    interface UploadResult {
+      name?: string;
+      publicUrl?: string;
+      thumbnail?: string;
+      path?: string;
+      error?: string;
+      placeholderId?: string;
+    }
+
+    const uploads: UploadResult[] = [];
 
     for (const entry of entries) {
       if (entry.isDirectory) continue;
@@ -58,7 +67,7 @@ export async function POST(req: NextRequest) {
         continue;
       }
 
-      try {
+    try {
         const folder = `properties/${propertyId}`;
         const baseFileName = `${Date.now()}_${Math.random().toString(36).slice(2,8)}_${sanitizeFileName(path.basename(entryName))}`;
         const pathKey = `${folder}/${baseFileName}`;
@@ -73,20 +82,20 @@ export async function POST(req: NextRequest) {
 
           // Configure ffmpeg binary.
           // Use dynamic require for the ffmpeg installer to avoid bundler issues.
-          try {
-            // hide static require from Next/Turbopack analysis
-            // eslint-disable-next-line no-eval
-            const req: any = eval('require');
-            const ffmpegInstaller = req('@ffmpeg-installer/ffmpeg');
-            if (ffmpegInstaller && ffmpegInstaller.path) {
-              ffmpeg.setFfmpegPath(ffmpegInstaller.path);
-            }
-          } catch (e) {
+            try {
+              // hide static require from Next/Turbopack analysis
+              const req = eval('require') as NodeRequire;
+              type FfmpegInstaller = { path?: string };
+              const ffmpegInstaller = req('@ffmpeg-installer/ffmpeg') as FfmpegInstaller;
+              if (ffmpegInstaller && ffmpegInstaller.path) {
+                ffmpeg.setFfmpegPath(ffmpegInstaller.path);
+              }
+          } catch {
             // If dynamic require fails (e.g., in some build environments), allow an env override
             if (process.env.FFMPEG_PATH) {
               ffmpeg.setFfmpegPath(process.env.FFMPEG_PATH);
             } else {
-              throw new Error('ffmpeg binary not found. Install ffmpeg or set FFMPEG_PATH env var.');
+                throw new Error('ffmpeg binary not found. Install ffmpeg or set FFMPEG_PATH env var.');
             }
           }
 
@@ -133,13 +142,14 @@ export async function POST(req: NextRequest) {
         if (upErr) { uploads.push({ name: entryName, error: upErr.message }); continue; }
         const { data } = svc.storage.from('property-photos').getPublicUrl(pathKey);
         uploads.push({ name: entryName, publicUrl: data.publicUrl, path: pathKey });
-      } catch (err: any) {
-        uploads.push({ name: entryName, error: err.message || String(err) });
+      } catch (err) {
+        const msg = err instanceof Error ? err.message : String(err);
+        uploads.push({ name: entryName, error: msg });
       }
     }
 
     const USE_PLACEHOLDERS = process.env.FEATURE_MEDIA_PLACEHOLDERS === 'true';
-    const successful = uploads.filter((u: any) => u.publicUrl);
+    const successful = uploads.filter((u) => !!u.publicUrl);
     for (const u of successful) {
       try {
         if (USE_PLACEHOLDERS) {
@@ -160,15 +170,21 @@ export async function POST(req: NextRequest) {
           await svc.from('property_photos').insert({ property_id: propertyId, url: u.publicUrl, thumbnail_url: null, caption: u.name || null, display_order: 0, is_cover: false });
         }
       } catch (err) {
-        console.error('Failed to insert property_photos/media row', err);
+        const msg = err instanceof Error ? err.message : String(err);
+        console.error('Failed to insert property_photos/media row', msg);
       }
     }
-
-    try { await svc.from('property_media_audit').insert({ property_id: propertyId, uploads, changed_by: req.headers.get('x-admin-user') || 'admin-zip' }); } catch (err) { console.error('Failed to write property_media_audit', err); }
+    try {
+      await svc.from('property_media_audit').insert({ property_id: propertyId, uploads, changed_by: req.headers.get('x-admin-user') || 'admin-zip' });
+    } catch (err) {
+      const msg = err instanceof Error ? err.message : String(err);
+      console.error('Failed to write property_media_audit', msg);
+    }
 
     return NextResponse.json({ ok: true, uploads });
-  } catch (err: any) {
-    console.error('admin zip upload error', err);
-    return NextResponse.json({ error: err.message || String(err) }, { status: 500 });
+  } catch (err) {
+    const msg = err instanceof Error ? err.message : String(err);
+    console.error('admin zip upload error', msg);
+    return NextResponse.json({ error: msg }, { status: 500 });
   }
 }

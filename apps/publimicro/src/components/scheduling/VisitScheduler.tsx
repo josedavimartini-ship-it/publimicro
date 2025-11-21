@@ -1,7 +1,6 @@
 ﻿"use client";
 
 import { useState, useEffect, useRef } from "react";
-import FocusLock from "react-focus-lock";
 import { useAuth } from "../AuthProvider";
 import { useI18n } from "@/lib/i18n";
 
@@ -18,12 +17,12 @@ export default function VisitScheduler({
   propertyId, 
   propertyTitle,
   propertyPhoto,
-  onClose
+  onClose: _onClose
 }: VisitSchedulerProps) {
   const { user, profile } = useAuth();
   const { t } = useI18n();
   const [visitType, setVisitType] = useState<VisitType>("presencial");
-  const [isGuest, setIsGuest] = useState(!user); // Track if scheduling as guest
+  const [isGuest, _setIsGuest] = useState(!user); // Track if scheduling as guest
   const [formData, setFormData] = useState({
     nome: profile?.full_name || "",
     email: user?.email || "",
@@ -69,28 +68,28 @@ export default function VisitScheduler({
             setVerificationStatus(data);
             if (data.status === "approved") {
               setStatus("verification_approved");
-              clearInterval(pollingRef.current!);
+              if (pollingRef.current) clearInterval(pollingRef.current);
             } else if (data.status === "rejected") {
               setStatus("verification_rejected");
-              clearInterval(pollingRef.current!);
+              if (pollingRef.current) clearInterval(pollingRef.current);
             } else if (data.status === "failed") {
               setStatus("verification_failed");
-              clearInterval(pollingRef.current!);
+              if (pollingRef.current) clearInterval(pollingRef.current);
             } else if (data.status === "in_progress" || data.status === "pending") {
               setStatus("verification_in_progress");
             }
           }
-        } catch (e) {
+        } catch {
           // ignore polling errors
         }
       };
-      poll();
-      pollingRef.current = setInterval(poll, 8000);
+      void poll();
+      pollingRef.current = setInterval(() => { void poll(); }, 8000);
       return () => {
         if (pollingRef.current) clearInterval(pollingRef.current);
       };
     }
-    // eslint-disable-next-line
+     
   }, [status, verificationId]);
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -254,7 +253,7 @@ export default function VisitScheduler({
         </button>
       </div>
 
-      <form onSubmit={handleSubmit} className="space-y-4">
+      <form onSubmit={(e) => { void handleSubmit(e); }} className="space-y-4">
         {/* Personal Info */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div>

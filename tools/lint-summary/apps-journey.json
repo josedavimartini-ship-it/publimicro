@@ -1,0 +1,10 @@
+{
+  "app": "journey",
+  "files": 41,
+  "errors": 0,
+  "warnings": 2,
+  "topRules": {
+    "rule": "@typescript-eslint/no-unused-vars",
+    "count": 2
+  }
+}

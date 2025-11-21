@@ -79,7 +79,7 @@ export function OnboardingModal({ isOpen, onComplete, userId }: OnboardingModalP
   // Load existing profile data if any
   useEffect(() => {
     if (isOpen && userId) {
-      loadProfileData();
+      void loadProfileData();
     }
   }, [isOpen, userId]);
 
@@ -211,7 +211,7 @@ export function OnboardingModal({ isOpen, onComplete, userId }: OnboardingModalP
     if (name === "cep") {
       formattedValue = formatCEP(value);
       if (formattedValue.replace(/\D/g, "").length === 8) {
-        fetchAddressFromCEP(formattedValue);
+        void fetchAddressFromCEP(formattedValue);
       }
     }
     
@@ -703,3 +703,9 @@ export function OnboardingModal({ isOpen, onComplete, userId }: OnboardingModalP
     </div>
   );
 }
+
+
+
+
+
+

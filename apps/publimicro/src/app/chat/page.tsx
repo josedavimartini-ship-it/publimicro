@@ -11,7 +11,7 @@ export default function ChatPage() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    supabase.auth.getUser().then(({ data }) => {
+    void supabase.auth.getUser().then(({ data }) => {
       if (!data?.user) {
         window.location.href = "/entrar";
       } else {
@@ -74,3 +74,6 @@ export default function ChatPage() {
     </main>
   );
 }
+
+
+

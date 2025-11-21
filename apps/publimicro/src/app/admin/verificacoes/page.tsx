@@ -45,12 +45,12 @@ export default function AdminVerificationsPage() {
   const supabase = createClientComponentClient();
 
   useEffect(() => {
-    checkAdminAccess();
+    void checkAdminAccess();
   }, []);
 
   useEffect(() => {
     if (loading === false) {
-      fetchVerifications();
+      void fetchVerifications();
     }
   }, [statusFilter, searchQuery, loading]);
 
@@ -117,7 +117,7 @@ export default function AdminVerificationsPage() {
         setShowModal(false);
         setSelectedVerification(null);
         setActionNotes('');
-        fetchVerifications();
+        void fetchVerifications();
       } else {
         alert('Erro ao aprovar verificação');
       }
@@ -154,7 +154,7 @@ export default function AdminVerificationsPage() {
         setSelectedVerification(null);
         setActionNotes('');
         setRejectionReason('');
-        fetchVerifications();
+        void fetchVerifications();
       } else {
         alert('Erro ao rejeitar verificação');
       }
@@ -691,3 +691,9 @@ function ActionModal({
     </div>
   );
 }
+
+
+
+
+
+

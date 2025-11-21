@@ -18,7 +18,7 @@ interface ProposalModalProps {
 }
 
 // Simulated proposal history (replace with real API call)
-const mockHistory = [
+const _mockHistory = [
   { amount: 350000, date: '2025-11-01', status: 'Aceita' },
   { amount: 340000, date: '2025-10-28', status: 'Recusada' },
 ];
@@ -33,7 +33,7 @@ export default function ProposalModal({
 }: ProposalModalProps) {
   const { profile } = useAuth();
   const { t } = useI18n();
-  const [isMobile, setIsMobile] = useState(false);
+  const [_isMobile, setIsMobile] = useState(false);
   const [amount, setAmount] = useState('');
   const [entry, setEntry] = useState('');
   const [installments, setInstallments] = useState(1);
@@ -45,8 +45,8 @@ export default function ProposalModal({
 
   // Check if user is authorized to make proposals
   const canMakeProposal = profile?.can_place_bids === true && profile?.verified === true;
-  const needsProfileCompletion = !profile?.profile_completed;
-  const needsVerification = profile?.profile_completed && !profile?.verified;
+
+
 
   // Detect mobile screen size
   useEffect(() => {
@@ -305,3 +305,8 @@ export default function ProposalModal({
     </div>
   );
 }
+
+
+
+
+

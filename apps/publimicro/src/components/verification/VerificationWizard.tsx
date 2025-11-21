@@ -35,7 +35,7 @@ export default function VerificationWizard() {
 
   // Check existing verification status on mount
   useEffect(() => {
-    checkVerificationStatus();
+    void checkVerificationStatus();
   }, []);
 
   const checkVerificationStatus = async () => {
@@ -146,7 +146,7 @@ export default function VerificationWizard() {
   };
 
   const pollVerificationStatus = () => {
-    const interval = setInterval(async () => {
+    const interval = setInterval(void async () => {
       try {
         const response = await fetch('/api/verification/status');
         const data = await response.json();
@@ -328,3 +328,5 @@ function StepIndicator({
     </div>
   );
 }
+
+

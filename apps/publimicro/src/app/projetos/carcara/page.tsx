@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 import React from 'react';
 import { useState, useEffect } from 'react';
 import { I18nProvider, useI18n } from '@/lib/i18n';
@@ -28,7 +28,7 @@ import CANONICAL_PROPERS from '@/lib/AcheMeRuralPropers.json';
 // For client components, SEO is handled via layout.tsx or a parallel route
 
 // Dynamic import to avoid SSR issues with Leaflet
-const LeafletMapKML = dynamic(() => import("@/components/LeafletMapKML"), {
+
   ssr: false,
   loading: () => (
     <div className="w-full h-[600px] bg-[#1a1a1a] rounded-2xl flex items-center justify-center">
@@ -38,7 +38,7 @@ const LeafletMapKML = dynamic(() => import("@/components/LeafletMapKML"), {
 });
 
 // KML data from the attached file (Sítios Carcará property boundaries)
-const KML_DATA = `<?xml version="1.0" encoding="UTF-8"?>
+
 <kml xmlns="http://www.opengis.net/kml/2.2" xmlns:gx="http://www.google.com/kml/ext/2.2">
 <Document>
 <Style id="yellowLineGreenPoly"><LineStyle><color>ff00ffff</color><width>3</width></LineStyle><PolyStyle><fill>0</fill></PolyStyle></Style>
@@ -94,9 +94,9 @@ function CarcaraProjectPageContent() {
       }
     }
 
-    fetchSitios();
+    void fetchSitios();
     // Get current user from Supabase auth
-    supabase.auth.getUser().then(({ data }) => {
+    void supabase.auth.getUser().then(({ data }) => {
       if (data?.user?.id) setUserId(data.user.id);
     });
   }, []);
@@ -595,3 +595,6 @@ function CarcaraProjectPageContent() {
       </I18nProvider>
     );
   }
+
+
+

@@ -11,7 +11,7 @@ import { cookies } from 'next/headers';
  * 
  * API Docs: https://desenvolvedores.serasaexperian.com.br/
  */
-export async function POST(request: NextRequest) {
+export async function POST(_request: NextRequest) {
   try {
     const supabase = createRouteHandlerClient({ cookies });
 
@@ -264,3 +264,5 @@ export async function POST(request: NextRequest) {
     );
   }
 }
+
+

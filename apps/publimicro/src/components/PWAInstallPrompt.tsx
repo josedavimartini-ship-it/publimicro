@@ -117,3 +117,9 @@ export default function PWAInstallPrompt() {
 // .animate-slide-up {
 //   animation: slide-up 0.3s ease-out;
 // }
+
+
+
+
+
+

@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import Link from "next/link";
 import Image from "next/image";
@@ -61,7 +61,7 @@ export default function CarcaraHighlights() {
       if (!error && data) setItems(data);
       else console.error("Erro ao buscar destaques:", error);
     }
-    fetchItems();
+    void fetchItems();
   }, []);
 
   return (
@@ -130,3 +130,4 @@ export default function CarcaraHighlights() {
     </section>
   );
 }
+

@@ -80,12 +80,12 @@ export default function AdminPage() {
   const [biddingLoading, setBiddingLoading] = useState(false);
 
   useEffect(() => {
-    checkAdminAccess();
+    void checkAdminAccess();
   }, []);
 
   useEffect(() => {
-    if (isAdmin) fetchBiddingStatus();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    if (isAdmin) { void fetchBiddingStatus(); }
+
   }, [isAdmin]);
 
   const fetchBiddingStatus = async () => {
@@ -109,8 +109,9 @@ export default function AdminPage() {
       const j = await res.json();
       if (res.ok) setBiddingOpen(Boolean(j.bidding_open));
       else throw new Error(j.error || 'Failed');
-    } catch (err: any) {
-      alert('Erro ao atualizar status de bidding: ' + (err.message || String(err)));
+    } catch (err) {
+      const msg = err instanceof Error ? err.message : String(err);
+      alert('Erro ao atualizar status de bidding: ' + msg);
     } finally {
       setBiddingLoading(false);
     }
@@ -225,7 +226,7 @@ export default function AdminPage() {
     if (!selectedFilesInput && !selectedKmlInput) return alert('Selecione fotos ou um arquivo KML');
     setUploadingMedia(true);
     try {
-      const filesArr: any[] = [];
+      const filesArr: Array<{ name: string; base64: string; mime: string }> = [];
       if (selectedFilesInput) {
         for (let i = 0; i < selectedFilesInput.length; i++) {
           const f = selectedFilesInput[i];
@@ -255,8 +256,9 @@ export default function AdminPage() {
       // clear file inputs if present
       const fileInputs = document.querySelectorAll('input[type=file]') as NodeListOf<HTMLInputElement>;
       fileInputs.forEach(fi => fi.value = '');
-    } catch (err: any) {
-      alert('Erro no upload: ' + (err.message || String(err)));
+    } catch (err) {
+      const msg = err instanceof Error ? err.message : String(err);
+      alert('Erro no upload: ' + msg);
     } finally {
       setUploadingMedia(false);
     }
@@ -284,8 +286,9 @@ export default function AdminPage() {
       } else {
         throw new Error(j.error || 'Failed');
       }
-    } catch (err: any) {
-      alert('Erro ao salvar admin emails: ' + (err.message || String(err)));
+    } catch (err) {
+      const msg = err instanceof Error ? err.message : String(err);
+      alert('Erro ao salvar admin emails: ' + msg);
     }
   };
 
@@ -329,8 +332,9 @@ export default function AdminPage() {
 
       alert(`Lance ${newStatus === "accepted" ? "aceito" : "rejeitado"} com sucesso!`);
       await loadBids();
-    } catch (error: any) {
-      alert("Erro ao atualizar lance: " + error.message);
+    } catch (error) {
+      const msg = error instanceof Error ? error.message : String(error);
+      alert("Erro ao atualizar lance: " + msg);
     }
   };
 
@@ -345,8 +349,9 @@ export default function AdminPage() {
 
       alert("Status atualizado com sucesso!");
       await loadContacts();
-    } catch (error: any) {
-      alert("Erro ao atualizar contato: " + error.message);
+    } catch (error) {
+      const msg = error instanceof Error ? error.message : String(error);
+      alert("Erro ao atualizar contato: " + msg);
     }
   };
 
@@ -363,8 +368,9 @@ export default function AdminPage() {
 
       alert("Propriedade excluída com sucesso!");
       await loadProperties();
-    } catch (error: any) {
-      alert("Erro ao excluir propriedade: " + error.message);
+    } catch (error) {
+      const msg = error instanceof Error ? error.message : String(error);
+      alert("Erro ao excluir propriedade: " + msg);
     }
   };
 
@@ -376,9 +382,9 @@ export default function AdminPage() {
   useEffect(() => {
     if (!isAdmin) return;
 
-    if (activeTab === "properties") loadProperties();
-    if (activeTab === "bids") loadBids();
-    if (activeTab === "contacts") loadContacts();
+    if (activeTab === "properties") { void loadProperties(); }
+    if (activeTab === "bids") { void loadBids(); }
+    if (activeTab === "contacts") { void loadContacts(); }
   }, [activeTab, isAdmin]);
 
   if (loading) {
@@ -494,8 +500,8 @@ export default function AdminPage() {
                 </div>
                 <div>
                   <button
-                    disabled={biddingLoading || biddingOpen === null}
-                    onClick={() => toggleBidding(!Boolean(biddingOpen))}
+                      disabled={biddingLoading || biddingOpen === null}
+                      onClick={() => { void toggleBidding(!Boolean(biddingOpen)); }}
                     className={`px-4 py-2 rounded-full font-semibold transition-all ${biddingOpen ? 'bg-green-500/80 text-black' : 'bg-gray-700 text-white'} ${biddingLoading ? 'opacity-60 cursor-wait' : 'hover:scale-105'}`}
                   >
                     {biddingLoading ? 'Updating...' : biddingOpen ? 'Close' : 'Open'}
@@ -506,7 +512,7 @@ export default function AdminPage() {
           </div>
 
           <button
-            onClick={handleSignOut}
+            onClick={() => { void handleSignOut(); }}
             className="w-full flex items-center gap-3 px-4 py-3 rounded-lg text-red-400 hover:bg-red-900/20 transition-all mt-4"
           >
             <LogOut className="w-5 h-5" />
@@ -651,7 +657,7 @@ export default function AdminPage() {
                 </div>
 
                 <div className="mt-4">
-                  <button onClick={uploadPropertyMedia} disabled={uploadingMedia} className="px-4 py-2 bg-gradient-to-r from-[#A8C97F] to-[#0D7377] rounded font-semibold">
+                  <button onClick={() => { void uploadPropertyMedia(); }} disabled={uploadingMedia} className="px-4 py-2 bg-gradient-to-r from-[#A8C97F] to-[#0D7377] rounded font-semibold">
                     {uploadingMedia ? 'Enviando...' : 'Enviar'}
                   </button>
                 </div>
@@ -667,7 +673,7 @@ export default function AdminPage() {
                         {adminEmails.map(e => <li key={e}>{e}</li>)}
                       </ul>
                       <div className="mt-2">
-                        <button onClick={() => { setEditingAdminEmails(true); setAdminEmailsInput(adminEmails.join(', ')); fetchAdminEmails(); }} className="px-3 py-1 bg-gray-700 rounded">Edit</button>
+                        <button onClick={() => { setEditingAdminEmails(true); setAdminEmailsInput(adminEmails.join(', ')); void fetchAdminEmails(); }} className="px-3 py-1 bg-gray-700 rounded">Edit</button>
                       </div>
                     </div>
                   )}
@@ -676,7 +682,7 @@ export default function AdminPage() {
                     <div>
                       <textarea value={adminEmailsInput} onChange={(e) => setAdminEmailsInput(e.target.value)} className="w-full bg-[#0a0a0a] p-2 rounded h-24" />
                       <div className="mt-2">
-                        <button onClick={saveAdminEmails} className="px-3 py-1 bg-green-600 rounded mr-2">Save</button>
+                        <button onClick={() => { void saveAdminEmails(); }} className="px-3 py-1 bg-green-600 rounded mr-2">Save</button>
                         <button onClick={() => setEditingAdminEmails(false)} className="px-3 py-1 bg-gray-700 rounded">Cancel</button>
                       </div>
                     </div>
@@ -712,7 +718,7 @@ export default function AdminPage() {
                                 <Eye className="w-4 h-4 text-[#8B9B6E]" />
                               </Link>
                               <button
-                                onClick={() => deleteProperty(property.id)}
+                                  onClick={() => { void deleteProperty(property.id); }}
                                 className="p-2 bg-red-500/20 hover:bg-red-500/30 rounded-lg transition-colors"
                                 title="Excluir"
                               >
@@ -779,14 +785,14 @@ export default function AdminPage() {
                             {bid.status === "pending" && (
                               <div className="flex items-center gap-2">
                                 <button
-                                  onClick={() => updateBidStatus(bid.id, "accepted")}
+                                  onClick={() => { void updateBidStatus(bid.id, "accepted"); }}
                                   className="p-2 bg-green-500/20 hover:bg-green-500/30 rounded-lg transition-colors"
                                   title="Aceitar"
                                 >
                                   <CheckCircle className="w-4 h-4 text-green-400" />
                                 </button>
                                 <button
-                                  onClick={() => updateBidStatus(bid.id, "rejected")}
+                                  onClick={() => { void updateBidStatus(bid.id, "rejected"); }}
                                   className="p-2 bg-red-500/20 hover:bg-red-500/30 rounded-lg transition-colors"
                                   title="Rejeitar"
                                 >
@@ -854,7 +860,7 @@ export default function AdminPage() {
                     <div className="flex flex-wrap gap-2">
                       {contact.status === "novo" && (
                         <button
-                          onClick={() => updateContactStatus(contact.id, "em_analise")}
+                          onClick={() => { void updateContactStatus(contact.id, "em_analise"); }}
                           className="px-4 py-2 bg-yellow-500/20 hover:bg-yellow-500/30 text-yellow-400 rounded-lg transition-colors text-sm font-semibold"
                         >
                           Marcar em Análise
@@ -862,14 +868,14 @@ export default function AdminPage() {
                       )}
                       {(contact.status === "novo" || contact.status === "em_analise") && (
                         <button
-                          onClick={() => updateContactStatus(contact.id, "respondido")}
+                          onClick={() => { void updateContactStatus(contact.id, "respondido"); }}
                           className="px-4 py-2 bg-green-500/20 hover:bg-green-500/30 text-green-400 rounded-lg transition-colors text-sm font-semibold"
                         >
                           Marcar como Respondido
                         </button>
                       )}
                       <button
-                        onClick={() => updateContactStatus(contact.id, "arquivado")}
+                        onClick={() => { void updateContactStatus(contact.id, "arquivado"); }}
                         className="px-4 py-2 bg-[#676767]/20 hover:bg-[#676767]/30 text-[#676767] rounded-lg transition-colors text-sm font-semibold"
                       >
                         Arquivar

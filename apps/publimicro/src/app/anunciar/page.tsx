@@ -30,7 +30,7 @@ export default function AnunciarPage() {
 
   useEffect(() => {
     // Check authentication
-    supabase.auth.getUser().then(({ data }) => {
+    void supabase.auth.getUser().then(({ data }) => {
       if (!data?.user) {
         alert("Por favor, faça login para anunciar.");
         router.push("/entrar");
@@ -433,3 +433,9 @@ export default function AnunciarPage() {
     </main>
   );
 }
+
+
+
+
+
+

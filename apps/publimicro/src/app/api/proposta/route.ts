@@ -57,7 +57,7 @@ export async function POST(req: Request): Promise<NextResponse> {
       .eq('status', 'completed')
       .limit(1);
 
-    let authCode = (formData.get('auth_code') as string) || null;
+    const authCode = (formData.get('auth_code') as string) || null;
     let authorized = visits && visits.length > 0;
 
     if (!authorized && authCode) {
