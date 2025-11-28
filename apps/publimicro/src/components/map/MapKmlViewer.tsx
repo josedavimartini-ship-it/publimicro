@@ -6,7 +6,7 @@ import { useEffect, useRef } from "react";
 
 type MapKmlViewerProps = {
   kmlUrl: string; // e.g. "/maps/carcara.kml"
-  center?: any; // allow any to avoid global google type dependence during triage
+  center?: { lat: number; lng: number };
   zoom?: number;
 };
 
@@ -18,8 +18,8 @@ export default function MapKmlViewer({
   const ref = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
-      let map: any = null;
-      let kmlLayer: any = null;
+    let map: any = null;
+    let kmlLayer: any = null;
 
     const init = async () => {
       const apiKey = process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY;
@@ -40,7 +40,7 @@ export default function MapKmlViewer({
       if (!ref.current) return;
 
       map = new window.google.maps.Map(ref.current, {
-        center,
+        center: center as unknown as any,
         zoom,
         mapTypeId: "satellite",
         disableDefaultUI: false,
@@ -53,7 +53,7 @@ export default function MapKmlViewer({
 
       kmlLayer = new window.google.maps.KmlLayer({
         url: `${location.origin}${kmlUrl}`,
-        map,
+        map: map as any,
         preserveViewport: false,
         suppressInfoWindows: false,
       });

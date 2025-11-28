@@ -1,213 +1,465 @@
 "use client";
 
-import { useState, FormEvent } from "react";
-import Image from "next/image";
-import Link from "next/link";
-import { supabase } from "@/lib/supabaseClient";
-import { ArrowLeft, Mail, Phone, MessageSquare, CheckCircle, AlertCircle } from "lucide-react";
-import { WhatsAppLink } from "@publimicro/ui";
+import { useState, useEffect } from 'react';
+import { useRouter } from 'next/navigation';
+import { createClientComponentClient } from '@supabase/auth-helpers-nextjs';
+import { Upload, X, MapPin, Home, DollarSign, Bed, Bath, Square, Calendar } from 'lucide-react';
 
-export default function ContatoPage() {
-  const [formData, setFormData] = useState({
-    nome: "",
-    email: "",
-    telefone: "",
-    mensagem: "",
-  });
+const PROPERTY_TYPES = [
+  { value: 'sitio', label: 'Sítio' },
+  { value: 'chacara', label: 'Chácara' },
+  { value: 'fazenda', label: 'Fazenda' },
+  { value: 'terreno_rural', label: 'Terreno Rural' },
+  { value: 'casa', label: 'Casa' },
+  { value: 'apartamento', label: 'Apartamento' },
+  { value: 'comercial', label: 'Comercial' },
+  { value: 'industrial', label: 'Industrial' },
+];
+
+export default function PostarPage() {
+  const router = useRouter();
+  const supabase = createClientComponentClient();
+  
+  const [loading, setLoading] = useState(true);
   const [submitting, setSubmitting] = useState(false);
-  const [success, setSuccess] = useState(false);
-  const [error, setError] = useState("");
+  const [user, setUser] = useState<any>(null);
+  
+  // Form state
+  const [propertyType, setPropertyType] = useState('sitio');
+  const [nome, setNome] = useState('');
+  const [descricao, setDescricao] = useState('');
+  const [preco, setPreco] = useState('');
+  const [localizacao, setLocalizacao] = useState('');
+  const [cidade, setCidade] = useState('');
+  const [estado, setEstado] = useState('');
+  const [cep, setCep] = useState('');
+  
+  // Property details
+  const [areaTotal, setAreaTotal] = useState('');
+  const [quartos, setQuartos] = useState('');
+  const [banheiros, setBanheiros] = useState('');
+  const [vagas, setVagas] = useState('');
+  const [anosConstrucao, setAnosConstrucao] = useState('');
+  
+  // Photos
+  const [photos, setPhotos] = useState<File[]>([]);
+  const [photoPreviews, setPhotoPreviews] = useState<string[]>([]);
+  
+  const [error, setError] = useState('');
+  const [success, setSuccess] = useState('');
 
-  const handleSubmit = async (e: FormEvent) => {
+  useEffect(() => {
+    void checkAuth();
+  }, []);
+
+  const checkAuth = async () => {
+    try {
+      const { data: { user } } = await supabase.auth.getUser();
+      
+      if (!user) {
+        router.push('/entrar?redirect=/postar');
+        return;
+      }
+      
+      setUser(user);
+    } catch (error) {
+      console.error('Error checking auth:', error);
+      router.push('/entrar?redirect=/postar');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handlePhotoChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files) {
+      const newFiles = Array.from(e.target.files);
+      setPhotos([...photos, ...newFiles]);
+      
+      // Create previews
+      newFiles.forEach(file => {
+        const reader = new FileReader();
+        reader.onloadend = () => {
+          setPhotoPreviews(prev => [...prev, reader.result as string]);
+        };
+        reader.readAsDataURL(file);
+      });
+    }
+  };
+
+  const removePhoto = (index: number) => {
+    setPhotos(photos.filter((_, i) => i !== index));
+    setPhotoPreviews(photoPreviews.filter((_, i) => i !== index));
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setError('');
+    setSuccess('');
     setSubmitting(true);
-    setError("");
-    setSuccess(false);
 
     try {
-      const { error: submitError } = await supabase
-        .from("contacts")
+      if (!user) {
+        setError('Você precisa estar logado para anunciar');
+        setSubmitting(false);
+        return;
+      }
+
+      if (photos.length === 0) {
+        setError('Adicione pelo menos uma foto da propriedade');
+        setSubmitting(false);
+        return;
+      }
+
+      // Insert property
+      const { data: property, error: propertyError } = await supabase
+        .from('properties')
         .insert({
-          nome: formData.nome,
-          email: formData.email,
-          telefone: formData.telefone || null,
-          mensagem: formData.mensagem,
-          status: "novo",
-        });
+          user_id: user.id,
+          title: nome,
+          description: descricao,
+          price: parseFloat(preco.replace(/\D/g, '')),
+          address: localizacao,
+          city: cidade,
+          state: estado,
+          zip_code: cep,
+          property_type: propertyType,
+          transaction_type: 'sale', // Default to sale
+          total_area: areaTotal ? parseFloat(areaTotal) : null,
+          bedrooms: quartos ? parseInt(quartos) : null,
+          bathrooms: banheiros ? parseInt(banheiros) : null,
+          parking_spaces: vagas ? parseInt(vagas) : null,
+          year_built: anosConstrucao ? parseInt(anosConstrucao) : null,
+          status: 'active',
+        })
+        .select()
+        .single();
 
-      if (submitError) throw submitError;
+      if (propertyError) throw propertyError;
 
-      setSuccess(true);
-      setFormData({
-        nome: "",
-        email: "",
-        telefone: "",
-        mensagem: "",
-      });
+      // Upload photos
+      for (let i = 0; i < photos.length; i++) {
+        const photo = photos[i];
+        const fileExt = photo.name.split('.').pop();
+        const fileName = `${property.id}/${Date.now()}_${i}.${fileExt}`;
 
-      // Auto-hide success message after 5 seconds
-      setTimeout(() => setSuccess(false), 5000);
-    } catch (err: any) {
-      console.error("Error submitting contact form:", err);
-      setError(err.message || "Erro ao enviar mensagem. Tente novamente.");
+        const { error: uploadError } = await supabase.storage
+          .from('property-photos')
+          .upload(fileName, photo);
+
+        if (uploadError) throw uploadError;
+
+        const { data: { publicUrl } } = supabase.storage
+          .from('property-photos')
+          .getPublicUrl(fileName);
+
+        // Insert photo record
+        await supabase
+          .from('property_photos')
+          .insert({
+            property_id: property.id,
+            url: publicUrl,
+            is_cover: i === 0,
+            display_order: i,
+          });
+      }
+
+      setSuccess('Propriedade anunciada com sucesso!');
+      
+      // Redirect to property page
+      setTimeout(() => {
+        router.push(`/imoveis/${property.id}`);
+      }, 2000);
+
+    } catch (error: any) {
+      console.error('Error posting property:', error);
+      setError(error.message || 'Erro ao anunciar propriedade. Tente novamente.');
     } finally {
       setSubmitting(false);
     }
   };
 
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-gradient-to-b from-[#0a0a0a] via-[#1a1a1a] to-[#0a0a0a] flex items-center justify-center">
+        <div className="text-[#D4A574] text-xl">Carregando...</div>
+      </div>
+    );
+  }
+
   return (
-    <main className="relative min-h-screen">
-      {/* Imagem de fundo */}
-      <div className="absolute inset-0 -z-10">
-        <Image
-          src="https://irrzpwzyqcubhhjeuakc.supabase.co/storage/v1/object/public/imagens-sitios/sitioCanarioFogueira.jpg"
-          alt="Fundo contato"
-          fill
-          className="object-cover brightness-75"
-          priority
-        />
-      </div>
-
-      {/* Back Button */}
-      <div className="absolute top-6 left-6 z-20">
-        <Link
-          href="/"
-          className="flex items-center gap-2 px-4 py-2 bg-black/60 hover:bg-black/80 text-[#E6C98B] border border-[#E6C98B]/30 rounded-full transition-all backdrop-blur-sm"
-        >
-          <ArrowLeft className="w-5 h-5" />
-          <span>Voltar</span>
-        </Link>
-      </div>
-
-      {/* Conteúdo */}
-      <section className="flex flex-col items-center justify-center min-h-screen text-[#E6C98B] text-center px-6 py-20">
-        <div className="bg-black/70 backdrop-blur-sm p-10 rounded-2xl max-w-2xl w-full shadow-2xl border border-[#E6C98B]/20">
-          <h1 className="text-4xl font-bold mb-3 text-transparent bg-clip-text bg-gradient-to-r from-[#E6C98B] to-[#A8C97F]">
-            Contato & Agendamento
+    <main className="min-h-screen bg-gradient-to-b from-[#0a0a0a] via-[#1a1a1a] to-[#0a0a0a] py-12 px-6">
+      <div className="max-w-4xl mx-auto">
+        <div className="text-center mb-8">
+          <h1 className="text-4xl font-black text-transparent bg-clip-text bg-gradient-to-r from-[#A8C97F] to-[#0D7377] mb-4">
+            Anunciar Propriedade
           </h1>
-          <p className="mb-8 text-lg text-[#8B9B6E]">
-            Solicite informações, agende visitas presenciais ou videoconferências.
-          </p>
+          <p className="text-[#676767]">Preencha os dados para anunciar sua propriedade gratuitamente</p>
+        </div>
 
-          {/* Success Message */}
-          {success && (
-            <div className="mb-6 p-4 bg-green-900/30 border border-green-500/50 rounded-lg flex items-center gap-3 animate-pulse">
-              <CheckCircle className="w-6 h-6 text-green-400 flex-shrink-0" />
-              <div className="text-left">
-                <p className="text-green-400 font-semibold">Mensagem enviada com sucesso!</p>
-                <p className="text-green-300 text-sm">Entraremos em contato em breve.</p>
-              </div>
-            </div>
-          )}
+        <form onSubmit={handleSubmit} className="bg-[#2a2a2a] border-2 border-[#3a3a3a] rounded-2xl p-8 space-y-6">
+          {/* Property Type */}
+          <div>
+            <label className="block text-[#D4A574] font-semibold mb-2">Tipo de Propriedade *</label>
+            <select
+              value={propertyType}
+              onChange={(e) => setPropertyType(e.target.value)}
+              className="w-full px-4 py-3 bg-[#1a1a1a] border border-[#3a3a3a] text-[#D4A574] rounded-lg focus:outline-none focus:border-[#A8C97F]"
+              required
+            >
+              {PROPERTY_TYPES.map(type => (
+                <option key={type.value} value={type.value}>{type.label}</option>
+              ))}
+            </select>
+          </div>
 
-          {/* Error Message */}
-          {error && (
-            <div className="mb-6 p-4 bg-red-900/30 border border-red-500/50 rounded-lg flex items-center gap-3">
-              <AlertCircle className="w-6 h-6 text-red-400 flex-shrink-0" />
-              <p className="text-red-400 text-left">{error}</p>
-            </div>
-          )}
+          {/* Name */}
+          <div>
+            <label className="block text-[#D4A574] font-semibold mb-2">
+              <Home className="w-4 h-4 inline mr-2" />
+              Nome da Propriedade *
+            </label>
+            <input
+              type="text"
+              value={nome}
+              onChange={(e) => setNome(e.target.value)}
+              placeholder="Ex: Sítio Recanto das Águas"
+              className="w-full px-4 py-3 bg-[#1a1a1a] border border-[#3a3a3a] text-[#D4A574] rounded-lg focus:outline-none focus:border-[#A8C97F]"
+              required
+            />
+          </div>
 
-          <form onSubmit={handleSubmit} className="flex flex-col gap-4">
-            {/* Nome */}
+          {/* Description */}
+          <div>
+            <label className="block text-[#D4A574] font-semibold mb-2">Descrição *</label>
+            <textarea
+              value={descricao}
+              onChange={(e) => setDescricao(e.target.value)}
+              placeholder="Descreva sua propriedade, destacando suas características principais..."
+              rows={5}
+              className="w-full px-4 py-3 bg-[#1a1a1a] border border-[#3a3a3a] text-[#D4A574] rounded-lg focus:outline-none focus:border-[#A8C97F]"
+              required
+            />
+          </div>
+
+          {/* Price */}
+          <div>
+            <label className="block text-[#D4A574] font-semibold mb-2">
+              <DollarSign className="w-4 h-4 inline mr-2" />
+              Preço (R$) *
+            </label>
+            <input
+              type="text"
+              value={preco}
+              onChange={(e) => {
+                const value = e.target.value.replace(/\D/g, '');
+                setPreco(value ? parseInt(value).toLocaleString('pt-BR') : '');
+              }}
+              placeholder="Ex: 850.000"
+              className="w-full px-4 py-3 bg-[#1a1a1a] border border-[#3a3a3a] text-[#D4A574] rounded-lg focus:outline-none focus:border-[#A8C97F]"
+              required
+            />
+          </div>
+
+          {/* Location */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
-              <label htmlFor="nome" className="sr-only">Nome completo</label>
+              <label className="block text-[#D4A574] font-semibold mb-2">
+                <MapPin className="w-4 h-4 inline mr-2" />
+                Cidade *
+              </label>
               <input
-                id="nome"
                 type="text"
-                placeholder="Nome completo *"
-                value={formData.nome}
-                onChange={(e) => setFormData({ ...formData, nome: e.target.value })}
+                value={cidade}
+                onChange={(e) => setCidade(e.target.value)}
+                placeholder="Ex: Planaltina"
+                className="w-full px-4 py-3 bg-[#1a1a1a] border border-[#3a3a3a] text-[#D4A574] rounded-lg focus:outline-none focus:border-[#A8C97F]"
                 required
-                className="w-full p-4 rounded-lg bg-[#0a0a0a]/80 border-2 border-[#2a2a1a] text-[#E6C98B] placeholder-[#676767] focus:border-[#A8C97F] focus:outline-none transition-colors"
               />
             </div>
-
-            {/* Email */}
             <div>
-              <label htmlFor="email" className="sr-only">Email</label>
-              <div className="relative">
-                <Mail className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-[#676767]" />
-                <input
-                  id="email"
-                  type="email"
-                  placeholder="Email *"
-                  value={formData.email}
-                  onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                  required
-                  className="w-full pl-12 pr-4 py-4 rounded-lg bg-[#0a0a0a]/80 border-2 border-[#2a2a1a] text-[#E6C98B] placeholder-[#676767] focus:border-[#A8C97F] focus:outline-none transition-colors"
-                />
-              </div>
-            </div>
-
-            {/* Telefone */}
-            <div>
-              <label htmlFor="telefone" className="sr-only">Telefone ou WhatsApp</label>
-              <div className="relative">
-                <Phone className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-[#676767]" />
-                <input
-                  id="telefone"
-                  type="text"
-                  placeholder="Telefone/WhatsApp"
-                  value={formData.telefone}
-                  onChange={(e) => setFormData({ ...formData, telefone: e.target.value })}
-                  className="w-full pl-12 pr-4 py-4 rounded-lg bg-[#0a0a0a]/80 border-2 border-[#2a2a1a] text-[#E6C98B] placeholder-[#676767] focus:border-[#A8C97F] focus:outline-none transition-colors"
-                />
-              </div>
-            </div>
-
-            {/* Mensagem */}
-            <div>
-              <label htmlFor="mensagem" className="sr-only">Mensagem</label>
-              <div className="relative">
-                <MessageSquare className="absolute left-4 top-4 w-5 h-5 text-[#676767]" />
-                <textarea
-                  id="mensagem"
-                  placeholder="Mensagem *"
-                  value={formData.mensagem}
-                  onChange={(e) => setFormData({ ...formData, mensagem: e.target.value })}
-                  required
-                  rows={5}
-                  className="w-full pl-12 pr-4 py-4 rounded-lg bg-[#0a0a0a]/80 border-2 border-[#2a2a1a] text-[#E6C98B] placeholder-[#676767] focus:border-[#A8C97F] focus:outline-none transition-colors resize-none"
-                />
-              </div>
-            </div>
-
-            <button
-              type="submit"
-              disabled={submitting}
-              className="w-full bg-gradient-to-r from-[#A8C97F] to-[#0D7377] hover:from-[#0D7377] hover:to-[#A8C97F] text-[#0a0a0a] font-bold py-4 rounded-full transition-all shadow-lg disabled:opacity-50 disabled:cursor-not-allowed"
-            >
-              {submitting ? "Enviando..." : "✉️ Enviar solicitação"}
-            </button>
-          </form>
-
-          {/* Contact Info */}
-          <div className="mt-8 pt-6 border-t border-[#2a2a1a]">
-            <p className="text-[#8B9B6E] text-sm mb-3">Ou entre em contato diretamente:</p>
-            <div className="flex flex-col sm:flex-row gap-3 justify-center">
-              <WhatsAppLink
-                number="5534992610004"
-                className="flex items-center justify-center gap-2 px-6 py-3 border-2 border-[#25D366] text-[#25D366] font-semibold rounded-full hover:bg-[#25D366]/10 transition-all"
-                aria-label="WhatsApp"
-              >
-                <Phone className="w-5 h-5" />
-                WhatsApp
-              </WhatsAppLink>
-              <a
-                href="mailto:contato@publimicro.com.br"
-                className="flex items-center justify-center gap-2 px-6 py-3 border-2 border-[#E6C98B] text-[#E6C98B] font-semibold rounded-full hover:bg-[#E6C98B]/10 transition-all"
-              >
-                <Mail className="w-5 h-5" />
-                Email
-              </a>
+              <label className="block text-[#D4A574] font-semibold mb-2">Estado *</label>
+              <input
+                type="text"
+                value={estado}
+                onChange={(e) => setEstado(e.target.value)}
+                placeholder="Ex: Goiás"
+                className="w-full px-4 py-3 bg-[#1a1a1a] border border-[#3a3a3a] text-[#D4A574] rounded-lg focus:outline-none focus:border-[#A8C97F]"
+                required
+              />
             </div>
           </div>
-        </div>
-      </section>
+
+          <div>
+            <label className="block text-[#D4A574] font-semibold mb-2">Endereço/Localização *</label>
+            <input
+              type="text"
+              value={localizacao}
+              onChange={(e) => setLocalizacao(e.target.value)}
+              placeholder="Ex: Rodovia GO-118, Km 25"
+              className="w-full px-4 py-3 bg-[#1a1a1a] border border-[#3a3a3a] text-[#D4A574] rounded-lg focus:outline-none focus:border-[#A8C97F]"
+              required
+            />
+          </div>
+
+          <div>
+            <label className="block text-[#D4A574] font-semibold mb-2">CEP</label>
+            <input
+              type="text"
+              value={cep}
+              onChange={(e) => setCep(e.target.value)}
+              placeholder="Ex: 73000-000"
+              className="w-full px-4 py-3 bg-[#1a1a1a] border border-[#3a3a3a] text-[#D4A574] rounded-lg focus:outline-none focus:border-[#A8C97F]"
+            />
+          </div>
+
+          {/* Property Details */}
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+            <div>
+              <label className="block text-[#D4A574] font-semibold mb-2">
+                <Square className="w-4 h-4 inline mr-2" />
+                Área (m²)
+              </label>
+              <input
+                type="number"
+                value={areaTotal}
+                onChange={(e) => setAreaTotal(e.target.value)}
+                placeholder="Ex: 50000"
+                className="w-full px-4 py-3 bg-[#1a1a1a] border border-[#3a3a3a] text-[#D4A574] rounded-lg focus:outline-none focus:border-[#A8C97F]"
+              />
+            </div>
+            <div>
+              <label className="block text-[#D4A574] font-semibold mb-2">
+                <Bed className="w-4 h-4 inline mr-2" />
+                Quartos
+              </label>
+              <input
+                type="number"
+                value={quartos}
+                onChange={(e) => setQuartos(e.target.value)}
+                placeholder="Ex: 4"
+                className="w-full px-4 py-3 bg-[#1a1a1a] border border-[#3a3a3a] text-[#D4A574] rounded-lg focus:outline-none focus:border-[#A8C97F]"
+              />
+            </div>
+            <div>
+              <label className="block text-[#D4A574] font-semibold mb-2">
+                <Bath className="w-4 h-4 inline mr-2" />
+                Banheiros
+              </label>
+              <input
+                type="number"
+                value={banheiros}
+                onChange={(e) => setBanheiros(e.target.value)}
+                placeholder="Ex: 3"
+                className="w-full px-4 py-3 bg-[#1a1a1a] border border-[#3a3a3a] text-[#D4A574] rounded-lg focus:outline-none focus:border-[#A8C97F]"
+              />
+            </div>
+            <div>
+              <label className="block text-[#D4A574] font-semibold mb-2">Vagas</label>
+              <input
+                type="number"
+                value={vagas}
+                onChange={(e) => setVagas(e.target.value)}
+                placeholder="Ex: 2"
+                className="w-full px-4 py-3 bg-[#1a1a1a] border border-[#3a3a3a] text-[#D4A574] rounded-lg focus:outline-none focus:border-[#A8C97F]"
+              />
+            </div>
+          </div>
+
+          <div>
+            <label className="block text-[#D4A574] font-semibold mb-2">
+              <Calendar className="w-4 h-4 inline mr-2" />
+              Ano de Construção
+            </label>
+            <input
+              type="number"
+              value={anosConstrucao}
+              onChange={(e) => setAnosConstrucao(e.target.value)}
+              placeholder="Ex: 2015"
+              className="w-full px-4 py-3 bg-[#1a1a1a] border border-[#3a3a3a] text-[#D4A574] rounded-lg focus:outline-none focus:border-[#A8C97F]"
+            />
+          </div>
+
+          {/* Photos */}
+          <div>
+            <label className="block text-[#D4A574] font-semibold mb-2">
+              <Upload className="w-4 h-4 inline mr-2" />
+              Fotos da Propriedade * (mínimo 1)
+            </label>
+            <input
+              type="file"
+              accept="image/*"
+              multiple
+              onChange={handlePhotoChange}
+              className="w-full px-4 py-3 bg-[#1a1a1a] border border-[#3a3a3a] text-[#676767] rounded-lg focus:outline-none focus:border-[#A8C97F]"
+            />
+            
+            {photoPreviews.length > 0 && (
+              <div className="grid grid-cols-3 md:grid-cols-5 gap-4 mt-4">
+                {photoPreviews.map((preview, index) => (
+                  <div key={index} className="relative group">
+                    <img 
+                      src={preview} 
+                      alt={`Preview ${index + 1}`} 
+                      className="w-full h-24 object-cover rounded-lg border border-[#3a3a3a]"
+                    />
+                    <button
+                      type="button"
+                      onClick={() => removePhoto(index)}
+                      className="absolute top-1 right-1 bg-red-500 text-white p-1 rounded-full opacity-0 group-hover:opacity-100 transition"
+                    >
+                      <X className="w-4 h-4" />
+                    </button>
+                    {index === 0 && (
+                      <span className="absolute bottom-1 left-1 bg-[#A8C97F] text-[#0a0a0a] text-xs px-2 py-1 rounded">
+                        Capa
+                      </span>
+                    )}
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+
+          {/* Error/Success Messages */}
+          {error && (
+            <div className="p-4 bg-red-900/20 border border-red-500/50 text-red-400 rounded-lg">
+              {error}
+            </div>
+          )}
+
+          {success && (
+            <div className="p-4 bg-green-900/20 border border-green-500/50 text-green-400 rounded-lg">
+              {success}
+            </div>
+          )}
+
+          {/* Submit Button */}
+          <button
+            type="submit"
+            disabled={submitting}
+            className="w-full px-8 py-4 bg-gradient-to-r from-[#A8C97F] to-[#0D7377] text-white font-bold rounded-lg hover:scale-105 transition disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100"
+          >
+            {submitting ? 'Publicando...' : 'Publicar Anúncio'}
+          </button>
+        </form>
+      </div>
     </main>
   );
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

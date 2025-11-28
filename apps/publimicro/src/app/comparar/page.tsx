@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import React, { useState, useEffect, type ElementType } from "react";
 import { supabase } from "@/lib/supabaseClient";
 import Link from "next/link";
 import Image from "next/image";
@@ -23,9 +23,9 @@ interface Property {
 interface ComparisonRow {
   label: string;
   key: keyof Property | 'preco_ha';
-  icon?: any;
+  icon?: ElementType;
   suffix?: string;
-  format?: (value: any) => string;
+  format?: (value: unknown, property?: Property) => string;
 }
 
 export default function ComparePage() {
@@ -132,11 +132,20 @@ export default function ComparePage() {
   const comparisonRows: ComparisonRow[] = [
     { label: "Localização", key: "location", icon: MapPin },
     { label: "Área Total", key: "area_total", suffix: " hectares", icon: Maximize2 },
-    { label: "Preço", key: "price", format: (v: any) => `R$ ${v.toLocaleString("pt-BR")}`, icon: DollarSign },
-    { label: "Preço por Hectare", key: "preco_ha", format: (p: any) => p.area_total ? `R$ ${Math.round(p.price / p.area_total).toLocaleString("pt-BR")}` : "N/A" },
-    { label: "Água", key: "agua", format: (v: any) => v ? "✅ Sim" : "❌ Não" },
-    { label: "Energia Elétrica", key: "energia", format: (v: any) => v ? "✅ Sim" : "❌ Não" },
-    { label: "Internet", key: "internet", format: (v: any) => v ? "✅ Sim" : "❌ Não" }
+    {
+      label: "Preço",
+      key: "price",
+      format: (v: unknown) => (typeof v === "number" ? `R$ ${v.toLocaleString("pt-BR")}` : "-"),
+      icon: DollarSign,
+    },
+    {
+      label: "Preço por Hectare",
+      key: "preco_ha",
+      format: (_v: unknown, p?: Property) => (p && p.area_total ? `R$ ${Math.round(p.price / p.area_total).toLocaleString("pt-BR")}` : "N/A"),
+    },
+    { label: "Água", key: "agua", format: (v: unknown) => (v === true ? "✅ Sim" : "❌ Não") },
+    { label: "Energia Elétrica", key: "energia", format: (v: unknown) => (v === true ? "✅ Sim" : "❌ Não") },
+    { label: "Internet", key: "internet", format: (v: unknown) => (v === true ? "✅ Sim" : "❌ Não") },
   ];
 
   return (
@@ -232,21 +241,33 @@ export default function ComparePage() {
                   >
                     <td className="p-4 text-[#8B9B6E] font-semibold border-b border-[#2a2a1a] sticky left-0 bg-inherit">
                       <div className="flex items-center gap-2">
-                        {Icon && <Icon className="w-4 h-4" />}
+                        {Icon ? React.createElement(Icon as any, { className: "w-4 h-4" }) : null}
                         {row.label}
                       </div>
                     </td>
                     {properties.map((property) => (
                       <td key={property.id} className="p-4 text-[#E6C98B] border-b border-[#2a2a1a]">
-                        {row.format
-                          ? row.key === "preco_ha"
-                            ? row.format(property)
-                            : row.format((property as unknown as Record<string, any>)[row.key as string])
-                          : row.key === "preco_ha"
-                          ? "-"
-                          : (property as unknown as Record<string, any>)[row.key as string]
+                        {
+                          (() => {
+                            let cellContent: React.ReactNode = null;
+                            if (row.format) {
+                              try {
+                                cellContent = row.key === "preco_ha"
+                                  ? row.format(undefined, property)
+                                  : row.format((property as unknown as Record<string, unknown>)[row.key as string], property);
+                              } catch {
+                                cellContent = null;
+                              }
+                            } else if (row.key === "preco_ha") {
+                              cellContent = "-";
+                            } else {
+                              const val = (property as unknown as Record<string, unknown>)[row.key as string];
+                              cellContent = val === undefined || val === null ? '' : String(val);
+                            }
+                            return cellContent;
+                          })()
                         }
-                        {row.suffix && (property as unknown as Record<string, any>)[row.key as string] && row.suffix}
+                        {row.suffix && (property as unknown as Record<string, unknown>)[row.key as string] && <>{row.suffix}</>}
                       </td>
                     ))}
                   </tr>

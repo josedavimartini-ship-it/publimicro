@@ -17,6 +17,15 @@ interface BackgroundCheckRequest {
   estado?: string;
 }
 
+interface ExternalCheckResponse {
+  [k: string]: unknown;
+  has_criminal_record?: boolean;
+  is_wanted?: boolean;
+  is_red_notice?: boolean;
+  restrictions?: unknown[];
+  checked_at?: string;
+}
+
 export async function POST(req: Request) {
   const supabase = createServerSupabaseClient();
   
@@ -37,7 +46,7 @@ export async function POST(req: Request) {
     // ============================================
     
     let federalPoliceStatus: 'approved' | 'rejected' | 'needs_review' = 'approved';
-    let federalPoliceResponse: any = null;
+    let federalPoliceResponse: ExternalCheckResponse | null = null;
     
     try {
       // TODO: Integration with Brazilian Federal Police API
@@ -68,10 +77,11 @@ export async function POST(req: Request) {
         response_data: federalPoliceResponse
       });
       
-    } catch (error: any) {
-      console.error('Federal Police check error:', error);
+    } catch (e: unknown) {
+      const msg = e instanceof Error ? e.message : String(e);
+      console.error('Federal Police check error:', msg);
       federalPoliceStatus = 'needs_review';
-      federalPoliceResponse = { error: error.message };
+      federalPoliceResponse = { error: msg };
     }
     
     // ============================================
@@ -79,7 +89,7 @@ export async function POST(req: Request) {
     // ============================================
     
     let interpolStatus: 'approved' | 'rejected' | 'needs_review' = 'approved';
-    let interpolResponse: any = null;
+    let interpolResponse: ExternalCheckResponse | null = null;
     
     try {
       // TODO: Integration with Interpol I-24/7 Database
@@ -109,10 +119,11 @@ export async function POST(req: Request) {
         response_data: interpolResponse
       });
       
-    } catch (error: any) {
-      console.error('Interpol check error:', error);
+    } catch (e: unknown) {
+      const msg = e instanceof Error ? e.message : String(e);
+      console.error('Interpol check error:', msg);
       interpolStatus = 'needs_review';
-      interpolResponse = { error: error.message };
+      interpolResponse = { error: msg };
     }
     
     // ============================================
@@ -124,10 +135,10 @@ export async function POST(req: Request) {
 
     // If any criminal/wanted/red notice, auto-reject and alert
     const isCriminal =
-      federalPoliceResponse?.has_criminal_record === true ||
-      federalPoliceResponse?.is_wanted === true ||
-      interpolResponse?.is_red_notice === true ||
-      interpolResponse?.is_wanted === true;
+      (federalPoliceResponse?.has_criminal_record === true) ||
+      (federalPoliceResponse?.is_wanted === true) ||
+      (interpolResponse?.is_red_notice === true) ||
+      (interpolResponse?.is_wanted === true);
 
     if (isCriminal) {
       finalStatus = 'rejected';
@@ -215,10 +226,11 @@ export async function POST(req: Request) {
       checked_at: new Date().toISOString()
     });
     
-  } catch (error: any) {
-    console.error('Background check error:', error);
-    return NextResponse.json({ 
-      error: error.message || 'Background check failed' 
-    }, { status: 500 });
-  }
+    } catch (e: unknown) {
+      const msg = e instanceof Error ? e.message : String(e);
+      console.error('Background check error:', msg);
+      return NextResponse.json({
+        error: msg || 'Background check failed'
+      }, { status: 500 });
+    }
 }

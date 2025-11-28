@@ -1,350 +1,465 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
-import { useAuth } from "@/components/AuthProvider";
-import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
-import { Trash2, Edit, Eye, EyeOff, PlusCircle, Home, Package } from "lucide-react";
-import { useToast } from "@/components/ToastNotification";
-import Image from "next/image";
-import Link from "next/link";
+import { useState, useEffect } from 'react';
+import { useRouter } from 'next/navigation';
+import { createClientComponentClient } from '@supabase/auth-helpers-nextjs';
+import { Upload, X, MapPin, Home, DollarSign, Bed, Bath, Square, Calendar } from 'lucide-react';
 
-interface Property {
-  id: string;
-  nome: string;
-  preco: number;
-  fotos: string[];
-  localizacao: string;
-  created_at: string;
-}
+const PROPERTY_TYPES = [
+  { value: 'sitio', label: 'Sítio' },
+  { value: 'chacara', label: 'Chácara' },
+  { value: 'fazenda', label: 'Fazenda' },
+  { value: 'terreno_rural', label: 'Terreno Rural' },
+  { value: 'casa', label: 'Casa' },
+  { value: 'apartamento', label: 'Apartamento' },
+  { value: 'comercial', label: 'Comercial' },
+  { value: 'industrial', label: 'Industrial' },
+];
 
-interface Listing {
-  id: string;
-  title: string;
-  price: number;
-  photos: string[];
-  city: string;
-  state: string;
-  created_at: string;
-  is_featured: boolean;
-}
-
-export default function MeusAnunciosPage() {
-  const { user, loading: authLoading } = useAuth();
+export default function PostarPage() {
   const router = useRouter();
-  const { showToast } = useToast();
   const supabase = createClientComponentClient();
-
+  
   const [loading, setLoading] = useState(true);
-  const [properties, setProperties] = useState<Property[]>([]);
-  const [listings, setListings] = useState<Listing[]>([]);
-  const [activeTab, setActiveTab] = useState<"properties" | "listings">("properties");
-  const [deleting, setDeleting] = useState<string | null>(null);
+  const [submitting, setSubmitting] = useState(false);
+  const [user, setUser] = useState<any>(null);
+  
+  // Form state
+  const [propertyType, setPropertyType] = useState('sitio');
+  const [nome, setNome] = useState('');
+  const [descricao, setDescricao] = useState('');
+  const [preco, setPreco] = useState('');
+  const [localizacao, setLocalizacao] = useState('');
+  const [cidade, setCidade] = useState('');
+  const [estado, setEstado] = useState('');
+  const [cep, setCep] = useState('');
+  
+  // Property details
+  const [areaTotal, setAreaTotal] = useState('');
+  const [quartos, setQuartos] = useState('');
+  const [banheiros, setBanheiros] = useState('');
+  const [vagas, setVagas] = useState('');
+  const [anosConstrucao, setAnosConstrucao] = useState('');
+  
+  // Photos
+  const [photos, setPhotos] = useState<File[]>([]);
+  const [photoPreviews, setPhotoPreviews] = useState<string[]>([]);
+  
+  const [error, setError] = useState('');
+  const [success, setSuccess] = useState('');
 
   useEffect(() => {
-    if (!authLoading && !user) {
-      router.push("/entrar?redirect=/meus-anuncios");
-    }
-  }, [user, authLoading, router]);
+    void checkAuth();
+  }, []);
 
-  useEffect(() => {
-    if (user) {
-      void loadUserData();
-    }
-  }, [user]);
-
-  const loadUserData = async () => {
-    if (!user) return;
-
-    setLoading(true);
+  const checkAuth = async () => {
     try {
-      // Load properties
-      const { data: propsData, error: propsError } = await supabase
-        .from("sitios")
-        .select("*")
-        .eq("user_id", user.id)
-        .order("created_at", { ascending: false });
-
-      if (propsError) throw propsError;
-      setProperties(propsData || []);
-
-      // Load AcheMeCoisas listings
-      const { data: listingsData, error: listingsError } = await supabase
-        .from("listings")
-        .select("*")
-        .eq("user_id", user.id)
-        .order("created_at", { ascending: false });
-
-      if (listingsError) throw listingsError;
-      setListings(listingsData || []);
-    } catch (error: any) {
-      showToast({ 
-        type: "error", 
-        title: "Erro ao carregar anúncios",
-        message: error.message 
-      });
+      const { data: { user } } = await supabase.auth.getUser();
+      
+      if (!user) {
+        router.push('/entrar?redirect=/postar');
+        return;
+      }
+      
+      setUser(user);
+    } catch (error) {
+      console.error('Error checking auth:', error);
+      router.push('/entrar?redirect=/postar');
     } finally {
       setLoading(false);
     }
   };
 
-  const handleDeleteProperty = async (id: string) => {
-    if (!confirm("Tem certeza que deseja excluir esta propriedade?")) return;
-
-    setDeleting(id);
-    try {
-      const { error } = await supabase.from("sitios").delete().eq("id", id);
-
-      if (error) throw error;
-
-      setProperties(properties.filter((p) => p.id !== id));
-      showToast({ 
-        type: "success", 
-        title: "Propriedade excluída com sucesso!" 
+  const handlePhotoChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files) {
+      const newFiles = Array.from(e.target.files);
+      setPhotos([...photos, ...newFiles]);
+      
+      // Create previews
+      newFiles.forEach(file => {
+        const reader = new FileReader();
+        reader.onloadend = () => {
+          setPhotoPreviews(prev => [...prev, reader.result as string]);
+        };
+        reader.readAsDataURL(file);
       });
-    } catch (error: any) {
-      showToast({ 
-        type: "error", 
-        title: "Erro ao excluir propriedade",
-        message: error.message 
-      });
-    } finally {
-      setDeleting(null);
     }
   };
 
-  const handleDeleteListing = async (id: string) => {
-    if (!confirm("Tem certeza que deseja excluir este anúncio?")) return;
+  const removePhoto = (index: number) => {
+    setPhotos(photos.filter((_, i) => i !== index));
+    setPhotoPreviews(photoPreviews.filter((_, i) => i !== index));
+  };
 
-    setDeleting(id);
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setError('');
+    setSuccess('');
+    setSubmitting(true);
+
     try {
-      const { error } = await supabase.from("listings").delete().eq("id", id);
+      if (!user) {
+        setError('Você precisa estar logado para anunciar');
+        setSubmitting(false);
+        return;
+      }
 
-      if (error) throw error;
+      if (photos.length === 0) {
+        setError('Adicione pelo menos uma foto da propriedade');
+        setSubmitting(false);
+        return;
+      }
 
-      setListings(listings.filter((l) => l.id !== id));
-      showToast({ 
-        type: "success", 
-        title: "Anúncio excluído com sucesso!" 
-      });
+      // Insert property
+      const { data: property, error: propertyError } = await supabase
+        .from('properties')
+        .insert({
+          user_id: user.id,
+          title: nome,
+          description: descricao,
+          price: parseFloat(preco.replace(/\D/g, '')),
+          address: localizacao,
+          city: cidade,
+          state: estado,
+          zip_code: cep,
+          property_type: propertyType,
+          transaction_type: 'sale', // Default to sale
+          total_area: areaTotal ? parseFloat(areaTotal) : null,
+          bedrooms: quartos ? parseInt(quartos) : null,
+          bathrooms: banheiros ? parseInt(banheiros) : null,
+          parking_spaces: vagas ? parseInt(vagas) : null,
+          year_built: anosConstrucao ? parseInt(anosConstrucao) : null,
+          status: 'active',
+        })
+        .select()
+        .single();
+
+      if (propertyError) throw propertyError;
+
+      // Upload photos
+      for (let i = 0; i < photos.length; i++) {
+        const photo = photos[i];
+        const fileExt = photo.name.split('.').pop();
+        const fileName = `${property.id}/${Date.now()}_${i}.${fileExt}`;
+
+        const { error: uploadError } = await supabase.storage
+          .from('property-photos')
+          .upload(fileName, photo);
+
+        if (uploadError) throw uploadError;
+
+        const { data: { publicUrl } } = supabase.storage
+          .from('property-photos')
+          .getPublicUrl(fileName);
+
+        // Insert photo record
+        await supabase
+          .from('property_photos')
+          .insert({
+            property_id: property.id,
+            url: publicUrl,
+            is_cover: i === 0,
+            display_order: i,
+          });
+      }
+
+      setSuccess('Propriedade anunciada com sucesso!');
+      
+      // Redirect to property page
+      setTimeout(() => {
+        router.push(`/imoveis/${property.id}`);
+      }, 2000);
+
     } catch (error: any) {
-      showToast({ 
-        type: "error", 
-        title: "Erro ao excluir anúncio",
-        message: error.message 
-      });
+      console.error('Error posting property:', error);
+      setError(error.message || 'Erro ao anunciar propriedade. Tente novamente.');
     } finally {
-      setDeleting(null);
+      setSubmitting(false);
     }
   };
 
-  if (authLoading || loading) {
+  if (loading) {
     return (
-      <div className="min-h-screen bg-[#0a0a0a] flex items-center justify-center">
-        <div className="text-[#D4A574] text-xl">Carregando seus anúncios...</div>
+      <div className="min-h-screen bg-gradient-to-b from-[#0a0a0a] via-[#1a1a1a] to-[#0a0a0a] flex items-center justify-center">
+        <div className="text-[#D4A574] text-xl">Carregando...</div>
       </div>
     );
   }
 
-  if (!user) return null;
-
   return (
-    <main className="min-h-screen bg-[#0a0a0a] pt-24 pb-16">
-      <div className="max-w-7xl mx-auto px-4">
-        {/* Header */}
-        <div className="flex items-center justify-between mb-8">
-          <div>
-            <h1 className="text-4xl font-bold bg-gradient-to-r from-[#D4AF37] to-[#CD7F32] bg-clip-text text-transparent mb-2">
-              Meus Anúncios
-            </h1>
-            <p className="text-[#8B9B6E]">Gerencie suas propriedades e listings</p>
-          </div>
-          <Link
-            href="/acheme-coisas/postar"
-            className="flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-[#CD7F32] to-[#B87333] hover:from-[#D4AF37] hover:to-[#CD7F32] text-[#0a0a0a] font-bold rounded-full transition-all"
-          >
-            <PlusCircle className="w-5 h-5" />
-            Novo Anúncio
-          </Link>
+    <main className="min-h-screen bg-gradient-to-b from-[#0a0a0a] via-[#1a1a1a] to-[#0a0a0a] py-12 px-6">
+      <div className="max-w-4xl mx-auto">
+        <div className="text-center mb-8">
+          <h1 className="text-4xl font-black text-transparent bg-clip-text bg-gradient-to-r from-[#A8C97F] to-[#0D7377] mb-4">
+            Anunciar Propriedade
+          </h1>
+          <p className="text-[#676767]">Preencha os dados para anunciar sua propriedade gratuitamente</p>
         </div>
 
-        {/* Tabs */}
-        <div className="flex gap-4 mb-8 border-b border-[#2a2a1a]">
-          <button
-            onClick={() => setActiveTab("properties")}
-            className={`flex items-center gap-2 px-6 py-4 font-semibold transition-all ${
-              activeTab === "properties"
-                ? "text-[#D4AF37] border-b-2 border-[#D4AF37]"
-                : "text-[#8B9B6E] hover:text-[#D4A574]"
-            }`}
-          >
-            <Home className="w-5 h-5" />
-            Propriedades ({properties.length})
-          </button>
-          <button
-            onClick={() => setActiveTab("listings")}
-            className={`flex items-center gap-2 px-6 py-4 font-semibold transition-all ${
-              activeTab === "listings"
-                ? "text-[#D4AF37] border-b-2 border-[#D4AF37]"
-                : "text-[#8B9B6E] hover:text-[#D4A574]"
-            }`}
-          >
-            <Package className="w-5 h-5" />
-            AcheMeCoisas ({listings.length})
-          </button>
-        </div>
-
-        {/* Properties Tab */}
-        {activeTab === "properties" && (
+        <form onSubmit={handleSubmit} className="bg-[#2a2a2a] border-2 border-[#3a3a3a] rounded-2xl p-8 space-y-6">
+          {/* Property Type */}
           <div>
-            {properties.length === 0 ? (
-              <div className="bg-gradient-to-br from-[#1a1a1a] to-[#0d0d0d] border-2 border-[#2a2a1a] rounded-2xl p-12 text-center">
-                <Home className="w-16 h-16 text-[#8B9B6E] mx-auto mb-4" />
-                <h3 className="text-xl font-bold text-[#E6C98B] mb-2">Nenhuma propriedade cadastrada</h3>
-                <p className="text-[#8B9B6E] mb-6">Comece anunciando sua primeira propriedade</p>
-                <Link
-                  href="/postar-imovel"
-                  className="inline-flex items-center gap-2 px-6 py-3 bg-[#A8C97F]/20 border-2 border-[#A8C97F] text-[#A8C97F] font-semibold rounded-full hover:bg-[#A8C97F]/30 transition-all"
-                >
-                  <PlusCircle className="w-5 h-5" />
-                  Anunciar Propriedade
-                </Link>
-              </div>
-            ) : (
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                {properties.map((property) => (
-                  <div
-                    key={property.id}
-                    className="bg-gradient-to-br from-[#1a1a1a] to-[#0d0d0d] border-2 border-[#2a2a1a] rounded-xl overflow-hidden hover:border-[#A8C97F] transition-all group"
-                  >
-                    {/* Image */}
-                    <div className="aspect-video relative bg-[#0a0a0a]">
-                      {property.fotos && property.fotos[0] ? (
-                        <Image
-                          src={property.fotos[0]}
-                          alt={property.nome}
-                          fill
-                          className="object-cover"
-                        />
-                      ) : (
-                        <div className="w-full h-full flex items-center justify-center">
-                          <Home className="w-12 h-12 text-[#8B9B6E]" />
-                        </div>
-                      )}
-                    </div>
-
-                    {/* Content */}
-                    <div className="p-4">
-                      <h3 className="text-lg font-bold text-[#E6C98B] mb-2 truncate">{property.nome}</h3>
-                      <p className="text-[#8B9B6E] text-sm mb-2">{property.localizacao}</p>
-                      <p className="text-[#D4AF37] font-bold text-xl mb-4">
-                        R$ {property.preco?.toLocaleString("pt-BR")}
-                      </p>
-
-                      {/* Actions */}
-                      <div className="flex gap-2">
-                        <Link
-                          href={`/imoveis/${property.id}`}
-                          className="flex-1 flex items-center justify-center gap-2 px-4 py-2 bg-[#A8C97F]/20 border border-[#A8C97F] text-[#A8C97F] font-semibold rounded-lg hover:bg-[#A8C97F]/30 transition-all text-sm"
-                        >
-                          <Eye className="w-4 h-4" />
-                          Ver
-                        </Link>
-                        <button
-                          onClick={() => handleDeleteProperty(property.id)}
-                          disabled={deleting === property.id}
-                          className="px-4 py-2 bg-red-900/20 border border-red-500/50 text-red-400 font-semibold rounded-lg hover:bg-red-900/30 transition-all disabled:opacity-50 text-sm"
-                        >
-                          {deleting === property.id ? "..." : <Trash2 className="w-4 h-4" />}
-                        </button>
-                      </div>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            )}
+            <label className="block text-[#D4A574] font-semibold mb-2">Tipo de Propriedade *</label>
+            <select
+              value={propertyType}
+              onChange={(e) => setPropertyType(e.target.value)}
+              className="w-full px-4 py-3 bg-[#1a1a1a] border border-[#3a3a3a] text-[#D4A574] rounded-lg focus:outline-none focus:border-[#A8C97F]"
+              required
+            >
+              {PROPERTY_TYPES.map(type => (
+                <option key={type.value} value={type.value}>{type.label}</option>
+              ))}
+            </select>
           </div>
-        )}
 
-        {/* Listings Tab */}
-        {activeTab === "listings" && (
+          {/* Name */}
           <div>
-            {listings.length === 0 ? (
-              <div className="bg-gradient-to-br from-[#1a1a1a] to-[#0d0d0d] border-2 border-[#2a2a1a] rounded-2xl p-12 text-center">
-                <Package className="w-16 h-16 text-[#8B9B6E] mx-auto mb-4" />
-                <h3 className="text-xl font-bold text-[#E6C98B] mb-2">Nenhum anúncio cadastrado</h3>
-                <p className="text-[#8B9B6E] mb-6">Venda, compre ou troque no AcheMeCoisas</p>
-                <Link
-                  href="/acheme-coisas/postar"
-                  className="inline-flex items-center gap-2 px-6 py-3 bg-[#A8C97F]/20 border-2 border-[#A8C97F] text-[#A8C97F] font-semibold rounded-full hover:bg-[#A8C97F]/30 transition-all"
-                >
-                  <PlusCircle className="w-5 h-5" />
-                  Criar Anúncio
-                </Link>
-              </div>
-            ) : (
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                {listings.map((listing) => (
-                  <div
-                    key={listing.id}
-                    className="bg-gradient-to-br from-[#1a1a1a] to-[#0d0d0d] border-2 border-[#2a2a1a] rounded-xl overflow-hidden hover:border-[#A8C97F] transition-all group relative"
-                  >
-                    {/* Featured Badge */}
-                    {listing.is_featured && (
-                      <div className="absolute top-2 right-2 z-10 bg-gradient-to-r from-[#D4AF37] to-[#CD7F32] text-[#0a0a0a] text-xs font-bold px-3 py-1 rounded-full">
-                        DESTAQUE
-                      </div>
+            <label className="block text-[#D4A574] font-semibold mb-2">
+              <Home className="w-4 h-4 inline mr-2" />
+              Nome da Propriedade *
+            </label>
+            <input
+              type="text"
+              value={nome}
+              onChange={(e) => setNome(e.target.value)}
+              placeholder="Ex: Sítio Recanto das Águas"
+              className="w-full px-4 py-3 bg-[#1a1a1a] border border-[#3a3a3a] text-[#D4A574] rounded-lg focus:outline-none focus:border-[#A8C97F]"
+              required
+            />
+          </div>
+
+          {/* Description */}
+          <div>
+            <label className="block text-[#D4A574] font-semibold mb-2">Descrição *</label>
+            <textarea
+              value={descricao}
+              onChange={(e) => setDescricao(e.target.value)}
+              placeholder="Descreva sua propriedade, destacando suas características principais..."
+              rows={5}
+              className="w-full px-4 py-3 bg-[#1a1a1a] border border-[#3a3a3a] text-[#D4A574] rounded-lg focus:outline-none focus:border-[#A8C97F]"
+              required
+            />
+          </div>
+
+          {/* Price */}
+          <div>
+            <label className="block text-[#D4A574] font-semibold mb-2">
+              <DollarSign className="w-4 h-4 inline mr-2" />
+              Preço (R$) *
+            </label>
+            <input
+              type="text"
+              value={preco}
+              onChange={(e) => {
+                const value = e.target.value.replace(/\D/g, '');
+                setPreco(value ? parseInt(value).toLocaleString('pt-BR') : '');
+              }}
+              placeholder="Ex: 850.000"
+              className="w-full px-4 py-3 bg-[#1a1a1a] border border-[#3a3a3a] text-[#D4A574] rounded-lg focus:outline-none focus:border-[#A8C97F]"
+              required
+            />
+          </div>
+
+          {/* Location */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+              <label className="block text-[#D4A574] font-semibold mb-2">
+                <MapPin className="w-4 h-4 inline mr-2" />
+                Cidade *
+              </label>
+              <input
+                type="text"
+                value={cidade}
+                onChange={(e) => setCidade(e.target.value)}
+                placeholder="Ex: Planaltina"
+                className="w-full px-4 py-3 bg-[#1a1a1a] border border-[#3a3a3a] text-[#D4A574] rounded-lg focus:outline-none focus:border-[#A8C97F]"
+                required
+              />
+            </div>
+            <div>
+              <label className="block text-[#D4A574] font-semibold mb-2">Estado *</label>
+              <input
+                type="text"
+                value={estado}
+                onChange={(e) => setEstado(e.target.value)}
+                placeholder="Ex: Goiás"
+                className="w-full px-4 py-3 bg-[#1a1a1a] border border-[#3a3a3a] text-[#D4A574] rounded-lg focus:outline-none focus:border-[#A8C97F]"
+                required
+              />
+            </div>
+          </div>
+
+          <div>
+            <label className="block text-[#D4A574] font-semibold mb-2">Endereço/Localização *</label>
+            <input
+              type="text"
+              value={localizacao}
+              onChange={(e) => setLocalizacao(e.target.value)}
+              placeholder="Ex: Rodovia GO-118, Km 25"
+              className="w-full px-4 py-3 bg-[#1a1a1a] border border-[#3a3a3a] text-[#D4A574] rounded-lg focus:outline-none focus:border-[#A8C97F]"
+              required
+            />
+          </div>
+
+          <div>
+            <label className="block text-[#D4A574] font-semibold mb-2">CEP</label>
+            <input
+              type="text"
+              value={cep}
+              onChange={(e) => setCep(e.target.value)}
+              placeholder="Ex: 73000-000"
+              className="w-full px-4 py-3 bg-[#1a1a1a] border border-[#3a3a3a] text-[#D4A574] rounded-lg focus:outline-none focus:border-[#A8C97F]"
+            />
+          </div>
+
+          {/* Property Details */}
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+            <div>
+              <label className="block text-[#D4A574] font-semibold mb-2">
+                <Square className="w-4 h-4 inline mr-2" />
+                Área (m²)
+              </label>
+              <input
+                type="number"
+                value={areaTotal}
+                onChange={(e) => setAreaTotal(e.target.value)}
+                placeholder="Ex: 50000"
+                className="w-full px-4 py-3 bg-[#1a1a1a] border border-[#3a3a3a] text-[#D4A574] rounded-lg focus:outline-none focus:border-[#A8C97F]"
+              />
+            </div>
+            <div>
+              <label className="block text-[#D4A574] font-semibold mb-2">
+                <Bed className="w-4 h-4 inline mr-2" />
+                Quartos
+              </label>
+              <input
+                type="number"
+                value={quartos}
+                onChange={(e) => setQuartos(e.target.value)}
+                placeholder="Ex: 4"
+                className="w-full px-4 py-3 bg-[#1a1a1a] border border-[#3a3a3a] text-[#D4A574] rounded-lg focus:outline-none focus:border-[#A8C97F]"
+              />
+            </div>
+            <div>
+              <label className="block text-[#D4A574] font-semibold mb-2">
+                <Bath className="w-4 h-4 inline mr-2" />
+                Banheiros
+              </label>
+              <input
+                type="number"
+                value={banheiros}
+                onChange={(e) => setBanheiros(e.target.value)}
+                placeholder="Ex: 3"
+                className="w-full px-4 py-3 bg-[#1a1a1a] border border-[#3a3a3a] text-[#D4A574] rounded-lg focus:outline-none focus:border-[#A8C97F]"
+              />
+            </div>
+            <div>
+              <label className="block text-[#D4A574] font-semibold mb-2">Vagas</label>
+              <input
+                type="number"
+                value={vagas}
+                onChange={(e) => setVagas(e.target.value)}
+                placeholder="Ex: 2"
+                className="w-full px-4 py-3 bg-[#1a1a1a] border border-[#3a3a3a] text-[#D4A574] rounded-lg focus:outline-none focus:border-[#A8C97F]"
+              />
+            </div>
+          </div>
+
+          <div>
+            <label className="block text-[#D4A574] font-semibold mb-2">
+              <Calendar className="w-4 h-4 inline mr-2" />
+              Ano de Construção
+            </label>
+            <input
+              type="number"
+              value={anosConstrucao}
+              onChange={(e) => setAnosConstrucao(e.target.value)}
+              placeholder="Ex: 2015"
+              className="w-full px-4 py-3 bg-[#1a1a1a] border border-[#3a3a3a] text-[#D4A574] rounded-lg focus:outline-none focus:border-[#A8C97F]"
+            />
+          </div>
+
+          {/* Photos */}
+          <div>
+            <label className="block text-[#D4A574] font-semibold mb-2">
+              <Upload className="w-4 h-4 inline mr-2" />
+              Fotos da Propriedade * (mínimo 1)
+            </label>
+            <input
+              type="file"
+              accept="image/*"
+              multiple
+              onChange={handlePhotoChange}
+              className="w-full px-4 py-3 bg-[#1a1a1a] border border-[#3a3a3a] text-[#676767] rounded-lg focus:outline-none focus:border-[#A8C97F]"
+            />
+            
+            {photoPreviews.length > 0 && (
+              <div className="grid grid-cols-3 md:grid-cols-5 gap-4 mt-4">
+                {photoPreviews.map((preview, index) => (
+                  <div key={index} className="relative group">
+                    <img 
+                      src={preview} 
+                      alt={`Preview ${index + 1}`} 
+                      className="w-full h-24 object-cover rounded-lg border border-[#3a3a3a]"
+                    />
+                    <button
+                      type="button"
+                      onClick={() => removePhoto(index)}
+                      className="absolute top-1 right-1 bg-red-500 text-white p-1 rounded-full opacity-0 group-hover:opacity-100 transition"
+                    >
+                      <X className="w-4 h-4" />
+                    </button>
+                    {index === 0 && (
+                      <span className="absolute bottom-1 left-1 bg-[#A8C97F] text-[#0a0a0a] text-xs px-2 py-1 rounded">
+                        Capa
+                      </span>
                     )}
-
-                    {/* Image */}
-                    <div className="aspect-video relative bg-[#0a0a0a]">
-                      {listing.photos && listing.photos[0] ? (
-                        <Image src={listing.photos[0]} alt={listing.title} fill className="object-cover" />
-                      ) : (
-                        <div className="w-full h-full flex items-center justify-center">
-                          <Package className="w-12 h-12 text-[#8B9B6E]" />
-                        </div>
-                      )}
-                    </div>
-
-                    {/* Content */}
-                    <div className="p-4">
-                      <h3 className="text-lg font-bold text-[#E6C98B] mb-2 truncate">{listing.title}</h3>
-                      <p className="text-[#8B9B6E] text-sm mb-2">
-                        {listing.city}, {listing.state}
-                      </p>
-                      <p className="text-[#D4AF37] font-bold text-xl mb-4">
-                        R$ {listing.price?.toLocaleString("pt-BR")}
-                      </p>
-
-                      {/* Actions */}
-                      <div className="flex gap-2">
-                        <Link
-                          href={`/acheme-coisas/${listing.id}`}
-                          className="flex-1 flex items-center justify-center gap-2 px-4 py-2 bg-[#A8C97F]/20 border border-[#A8C97F] text-[#A8C97F] font-semibold rounded-lg hover:bg-[#A8C97F]/30 transition-all text-sm"
-                        >
-                          <Eye className="w-4 h-4" />
-                          Ver
-                        </Link>
-                        <button
-                          onClick={() => handleDeleteListing(listing.id)}
-                          disabled={deleting === listing.id}
-                          className="px-4 py-2 bg-red-900/20 border border-red-500/50 text-red-400 font-semibold rounded-lg hover:bg-red-900/30 transition-all disabled:opacity-50 text-sm"
-                        >
-                          {deleting === listing.id ? "..." : <Trash2 className="w-4 h-4" />}
-                        </button>
-                      </div>
-                    </div>
                   </div>
                 ))}
               </div>
             )}
           </div>
-        )}
+
+          {/* Error/Success Messages */}
+          {error && (
+            <div className="p-4 bg-red-900/20 border border-red-500/50 text-red-400 rounded-lg">
+              {error}
+            </div>
+          )}
+
+          {success && (
+            <div className="p-4 bg-green-900/20 border border-green-500/50 text-green-400 rounded-lg">
+              {success}
+            </div>
+          )}
+
+          {/* Submit Button */}
+          <button
+            type="submit"
+            disabled={submitting}
+            className="w-full px-8 py-4 bg-gradient-to-r from-[#A8C97F] to-[#0D7377] text-white font-bold rounded-lg hover:scale-105 transition disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100"
+          >
+            {submitting ? 'Publicando...' : 'Publicar Anúncio'}
+          </button>
+        </form>
       </div>
     </main>
   );
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

@@ -14,12 +14,12 @@ async function ensureAdmin() {
     const svc = createServiceSupabaseClient();
     const { data: setting } = await svc.from('app_settings').select('value').eq('key', 'admin_emails').maybeSingle();
     if (setting?.value) {
-      const list = Array.isArray(setting.value) ? setting.value : JSON.parse(setting.value);
-      const normalized = list.map((e: any) => String(e).toLowerCase());
+      const list = Array.isArray(setting.value) ? setting.value : (JSON.parse(String(setting.value)) as Array<unknown>);
+      const normalized = (list as Array<unknown>).map((e) => String(e).toLowerCase());
       if (normalized.includes(email)) return { ok: true, user };
     }
-  } catch (err) {
-    console.error('settings proxy: failed to read admin_emails', err);
+  } catch (e: unknown) {
+    console.error('settings proxy: failed to read admin_emails', e instanceof Error ? e.message : String(e));
   }
 
   // fallback
@@ -35,11 +35,12 @@ export async function GET(_req: NextRequest) {
   try {
     const svc = createServiceSupabaseClient();
     const { data } = await svc.from('app_settings').select('key,value,updated_at').in('key', ['admin_emails']).order('updated_at', { ascending: false });
-    const admin = data?.find((r: any) => r.key === 'admin_emails');
+    const admin = (data as Array<Record<string, unknown>> | null)?.find((r) => r.key === 'admin_emails');
     return NextResponse.json({ admin_emails: admin?.value ?? ['admin@publimicro.com.br'] });
-  } catch (err: any) {
-    console.error('settings proxy GET error', err);
-    return NextResponse.json({ error: err.message || String(err) }, { status: 500 });
+  } catch (err: unknown) {
+    const msg = err instanceof Error ? err.message : String(err);
+    console.error('settings proxy GET error', msg);
+    return NextResponse.json({ error: msg }, { status: 500 });
   }
 }
 
@@ -48,8 +49,10 @@ export async function POST(req: NextRequest) {
   if (!auth.ok) return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
 
   try {
-    const body = await req.json();
-    const list = body?.admin_emails;
+    const raw = await req.json() as unknown;
+    if (typeof raw !== 'object' || raw === null) return NextResponse.json({ error: 'invalid request body' }, { status: 400 });
+    const body = raw as { admin_emails?: unknown };
+    const list = Array.isArray(body.admin_emails) ? (body.admin_emails as Array<unknown>) : undefined;
     if (!Array.isArray(list)) return NextResponse.json({ error: 'admin_emails must be an array' }, { status: 400 });
 
     const svc = createServiceSupabaseClient();
@@ -65,9 +68,10 @@ export async function POST(req: NextRequest) {
     }
 
     return NextResponse.json({ ok: true, admin_emails: list });
-  } catch (err: any) {
-    console.error('settings proxy POST error', err);
-    return NextResponse.json({ error: err.message || String(err) }, { status: 500 });
+  } catch (err: unknown) {
+    const msg = err instanceof Error ? err.message : String(err);
+    console.error('settings proxy POST error', msg);
+    return NextResponse.json({ error: msg }, { status: 500 });
   }
 }
 

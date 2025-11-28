@@ -1,337 +1,465 @@
-'use client';
+"use client";
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import { VerificationGate, useVerificationStatus, VerificationBadge } from '@/components/verification/VerificationGate';
+import { createClientComponentClient } from '@supabase/auth-helpers-nextjs';
+import { Upload, X, MapPin, Home, DollarSign, Bed, Bath, Square, Calendar } from 'lucide-react';
 
-interface PricingPlan {
-  id: string;
-  name: string;
-  price: number;
-  interval: 'month' | 'year';
-  features: string[];
-  recommended?: boolean;
-  stripePriceId: string;
-}
-
-const PLANS: PricingPlan[] = [
-  {
-    id: 'basic',
-    name: 'Básico',
-    price: 0,
-    interval: 'month',
-    stripePriceId: '',
-    features: [
-      '5 anúncios ativos',
-      'Fotos básicas',
-      'Suporte por email',
-      'Visibilidade padrão',
-    ],
-  },
-  {
-    id: 'pro',
-    name: 'Profissional',
-    price: 49.90,
-    interval: 'month',
-    stripePriceId: process.env.NEXT_PUBLIC_STRIPE_PRICE_PRO || '',
-    recommended: true,
-    features: [
-      '✨ Anúncios ilimitados',
-      '🎯 5 Destaques por mês',
-      '📸 Até 20 fotos por anúncio',
-      '🚀 Impulsionamento básico',
-      '⭐ Selo verificado',
-      '📊 Estatísticas detalhadas',
-      '💬 Suporte prioritário',
-    ],
-  },
-  {
-    id: 'enterprise',
-    name: 'Empresarial',
-    price: 149.90,
-    interval: 'month',
-    stripePriceId: process.env.NEXT_PUBLIC_STRIPE_PRICE_ENTERPRISE || '',
-    features: [
-      '✨ Tudo do Profissional',
-      '🎯 Destaques ilimitados',
-      '🚀 Impulsionamento premium',
-      '🏆 Destaque na homepage',
-      '📈 Analytics avançado',
-      '🤝 Gerente de conta dedicado',
-      '📞 Suporte 24/7',
-      '🎨 Customização de perfil',
-    ],
-  },
+const PROPERTY_TYPES = [
+  { value: 'sitio', label: 'Sítio' },
+  { value: 'chacara', label: 'Chácara' },
+  { value: 'fazenda', label: 'Fazenda' },
+  { value: 'terreno_rural', label: 'Terreno Rural' },
+  { value: 'casa', label: 'Casa' },
+  { value: 'apartamento', label: 'Apartamento' },
+  { value: 'comercial', label: 'Comercial' },
+  { value: 'industrial', label: 'Industrial' },
 ];
 
-export default function AssinaturaPage() {
-  const [loading, setLoading] = useState<string | null>(null);
+export default function PostarPage() {
   const router = useRouter();
-  const { verified, status } = useVerificationStatus();
+  const supabase = createClientComponentClient();
+  
+  const [loading, setLoading] = useState(true);
+  const [submitting, setSubmitting] = useState(false);
+  const [user, setUser] = useState<any>(null);
+  
+  // Form state
+  const [propertyType, setPropertyType] = useState('sitio');
+  const [nome, setNome] = useState('');
+  const [descricao, setDescricao] = useState('');
+  const [preco, setPreco] = useState('');
+  const [localizacao, setLocalizacao] = useState('');
+  const [cidade, setCidade] = useState('');
+  const [estado, setEstado] = useState('');
+  const [cep, setCep] = useState('');
+  
+  // Property details
+  const [areaTotal, setAreaTotal] = useState('');
+  const [quartos, setQuartos] = useState('');
+  const [banheiros, setBanheiros] = useState('');
+  const [vagas, setVagas] = useState('');
+  const [anosConstrucao, setAnosConstrucao] = useState('');
+  
+  // Photos
+  const [photos, setPhotos] = useState<File[]>([]);
+  const [photoPreviews, setPhotoPreviews] = useState<string[]>([]);
+  
+  const [error, setError] = useState('');
+  const [success, setSuccess] = useState('');
 
-  const handleSubscribe = async (plan: PricingPlan) => {
-    if (plan.price === 0) {
-      router.push('/');
-      return;
-    }
+  useEffect(() => {
+    void checkAuth();
+  }, []);
 
-    setLoading(plan.id);
-
+  const checkAuth = async () => {
     try {
-      // Get auth token
-      const { createClientComponentClient } = await import('@supabase/auth-helpers-nextjs');
-      const supabase = createClientComponentClient();
-      const { data: { session } } = await supabase.auth.getSession();
-
-      if (!session) {
-        router.push('/entrar?redirect=/assinatura');
+      const { data: { user } } = await supabase.auth.getUser();
+      
+      if (!user) {
+        router.push('/entrar?redirect=/postar');
         return;
       }
-
-      // Create checkout session
-      const response = await fetch('/api/subscriptions/create-checkout', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${session.access_token}`,
-        },
-        body: JSON.stringify({
-          priceId: plan.stripePriceId,
-          planId: plan.id,
-        }),
-      });
-
-      const data = await response.json();
-
-      if (!response.ok) {
-        // Check if verification is required
-        if (data.requiresVerification) {
-          router.push('/verificacao');
-          return;
-        }
-        throw new Error(data.error || 'Erro ao criar checkout');
-      }
-
-      // Redirect to Stripe Checkout
-      if (data.url) {
-        window.location.href = data.url;
-      }
+      
+      setUser(user);
     } catch (error) {
-      console.error('Error creating checkout:', error);
-      alert('Erro ao processar assinatura. Tente novamente.');
+      console.error('Error checking auth:', error);
+      router.push('/entrar?redirect=/postar');
     } finally {
-      setLoading(null);
+      setLoading(false);
     }
   };
 
-  return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-blue-50 py-12 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-7xl mx-auto">
-        {/* Header */}
-        <div className="text-center mb-12">
-          <div className="inline-flex items-center gap-2 mb-4">
-            <h1 className="text-4xl font-bold text-gray-900">
-              Planos e Preços
-            </h1>
-            {verified && <VerificationBadge status="approved" />}
-          </div>
-          <p className="text-xl text-gray-600 max-w-2xl mx-auto">
-            Escolha o plano ideal para impulsionar seus negócios
-          </p>
-        </div>
+  const handlePhotoChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files) {
+      const newFiles = Array.from(e.target.files);
+      setPhotos([...photos, ...newFiles]);
+      
+      // Create previews
+      newFiles.forEach(file => {
+        const reader = new FileReader();
+        reader.onloadend = () => {
+          setPhotoPreviews(prev => [...prev, reader.result as string]);
+        };
+        reader.readAsDataURL(file);
+      });
+    }
+  };
 
-        {/* Verification Notice */}
-        {!verified && status !== 'not_started' && (
-          <div className="max-w-4xl mx-auto mb-8">
-            <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4 flex items-start gap-3">
-              <svg className="w-6 h-6 text-yellow-600 flex-shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
-              </svg>
-              <div className="flex-1">
-                <h3 className="text-sm font-medium text-yellow-900 mb-1">
-                  Verificação Necessária
-                </h3>
-                <p className="text-sm text-yellow-800">
-                  Complete sua verificação de identidade para assinar planos premium.{' '}
-                  <button
-                    onClick={() => router.push('/verificacao')}
-                    className="font-medium underline hover:text-yellow-900"
-                  >
-                    Verificar agora
-                  </button>
-                </p>
-              </div>
-            </div>
-          </div>
-        )}
+  const removePhoto = (index: number) => {
+    setPhotos(photos.filter((_, i) => i !== index));
+    setPhotoPreviews(photoPreviews.filter((_, i) => i !== index));
+  };
 
-        {/* Pricing Cards */}
-        <div className="grid md:grid-cols-3 gap-8 max-w-6xl mx-auto">
-          {PLANS.map((plan) => (
-            <div
-              key={plan.id}
-              className={`bg-white rounded-lg shadow-lg overflow-hidden ${
-                plan.recommended ? 'ring-2 ring-blue-500 transform scale-105' : ''
-              }`}
-            >
-              {plan.recommended && (
-                <div className="bg-gradient-to-r from-blue-600 to-indigo-600 text-white text-center py-2 text-sm font-medium">
-                  ⭐ Mais Popular
-                </div>
-              )}
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setError('');
+    setSuccess('');
+    setSubmitting(true);
 
-              <div className="p-8">
-                <h3 className="text-2xl font-bold text-gray-900 mb-2">
-                  {plan.name}
-                </h3>
+    try {
+      if (!user) {
+        setError('Você precisa estar logado para anunciar');
+        setSubmitting(false);
+        return;
+      }
 
-                <div className="mb-6">
-                  <span className="text-4xl font-bold text-gray-900">
-                    R$ {plan.price.toFixed(2)}
-                  </span>
-                  <span className="text-gray-600">/mês</span>
-                </div>
+      if (photos.length === 0) {
+        setError('Adicione pelo menos uma foto da propriedade');
+        setSubmitting(false);
+        return;
+      }
 
-                <ul className="space-y-3 mb-8">
-                  {plan.features.map((feature, index) => (
-                    <li key={index} className="flex items-start gap-2">
-                      <svg
-                        className="w-5 h-5 text-green-500 flex-shrink-0 mt-0.5"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                        stroke="currentColor"
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth={2}
-                          d="M5 13l4 4L19 7"
-                        />
-                      </svg>
-                      <span className="text-gray-700">{feature}</span>
-                    </li>
-                  ))}
-                </ul>
+      // Insert property
+      const { data: property, error: propertyError } = await supabase
+        .from('properties')
+        .insert({
+          user_id: user.id,
+          title: nome,
+          description: descricao,
+          price: parseFloat(preco.replace(/\D/g, '')),
+          address: localizacao,
+          city: cidade,
+          state: estado,
+          zip_code: cep,
+          property_type: propertyType,
+          transaction_type: 'sale', // Default to sale
+          total_area: areaTotal ? parseFloat(areaTotal) : null,
+          bedrooms: quartos ? parseInt(quartos) : null,
+          bathrooms: banheiros ? parseInt(banheiros) : null,
+          parking_spaces: vagas ? parseInt(vagas) : null,
+          year_built: anosConstrucao ? parseInt(anosConstrucao) : null,
+          status: 'active',
+        })
+        .select()
+        .single();
 
-                {plan.price === 0 ? (
-                  <button
-                    onClick={() => router.push('/')}
-                    className="w-full bg-gray-200 text-gray-700 py-3 px-4 rounded-lg font-medium hover:bg-gray-300 transition-colors"
-                  >
-                    Plano Atual
-                  </button>
-                ) : (
-                  <VerificationGate
-                    fallback={
-                      <button
-                        onClick={() => router.push('/verificacao')}
-                        className="w-full bg-blue-600 text-white py-3 px-4 rounded-lg font-medium hover:bg-blue-700 transition-colors flex items-center justify-center gap-2"
-                      >
-                        🔐 Verificar para Assinar
-                      </button>
-                    }
-                  >
-                    <button
-                      onClick={() => handleSubscribe(plan)}
-                      disabled={loading === plan.id}
-                      className={`w-full ${
-                        plan.recommended
-                          ? 'bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700'
-                          : 'bg-blue-600 hover:bg-blue-700'
-                      } text-white py-3 px-4 rounded-lg font-medium transition-colors disabled:opacity-50 disabled:cursor-not-allowed`}
-                    >
-                      {loading === plan.id ? (
-                        <span className="flex items-center justify-center gap-2">
-                          <svg className="animate-spin h-5 w-5" fill="none" viewBox="0 0 24 24">
-                            <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
-                            <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
-                          </svg>
-                          Processando...
-                        </span>
-                      ) : (
-                        'Assinar Agora'
-                      )}
-                    </button>
-                  </VerificationGate>
-                )}
-              </div>
-            </div>
-          ))}
-        </div>
+      if (propertyError) throw propertyError;
 
-        {/* FAQ */}
-        <div className="mt-16 max-w-3xl mx-auto">
-          <h2 className="text-2xl font-bold text-gray-900 text-center mb-8">
-            Perguntas Frequentes
-          </h2>
+      // Upload photos
+      for (let i = 0; i < photos.length; i++) {
+        const photo = photos[i];
+        const fileExt = photo.name.split('.').pop();
+        const fileName = `${property.id}/${Date.now()}_${i}.${fileExt}`;
 
-          <div className="bg-white rounded-lg shadow-lg p-8 space-y-6">
-            <details className="group">
-              <summary className="flex justify-between items-center cursor-pointer text-gray-900 font-medium">
-                Posso cancelar a qualquer momento?
-                <svg className="w-5 h-5 text-gray-500 group-open:rotate-180 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-                </svg>
-              </summary>
-              <p className="mt-2 text-gray-600 text-sm">
-                Sim! Você pode cancelar sua assinatura a qualquer momento. Seus benefícios continuarão até o final do período pago.
-              </p>
-            </details>
+        const { error: uploadError } = await supabase.storage
+          .from('property-photos')
+          .upload(fileName, photo);
 
-            <details className="group">
-              <summary className="flex justify-between items-center cursor-pointer text-gray-900 font-medium">
-                Por que preciso verificar minha identidade?
-                <svg className="w-5 h-5 text-gray-500 group-open:rotate-180 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-                </svg>
-              </summary>
-              <p className="mt-2 text-gray-600 text-sm">
-                A verificação garante segurança para todos os usuários, previne fraudes e aumenta a confiança nas transações da plataforma.
-              </p>
-            </details>
+        if (uploadError) throw uploadError;
 
-            <details className="group">
-              <summary className="flex justify-between items-center cursor-pointer text-gray-900 font-medium">
-                Posso mudar de plano depois?
-                <svg className="w-5 h-5 text-gray-500 group-open:rotate-180 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-                </svg>
-              </summary>
-              <p className="mt-2 text-gray-600 text-sm">
-                Sim! Você pode fazer upgrade ou downgrade do seu plano a qualquer momento. O valor será ajustado proporcionalmente.
-              </p>
-            </details>
+        const { data: { publicUrl } } = supabase.storage
+          .from('property-photos')
+          .getPublicUrl(fileName);
 
-            <details className="group">
-              <summary className="flex justify-between items-center cursor-pointer text-gray-900 font-medium">
-                Quais formas de pagamento são aceitas?
-                <svg className="w-5 h-5 text-gray-500 group-open:rotate-180 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-                </svg>
-              </summary>
-              <p className="mt-2 text-gray-600 text-sm">
-                Aceitamos cartões de crédito (Visa, Mastercard, Amex) via Stripe. Em breve: Pix, boleto bancário e débito.
-              </p>
-            </details>
-          </div>
-        </div>
+        // Insert photo record
+        await supabase
+          .from('property_photos')
+          .insert({
+            property_id: property.id,
+            url: publicUrl,
+            is_cover: i === 0,
+            display_order: i,
+          });
+      }
 
-        {/* CTA */}
-        <div className="mt-16 text-center">
-          <p className="text-gray-600 mb-4">
-            Ainda tem dúvidas? Entre em contato com nosso time de suporte.
-          </p>
-          <a
-            href="/contato"
-            className="text-blue-600 hover:text-blue-700 font-medium underline"
-          >
-            Falar com Suporte →
-          </a>
-        </div>
+      setSuccess('Propriedade anunciada com sucesso!');
+      
+      // Redirect to property page
+      setTimeout(() => {
+        router.push(`/imoveis/${property.id}`);
+      }, 2000);
+
+    } catch (error: any) {
+      console.error('Error posting property:', error);
+      setError(error.message || 'Erro ao anunciar propriedade. Tente novamente.');
+    } finally {
+      setSubmitting(false);
+    }
+  };
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-gradient-to-b from-[#0a0a0a] via-[#1a1a1a] to-[#0a0a0a] flex items-center justify-center">
+        <div className="text-[#D4A574] text-xl">Carregando...</div>
       </div>
-    </div>
+    );
+  }
+
+  return (
+    <main className="min-h-screen bg-gradient-to-b from-[#0a0a0a] via-[#1a1a1a] to-[#0a0a0a] py-12 px-6">
+      <div className="max-w-4xl mx-auto">
+        <div className="text-center mb-8">
+          <h1 className="text-4xl font-black text-transparent bg-clip-text bg-gradient-to-r from-[#A8C97F] to-[#0D7377] mb-4">
+            Anunciar Propriedade
+          </h1>
+          <p className="text-[#676767]">Preencha os dados para anunciar sua propriedade gratuitamente</p>
+        </div>
+
+        <form onSubmit={handleSubmit} className="bg-[#2a2a2a] border-2 border-[#3a3a3a] rounded-2xl p-8 space-y-6">
+          {/* Property Type */}
+          <div>
+            <label className="block text-[#D4A574] font-semibold mb-2">Tipo de Propriedade *</label>
+            <select
+              value={propertyType}
+              onChange={(e) => setPropertyType(e.target.value)}
+              className="w-full px-4 py-3 bg-[#1a1a1a] border border-[#3a3a3a] text-[#D4A574] rounded-lg focus:outline-none focus:border-[#A8C97F]"
+              required
+            >
+              {PROPERTY_TYPES.map(type => (
+                <option key={type.value} value={type.value}>{type.label}</option>
+              ))}
+            </select>
+          </div>
+
+          {/* Name */}
+          <div>
+            <label className="block text-[#D4A574] font-semibold mb-2">
+              <Home className="w-4 h-4 inline mr-2" />
+              Nome da Propriedade *
+            </label>
+            <input
+              type="text"
+              value={nome}
+              onChange={(e) => setNome(e.target.value)}
+              placeholder="Ex: Sítio Recanto das Águas"
+              className="w-full px-4 py-3 bg-[#1a1a1a] border border-[#3a3a3a] text-[#D4A574] rounded-lg focus:outline-none focus:border-[#A8C97F]"
+              required
+            />
+          </div>
+
+          {/* Description */}
+          <div>
+            <label className="block text-[#D4A574] font-semibold mb-2">Descrição *</label>
+            <textarea
+              value={descricao}
+              onChange={(e) => setDescricao(e.target.value)}
+              placeholder="Descreva sua propriedade, destacando suas características principais..."
+              rows={5}
+              className="w-full px-4 py-3 bg-[#1a1a1a] border border-[#3a3a3a] text-[#D4A574] rounded-lg focus:outline-none focus:border-[#A8C97F]"
+              required
+            />
+          </div>
+
+          {/* Price */}
+          <div>
+            <label className="block text-[#D4A574] font-semibold mb-2">
+              <DollarSign className="w-4 h-4 inline mr-2" />
+              Preço (R$) *
+            </label>
+            <input
+              type="text"
+              value={preco}
+              onChange={(e) => {
+                const value = e.target.value.replace(/\D/g, '');
+                setPreco(value ? parseInt(value).toLocaleString('pt-BR') : '');
+              }}
+              placeholder="Ex: 850.000"
+              className="w-full px-4 py-3 bg-[#1a1a1a] border border-[#3a3a3a] text-[#D4A574] rounded-lg focus:outline-none focus:border-[#A8C97F]"
+              required
+            />
+          </div>
+
+          {/* Location */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+              <label className="block text-[#D4A574] font-semibold mb-2">
+                <MapPin className="w-4 h-4 inline mr-2" />
+                Cidade *
+              </label>
+              <input
+                type="text"
+                value={cidade}
+                onChange={(e) => setCidade(e.target.value)}
+                placeholder="Ex: Planaltina"
+                className="w-full px-4 py-3 bg-[#1a1a1a] border border-[#3a3a3a] text-[#D4A574] rounded-lg focus:outline-none focus:border-[#A8C97F]"
+                required
+              />
+            </div>
+            <div>
+              <label className="block text-[#D4A574] font-semibold mb-2">Estado *</label>
+              <input
+                type="text"
+                value={estado}
+                onChange={(e) => setEstado(e.target.value)}
+                placeholder="Ex: Goiás"
+                className="w-full px-4 py-3 bg-[#1a1a1a] border border-[#3a3a3a] text-[#D4A574] rounded-lg focus:outline-none focus:border-[#A8C97F]"
+                required
+              />
+            </div>
+          </div>
+
+          <div>
+            <label className="block text-[#D4A574] font-semibold mb-2">Endereço/Localização *</label>
+            <input
+              type="text"
+              value={localizacao}
+              onChange={(e) => setLocalizacao(e.target.value)}
+              placeholder="Ex: Rodovia GO-118, Km 25"
+              className="w-full px-4 py-3 bg-[#1a1a1a] border border-[#3a3a3a] text-[#D4A574] rounded-lg focus:outline-none focus:border-[#A8C97F]"
+              required
+            />
+          </div>
+
+          <div>
+            <label className="block text-[#D4A574] font-semibold mb-2">CEP</label>
+            <input
+              type="text"
+              value={cep}
+              onChange={(e) => setCep(e.target.value)}
+              placeholder="Ex: 73000-000"
+              className="w-full px-4 py-3 bg-[#1a1a1a] border border-[#3a3a3a] text-[#D4A574] rounded-lg focus:outline-none focus:border-[#A8C97F]"
+            />
+          </div>
+
+          {/* Property Details */}
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+            <div>
+              <label className="block text-[#D4A574] font-semibold mb-2">
+                <Square className="w-4 h-4 inline mr-2" />
+                Área (m²)
+              </label>
+              <input
+                type="number"
+                value={areaTotal}
+                onChange={(e) => setAreaTotal(e.target.value)}
+                placeholder="Ex: 50000"
+                className="w-full px-4 py-3 bg-[#1a1a1a] border border-[#3a3a3a] text-[#D4A574] rounded-lg focus:outline-none focus:border-[#A8C97F]"
+              />
+            </div>
+            <div>
+              <label className="block text-[#D4A574] font-semibold mb-2">
+                <Bed className="w-4 h-4 inline mr-2" />
+                Quartos
+              </label>
+              <input
+                type="number"
+                value={quartos}
+                onChange={(e) => setQuartos(e.target.value)}
+                placeholder="Ex: 4"
+                className="w-full px-4 py-3 bg-[#1a1a1a] border border-[#3a3a3a] text-[#D4A574] rounded-lg focus:outline-none focus:border-[#A8C97F]"
+              />
+            </div>
+            <div>
+              <label className="block text-[#D4A574] font-semibold mb-2">
+                <Bath className="w-4 h-4 inline mr-2" />
+                Banheiros
+              </label>
+              <input
+                type="number"
+                value={banheiros}
+                onChange={(e) => setBanheiros(e.target.value)}
+                placeholder="Ex: 3"
+                className="w-full px-4 py-3 bg-[#1a1a1a] border border-[#3a3a3a] text-[#D4A574] rounded-lg focus:outline-none focus:border-[#A8C97F]"
+              />
+            </div>
+            <div>
+              <label className="block text-[#D4A574] font-semibold mb-2">Vagas</label>
+              <input
+                type="number"
+                value={vagas}
+                onChange={(e) => setVagas(e.target.value)}
+                placeholder="Ex: 2"
+                className="w-full px-4 py-3 bg-[#1a1a1a] border border-[#3a3a3a] text-[#D4A574] rounded-lg focus:outline-none focus:border-[#A8C97F]"
+              />
+            </div>
+          </div>
+
+          <div>
+            <label className="block text-[#D4A574] font-semibold mb-2">
+              <Calendar className="w-4 h-4 inline mr-2" />
+              Ano de Construção
+            </label>
+            <input
+              type="number"
+              value={anosConstrucao}
+              onChange={(e) => setAnosConstrucao(e.target.value)}
+              placeholder="Ex: 2015"
+              className="w-full px-4 py-3 bg-[#1a1a1a] border border-[#3a3a3a] text-[#D4A574] rounded-lg focus:outline-none focus:border-[#A8C97F]"
+            />
+          </div>
+
+          {/* Photos */}
+          <div>
+            <label className="block text-[#D4A574] font-semibold mb-2">
+              <Upload className="w-4 h-4 inline mr-2" />
+              Fotos da Propriedade * (mínimo 1)
+            </label>
+            <input
+              type="file"
+              accept="image/*"
+              multiple
+              onChange={handlePhotoChange}
+              className="w-full px-4 py-3 bg-[#1a1a1a] border border-[#3a3a3a] text-[#676767] rounded-lg focus:outline-none focus:border-[#A8C97F]"
+            />
+            
+            {photoPreviews.length > 0 && (
+              <div className="grid grid-cols-3 md:grid-cols-5 gap-4 mt-4">
+                {photoPreviews.map((preview, index) => (
+                  <div key={index} className="relative group">
+                    <img 
+                      src={preview} 
+                      alt={`Preview ${index + 1}`} 
+                      className="w-full h-24 object-cover rounded-lg border border-[#3a3a3a]"
+                    />
+                    <button
+                      type="button"
+                      onClick={() => removePhoto(index)}
+                      className="absolute top-1 right-1 bg-red-500 text-white p-1 rounded-full opacity-0 group-hover:opacity-100 transition"
+                    >
+                      <X className="w-4 h-4" />
+                    </button>
+                    {index === 0 && (
+                      <span className="absolute bottom-1 left-1 bg-[#A8C97F] text-[#0a0a0a] text-xs px-2 py-1 rounded">
+                        Capa
+                      </span>
+                    )}
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+
+          {/* Error/Success Messages */}
+          {error && (
+            <div className="p-4 bg-red-900/20 border border-red-500/50 text-red-400 rounded-lg">
+              {error}
+            </div>
+          )}
+
+          {success && (
+            <div className="p-4 bg-green-900/20 border border-green-500/50 text-green-400 rounded-lg">
+              {success}
+            </div>
+          )}
+
+          {/* Submit Button */}
+          <button
+            type="submit"
+            disabled={submitting}
+            className="w-full px-8 py-4 bg-gradient-to-r from-[#A8C97F] to-[#0D7377] text-white font-bold rounded-lg hover:scale-105 transition disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100"
+          >
+            {submitting ? 'Publicando...' : 'Publicar Anúncio'}
+          </button>
+        </form>
+      </div>
+    </main>
   );
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

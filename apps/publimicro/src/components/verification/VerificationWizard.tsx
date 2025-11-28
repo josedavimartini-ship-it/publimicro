@@ -146,7 +146,7 @@ export default function VerificationWizard() {
   };
 
   const pollVerificationStatus = () => {
-    const interval = setInterval(void async () => {
+    const interval = setInterval(async () => {
       try {
         const response = await fetch('/api/verification/status');
         const data = await response.json();

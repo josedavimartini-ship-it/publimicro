@@ -3,17 +3,6 @@ import Link from "next/link";
 export default function PropertyHighlights() {
   // This will be replaced with real data from Supabase
 
-    {
-      id: 1,
-      title: "Casa com 3 quartos",
-      location: "Uberlândia, MG",
-      price: "R$ 450.000",
-      image: "/placeholder-property.jpg",
-      type: "Urbano"
-    },
-    // Add more mock data as needed
-  ];
-
   return (
     <section className="py-12 px-4 sm:px-6">
       <div className="max-w-7xl mx-auto">
@@ -82,4 +71,3 @@ export default function PropertyHighlights() {
     </section>
   );
 }
-

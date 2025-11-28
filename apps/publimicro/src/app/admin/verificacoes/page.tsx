@@ -1,696 +1,465 @@
-'use client';
+"use client";
 
-import { useEffect, useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { createClientComponentClient } from '@supabase/auth-helpers-nextjs';
+import { Upload, X, MapPin, Home, DollarSign, Bed, Bath, Square, Calendar } from 'lucide-react';
 
-interface Verification {
-  id: string;
-  user_id: string;
-  cpf: string;
-  full_name: string;
-  date_of_birth: string;
-  phone_number: string;
-  document_type: string;
-  document_number: string;
-  document_front_url: string;
-  document_back_url: string | null;
-  selfie_url: string;
-  status: 'pending' | 'approved' | 'rejected' | 'manual_review';
-  cpf_check_status: string | null;
-  criminal_check_status: string | null;
-  rejection_reason: string | null;
-  admin_notes: string | null;
-  created_at: string;
-  user_profiles: {
-    full_name: string;
-    email: string;
-    phone_number: string;
-  };
-}
+const PROPERTY_TYPES = [
+  { value: 'sitio', label: 'Sítio' },
+  { value: 'chacara', label: 'Chácara' },
+  { value: 'fazenda', label: 'Fazenda' },
+  { value: 'terreno_rural', label: 'Terreno Rural' },
+  { value: 'casa', label: 'Casa' },
+  { value: 'apartamento', label: 'Apartamento' },
+  { value: 'comercial', label: 'Comercial' },
+  { value: 'industrial', label: 'Industrial' },
+];
 
-export default function AdminVerificationsPage() {
-  const [verifications, setVerifications] = useState<Verification[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [statusFilter, setStatusFilter] = useState('manual_review');
-  const [searchQuery, setSearchQuery] = useState('');
-  const [selectedVerification, setSelectedVerification] = useState<Verification | null>(null);
-  const [showModal, setShowModal] = useState(false);
-  const [modalAction, setModalAction] = useState<'approve' | 'reject' | null>(null);
-  const [actionNotes, setActionNotes] = useState('');
-  const [rejectionReason, setRejectionReason] = useState('');
-  const [actionLoading, setActionLoading] = useState(false);
-
+export default function PostarPage() {
   const router = useRouter();
   const supabase = createClientComponentClient();
+  
+  const [loading, setLoading] = useState(true);
+  const [submitting, setSubmitting] = useState(false);
+  const [user, setUser] = useState<any>(null);
+  
+  // Form state
+  const [propertyType, setPropertyType] = useState('sitio');
+  const [nome, setNome] = useState('');
+  const [descricao, setDescricao] = useState('');
+  const [preco, setPreco] = useState('');
+  const [localizacao, setLocalizacao] = useState('');
+  const [cidade, setCidade] = useState('');
+  const [estado, setEstado] = useState('');
+  const [cep, setCep] = useState('');
+  
+  // Property details
+  const [areaTotal, setAreaTotal] = useState('');
+  const [quartos, setQuartos] = useState('');
+  const [banheiros, setBanheiros] = useState('');
+  const [vagas, setVagas] = useState('');
+  const [anosConstrucao, setAnosConstrucao] = useState('');
+  
+  // Photos
+  const [photos, setPhotos] = useState<File[]>([]);
+  const [photoPreviews, setPhotoPreviews] = useState<string[]>([]);
+  
+  const [error, setError] = useState('');
+  const [success, setSuccess] = useState('');
 
   useEffect(() => {
-    void checkAdminAccess();
+    void checkAuth();
   }, []);
 
-  useEffect(() => {
-    if (loading === false) {
-      void fetchVerifications();
-    }
-  }, [statusFilter, searchQuery, loading]);
-
-  const checkAdminAccess = async () => {
+  const checkAuth = async () => {
     try {
-      const { data: { session } } = await supabase.auth.getSession();
+      const { data: { user } } = await supabase.auth.getUser();
       
-      if (!session) {
-        router.push('/entrar?redirect=/admin/verificacoes');
+      if (!user) {
+        router.push('/entrar?redirect=/postar');
+        return;
+      }
+      
+      setUser(user);
+    } catch (error) {
+      console.error('Error checking auth:', error);
+      router.push('/entrar?redirect=/postar');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handlePhotoChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files) {
+      const newFiles = Array.from(e.target.files);
+      setPhotos([...photos, ...newFiles]);
+      
+      // Create previews
+      newFiles.forEach(file => {
+        const reader = new FileReader();
+        reader.onloadend = () => {
+          setPhotoPreviews(prev => [...prev, reader.result as string]);
+        };
+        reader.readAsDataURL(file);
+      });
+    }
+  };
+
+  const removePhoto = (index: number) => {
+    setPhotos(photos.filter((_, i) => i !== index));
+    setPhotoPreviews(photoPreviews.filter((_, i) => i !== index));
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setError('');
+    setSuccess('');
+    setSubmitting(true);
+
+    try {
+      if (!user) {
+        setError('Você precisa estar logado para anunciar');
+        setSubmitting(false);
         return;
       }
 
-      const { data: profile } = await supabase
-        .from('user_profiles')
-        .select('role')
-        .eq('user_id', session.user.id)
+      if (photos.length === 0) {
+        setError('Adicione pelo menos uma foto da propriedade');
+        setSubmitting(false);
+        return;
+      }
+
+      // Insert property
+      const { data: property, error: propertyError } = await supabase
+        .from('properties')
+        .insert({
+          user_id: user.id,
+          title: nome,
+          description: descricao,
+          price: parseFloat(preco.replace(/\D/g, '')),
+          address: localizacao,
+          city: cidade,
+          state: estado,
+          zip_code: cep,
+          property_type: propertyType,
+          transaction_type: 'sale', // Default to sale
+          total_area: areaTotal ? parseFloat(areaTotal) : null,
+          bedrooms: quartos ? parseInt(quartos) : null,
+          bathrooms: banheiros ? parseInt(banheiros) : null,
+          parking_spaces: vagas ? parseInt(vagas) : null,
+          year_built: anosConstrucao ? parseInt(anosConstrucao) : null,
+          status: 'active',
+        })
+        .select()
         .single();
 
-      if (profile?.role !== 'admin') {
-        router.push('/');
-        return;
+      if (propertyError) throw propertyError;
+
+      // Upload photos
+      for (let i = 0; i < photos.length; i++) {
+        const photo = photos[i];
+        const fileExt = photo.name.split('.').pop();
+        const fileName = `${property.id}/${Date.now()}_${i}.${fileExt}`;
+
+        const { error: uploadError } = await supabase.storage
+          .from('property-photos')
+          .upload(fileName, photo);
+
+        if (uploadError) throw uploadError;
+
+        const { data: { publicUrl } } = supabase.storage
+          .from('property-photos')
+          .getPublicUrl(fileName);
+
+        // Insert photo record
+        await supabase
+          .from('property_photos')
+          .insert({
+            property_id: property.id,
+            url: publicUrl,
+            is_cover: i === 0,
+            display_order: i,
+          });
       }
 
-      setLoading(false);
-    } catch (error) {
-      console.error('Admin access check error:', error);
-      router.push('/');
-    }
-  };
+      setSuccess('Propriedade anunciada com sucesso!');
+      
+      // Redirect to property page
+      setTimeout(() => {
+        router.push(`/imoveis/${property.id}`);
+      }, 2000);
 
-  const fetchVerifications = async () => {
-    try {
-      const params = new URLSearchParams({
-        status: statusFilter,
-        search: searchQuery,
-      });
-
-      const response = await fetch(`/api/admin/verifications?${params}`);
-      const data = await response.json();
-
-      if (response.ok) {
-        setVerifications(data.verifications || []);
-      }
-    } catch (error) {
-      console.error('Error fetching verifications:', error);
-    }
-  };
-
-  const handleApprove = async () => {
-    if (!selectedVerification) return;
-
-    setActionLoading(true);
-    try {
-      const response = await fetch(
-        `/api/admin/verifications/${selectedVerification.id}/approve`,
-        {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ notes: actionNotes }),
-        }
-      );
-
-      if (response.ok) {
-        setShowModal(false);
-        setSelectedVerification(null);
-        setActionNotes('');
-        void fetchVerifications();
-      } else {
-        alert('Erro ao aprovar verificação');
-      }
-    } catch (error) {
-      console.error('Error approving verification:', error);
-      alert('Erro ao aprovar verificação');
+    } catch (error: any) {
+      console.error('Error posting property:', error);
+      setError(error.message || 'Erro ao anunciar propriedade. Tente novamente.');
     } finally {
-      setActionLoading(false);
+      setSubmitting(false);
     }
-  };
-
-  const handleReject = async () => {
-    if (!selectedVerification || !rejectionReason) {
-      alert('Motivo da rejeição é obrigatório');
-      return;
-    }
-
-    setActionLoading(true);
-    try {
-      const response = await fetch(
-        `/api/admin/verifications/${selectedVerification.id}/reject`,
-        {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ 
-            reason: rejectionReason,
-            notes: actionNotes 
-          }),
-        }
-      );
-
-      if (response.ok) {
-        setShowModal(false);
-        setSelectedVerification(null);
-        setActionNotes('');
-        setRejectionReason('');
-        void fetchVerifications();
-      } else {
-        alert('Erro ao rejeitar verificação');
-      }
-    } catch (error) {
-      console.error('Error rejecting verification:', error);
-      alert('Erro ao rejeitar verificação');
-    } finally {
-      setActionLoading(false);
-    }
-  };
-
-  const openActionModal = (verification: Verification, action: 'approve' | 'reject') => {
-    setSelectedVerification(verification);
-    setModalAction(action);
-    setShowModal(true);
-  };
-
-  const formatDate = (date: string) => {
-    return new Date(date).toLocaleString('pt-BR');
-  };
-
-  const getStatusBadge = (status: string) => {
-    const styles = {
-      pending: 'bg-yellow-100 text-yellow-800',
-      manual_review: 'bg-blue-100 text-blue-800',
-      approved: 'bg-green-100 text-green-800',
-      rejected: 'bg-red-100 text-red-800',
-    };
-
-    const labels = {
-      pending: 'Pendente',
-      manual_review: 'Revisão Manual',
-      approved: 'Aprovado',
-      rejected: 'Rejeitado',
-    };
-
-    return (
-      <span className={`px-3 py-1 rounded-full text-xs font-medium ${styles[status as keyof typeof styles]}`}>
-        {labels[status as keyof typeof labels]}
-      </span>
-    );
   };
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="text-center">
-          <div className="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mb-4" />
-          <p className="text-gray-600">Carregando...</p>
-        </div>
+      <div className="min-h-screen bg-gradient-to-b from-[#0a0a0a] via-[#1a1a1a] to-[#0a0a0a] flex items-center justify-center">
+        <div className="text-[#D4A574] text-xl">Carregando...</div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 py-8 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-7xl mx-auto">
-        {/* Header */}
-        <div className="mb-8">
-          <h1 className="text-3xl font-bold text-gray-900 mb-2">
-            Fila de Verificações
+    <main className="min-h-screen bg-gradient-to-b from-[#0a0a0a] via-[#1a1a1a] to-[#0a0a0a] py-12 px-6">
+      <div className="max-w-4xl mx-auto">
+        <div className="text-center mb-8">
+          <h1 className="text-4xl font-black text-transparent bg-clip-text bg-gradient-to-r from-[#A8C97F] to-[#0D7377] mb-4">
+            Anunciar Propriedade
           </h1>
-          <p className="text-gray-600">
-            Gerencie solicitações de verificação de identidade
-          </p>
+          <p className="text-[#676767]">Preencha os dados para anunciar sua propriedade gratuitamente</p>
         </div>
 
-        {/* Filters */}
-        <div className="bg-white rounded-lg shadow p-6 mb-6">
-          <div className="grid md:grid-cols-2 gap-4">
-            {/* Status Filter */}
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                Filtrar por Status
-              </label>
-              <select
-                value={statusFilter}
-                onChange={(e) => setStatusFilter(e.target.value)}
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-              >
-                <option value="all">Todos</option>
-                <option value="manual_review">Revisão Manual</option>
-                <option value="pending">Pendentes</option>
-                <option value="approved">Aprovados</option>
-                <option value="rejected">Rejeitados</option>
-              </select>
-            </div>
+        <form onSubmit={handleSubmit} className="bg-[#2a2a2a] border-2 border-[#3a3a3a] rounded-2xl p-8 space-y-6">
+          {/* Property Type */}
+          <div>
+            <label className="block text-[#D4A574] font-semibold mb-2">Tipo de Propriedade *</label>
+            <select
+              value={propertyType}
+              onChange={(e) => setPropertyType(e.target.value)}
+              className="w-full px-4 py-3 bg-[#1a1a1a] border border-[#3a3a3a] text-[#D4A574] rounded-lg focus:outline-none focus:border-[#A8C97F]"
+              required
+            >
+              {PROPERTY_TYPES.map(type => (
+                <option key={type.value} value={type.value}>{type.label}</option>
+              ))}
+            </select>
+          </div>
 
-            {/* Search */}
+          {/* Name */}
+          <div>
+            <label className="block text-[#D4A574] font-semibold mb-2">
+              <Home className="w-4 h-4 inline mr-2" />
+              Nome da Propriedade *
+            </label>
+            <input
+              type="text"
+              value={nome}
+              onChange={(e) => setNome(e.target.value)}
+              placeholder="Ex: Sítio Recanto das Águas"
+              className="w-full px-4 py-3 bg-[#1a1a1a] border border-[#3a3a3a] text-[#D4A574] rounded-lg focus:outline-none focus:border-[#A8C97F]"
+              required
+            />
+          </div>
+
+          {/* Description */}
+          <div>
+            <label className="block text-[#D4A574] font-semibold mb-2">Descrição *</label>
+            <textarea
+              value={descricao}
+              onChange={(e) => setDescricao(e.target.value)}
+              placeholder="Descreva sua propriedade, destacando suas características principais..."
+              rows={5}
+              className="w-full px-4 py-3 bg-[#1a1a1a] border border-[#3a3a3a] text-[#D4A574] rounded-lg focus:outline-none focus:border-[#A8C97F]"
+              required
+            />
+          </div>
+
+          {/* Price */}
+          <div>
+            <label className="block text-[#D4A574] font-semibold mb-2">
+              <DollarSign className="w-4 h-4 inline mr-2" />
+              Preço (R$) *
+            </label>
+            <input
+              type="text"
+              value={preco}
+              onChange={(e) => {
+                const value = e.target.value.replace(/\D/g, '');
+                setPreco(value ? parseInt(value).toLocaleString('pt-BR') : '');
+              }}
+              placeholder="Ex: 850.000"
+              className="w-full px-4 py-3 bg-[#1a1a1a] border border-[#3a3a3a] text-[#D4A574] rounded-lg focus:outline-none focus:border-[#A8C97F]"
+              required
+            />
+          </div>
+
+          {/* Location */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                Buscar por Nome ou CPF
+              <label className="block text-[#D4A574] font-semibold mb-2">
+                <MapPin className="w-4 h-4 inline mr-2" />
+                Cidade *
               </label>
               <input
                 type="text"
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                placeholder="Digite nome ou CPF..."
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                value={cidade}
+                onChange={(e) => setCidade(e.target.value)}
+                placeholder="Ex: Planaltina"
+                className="w-full px-4 py-3 bg-[#1a1a1a] border border-[#3a3a3a] text-[#D4A574] rounded-lg focus:outline-none focus:border-[#A8C97F]"
+                required
+              />
+            </div>
+            <div>
+              <label className="block text-[#D4A574] font-semibold mb-2">Estado *</label>
+              <input
+                type="text"
+                value={estado}
+                onChange={(e) => setEstado(e.target.value)}
+                placeholder="Ex: Goiás"
+                className="w-full px-4 py-3 bg-[#1a1a1a] border border-[#3a3a3a] text-[#D4A574] rounded-lg focus:outline-none focus:border-[#A8C97F]"
+                required
               />
             </div>
           </div>
-        </div>
 
-        {/* Stats */}
-        <div className="grid md:grid-cols-4 gap-4 mb-6">
-          <div className="bg-white rounded-lg shadow p-4">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-sm text-gray-600">Aguardando Revisão</p>
-                <p className="text-2xl font-bold text-blue-600">
-                  {verifications.filter(v => v.status === 'manual_review').length}
-                </p>
-              </div>
-              <div className="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center">
-                <svg className="w-6 h-6 text-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-                </svg>
-              </div>
-            </div>
+          <div>
+            <label className="block text-[#D4A574] font-semibold mb-2">Endereço/Localização *</label>
+            <input
+              type="text"
+              value={localizacao}
+              onChange={(e) => setLocalizacao(e.target.value)}
+              placeholder="Ex: Rodovia GO-118, Km 25"
+              className="w-full px-4 py-3 bg-[#1a1a1a] border border-[#3a3a3a] text-[#D4A574] rounded-lg focus:outline-none focus:border-[#A8C97F]"
+              required
+            />
           </div>
 
-          <div className="bg-white rounded-lg shadow p-4">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-sm text-gray-600">Aprovados Hoje</p>
-                <p className="text-2xl font-bold text-green-600">
-                  {verifications.filter(v => 
-                    v.status === 'approved' && 
-                    new Date(v.created_at).toDateString() === new Date().toDateString()
-                  ).length}
-                </p>
-              </div>
-              <div className="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center">
-                <svg className="w-6 h-6 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                </svg>
-              </div>
-            </div>
+          <div>
+            <label className="block text-[#D4A574] font-semibold mb-2">CEP</label>
+            <input
+              type="text"
+              value={cep}
+              onChange={(e) => setCep(e.target.value)}
+              placeholder="Ex: 73000-000"
+              className="w-full px-4 py-3 bg-[#1a1a1a] border border-[#3a3a3a] text-[#D4A574] rounded-lg focus:outline-none focus:border-[#A8C97F]"
+            />
           </div>
 
-          <div className="bg-white rounded-lg shadow p-4">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-sm text-gray-600">Rejeitados Hoje</p>
-                <p className="text-2xl font-bold text-red-600">
-                  {verifications.filter(v => 
-                    v.status === 'rejected' && 
-                    new Date(v.created_at).toDateString() === new Date().toDateString()
-                  ).length}
-                </p>
-              </div>
-              <div className="w-12 h-12 bg-red-100 rounded-full flex items-center justify-center">
-                <svg className="w-6 h-6 text-red-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                </svg>
-              </div>
-            </div>
-          </div>
-
-          <div className="bg-white rounded-lg shadow p-4">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-sm text-gray-600">Total</p>
-                <p className="text-2xl font-bold text-gray-900">
-                  {verifications.length}
-                </p>
-              </div>
-              <div className="w-12 h-12 bg-gray-100 rounded-full flex items-center justify-center">
-                <svg className="w-6 h-6 text-gray-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-                </svg>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        {/* Verifications Table */}
-        <div className="bg-white rounded-lg shadow overflow-hidden">
-          <div className="overflow-x-auto">
-            <table className="min-w-full divide-y divide-gray-200">
-              <thead className="bg-gray-50">
-                <tr>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    Usuário
-                  </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    CPF
-                  </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    Documento
-                  </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    Status
-                  </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    Data
-                  </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    Ações
-                  </th>
-                </tr>
-              </thead>
-              <tbody className="bg-white divide-y divide-gray-200">
-                {verifications.length === 0 ? (
-                  <tr>
-                    <td colSpan={6} className="px-6 py-12 text-center text-gray-500">
-                      Nenhuma verificação encontrada
-                    </td>
-                  </tr>
-                ) : (
-                  verifications.map((verification) => (
-                    <tr key={verification.id} className="hover:bg-gray-50">
-                      <td className="px-6 py-4 whitespace-nowrap">
-                        <div>
-                          <div className="text-sm font-medium text-gray-900">
-                            {verification.full_name}
-                          </div>
-                          <div className="text-sm text-gray-500">
-                            {verification.user_profiles?.email}
-                          </div>
-                        </div>
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                        {verification.cpf}
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                        {verification.document_type.toUpperCase()} - {verification.document_number}
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap">
-                        {getStatusBadge(verification.status)}
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                        {formatDate(verification.created_at)}
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm font-medium space-x-2">
-                        <button
-                          onClick={() => setSelectedVerification(verification)}
-                          className="text-blue-600 hover:text-blue-900"
-                        >
-                          Ver Documentos
-                        </button>
-                        {verification.status === 'manual_review' && (
-                          <>
-                            <button
-                              onClick={() => openActionModal(verification, 'approve')}
-                              className="text-green-600 hover:text-green-900"
-                            >
-                              Aprovar
-                            </button>
-                            <button
-                              onClick={() => openActionModal(verification, 'reject')}
-                              className="text-red-600 hover:text-red-900"
-                            >
-                              Rejeitar
-                            </button>
-                          </>
-                        )}
-                      </td>
-                    </tr>
-                  ))
-                )}
-              </tbody>
-            </table>
-          </div>
-        </div>
-      </div>
-
-      {/* Document Viewer Modal */}
-      {selectedVerification && !showModal && (
-        <DocumentViewerModal
-          verification={selectedVerification}
-          onClose={() => setSelectedVerification(null)}
-          onApprove={() => openActionModal(selectedVerification, 'approve')}
-          onReject={() => openActionModal(selectedVerification, 'reject')}
-        />
-      )}
-
-      {/* Action Modal */}
-      {showModal && selectedVerification && (
-        <ActionModal
-          action={modalAction!}
-          verification={selectedVerification}
-          notes={actionNotes}
-          setNotes={setActionNotes}
-          rejectionReason={rejectionReason}
-          setRejectionReason={setRejectionReason}
-          loading={actionLoading}
-          onConfirm={modalAction === 'approve' ? handleApprove : handleReject}
-          onCancel={() => {
-            setShowModal(false);
-            setActionNotes('');
-            setRejectionReason('');
-          }}
-        />
-      )}
-    </div>
-  );
-}
-
-// Document Viewer Modal Component
-function DocumentViewerModal({
-  verification,
-  onClose,
-  onApprove,
-  onReject,
-}: {
-  verification: Verification;
-  onClose: () => void;
-  onApprove: () => void;
-  onReject: () => void;
-}) {
-  return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-      <div className="bg-white rounded-lg max-w-6xl w-full max-h-[90vh] overflow-y-auto">
-        <div className="p-6">
-          {/* Header */}
-          <div className="flex justify-between items-start mb-6">
+          {/* Property Details */}
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
             <div>
-              <h2 className="text-2xl font-bold text-gray-900">
-                Documentos de {verification.full_name}
-              </h2>
-              <p className="text-gray-600 mt-1">
-                CPF: {verification.cpf} | {verification.document_type.toUpperCase()}: {verification.document_number}
-              </p>
-            </div>
-            <button
-              onClick={onClose}
-              className="text-gray-400 hover:text-gray-600"
-            >
-              <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-              </svg>
-            </button>
-          </div>
-
-          {/* User Info */}
-          <div className="bg-gray-50 rounded-lg p-4 mb-6">
-            <h3 className="font-semibold text-gray-900 mb-3">Informações Pessoais</h3>
-            <div className="grid md:grid-cols-2 gap-4 text-sm">
-              <div>
-                <span className="text-gray-600">Nome Completo:</span>
-                <span className="ml-2 font-medium">{verification.full_name}</span>
-              </div>
-              <div>
-                <span className="text-gray-600">Data de Nascimento:</span>
-                <span className="ml-2 font-medium">{verification.date_of_birth}</span>
-              </div>
-              <div>
-                <span className="text-gray-600">Telefone:</span>
-                <span className="ml-2 font-medium">{verification.phone_number}</span>
-              </div>
-              <div>
-                <span className="text-gray-600">Email:</span>
-                <span className="ml-2 font-medium">{verification.user_profiles?.email}</span>
-              </div>
-            </div>
-          </div>
-
-          {/* Check Results */}
-          {(verification.cpf_check_status || verification.criminal_check_status) && (
-            <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-6">
-              <h3 className="font-semibold text-blue-900 mb-3">Resultados das Verificações Automáticas</h3>
-              <div className="space-y-2 text-sm">
-                {verification.cpf_check_status && (
-                  <div>
-                    <span className="text-blue-700">Checagem CPF:</span>
-                    <span className="ml-2 font-medium">{verification.cpf_check_status}</span>
-                  </div>
-                )}
-                {verification.criminal_check_status && (
-                  <div>
-                    <span className="text-blue-700">Antecedentes Criminais:</span>
-                    <span className="ml-2 font-medium">{verification.criminal_check_status}</span>
-                  </div>
-                )}
-              </div>
-            </div>
-          )}
-
-          {/* Documents */}
-          <div className="grid md:grid-cols-2 gap-6 mb-6">
-            <div>
-              <h3 className="font-semibold text-gray-900 mb-3">Documento (Frente)</h3>
-              <img
-                src={verification.document_front_url}
-                alt="Documento Frente"
-                className="w-full rounded-lg border border-gray-300"
+              <label className="block text-[#D4A574] font-semibold mb-2">
+                <Square className="w-4 h-4 inline mr-2" />
+                Área (m²)
+              </label>
+              <input
+                type="number"
+                value={areaTotal}
+                onChange={(e) => setAreaTotal(e.target.value)}
+                placeholder="Ex: 50000"
+                className="w-full px-4 py-3 bg-[#1a1a1a] border border-[#3a3a3a] text-[#D4A574] rounded-lg focus:outline-none focus:border-[#A8C97F]"
               />
             </div>
+            <div>
+              <label className="block text-[#D4A574] font-semibold mb-2">
+                <Bed className="w-4 h-4 inline mr-2" />
+                Quartos
+              </label>
+              <input
+                type="number"
+                value={quartos}
+                onChange={(e) => setQuartos(e.target.value)}
+                placeholder="Ex: 4"
+                className="w-full px-4 py-3 bg-[#1a1a1a] border border-[#3a3a3a] text-[#D4A574] rounded-lg focus:outline-none focus:border-[#A8C97F]"
+              />
+            </div>
+            <div>
+              <label className="block text-[#D4A574] font-semibold mb-2">
+                <Bath className="w-4 h-4 inline mr-2" />
+                Banheiros
+              </label>
+              <input
+                type="number"
+                value={banheiros}
+                onChange={(e) => setBanheiros(e.target.value)}
+                placeholder="Ex: 3"
+                className="w-full px-4 py-3 bg-[#1a1a1a] border border-[#3a3a3a] text-[#D4A574] rounded-lg focus:outline-none focus:border-[#A8C97F]"
+              />
+            </div>
+            <div>
+              <label className="block text-[#D4A574] font-semibold mb-2">Vagas</label>
+              <input
+                type="number"
+                value={vagas}
+                onChange={(e) => setVagas(e.target.value)}
+                placeholder="Ex: 2"
+                className="w-full px-4 py-3 bg-[#1a1a1a] border border-[#3a3a3a] text-[#D4A574] rounded-lg focus:outline-none focus:border-[#A8C97F]"
+              />
+            </div>
+          </div>
 
-            {verification.document_back_url && (
-              <div>
-                <h3 className="font-semibold text-gray-900 mb-3">Documento (Verso)</h3>
-                <img
-                  src={verification.document_back_url}
-                  alt="Documento Verso"
-                  className="w-full rounded-lg border border-gray-300"
-                />
+          <div>
+            <label className="block text-[#D4A574] font-semibold mb-2">
+              <Calendar className="w-4 h-4 inline mr-2" />
+              Ano de Construção
+            </label>
+            <input
+              type="number"
+              value={anosConstrucao}
+              onChange={(e) => setAnosConstrucao(e.target.value)}
+              placeholder="Ex: 2015"
+              className="w-full px-4 py-3 bg-[#1a1a1a] border border-[#3a3a3a] text-[#D4A574] rounded-lg focus:outline-none focus:border-[#A8C97F]"
+            />
+          </div>
+
+          {/* Photos */}
+          <div>
+            <label className="block text-[#D4A574] font-semibold mb-2">
+              <Upload className="w-4 h-4 inline mr-2" />
+              Fotos da Propriedade * (mínimo 1)
+            </label>
+            <input
+              type="file"
+              accept="image/*"
+              multiple
+              onChange={handlePhotoChange}
+              className="w-full px-4 py-3 bg-[#1a1a1a] border border-[#3a3a3a] text-[#676767] rounded-lg focus:outline-none focus:border-[#A8C97F]"
+            />
+            
+            {photoPreviews.length > 0 && (
+              <div className="grid grid-cols-3 md:grid-cols-5 gap-4 mt-4">
+                {photoPreviews.map((preview, index) => (
+                  <div key={index} className="relative group">
+                    <img 
+                      src={preview} 
+                      alt={`Preview ${index + 1}`} 
+                      className="w-full h-24 object-cover rounded-lg border border-[#3a3a3a]"
+                    />
+                    <button
+                      type="button"
+                      onClick={() => removePhoto(index)}
+                      className="absolute top-1 right-1 bg-red-500 text-white p-1 rounded-full opacity-0 group-hover:opacity-100 transition"
+                    >
+                      <X className="w-4 h-4" />
+                    </button>
+                    {index === 0 && (
+                      <span className="absolute bottom-1 left-1 bg-[#A8C97F] text-[#0a0a0a] text-xs px-2 py-1 rounded">
+                        Capa
+                      </span>
+                    )}
+                  </div>
+                ))}
               </div>
             )}
-
-            <div>
-              <h3 className="font-semibold text-gray-900 mb-3">Selfie com Documento</h3>
-              <img
-                src={verification.selfie_url}
-                alt="Selfie"
-                className="w-full rounded-lg border border-gray-300"
-              />
-            </div>
           </div>
 
-          {/* Admin Notes (if any) */}
-          {verification.admin_notes && (
-            <div className="bg-gray-50 rounded-lg p-4 mb-6">
-              <h3 className="font-semibold text-gray-900 mb-2">Notas do Administrador</h3>
-              <p className="text-sm text-gray-700">{verification.admin_notes}</p>
+          {/* Error/Success Messages */}
+          {error && (
+            <div className="p-4 bg-red-900/20 border border-red-500/50 text-red-400 rounded-lg">
+              {error}
             </div>
           )}
 
-          {/* Actions */}
-          {verification.status === 'manual_review' && (
-            <div className="flex gap-4">
-              <button
-                onClick={onApprove}
-                className="flex-1 bg-green-600 text-white py-3 px-4 rounded-lg font-medium hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 transition-colors"
-              >
-                ✓ Aprovar Verificação
-              </button>
-              <button
-                onClick={onReject}
-                className="flex-1 bg-red-600 text-white py-3 px-4 rounded-lg font-medium hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 transition-colors"
-              >
-                ✗ Rejeitar Verificação
-              </button>
+          {success && (
+            <div className="p-4 bg-green-900/20 border border-green-500/50 text-green-400 rounded-lg">
+              {success}
             </div>
           )}
-        </div>
+
+          {/* Submit Button */}
+          <button
+            type="submit"
+            disabled={submitting}
+            className="w-full px-8 py-4 bg-gradient-to-r from-[#A8C97F] to-[#0D7377] text-white font-bold rounded-lg hover:scale-105 transition disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100"
+          >
+            {submitting ? 'Publicando...' : 'Publicar Anúncio'}
+          </button>
+        </form>
       </div>
-    </div>
+    </main>
   );
 }
 
-// Action Confirmation Modal
-function ActionModal({
-  action,
-  verification,
-  notes,
-  setNotes,
-  rejectionReason,
-  setRejectionReason,
-  loading,
-  onConfirm,
-  onCancel,
-}: {
-  action: 'approve' | 'reject';
-  verification: Verification;
-  notes: string;
-  setNotes: (notes: string) => void;
-  rejectionReason: string;
-  setRejectionReason: (reason: string) => void;
-  loading: boolean;
-  onConfirm: () => void;
-  onCancel: () => void;
-}) {
-  const isApprove = action === 'approve';
 
-  return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-      <div className="bg-white rounded-lg max-w-md w-full p-6">
-        <h3 className="text-xl font-bold text-gray-900 mb-4">
-          {isApprove ? 'Aprovar Verificação' : 'Rejeitar Verificação'}
-        </h3>
 
-        <p className="text-gray-600 mb-4">
-          Confirma a {isApprove ? 'aprovação' : 'rejeição'} da verificação de{' '}
-          <span className="font-medium">{verification.full_name}</span>?
-        </p>
 
-        {!isApprove && (
-          <div className="mb-4">
-            <label className="block text-sm font-medium text-gray-700 mb-2">
-              Motivo da Rejeição *
-            </label>
-            <select
-              value={rejectionReason}
-              onChange={(e) => setRejectionReason(e.target.value)}
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent"
-              required
-            >
-              <option value="">Selecione um motivo</option>
-              <option value="Documento ilegível ou de má qualidade">Documento ilegível ou de má qualidade</option>
-              <option value="Selfie não mostra rosto claramente">Selfie não mostra rosto claramente</option>
-              <option value="Documento fora da validade">Documento fora da validade</option>
-              <option value="Dados não conferem">Dados não conferem</option>
-              <option value="Documento adulterado ou suspeito">Documento adulterado ou suspeito</option>
-              <option value="Outros">Outros</option>
-            </select>
-          </div>
-        )}
 
-        <div className="mb-6">
-          <label className="block text-sm font-medium text-gray-700 mb-2">
-            Notas Internas (opcional)
-          </label>
-          <textarea
-            value={notes}
-            onChange={(e) => setNotes(e.target.value)}
-            rows={3}
-            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-            placeholder="Adicione observações para referência futura..."
-          />
-        </div>
 
-        <div className="flex gap-4">
-          <button
-            onClick={onCancel}
-            disabled={loading}
-            className="flex-1 bg-gray-200 text-gray-700 py-2 px-4 rounded-lg font-medium hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 disabled:opacity-50 transition-colors"
-          >
-            Cancelar
-          </button>
-          <button
-            onClick={onConfirm}
-            disabled={loading || (!isApprove && !rejectionReason)}
-            className={`flex-1 ${
-              isApprove ? 'bg-green-600 hover:bg-green-700' : 'bg-red-600 hover:bg-red-700'
-            } text-white py-2 px-4 rounded-lg font-medium focus:outline-none focus:ring-2 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed transition-colors`}
-          >
-            {loading ? 'Processando...' : isApprove ? 'Confirmar Aprovação' : 'Confirmar Rejeição'}
-          </button>
-        </div>
-      </div>
-    </div>
-  );
-}
+
+
+
+
+
+
+
+
 
 
 

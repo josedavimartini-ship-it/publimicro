@@ -6,7 +6,7 @@ const TABS = [
   { key: "arquivadas", label: "Arquivadas" },
 ];
 
-export default function ChatTab({ _user }: { _user: any }) {
+export default function ChatTab({ user }: { user: any }) {
   const [tab, setTab] = useState("ativas");
   const [chats, setChats] = useState<any[]>([]);
   useEffect(() => {

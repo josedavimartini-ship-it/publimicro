@@ -11,8 +11,12 @@ export async function POST(req: NextRequest) {
   }
 
   try {
-    const body = await req.json();
-    const phone = (body.phone || "").toString().replace(/\D/g, "");
+    const raw = await req.json() as unknown;
+    if (typeof raw !== 'object' || raw === null) {
+      return NextResponse.json({ error: 'invalid request body' }, { status: 400 });
+    }
+    const body = raw as { phone?: unknown };
+    const phone = String(body.phone ?? "").replace(/\D/g, "");
     if (!phone || phone.length < 4) return NextResponse.json({ error: "phone must be provided (at least 4 digits)" }, { status: 400 });
 
     // Candidate tables and columns to probe
@@ -59,12 +63,12 @@ export async function POST(req: NextRequest) {
     if (phone.length > 9) patterns.add(`%${phone.slice(-9)}%`);
 
     const supabase = createServiceSupabaseClient();
-    const result: Record<string, any> = {};
+    const result: Record<string, unknown> = {};
 
     // helper: try each column on a table and collect matches. Will attempt
     // each column and each pattern and avoid failing on missing columns.
     async function findMatches(tableName: string) {
-      const found: any[] = [];
+      const found: Array<Record<string, unknown>> = [];
       for (const col of phoneCols) {
         try {
           for (const p of Array.from(patterns)) {
@@ -77,12 +81,14 @@ export async function POST(req: NextRequest) {
             if (data && data.length > 0) {
               for (const r of data) {
                 // Normalize the candidate value server-side in JS and ensure the digits match
-                const val = String((r as any)[col] ?? "");
+                const row = (r as unknown) as Record<string, unknown>;
+                const val = String(row[col as string] ?? "");
                 const digits = val.replace(/\D/g, "");
                 if (digits && (digits.includes(phone) || phone.includes(digits) || digits.endsWith(phone.slice(-8)))) {
                   // attach entire row object for inspection
-                  const exists = found.find((f) => (f as any).id === (r as any).id);
-                  if (!exists) found.push({ id: (r as any).id, column: col, value: val, row: r });
+                  const rid = row['id'];
+                  const exists = found.find((f) => String(f['id']) === String(rid));
+                  if (!exists) found.push({ id: rid, column: col, value: val, row });
                 }
               }
             }
@@ -105,10 +111,13 @@ export async function POST(req: NextRequest) {
     }
 
     return NextResponse.json({ ok: true, phone: phone, result });
-  } catch (err: any) {
-    return NextResponse.json({ error: err.message || String(err) }, { status: 500 });
+    } catch (err: unknown) {
+    const msg = (err && typeof err === 'object' && 'message' in err) ? String(((err as unknown) as Record<string, unknown>)['message']) : String(err);
+    return NextResponse.json({ error: msg }, { status: 500 });
   }
 }
+
+
 
 
 

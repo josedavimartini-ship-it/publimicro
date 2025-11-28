@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { createClient } from '@supabase/supabase-js';
+import type { SupabaseClient } from '@supabase/supabase-js';
 import Stripe from 'stripe';
 import { getStripe } from '@/lib/stripe';
 import type { EnhancementType } from '@/lib/enhancementPricing';
@@ -30,25 +31,34 @@ export async function POST(request: NextRequest) {
   let event: Stripe.Event;
 
   try {
-      // Lazy-initialize Stripe (throws if not configured)
-      let stripeInstance: Stripe;
-      try {
-        stripeInstance = getStripe();
-      } catch (err: any) {
-        console.error('Stripe not configured for webhooks:', err?.message || err);
-        return NextResponse.json({ error: 'Server misconfigured' }, { status: 500 });
-      }
+    // Lazy-initialize Stripe (throws if not configured)
+    let stripeInstance: Stripe;
+    try {
+      stripeInstance = getStripe();
+    } catch (e: unknown) {
+      const msg = e instanceof Error ? e.message : String(e);
+      console.error('Stripe not configured for webhooks:', msg);
+      return NextResponse.json({ error: 'Server misconfigured' }, { status: 500 });
+    }
 
-      // Verify webhook signature
-      event = stripeInstance.webhooks.constructEvent(
-        body,
-        signature,
-        process.env.STRIPE_WEBHOOK_SECRET!
-      );
-  } catch (err: any) {
-    console.error('Webhook signature verification failed:', err.message);
+    // Check webhook secret is configured
+    const webhookSecret = process.env.STRIPE_WEBHOOK_SECRET;
+    if (!webhookSecret) {
+      console.error('STRIPE_WEBHOOK_SECRET not configured');
+      return NextResponse.json({ error: 'Server misconfigured' }, { status: 500 });
+    }
+
+    // Verify webhook signature
+    event = stripeInstance.webhooks.constructEvent(
+      body,
+      signature,
+      webhookSecret
+    );
+  } catch (e: unknown) {
+    const msg = e instanceof Error ? e.message : String(e);
+    console.error('Webhook signature verification failed:', msg);
     return NextResponse.json(
-      { error: `Webhook Error: ${err.message}` },
+      { error: `Webhook Error: ${msg}` },
       { status: 400 }
     );
   }
@@ -56,15 +66,14 @@ export async function POST(request: NextRequest) {
     // Create a service-role Supabase client for privileged updates
     // Create a Supabase service client at runtime. This avoids requiring
     // the service role key at module import time during builds.
-    if (!process.env.SUPABASE_SERVICE_ROLE_KEY) {
-      console.error('SUPABASE_SERVICE_ROLE_KEY not set — cannot write enhancement records');
+    const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
+    const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
+    if (!supabaseUrl || !supabaseKey) {
+      console.error('Supabase env not configured — cannot write enhancement records');
       throw new Error('Server not configured');
     }
 
-    const supabase = createClient(
-      process.env.NEXT_PUBLIC_SUPABASE_URL!,
-      process.env.SUPABASE_SERVICE_ROLE_KEY!
-    );
+    const supabase: SupabaseClient = createClient(supabaseUrl, supabaseKey);
 
   try {
     switch (event.type) {
@@ -86,8 +95,8 @@ export async function POST(request: NextRequest) {
 
     return NextResponse.json({ received: true });
 
-  } catch (error) {
-    console.error('Error handling webhook event:', error);
+  } catch (e: unknown) {
+    console.error('Error handling webhook event:', e instanceof Error ? e.message : String(e));
     return NextResponse.json(
       { error: 'Webhook handler failed' },
       { status: 500 }
@@ -98,16 +107,16 @@ export async function POST(request: NextRequest) {
 /**
  * Handle successful checkout session
  */
-async function handleCheckoutCompleted(session: Stripe.Checkout.Session, supabase: any) {
+async function handleCheckoutCompleted(session: Stripe.Checkout.Session, supabase: SupabaseClient) {
   // console.log('Processing checkout.session.completed:', session.id);
 
   const {
     user_id,
     announcement_id,
-    category,
+    category: _category,
     enhancement_type,
     price_brl,
-  } = session.metadata || {};
+  } = (session.metadata || {}) as Record<string, string>;
 
   if (!user_id || !announcement_id || !enhancement_type) {
     console.error('Missing required metadata in checkout session');
@@ -142,7 +151,7 @@ async function handleCheckoutCompleted(session: Stripe.Checkout.Session, supabas
       : null,
   };
 
-  const { data: enhancement, error: insertError } = await supabase
+  const { data: _enhancement, error: insertError } = await supabase
      .from('listing_enhancements')
      .insert(enhancementData)
      .select()
@@ -190,7 +199,7 @@ async function handleCheckoutCompleted(session: Stripe.Checkout.Session, supabas
 /**
  * Handle successful payment intent
  */
-async function handlePaymentSucceeded(paymentIntent: Stripe.PaymentIntent, supabase: any) {
+async function handlePaymentSucceeded(paymentIntent: Stripe.PaymentIntent, supabase: SupabaseClient) {
   // console.log('Processing payment_intent.succeeded:', paymentIntent.id);
 
   const { announcement_id } = paymentIntent.metadata || {};
@@ -217,7 +226,7 @@ async function handlePaymentSucceeded(paymentIntent: Stripe.PaymentIntent, supab
 /**
  * Handle failed payment intent
  */
-async function handlePaymentFailed(paymentIntent: Stripe.PaymentIntent, supabase: any) {
+async function handlePaymentFailed(paymentIntent: Stripe.PaymentIntent, supabase: SupabaseClient) {
   // console.log('Processing payment_intent.payment_failed:', paymentIntent.id);
 
   const { announcement_id } = paymentIntent.metadata || {};
@@ -253,6 +262,8 @@ export async function GET() {
     { status: 405 }
   );
 }
+
+
 
 
 

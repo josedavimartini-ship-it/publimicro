@@ -1,30 +1,25 @@
 {
-  "warnings": 144.0,
-  "errors": 143.0,
+  "files": 195,
+  "errors": 100.0,
   "topRules": [
     {
       "Key": "@typescript-eslint/no-explicit-any",
-      "Value": 119,
+      "Value": 98,
       "Name": "@typescript-eslint/no-explicit-any"
     },
     {
       "Key": "@typescript-eslint/no-unused-vars",
-      "Value": 88,
+      "Value": 57,
       "Name": "@typescript-eslint/no-unused-vars"
     },
     {
-      "Key": "@typescript-eslint/no-misused-promises",
-      "Value": 33,
-      "Name": "@typescript-eslint/no-misused-promises"
-    },
-    {
       "Key": "react-hooks/exhaustive-deps",
-      "Value": 23,
+      "Value": 13,
       "Name": "react-hooks/exhaustive-deps"
     },
     {
       "Key": "@typescript-eslint/no-non-null-assertion",
-      "Value": 10,
+      "Value": 9,
       "Name": "@typescript-eslint/no-non-null-assertion"
     },
     {
@@ -43,5 +38,5 @@
       "Name": "@next/next/no-img-element"
     }
   ],
-  "files": 195
+  "warnings": 113.0
 }
