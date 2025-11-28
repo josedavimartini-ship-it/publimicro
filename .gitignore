@@ -90,3 +90,4 @@ debug/
 # Build markers created by build scripts (should not be committed)
 .next-build-complete
 .build-complete
+Uploads/
