@@ -277,7 +277,7 @@ function SearchPageContent() {
                   searchType: "all",
                 });
               }}
-              className="px-6 py-3 bg-gradient-to-r from-[#A8C97F] to-[#0D7377] text-[#0a0a0a] font-bold rounded-full hover:scale-105 transition-all"
+              className="px-6 py-3 bg-gradient-to-r from-[#6B7F5C] to-[#2C5F6F] hover:from-[#7A8F6B] hover:to-[#3A6F7F] text-[#D4C4A8] font-bold rounded-full hover:scale-105 transition-all shadow-lg"
             >
               Limpar Filtros
             </button>

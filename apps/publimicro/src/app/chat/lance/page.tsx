@@ -26,12 +26,12 @@ export default function BiddingPage({
         </div>
 
         <div className="bg-gradient-to-br from-[#1a1a1a] to-[#0d0d0d] border-2 border-[#2a2a1a] rounded-2xl p-8 shadow-2xl">
-          <h1 className="text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-[#A8C97F] to-[#0D7377] mb-6">
+          <h1 className="text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-[#B8904D] to-[#C9A87C] mb-6">
             Sistema de Lances
           </h1>
 
-          <div className="mb-8 p-6 bg-[#A8C97F]/10 border border-[#A8C97F]/30 rounded-xl">
-            <h2 className="text-xl font-bold text-[#A8C97F] mb-3">Como Funciona</h2>
+          <div className="mb-8 p-6 bg-[#6B7F5C]/10 border border-[#6B7F5C]/30 rounded-xl">
+            <h2 className="text-xl font-bold text-[#C9A87C] mb-3">Como Funciona</h2>
             <ol className="space-y-2 text-[#E6C98B] text-sm">
               <li>1️⃣ Faça login ou cadastre-se</li>
               <li>2️⃣ Envie sua proposta de lance</li>
@@ -110,7 +110,7 @@ export default function BiddingPage({
             <div className="flex gap-4">
               <button
                 type="submit"
-                className="flex-1 px-6 py-4 bg-gradient-to-r from-[#A8C97F] to-[#0D7377] hover:from-[#0D7377] hover:to-[#A8C97F] text-[#0a0a0a] font-bold rounded-lg transition-all hover:scale-105 shadow-xl"
+                className="flex-1 px-6 py-4 bg-gradient-to-r from-[#6B7F5C] to-[#2C5F6F] hover:from-[#7A8F6B] hover:to-[#3A6F7F] text-[#D4C4A8] font-bold rounded-lg transition-all hover:scale-105 shadow-xl"
               >
                 💰 Enviar Lance
               </button>
