@@ -423,7 +423,7 @@ export default function AdminPage() {
               onClick={() => setActiveTab("dashboard")}
               className={`w-full flex items-center gap-3 px-4 py-3 rounded-lg transition-all ${
                 activeTab === "dashboard"
-                  ? "bg-gradient-to-r from-[#A8C97F] to-[#0D7377] text-[#0a0a0a] font-bold"
+                  ? "bg-gradient-to-r from-[#6B7F5C] to-[#2C5F6F] text-[#D4C4A8] font-bold"
                   : "text-[#8B9B6E] hover:bg-[#2a2a1a]"
               }`}
             >
@@ -435,7 +435,7 @@ export default function AdminPage() {
               onClick={() => setActiveTab("properties")}
               className={`w-full flex items-center gap-3 px-4 py-3 rounded-lg transition-all ${
                 activeTab === "properties"
-                  ? "bg-gradient-to-r from-[#A8C97F] to-[#0D7377] text-[#0a0a0a] font-bold"
+                  ? "bg-gradient-to-r from-[#6B7F5C] to-[#2C5F6F] text-[#D4C4A8] font-bold"
                   : "text-[#8B9B6E] hover:bg-[#2a2a1a]"
               }`}
             >
@@ -447,14 +447,14 @@ export default function AdminPage() {
               onClick={() => setActiveTab("bids")}
               className={`w-full flex items-center gap-3 px-4 py-3 rounded-lg transition-all ${
                 activeTab === "bids"
-                  ? "bg-gradient-to-r from-[#A8C97F] to-[#0D7377] text-[#0a0a0a] font-bold"
+                  ? "bg-gradient-to-r from-[#6B7F5C] to-[#2C5F6F] text-[#D4C4A8] font-bold"
                   : "text-[#8B9B6E] hover:bg-[#2a2a1a]"
               }`}
             >
               <DollarSign className="w-5 h-5" />
               Lances
               {stats && stats.activeBids > 0 && (
-                <span className="ml-auto bg-[#A8C97F] text-[#0a0a0a] text-xs font-bold px-2 py-1 rounded-full">
+                <span className="ml-auto bg-[#6B7F5C] text-[#D4C4A8] text-xs font-bold px-2 py-1 rounded-full">
                   {stats.activeBids}
                 </span>
               )}
@@ -464,14 +464,14 @@ export default function AdminPage() {
               onClick={() => setActiveTab("contacts")}
               className={`w-full flex items-center gap-3 px-4 py-3 rounded-lg transition-all ${
                 activeTab === "contacts"
-                  ? "bg-gradient-to-r from-[#A8C97F] to-[#0D7377] text-[#0a0a0a] font-bold"
+                  ? "bg-gradient-to-r from-[#6B7F5C] to-[#2C5F6F] text-[#D4C4A8] font-bold"
                   : "text-[#8B9B6E] hover:bg-[#2a2a1a]"
               }`}
             >
               <Mail className="w-5 h-5" />
               Contatos
               {stats && stats.pendingContacts > 0 && (
-                <span className="ml-auto bg-[#A8C97F] text-[#0a0a0a] text-xs font-bold px-2 py-1 rounded-full">
+                <span className="ml-auto bg-[#6B7F5C] text-[#D4C4A8] text-xs font-bold px-2 py-1 rounded-full">
                   {stats.pendingContacts}
                 </span>
               )}
@@ -481,7 +481,7 @@ export default function AdminPage() {
               onClick={() => setActiveTab("users")}
               className={`w-full flex items-center gap-3 px-4 py-3 rounded-lg transition-all ${
                 activeTab === "users"
-                  ? "bg-gradient-to-r from-[#A8C97F] to-[#0D7377] text-[#0a0a0a] font-bold"
+                  ? "bg-gradient-to-r from-[#6B7F5C] to-[#2C5F6F] text-[#D4C4A8] font-bold"
                   : "text-[#8B9B6E] hover:bg-[#2a2a1a]"
               }`}
             >
@@ -624,7 +624,7 @@ export default function AdminPage() {
                 <h2 className="text-3xl font-bold text-[#E6C98B]">Propriedades</h2>
                 <Link
                   href="/anunciar"
-                  className="flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-[#A8C97F] to-[#0D7377] text-[#0a0a0a] font-bold rounded-full hover:scale-105 transition-all"
+                  className="flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-[#6B7F5C] to-[#2C5F6F] hover:from-[#7A8F6B] hover:to-[#3A6F7F] text-[#D4C4A8] font-bold rounded-full hover:scale-105 transition-all shadow-lg"
                 >
                   <Plus className="w-5 h-5" />
                   Nova Propriedade
@@ -657,7 +657,7 @@ export default function AdminPage() {
                 </div>
 
                 <div className="mt-4">
-                  <button onClick={() => { void uploadPropertyMedia(); }} disabled={uploadingMedia} className="px-4 py-2 bg-gradient-to-r from-[#A8C97F] to-[#0D7377] rounded font-semibold">
+                  <button onClick={() => { void uploadPropertyMedia(); }} disabled={uploadingMedia} className="px-4 py-2 bg-gradient-to-r from-[#6B7F5C] to-[#2C5F6F] hover:from-[#7A8F6B] hover:to-[#3A6F7F] text-[#D4C4A8] rounded font-semibold shadow-lg">
                     {uploadingMedia ? 'Enviando...' : 'Enviar'}
                   </button>
                 </div>
