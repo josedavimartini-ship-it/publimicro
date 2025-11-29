@@ -20,14 +20,14 @@ export default function PubliProperPage() {
       icon: <Building2 className="w-12 h-12" />,
       href: '/proper/urban',
       description: 'Apartamentos, casas e imóveis urbanos',
-      color: 'from-[#A8C97F] to-[#0D7377]',
+      color: 'from-[#B8904D] to-[#9B6B3E]',
     },
     {
       title: 'Proper Rural',
       icon: <Tractor className="w-12 h-12" />,
       href: '/proper/rural',
       description: 'Sítios, fazendas e chácaras',
-      color: 'from-[#5F7161] to-[#0D7377]',
+      color: 'from-[#6B7F5C] to-[#2C5F6F]',
     },
     {
       title: 'Comercial',
@@ -90,7 +90,7 @@ export default function PubliProperPage() {
           </p>
           <Link
             href="/anunciar"
-            className="inline-block px-10 py-4 bg-gradient-to-r from-[#A8C97F] to-[#0D7377] hover:from-[#0D7377] hover:to-[#A8C97F] text-white font-bold rounded-full transition-all hover:scale-105"
+            className="inline-block px-10 py-4 bg-gradient-to-r from-[#6B7F5C] to-[#2C5F6F] hover:from-[#7A8F6B] hover:to-[#3A6F7F] text-[#D4C4A8] font-bold rounded-full transition-all hover:scale-105 shadow-lg"
           >
             📢 Publicar Anúncio Grátis
           </Link>

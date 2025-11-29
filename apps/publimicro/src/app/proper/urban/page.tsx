@@ -4,7 +4,7 @@ export default function ProperUrbanPage() {
   return (
     <main className="min-h-screen bg-gradient-to-b from-[#0a0a0a] via-[#0d0d0d] to-[#0a0a0a] py-20 px-6">
       <div className="max-w-7xl mx-auto text-center">
-        <h1 className="text-5xl md:text-6xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-[#A8C97F] to-[#B7791F] mb-6">
+        <h1 className="text-5xl md:text-6xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-[#B8904D] to-[#9B6B3E] mb-6">
           🏙️ Proper Urban
         </h1>
         <p className="text-xl text-[#d8c68e] mb-8">

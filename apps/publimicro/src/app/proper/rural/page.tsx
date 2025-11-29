@@ -38,7 +38,7 @@ export default function ProperRuralPage() {
     <main className="min-h-screen bg-gradient-to-b from-[#0a0a0a] via-[#0d0d0d] to-[#0a0a0a] py-20 px-6">
       <div className="max-w-7xl mx-auto">
         <div className="text-center mb-12">
-          <h1 className="text-5xl md:text-6xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-[#5F7161] to-[#0D7377] mb-6">
+          <h1 className="text-5xl md:text-6xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-[#6B7F5C] to-[#2C5F6F] mb-6">
             Proper Rural
           </h1>
           <p className="text-xl text-[#d8c68e] mb-4">
@@ -53,15 +53,15 @@ export default function ProperRuralPage() {
               🦅 Destaque Especial
             </span>
           </div>
-          <h2 className="text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-[#B7791F] to-[#0D7377] mb-4">
-            Sítios Carcará's Project
+          <h2 className="text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-[#B8904D] to-[#9B6B3E] mb-4">
+            Sítios Carcára's Project
           </h2>
           <p className="text-[#d8c68e] text-lg mb-6">
             6 propriedades exclusivas às margens da represa. Lances a partir de R$ 1.050.000
           </p>
           <Link
             href="/projetos/carcara"
-            className="inline-block px-10 py-4 bg-gradient-to-r from-[#A8C97F] to-[#0D7377] hover:from-[#0D7377] hover:to-[#A8C97F] text-white font-bold rounded-full transition-all hover:scale-105"
+            className="inline-block px-10 py-4 bg-gradient-to-r from-[#6B7F5C] to-[#2C5F6F] hover:from-[#7A8F6B] hover:to-[#3A6F7F] text-[#D4C4A8] font-bold rounded-full transition-all hover:scale-105 shadow-lg"
           >
             🏡 Explorar Projeto Completo
           </Link>
@@ -154,7 +154,7 @@ export default function ProperRuralPage() {
             </Link>
             <Link
               href="/anunciar"
-              className="px-8 py-3 bg-gradient-to-r from-[#5F7161] to-[#0D7377] hover:from-[#0D7377] hover:to-[#5F7161] text-white font-bold rounded-full transition-all hover:scale-105"
+              className="px-8 py-3 bg-gradient-to-r from-[#6B7F5C] to-[#2C5F6F] hover:from-[#7A8F6B] hover:to-[#3A6F7F] text-[#D4C4A8] font-bold rounded-full transition-all hover:scale-105 shadow-lg"
             >
               Anunciar Grátis
             </Link>
