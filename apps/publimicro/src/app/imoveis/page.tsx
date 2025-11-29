@@ -150,10 +150,10 @@ export default function ImoveisPage() {
           <Breadcrumbs />
           
           <div className="text-center mb-8 mt-4">
-            <h1 className="text-4xl md:text-5xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-[#E6C98B] to-[#A8C97F] mb-4">
+            <h1 className="text-4xl md:text-5xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-[#C9A87C] to-[#B8904D] mb-4">
               Todas as Propriedades
             </h1>
-            <p className="text-[#8B9B6E] text-lg">
+            <p className="text-[#B8A890] text-lg">
               Explore nosso catálogo completo de propriedades rurais e urbanas
             </p>
           </div>
@@ -162,16 +162,16 @@ export default function ImoveisPage() {
           
           {/* Results Summary */}
           <div className="mt-6 flex items-center justify-between flex-wrap gap-4">
-            <p className="text-[#8B9B6E]">
+            <p className="text-[#B8A890]">
               {loading ? (
                 "Carregando..."
               ) : (
                 <>
-                  <span className="font-bold text-[#A8C97F]">{totalResults}</span>{" "}
+                  <span className="font-bold text-[#C9A87C]">{totalResults}</span>{" "}
                   {totalResults === 1 ? "propriedade encontrada" : "propriedades encontradas"}
                   {filters.query && (
                     <>
-                      {" "}para "<span className="text-[#E6C98B]">{filters.query}</span>"
+                      {" "}para "<span className="text-[#D4C4A8]">{filters.query}</span>"
                     </>
                   )}
                 </>
@@ -184,8 +184,8 @@ export default function ImoveisPage() {
                 onClick={() => setViewMode("grid")}
                 className={`p-2 rounded transition-all ${
                   viewMode === "grid"
-                    ? "bg-gradient-to-r from-[#A8C97F] to-[#0D7377] text-[#0a0a0a]"
-                    : "text-[#8B9B6E] hover:bg-[#2a2a1a]"
+                    ? "bg-gradient-to-r from-[#6B7F5C] to-[#7A8F6B] text-[#D4C4A8]"
+                    : "text-[#B8A890] hover:bg-[#2a2a1a]"
                 }`}
               >
                 <Grid3x3 className="w-5 h-5" />
@@ -194,8 +194,8 @@ export default function ImoveisPage() {
                 onClick={() => setViewMode("list")}
                 className={`p-2 rounded transition-all ${
                   viewMode === "list"
-                    ? "bg-gradient-to-r from-[#A8C97F] to-[#0D7377] text-[#0a0a0a]"
-                    : "text-[#8B9B6E] hover:bg-[#2a2a1a]"
+                    ? "bg-gradient-to-r from-[#6B7F5C] to-[#7A8F6B] text-[#D4C4A8]"
+                    : "text-[#B8A890] hover:bg-[#2a2a1a]"
                 }`}
               >
                 <List className="w-5 h-5" />
@@ -219,7 +219,7 @@ export default function ImoveisPage() {
               <Link
                 key={property.id}
                 href={`/imoveis/${property.id}`}
-                className={`bg-gradient-to-br from-[#1a1a1a] to-[#0d0d0d] border-2 border-[#2a2a1a] rounded-2xl overflow-hidden hover:border-[#A8C97F] transition-all hover:scale-105 shadow-lg hover:shadow-2xl group ${
+                className={`bg-gradient-to-br from-[#1a1a1a] to-[#0d0d0d] border-2 border-[#2a2a1a] rounded-2xl overflow-hidden hover:border-[#6B7F5C] transition-all hover:scale-105 shadow-lg hover:shadow-2xl group ${
                   viewMode === "list" ? "flex" : ""
                 }`}
               >
@@ -246,10 +246,10 @@ export default function ImoveisPage() {
                       e.preventDefault();
                       // Handle favorite toggle
                     }}
-                    className="absolute top-4 right-4 p-2 bg-[#0a0a0a]/80 hover:bg-[#A8C97F] rounded-full transition-all group/fav"
+                    className="absolute top-4 right-4 p-2 bg-[#0a0a0a]/80 hover:bg-[#6B7F5C] rounded-full transition-all group/fav"
                     aria-label="Adicionar aos favoritos"
                   >
-                    <Heart className="w-5 h-5 text-[#E6C98B] group-hover/fav:fill-current" />
+                    <Heart className="w-5 h-5 text-[#C9A87C] group-hover/fav:fill-current" />
                   </button>
                   
                   {/* Comparison Button */}
@@ -268,8 +268,8 @@ export default function ImoveisPage() {
                     }}
                     className={`absolute top-4 left-4 p-2 rounded-full transition-all ${
                       isInComparison(property.id)
-                        ? "bg-[#A8C97F] text-[#0a0a0a]"
-                        : "bg-[#0a0a0a]/80 hover:bg-[#E6C98B] text-[#E6C98B]"
+                        ? "bg-[#6B7F5C] text-[#D4C4A8]"
+                        : "bg-[#0a0a0a]/80 hover:bg-[#C9A87C] text-[#C9A87C]"
                     }`}
                     aria-label={isInComparison(property.id) ? "Remover da comparação" : "Adicionar à comparação"}
                   >
@@ -279,18 +279,18 @@ export default function ImoveisPage() {
 
                 {/* Content */}
                 <div className="p-6 flex-1">
-                  <h3 className="text-xl font-bold text-[#E6C98B] mb-3 group-hover:text-[#A8C97F] transition-colors">
+                  <h3 className="text-xl font-bold text-[#C9A87C] mb-3 group-hover:text-[#B8904D] transition-colors">
                     {property.title}
                   </h3>
 
                   <div className="space-y-2 mb-4">
-                    <div className="flex items-center gap-2 text-[#8B9B6E]">
+                    <div className="flex items-center gap-2 text-[#B8A890]">
                       <MapPin className="w-4 h-4" />
                       <span className="text-sm">{property.location}</span>
                     </div>
 
                     {property.area_total && (
-                      <div className="flex items-center gap-2 text-[#8B9B6E]">
+                      <div className="flex items-center gap-2 text-[#B8A890]">
                         <Maximize2 className="w-4 h-4" />
                         <span className="text-sm">{property.area_total} hectares</span>
                       </div>
