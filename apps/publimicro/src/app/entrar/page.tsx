@@ -190,20 +190,20 @@ export default function PostarPage() {
     <main className="min-h-screen bg-gradient-to-b from-[#0a0a0a] via-[#1a1a1a] to-[#0a0a0a] py-12 px-6">
       <div className="max-w-4xl mx-auto">
         <div className="text-center mb-8">
-          <h1 className="text-4xl font-black text-transparent bg-clip-text bg-gradient-to-r from-[#A8C97F] to-[#0D7377] mb-4">
+          <h1 className="text-4xl font-black text-transparent bg-clip-text bg-gradient-to-r from-[#C9A87C] to-[#B8904D] mb-4">
             Anunciar Propriedade
           </h1>
-          <p className="text-[#676767]">Preencha os dados para anunciar sua propriedade gratuitamente</p>
+          <p className="text-[#B8A890]">Preencha os dados para anunciar sua propriedade gratuitamente</p>
         </div>
 
         <form onSubmit={handleSubmit} className="bg-[#2a2a2a] border-2 border-[#3a3a3a] rounded-2xl p-8 space-y-6">
           {/* Property Type */}
           <div>
-            <label className="block text-[#D4A574] font-semibold mb-2">Tipo de Propriedade *</label>
+            <label className="block text-[#D4C4A8] font-semibold mb-2">Tipo de Propriedade *</label>
             <select
               value={propertyType}
               onChange={(e) => setPropertyType(e.target.value)}
-              className="w-full px-4 py-3 bg-[#1a1a1a] border border-[#3a3a3a] text-[#D4A574] rounded-lg focus:outline-none focus:border-[#A8C97F]"
+              className="w-full px-4 py-3 bg-[#2a2a2a] border border-[#3a3a3a] text-[#D4C4A8] rounded-lg focus:outline-none focus:border-[#6B7F5C]"
               required
             >
               {PROPERTY_TYPES.map(type => (
@@ -214,7 +214,7 @@ export default function PostarPage() {
 
           {/* Name */}
           <div>
-            <label className="block text-[#D4A574] font-semibold mb-2">
+            <label className="block text-[#D4C4A8] font-semibold mb-2">
               <Home className="w-4 h-4 inline mr-2" />
               Nome da Propriedade *
             </label>
@@ -223,27 +223,27 @@ export default function PostarPage() {
               value={nome}
               onChange={(e) => setNome(e.target.value)}
               placeholder="Ex: Sítio Recanto das Águas"
-              className="w-full px-4 py-3 bg-[#1a1a1a] border border-[#3a3a3a] text-[#D4A574] rounded-lg focus:outline-none focus:border-[#A8C97F]"
+              className="w-full px-4 py-3 bg-[#2a2a2a] border border-[#3a3a3a] text-[#D4C4A8] placeholder-[#8B8B8B] rounded-lg focus:outline-none focus:border-[#6B7F5C]"
               required
             />
           </div>
 
           {/* Description */}
           <div>
-            <label className="block text-[#D4A574] font-semibold mb-2">Descrição *</label>
+            <label className="block text-[#D4C4A8] font-semibold mb-2">Descrição *</label>
             <textarea
               value={descricao}
               onChange={(e) => setDescricao(e.target.value)}
               placeholder="Descreva sua propriedade, destacando suas características principais..."
               rows={5}
-              className="w-full px-4 py-3 bg-[#1a1a1a] border border-[#3a3a3a] text-[#D4A574] rounded-lg focus:outline-none focus:border-[#A8C97F]"
+              className="w-full px-4 py-3 bg-[#2a2a2a] border border-[#3a3a3a] text-[#D4C4A8] placeholder-[#8B8B8B] rounded-lg focus:outline-none focus:border-[#6B7F5C]"
               required
             />
           </div>
 
           {/* Price */}
           <div>
-            <label className="block text-[#D4A574] font-semibold mb-2">
+            <label className="block text-[#D4C4A8] font-semibold mb-2">
               <DollarSign className="w-4 h-4 inline mr-2" />
               Preço (R$) *
             </label>
@@ -255,7 +255,7 @@ export default function PostarPage() {
                 setPreco(value ? parseInt(value).toLocaleString('pt-BR') : '');
               }}
               placeholder="Ex: 850.000"
-              className="w-full px-4 py-3 bg-[#1a1a1a] border border-[#3a3a3a] text-[#D4A574] rounded-lg focus:outline-none focus:border-[#A8C97F]"
+              className="w-full px-4 py-3 bg-[#2a2a2a] border border-[#3a3a3a] text-[#D4C4A8] placeholder-[#8B8B8B] rounded-lg focus:outline-none focus:border-[#6B7F5C]"
               required
             />
           </div>
@@ -263,7 +263,7 @@ export default function PostarPage() {
           {/* Location */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
-              <label className="block text-[#D4A574] font-semibold mb-2">
+              <label className="block text-[#D4C4A8] font-semibold mb-2">
                 <MapPin className="w-4 h-4 inline mr-2" />
                 Cidade *
               </label>
@@ -272,50 +272,50 @@ export default function PostarPage() {
                 value={cidade}
                 onChange={(e) => setCidade(e.target.value)}
                 placeholder="Ex: Planaltina"
-                className="w-full px-4 py-3 bg-[#1a1a1a] border border-[#3a3a3a] text-[#D4A574] rounded-lg focus:outline-none focus:border-[#A8C97F]"
+                className="w-full px-4 py-3 bg-[#2a2a2a] border border-[#3a3a3a] text-[#D4C4A8] placeholder-[#8B8B8B] rounded-lg focus:outline-none focus:border-[#6B7F5C]"
                 required
               />
             </div>
             <div>
-              <label className="block text-[#D4A574] font-semibold mb-2">Estado *</label>
+              <label className="block text-[#D4C4A8] font-semibold mb-2">Estado *</label>
               <input
                 type="text"
                 value={estado}
                 onChange={(e) => setEstado(e.target.value)}
                 placeholder="Ex: Goiás"
-                className="w-full px-4 py-3 bg-[#1a1a1a] border border-[#3a3a3a] text-[#D4A574] rounded-lg focus:outline-none focus:border-[#A8C97F]"
+                className="w-full px-4 py-3 bg-[#2a2a2a] border border-[#3a3a3a] text-[#D4C4A8] placeholder-[#8B8B8B] rounded-lg focus:outline-none focus:border-[#6B7F5C]"
                 required
               />
             </div>
           </div>
 
           <div>
-            <label className="block text-[#D4A574] font-semibold mb-2">Endereço/Localização *</label>
+            <label className="block text-[#D4C4A8] font-semibold mb-2">Endereço/Localização *</label>
             <input
               type="text"
               value={localizacao}
               onChange={(e) => setLocalizacao(e.target.value)}
               placeholder="Ex: Rodovia GO-118, Km 25"
-              className="w-full px-4 py-3 bg-[#1a1a1a] border border-[#3a3a3a] text-[#D4A574] rounded-lg focus:outline-none focus:border-[#A8C97F]"
+              className="w-full px-4 py-3 bg-[#2a2a2a] border border-[#3a3a3a] text-[#D4C4A8] placeholder-[#8B8B8B] rounded-lg focus:outline-none focus:border-[#6B7F5C]"
               required
             />
           </div>
 
           <div>
-            <label className="block text-[#D4A574] font-semibold mb-2">CEP</label>
+            <label className="block text-[#D4C4A8] font-semibold mb-2">CEP</label>
             <input
               type="text"
               value={cep}
               onChange={(e) => setCep(e.target.value)}
               placeholder="Ex: 73000-000"
-              className="w-full px-4 py-3 bg-[#1a1a1a] border border-[#3a3a3a] text-[#D4A574] rounded-lg focus:outline-none focus:border-[#A8C97F]"
+              className="w-full px-4 py-3 bg-[#2a2a2a] border border-[#3a3a3a] text-[#D4C4A8] placeholder-[#8B8B8B] rounded-lg focus:outline-none focus:border-[#6B7F5C]"
             />
           </div>
 
           {/* Property Details */}
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
             <div>
-              <label className="block text-[#D4A574] font-semibold mb-2">
+              <label className="block text-[#D4C4A8] font-semibold mb-2">
                 <Square className="w-4 h-4 inline mr-2" />
                 Área (m²)
               </label>
@@ -324,11 +324,11 @@ export default function PostarPage() {
                 value={areaTotal}
                 onChange={(e) => setAreaTotal(e.target.value)}
                 placeholder="Ex: 50000"
-                className="w-full px-4 py-3 bg-[#1a1a1a] border border-[#3a3a3a] text-[#D4A574] rounded-lg focus:outline-none focus:border-[#A8C97F]"
+                className="w-full px-4 py-3 bg-[#2a2a2a] border border-[#3a3a3a] text-[#D4C4A8] placeholder-[#8B8B8B] rounded-lg focus:outline-none focus:border-[#6B7F5C]"
               />
             </div>
             <div>
-              <label className="block text-[#D4A574] font-semibold mb-2">
+              <label className="block text-[#D4C4A8] font-semibold mb-2">
                 <Bed className="w-4 h-4 inline mr-2" />
                 Quartos
               </label>
@@ -337,11 +337,11 @@ export default function PostarPage() {
                 value={quartos}
                 onChange={(e) => setQuartos(e.target.value)}
                 placeholder="Ex: 4"
-                className="w-full px-4 py-3 bg-[#1a1a1a] border border-[#3a3a3a] text-[#D4A574] rounded-lg focus:outline-none focus:border-[#A8C97F]"
+                className="w-full px-4 py-3 bg-[#2a2a2a] border border-[#3a3a3a] text-[#D4C4A8] placeholder-[#8B8B8B] rounded-lg focus:outline-none focus:border-[#6B7F5C]"
               />
             </div>
             <div>
-              <label className="block text-[#D4A574] font-semibold mb-2">
+              <label className="block text-[#D4C4A8] font-semibold mb-2">
                 <Bath className="w-4 h-4 inline mr-2" />
                 Banheiros
               </label>
@@ -350,23 +350,23 @@ export default function PostarPage() {
                 value={banheiros}
                 onChange={(e) => setBanheiros(e.target.value)}
                 placeholder="Ex: 3"
-                className="w-full px-4 py-3 bg-[#1a1a1a] border border-[#3a3a3a] text-[#D4A574] rounded-lg focus:outline-none focus:border-[#A8C97F]"
+                className="w-full px-4 py-3 bg-[#2a2a2a] border border-[#3a3a3a] text-[#D4C4A8] placeholder-[#8B8B8B] rounded-lg focus:outline-none focus:border-[#6B7F5C]"
               />
             </div>
             <div>
-              <label className="block text-[#D4A574] font-semibold mb-2">Vagas</label>
+              <label className="block text-[#D4C4A8] font-semibold mb-2">Vagas</label>
               <input
                 type="number"
                 value={vagas}
                 onChange={(e) => setVagas(e.target.value)}
                 placeholder="Ex: 2"
-                className="w-full px-4 py-3 bg-[#1a1a1a] border border-[#3a3a3a] text-[#D4A574] rounded-lg focus:outline-none focus:border-[#A8C97F]"
+                className="w-full px-4 py-3 bg-[#2a2a2a] border border-[#3a3a3a] text-[#D4C4A8] placeholder-[#8B8B8B] rounded-lg focus:outline-none focus:border-[#6B7F5C]"
               />
             </div>
           </div>
 
           <div>
-            <label className="block text-[#D4A574] font-semibold mb-2">
+            <label className="block text-[#D4C4A8] font-semibold mb-2">
               <Calendar className="w-4 h-4 inline mr-2" />
               Ano de Construção
             </label>
@@ -375,13 +375,13 @@ export default function PostarPage() {
               value={anosConstrucao}
               onChange={(e) => setAnosConstrucao(e.target.value)}
               placeholder="Ex: 2015"
-              className="w-full px-4 py-3 bg-[#1a1a1a] border border-[#3a3a3a] text-[#D4A574] rounded-lg focus:outline-none focus:border-[#A8C97F]"
+              className="w-full px-4 py-3 bg-[#2a2a2a] border border-[#3a3a3a] text-[#D4C4A8] placeholder-[#8B8B8B] rounded-lg focus:outline-none focus:border-[#6B7F5C]"
             />
           </div>
 
           {/* Photos */}
           <div>
-            <label className="block text-[#D4A574] font-semibold mb-2">
+            <label className="block text-[#D4C4A8] font-semibold mb-2">
               <Upload className="w-4 h-4 inline mr-2" />
               Fotos da Propriedade * (mínimo 1)
             </label>
@@ -390,7 +390,7 @@ export default function PostarPage() {
               accept="image/*"
               multiple
               onChange={handlePhotoChange}
-              className="w-full px-4 py-3 bg-[#1a1a1a] border border-[#3a3a3a] text-[#676767] rounded-lg focus:outline-none focus:border-[#A8C97F]"
+              className="w-full px-4 py-3 bg-[#2a2a2a] border border-[#3a3a3a] text-[#8B8B8B] rounded-lg focus:outline-none focus:border-[#6B7F5C]"
             />
             
             {photoPreviews.length > 0 && (
@@ -410,7 +410,7 @@ export default function PostarPage() {
                       <X className="w-4 h-4" />
                     </button>
                     {index === 0 && (
-                      <span className="absolute bottom-1 left-1 bg-[#A8C97F] text-[#0a0a0a] text-xs px-2 py-1 rounded">
+                      <span className="absolute bottom-1 left-1 bg-[#6B7F5C] text-[#D4C4A8] text-xs px-2 py-1 rounded">
                         Capa
                       </span>
                     )}
@@ -437,7 +437,7 @@ export default function PostarPage() {
           <button
             type="submit"
             disabled={submitting}
-            className="w-full px-8 py-4 bg-gradient-to-r from-[#A8C97F] to-[#0D7377] text-white font-bold rounded-lg hover:scale-105 transition disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100"
+            className="w-full px-8 py-4 bg-gradient-to-r from-[#6B7F5C] to-[#7A8F6B] hover:from-[#7A8F6B] hover:to-[#6B7F5C] text-[#D4C4A8] font-bold rounded-lg hover:scale-105 transition disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100 shadow-lg"
           >
             {submitting ? 'Publicando...' : 'Publicar Anúncio'}
           </button>
