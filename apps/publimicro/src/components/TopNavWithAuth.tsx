@@ -133,7 +133,7 @@ export function TopNavWithAuth({
                   <button
                     type="button"
                     onClick={() => setShowCategories(!showCategories)}
-                    className="w-full h-12 px-4 bg-[#1a1a1a] border-2 border-[#2a2a1a] rounded-lg text-[#E6C98B] hover:bg-[#2a2a1a] hover:border-[#A8C97F] transition-colors flex items-center justify-between gap-2 text-sm font-medium"
+                    className="w-full h-12 px-4 bg-[#1a1a1a] border-2 border-[#2a2a1a] rounded-lg text-[#C9A87C] hover:bg-[#2a2a2a] hover:border-[#6B7F5C] transition-colors flex items-center justify-between gap-2 text-sm font-medium"
                   >
                     <span className="truncate">{categories.find(c => c.value === selectedCategory)?.label || "Categoria"}</span>
                     <ChevronDown className="w-5 h-5 flex-shrink-0" />
@@ -148,7 +148,7 @@ export function TopNavWithAuth({
                             setSelectedCategory(cat.value);
                             setShowCategories(false);
                           }}
-                          className="w-full text-left px-4 py-3 text-sm text-[#E6C98B] hover:bg-[#2a2a1a] hover:text-[#A8C97F] first:rounded-t-xl last:rounded-b-xl transition-colors"
+                          className="w-full text-left px-4 py-3 text-sm text-[#C9A87C] hover:bg-[#2a2a2a] hover:text-[#B8904D] first:rounded-t-xl last:rounded-b-xl transition-colors"
                         >
                           {cat.label}
                         </button>

@@ -92,13 +92,13 @@ function ToastItem({ toast, onRemove }: { toast: Toast; onRemove: (id: string) =
   const getIcon = () => {
     switch (toast.type) {
       case "success":
-        return <CheckCircle className="w-5 h-5 text-[#A8C97F]" />;
+        return <CheckCircle className="w-5 h-5 text-[#6B7F5C]" />;
       case "error":
         return <AlertCircle className="w-5 h-5 text-red-400" />;
       case "bid":
         return <TrendingUp className="w-5 h-5 text-[#B7791F]" />;
       default:
-        return <Info className="w-5 h-5 text-[#E6C98B]" />;
+        return <Info className="w-5 h-5 text-[#C9A87C]" />;
     }
   };
 
@@ -125,15 +125,15 @@ function ToastItem({ toast, onRemove }: { toast: Toast; onRemove: (id: string) =
       <div className="flex-shrink-0 mt-0.5" aria-hidden="true">{getIcon()}</div>
       
       <div className="flex-1 min-w-0">
-        <h4 className="text-[#E6C98B] font-bold text-sm">{toast.title}</h4>
+        <h4 className="text-[#C9A87C] font-bold text-sm">{toast.title}</h4>
         {toast.message && (
-          <p className="text-[#A8C97F] text-sm mt-1">{toast.message}</p>
+          <p className="text-[#B8A890] text-sm mt-1">{toast.message}</p>
         )}
       </div>
 
       <button
         onClick={() => onRemove(toast.id)}
-        className="flex-shrink-0 text-[#959595] hover:text-[#E6C98B] transition-colors"
+        className="flex-shrink-0 text-[#959595] hover:text-[#C9A87C] transition-colors"
         aria-label="Fechar notificação"
       >
         <X className="w-5 h-5" />

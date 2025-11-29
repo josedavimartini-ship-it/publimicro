@@ -109,7 +109,7 @@ export default function NeighborhoodInfo({ data, compact = false, showTitle = tr
   return (
     <div className="space-y-4">
       {showTitle && (
-        <h3 className="text-xl font-bold text-[#E6C98B] flex items-center gap-2">
+        <h3 className="text-xl font-bold text-[#C9A87C] flex items-center gap-2">
           <MapPin className="w-6 h-6" />
           Região & Proximidades
         </h3>
@@ -129,7 +129,7 @@ export default function NeighborhoodInfo({ data, compact = false, showTitle = tr
             <span className="px-2 py-0.5 bg-[#8B9B6E]/20 rounded text-xs">Zona Rural</span>
           )}
           {data.urban_area && (
-            <span className="px-2 py-0.5 bg-[#A8C97F]/20 rounded text-xs">Zona Urbana</span>
+            <span className="px-2 py-0.5 bg-[#6B7F5C]/20 rounded text-xs">Zona Urbana</span>
           )}
         </div>
       )}
@@ -208,9 +208,9 @@ export default function NeighborhoodInfo({ data, compact = false, showTitle = tr
       <div className="flex flex-wrap gap-2 pt-2 border-t border-[#2a2a1a]">
         {/* Internet */}
         {data.internet_available && (
-          <div className="flex items-center gap-2 px-3 py-2 bg-gradient-to-r from-[#A8C97F]/20 to-[#0D7377]/20 border border-[#A8C97F]/30 rounded-lg">
-            <Wifi className="w-4 h-4 text-[#A8C97F]" strokeWidth={2} />
-            <span className="text-sm font-semibold text-[#E6C98B]">
+          <div className="flex items-center gap-2 px-3 py-2 bg-gradient-to-r from-[#6B7F5C]/20 to-[#2C5F6F]/20 border border-[#6B7F5C]/30 rounded-lg">
+            <Wifi className="w-4 h-4 text-[#6B7F5C]" strokeWidth={2} />
+            <span className="text-sm font-semibold text-[#C9A87C]">
               {data.internet_type === 'fiber' && '🚀 Internet Fibra'}
               {data.internet_type === 'satellite' && '📡 Internet Satélite'}
               {data.internet_type === '4G' && '📱 Internet 4G'}
