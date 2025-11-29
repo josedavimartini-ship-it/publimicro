@@ -2,7 +2,7 @@
 
 import { useRef, Suspense, useEffect } from "react";
 import { Canvas, useFrame } from "@react-three/fiber";
-import { useGLTF, OrbitControls } from "@react-three/drei";
+import { useGLTF, useFBX, OrbitControls } from "@react-three/drei";
 import type { Group } from "three";
 
 interface CarcaraModelProps {
@@ -20,7 +20,15 @@ function CarcaraModel({ scale = 2.5, onAnimationStart, onAnimationComplete, auto
   const isAnimating = useRef(false);
   const flightOffset = useRef(0);
 
-  const { scene } = useGLTF(modelPath);
+  // Auto-detect format based on file extension
+  const isFBX = modelPath.toLowerCase().endsWith('.fbx');
+  
+  // Load model based on format
+  const glbModel = !isFBX ? useGLTF(modelPath) : { scene: null };
+  const fbxModel = isFBX ? useFBX(modelPath) : null;
+  
+  // Use the appropriate scene
+  const scene = isFBX ? fbxModel : glbModel.scene;
 
   useEffect(() => {
     if (modelRef.current) {
@@ -55,6 +63,8 @@ function CarcaraModel({ scale = 2.5, onAnimationStart, onAnimationComplete, auto
       }, 1500);
     }
   });
+
+  if (!scene) return null;
 
   return <primitive ref={modelRef} object={scene} scale={scale} castShadow receiveShadow />;
 }
