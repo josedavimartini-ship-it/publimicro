@@ -24,5 +24,20 @@ export type { PropertyCardProps } from "./PropertyCard";
 
 export { theme, publimicroColors } from "./theme";
 export type { Theme } from "./theme";
+
+// Dark Theme Configuration
+export { default as darkTheme, tw, componentPresets, textShadowStyles } from "./darkTheme";
+
+// Dark Theme Components
+export {
+  H1, H2, H3, H4,
+  DarkButton,
+  DarkCard, DarkModal,
+  DarkInput, DarkTextarea, DarkSelect,
+  DarkBadge,
+  DarkSpinner,
+  DarkLink,
+} from "./components/DarkThemeComponents";
+
 // Tabs are a lightweight UI primitive used by apps; export a simple implementation.
 export { Tabs, Tab } from "./components/Tabs";

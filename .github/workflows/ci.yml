@@ -15,16 +15,7 @@ jobs:
         node-version: [20.x]
     steps:
       - uses: actions/checkout@v4
-      - name: Debug: Node/npm/pnpm and scripts listing
-        run: |
-          node -v
-          npm -v
-          pnpm -v || npm install -g pnpm
-          pnpm -v
-          echo '=== scripts/ listing ==='
-          ls -la scripts || true
-          echo '=== apps/*/scripts/ sample ==='
-          ls -la apps/*/scripts 2>/dev/null || true
+      
       - name: Use Node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v4
         with:
