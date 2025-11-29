@@ -40,10 +40,10 @@ export default async function ScheduleVisitPage({
 
       <section className="flex-1 max-w-4xl mx-auto px-6 py-16 w-full relative z-10">
         <div className="text-center mb-12">
-          <h1 className="text-4xl md:text-5xl font-bold text-[#E6C98B] mb-4 drop-shadow-[0_4px_12px_rgba(0,0,0,0.9)]">
+          <h1 className="text-4xl md:text-5xl font-bold text-[#C9A87C] mb-4 drop-shadow-[0_4px_12px_rgba(0,0,0,0.9)]">
             Agendar Visita
           </h1>
-          <p className="text-white text-lg max-w-2xl mx-auto drop-shadow-[0_2px_8px_rgba(0,0,0,1)]">
+          <p className="text-[#D4C4A8] text-lg max-w-2xl mx-auto drop-shadow-[0_2px_8px_rgba(0,0,0,1)]">
             Escolha entre visita presencial ou videoconferência. 
             Nossa equipe entrará em contato para confirmar o agendamento.
           </p>
