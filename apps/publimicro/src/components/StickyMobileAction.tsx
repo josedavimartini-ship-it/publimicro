@@ -83,7 +83,7 @@ export function ActionButton({
 }: ActionButtonProps) {
   const variantClasses = {
     primary:
-      "bg-gradient-to-r from-[#A8C97F] to-[#0D7377] text-white hover:from-[#8B9B6E] hover:to-[#0A5F62] disabled:from-[#3a3a3a] disabled:to-[#2a2a2a] disabled:text-[#676767]",
+      "bg-gradient-to-r from-[#6B7F5C] to-[#2C5F6F] text-[#D4C4A8] hover:from-[#7A8F6B] hover:to-[#3A6F7F] disabled:from-[#3a3a3a] disabled:to-[#2a2a2a] disabled:text-[#676767]",
     secondary:
       "bg-gradient-to-r from-[#E6C98B] to-[#B7791F] text-[#0a0a0a] hover:from-[#D4A574] hover:to-[#A6681E] disabled:from-[#3a3a3a] disabled:to-[#2a2a2a] disabled:text-[#676767]",
     outline:

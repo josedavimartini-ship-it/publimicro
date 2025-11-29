@@ -683,7 +683,7 @@ export function OnboardingModal({ isOpen, onComplete, userId }: OnboardingModalP
                 <button
                   type="button"
                   onClick={handleNext}
-                  className="flex-1 px-6 py-3 bg-gradient-to-r from-[#A8C97F] to-[#0D7377] hover:from-[#0D7377] hover:to-[#A8C97F] text-white rounded-lg transition-all font-bold"
+                  className="flex-1 px-6 py-3 bg-gradient-to-r from-[#6B7F5C] to-[#2C5F6F] hover:from-[#7A8F6B] hover:to-[#3A6F7F] text-[#D4C4A8] rounded-lg transition-all font-bold shadow-lg"
                 >
                   Próximo
                 </button>
@@ -691,7 +691,7 @@ export function OnboardingModal({ isOpen, onComplete, userId }: OnboardingModalP
                 <button
                   type="submit"
                   disabled={loading || !formData.terms_accepted}
-                  className="flex-1 px-6 py-3 bg-gradient-to-r from-[#A8C97F] to-[#0D7377] hover:from-[#0D7377] hover:to-[#A8C97F] text-white rounded-lg transition-all font-bold disabled:opacity-50 disabled:cursor-not-allowed"
+                  className="flex-1 px-6 py-3 bg-gradient-to-r from-[#6B7F5C] to-[#2C5F6F] hover:from-[#7A8F6B] hover:to-[#3A6F7F] text-[#D4C4A8] rounded-lg transition-all font-bold disabled:opacity-50 disabled:cursor-not-allowed shadow-lg"
                 >
                   {loading ? "Salvando..." : "Completar Cadastro"}
                 </button>

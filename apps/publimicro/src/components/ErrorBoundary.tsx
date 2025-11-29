@@ -69,7 +69,7 @@ export class ErrorBoundary extends React.Component<
             <div className="flex gap-4 justify-center">
               <button
                 onClick={() => window.location.reload()}
-                className="flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-[#A8C97F] to-[#0D7377] text-white font-bold rounded-full hover:from-[#0D7377] hover:to-[#A8C97F] transition-all"
+                className="flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-[#6B7F5C] to-[#2C5F6F] text-[#D4C4A8] font-bold rounded-full hover:from-[#7A8F6B] hover:to-[#3A6F7F] transition-all shadow-lg"
               >
                 <RefreshCw className="w-5 h-5" />
                 Recarregar Página

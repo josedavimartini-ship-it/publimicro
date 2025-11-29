@@ -35,7 +35,7 @@ export default function SearchBar({ onFilterChange }: { onFilterChange?: React.D
           )}
           <button
             onClick={() => setShowFilters(!showFilters)}
-            className={`flex items-center gap-2 px-5 py-3 rounded-full ${showFilters ? "bg-gradient-to-r from-[#A8C97F] to-[#0D7377] text-[#0a0a0a]" : "bg-[#2a2a1a] text-[#A8C97F]"}`}
+            className={`flex items-center gap-2 px-5 py-3 rounded-full ${showFilters ? "bg-gradient-to-r from-[#6B7F5C] to-[#2C5F6F] text-[#D4C4A8]" : "bg-[#2a2a1a] text-[#6B7F5C]"}`}
           >
             <SlidersHorizontal className="w-5 h-5" />
             <span className="font-extrabold">Filtros</span>

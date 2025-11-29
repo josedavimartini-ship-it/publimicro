@@ -130,7 +130,7 @@ export default function SearchTab({ onFilterChange, initialSection = DEFAULT_SEC
                 />
                 <button
                   onClick={() => applyFilters()}
-                  className="px-5 py-3 rounded-xl bg-gradient-to-r from-[#A8C97F] to-[#0D7377] text-black font-bold"
+                  className="px-5 py-3 rounded-xl bg-gradient-to-r from-[#6B7F5C] to-[#2C5F6F] text-[#D4C4A8] font-bold shadow-lg"
                 >
                   Buscar
                 </button>
