@@ -1,0 +1,91 @@
+<svg width="512" height="512" xmlns="http://www.w3.org/2000/svg">
+  <!-- Dark background -->
+  <rect width="512" height="512" fill="#0a0a0a"/>
+  
+  <!-- Gradient definitions -->
+  <defs>
+    <radialGradient id="bgGrad" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" style="stop-color:#1a1a1a;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#0a0a0a;stop-opacity:1" />
+    </radialGradient>
+    <linearGradient id="emeBody" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#8B7355;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#6B5345;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="binoculars" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#A8C97F;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#8B9B6E;stop-opacity:1" />
+    </linearGradient>
+    <radialGradient id="lens" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" style="stop-color:#E6C98B;stop-opacity:0.3" />
+      <stop offset="50%" style="stop-color:#50C878;stop-opacity:0.2" />
+      <stop offset="100%" style="stop-color:#A8C97F;stop-opacity:0.4" />
+    </radialGradient>
+  </defs>
+  
+  <circle cx="256" cy="256" r="220" fill="url(#bgGrad)"/>
+  
+  <!-- EME Body (simplified bird shape) -->
+  <g transform="translate(256, 280)">
+    <!-- Body -->
+    <ellipse cx="0" cy="0" rx="60" ry="80" fill="url(#emeBody)" opacity="0.9"/>
+    
+    <!-- Neck -->
+    <rect x="-15" y="-80" width="30" height="60" rx="10" fill="url(#emeBody)" opacity="0.9"/>
+    
+    <!-- Head -->
+    <ellipse cx="0" cy="-90" rx="35" ry="40" fill="url(#emeBody)" opacity="0.95"/>
+    
+    <!-- Beak -->
+    <path d="M 0,-80 L 15,-75 L 0,-70 Z" fill="#D4A574" opacity="0.9"/>
+    
+    <!-- Legs (simple) -->
+    <rect x="-25" y="70" width="12" height="40" rx="4" fill="#8B7355" opacity="0.8"/>
+    <rect x="13" y="70" width="12" height="40" rx="4" fill="#8B7355" opacity="0.8"/>
+    
+    <!-- Feet -->
+    <ellipse cx="-19" cy="110" rx="10" ry="6" fill="#6B5345" opacity="0.9"/>
+    <ellipse cx="19" cy="110" rx="10" ry="6" fill="#6B5345" opacity="0.9"/>
+  </g>
+  
+  <!-- BINOCULARS - The Star of the Show! -->
+  <g transform="translate(256, 170)">
+    <!-- Binocular body -->
+    <rect x="-55" y="-25" width="40" height="50" rx="8" fill="url(#binoculars)" opacity="0.95"/>
+    <rect x="15" y="-25" width="40" height="50" rx="8" fill="url(#binoculars)" opacity="0.95"/>
+    
+    <!-- Bridge connecting the barrels -->
+    <rect x="-15" y="-15" width="30" height="10" rx="3" fill="#8B9B6E" opacity="0.9"/>
+    
+    <!-- Left lens -->
+    <circle cx="-35" cy="0" r="18" fill="url(#lens)" stroke="#50C878" stroke-width="2"/>
+    <circle cx="-35" cy="0" r="12" fill="#0a0a0a" opacity="0.3"/>
+    <circle cx="-32" cy="-3" r="5" fill="#E6C98B" opacity="0.6"/>
+    
+    <!-- Right lens -->
+    <circle cx="35" cy="0" r="18" fill="url(#lens)" stroke="#50C878" stroke-width="2"/>
+    <circle cx="35" cy="0" r="12" fill="#0a0a0a" opacity="0.3"/>
+    <circle cx="38" cy="-3" r="5" fill="#E6C98B" opacity="0.6"/>
+    
+    <!-- Focus wheel details -->
+    <circle cx="-35" cy="20" r="8" fill="#6B5345" opacity="0.7"/>
+    <circle cx="35" cy="20" r="8" fill="#6B5345" opacity="0.7"/>
+    
+    <!-- Shine/highlight on binoculars -->
+    <ellipse cx="-45" cy="-20" rx="6" ry="8" fill="#E6C98B" opacity="0.3"/>
+    <ellipse cx="45" cy="-20" rx="6" ry="8" fill="#E6C98B" opacity="0.3"/>
+  </g>
+  
+  <!-- "AcheMe" text below -->
+  <text x="256" y="440" text-anchor="middle" fill="#A8C97F" font-family="Arial, sans-serif" font-size="48" font-weight="900" letter-spacing="2">AcheMe</text>
+  
+  <!-- Tagline -->
+  <text x="256" y="470" text-anchor="middle" fill="#E6C98B" font-family="Arial, sans-serif" font-size="18" font-weight="400" letter-spacing="1" opacity="0.8">Find For Me</text>
+  
+  <!-- Decorative search circles (subtle) -->
+  <g opacity="0.2">
+    <circle cx="140" cy="140" r="30" fill="none" stroke="#A8C97F" stroke-width="2" stroke-dasharray="3,5"/>
+    <circle cx="372" cy="140" r="25" fill="none" stroke="#50C878" stroke-width="2" stroke-dasharray="2,4"/>
+    <circle cx="140" cy="372" r="20" fill="none" stroke="#E6C98B" stroke-width="2" stroke-dasharray="4,6"/>
+  </g>
+</svg>

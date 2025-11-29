@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import { supabase } from "@/lib/supabaseClient";
 import Link from "next/link";
 import Image from "next/image";
-import { TrendingUp, Clock, CheckCircle, XCircle, AlertCircle, Eye, DollarSign, Calendar } from "lucide-react";
+import { TrendingUp, Clock, CheckCircle, XCircle, AlertCircle, Eye, DollarSign } from "lucide-react";
 import Breadcrumbs from "@/components/Breadcrumbs";
 import { Skeleton } from "@/components/Skeleton";
 
@@ -30,7 +30,7 @@ export default function LancesPage() {
   const [bids, setBids] = useState<Bid[]>([]);
   const [loading, setLoading] = useState(true);
   const [filter, setFilter] = useState<"all" | "pending" | "accepted" | "rejected">("all");
-  const [userId, setUserId] = useState<string | null>(null);
+  const [_userId, setUserId] = useState<string | null>(null);
 
   useEffect(() => {
     void loadUserAndBids();

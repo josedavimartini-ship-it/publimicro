@@ -37,7 +37,7 @@ export default function CarcaraHighlights({ limit = 6, hideTestListings = true }
     try {
       if (!v && v !== 0) return undefined;
       return new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(v as number);
-    } catch (_e) {
+    } catch {
       return undefined;
     }
   };

@@ -6,8 +6,8 @@ import Link from "next/link";
 import { MessageCircle, ArrowLeft } from "lucide-react";
 
 export default function ChatPage() {
-  const [userId, setUserId] = useState<string | null>(null);
-  const [chats, setChats] = useState<any[]>([]);
+  const [_userId, setUserId] = useState<string | null>(null);
+  const [chats, _setChats] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {

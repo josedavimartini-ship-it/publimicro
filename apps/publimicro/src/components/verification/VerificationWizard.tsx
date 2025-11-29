@@ -25,8 +25,8 @@ interface VerificationData {
 }
 
 export default function VerificationWizard() {
-  const router = useRouter();
-  const supabase = createClientComponentClient();
+  const _router = useRouter();
+  const _supabase = createClientComponentClient();
   
   const [currentStep, setCurrentStep] = useState<VerificationStep>('personal_info');
   const [verificationData, setVerificationData] = useState<Partial<VerificationData>>({});

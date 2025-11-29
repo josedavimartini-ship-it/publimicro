@@ -2,8 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { apiPost } from '@/lib/api';
-import { X, DollarSign, MessageSquare, ShieldCheck, AlertCircle } from 'lucide-react';
-import BottomSheet from './BottomSheet';
+import { DollarSign, ShieldCheck } from 'lucide-react';
 import { useAuth } from './AuthProvider';
 import { useI18n } from '@/lib/i18n';
 import Link from 'next/link';
@@ -33,7 +32,7 @@ export default function ProposalModal({
 }: ProposalModalProps) {
   const { profile } = useAuth();
   const { t } = useI18n();
-  const [_isMobile, setIsMobile] = useState(false);
+  const [__isMobile, setIsMobile] = useState(false);
   const [amount, setAmount] = useState('');
   const [entry, setEntry] = useState('');
   const [installments, setInstallments] = useState(1);
@@ -41,7 +40,7 @@ export default function ProposalModal({
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
   const [error, setError] = useState('');
-  const [tab, setTab] = useState<'proposta' | 'historico'>('proposta');
+  const [_tab, _setTab] = useState<'proposta' | 'historico'>('proposta');
 
   // Check if user is authorized to make proposals
   const canMakeProposal = profile?.can_place_bids === true && profile?.verified === true;

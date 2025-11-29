@@ -6,7 +6,7 @@ import { Volume2, VolumeX } from "lucide-react";
 
 export default function BirdAudioToggle() {
   const [isMuted, setIsMuted] = useState(true);
-  const [audio, setAudio] = useState<HTMLAudioElement | null>(null);
+  const [_audio, setAudio] = useState<HTMLAudioElement | null>(null);
 
   useEffect(() => {
     // Create audio element

@@ -1,0 +1,673 @@
+
+openapi: 3.0.3
+info:
+  title: Classifieds & Marketplace - MVP API
+  version: 1.0.0
+  description: OpenAPI specification (skeleton) for the Classifieds/Imobiliário MVP (listings, users, bookings, payments, KYC, inspections)
+servers:
+  - url: https://api.yourplatform.com/v1
+    description: Production
+  - url: https://sandbox.api.yourplatform.com/v1
+    description: Sandbox
+
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+  schemas:
+    User:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        name:
+          type: string
+        email:
+          type: string
+          format: email
+        phone:
+          type: string
+        role:
+          type: string
+          enum: [buyer, seller, broker, admin]
+        verified:
+          type: boolean
+        kyc_status:
+          $ref: '#/components/schemas/KycStatus'
+        rating:
+          type: number
+          format: float
+        created_at:
+          type: string
+          format: date-time
+      required: [id, email, role, created_at]
+
+    KycStatus:
+      type: object
+      properties:
+        status:
+          type: string
+          enum: [unverified, pending, verified, failed]
+        provider:
+          type: string
+        provider_reference:
+          type: string
+        updated_at:
+          type: string
+          format: date-time
+
+    Listing:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        owner_id:
+          type: string
+          format: uuid
+        title:
+          type: string
+        description:
+          type: string
+        address:
+          type: object
+          properties:
+            street: { type: string }
+            city: { type: string }
+            state: { type: string }
+            country: { type: string }
+            zipcode: { type: string }
+            geo_lat: { type: number, format: float }
+            geo_lng: { type: number, format: float }
+        price_type:
+          type: string
+          enum: [sale, rent, short_term]
+        price:
+          type: number
+          format: float
+        currency:
+          type: string
+          example: BRL
+        bedrooms:
+          type: integer
+        bathrooms:
+          type: integer
+        area_m2:
+          type: number
+        property_type:
+          type: string
+        photos:
+          type: array
+          items:
+            type: string
+            format: uri
+        media_3d_url:
+          type: string
+          format: uri
+        status:
+          type: string
+          enum: [draft, published, archived]
+        created_at:
+          type: string
+          format: date-time
+      required: [id, owner_id, title, price, currency, status, created_at]
+
+    Booking:
+      type: object
+      properties:
+        id: { type: string, format: uuid }
+        listing_id: { type: string, format: uuid }
+        user_id: { type: string, format: uuid }
+        start_date: { type: string, format: date }
+        end_date: { type: string, format: date }
+        status:
+          type: string
+          enum: [requested, held, confirmed, cancelled, completed]
+        hold_amount:
+          type: number
+          format: float
+        payment_id:
+          type: string
+        created_at: { type: string, format: date-time }
+
+    Payment:
+      type: object
+      properties:
+        id: { type: string, format: uuid }
+        provider: { type: string }
+        provider_payment_id: { type: string }
+        amount: { type: number, format: float }
+        currency: { type: string }
+        status:
+          type: string
+          enum: [authorized, captured, refunded, failed]
+        created_at: { type: string, format: date-time }
+
+    Inspection:
+      type: object
+      properties:
+        id: { type: string, format: uuid }
+        listing_id: { type: string, format: uuid }
+        booking_id: { type: string, format: uuid }
+        inspector_id: { type: string, format: uuid }
+        photos:
+          type: array
+          items:
+            type: string
+            format: uri
+        checklist:
+          type: array
+          items:
+            type: object
+            properties:
+              key: { type: string }
+              value: { type: string }
+        concluded_at: { type: string, format: date-time }
+
+  responses:
+    Unauthorized:
+      description: JWT missing or invalid
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              message: { type: string }
+
+paths:
+
+  /auth/signup:
+    post:
+      summary: Register a new user
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name: { type: string }
+                email: { type: string, format: email }
+                phone: { type: string }
+                password: { type: string }
+                role:
+                  type: string
+                  enum: [buyer, seller, broker]
+      responses:
+        '201':
+          description: User created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        '400':
+          description: Bad request
+
+  /auth/login:
+    post:
+      summary: Login (returns JWT)
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email: { type: string, format: email }
+                password: { type: string }
+      responses:
+        '200':
+          description: Auth token
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  token: { type: string }
+                  expires_in: { type: integer }
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+
+  /auth/me:
+    get:
+      summary: Get current user
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Current user
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+
+  /kyc/start:
+    post:
+      summary: Start KYC verification (provider flow)
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                user_id: { type: string }
+                return_url: { type: string }
+      responses:
+        '201':
+          description: KYC session created
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  session_id: { type: string }
+                  redirect_url: { type: string }
+        '400':
+          description: Bad request
+
+  /kyc/{session_id}/status:
+    get:
+      summary: Get KYC status for session
+      parameters:
+        - in: path
+          name: session_id
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: status
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/KycStatus'
+
+  /users/{id}:
+    get:
+      summary: Get user by id
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: user
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+
+    put:
+      summary: Update user profile
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name: { type: string }
+                phone: { type: string }
+      responses:
+        '200':
+          description: updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+
+  /listings:
+    post:
+      summary: Create a listing
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                title: { type: string }
+                description: { type: string }
+                price: { type: number }
+                currency: { type: string }
+                property_type: { type: string }
+                photos:
+                  type: array
+                  items:
+                    type: string
+                    format: binary
+      responses:
+        '201':
+          description: listing created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Listing'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+
+    get:
+      summary: Search listings
+      parameters:
+        - in: query
+          name: q
+          schema: { type: string }
+        - in: query
+          name: price_min
+          schema: { type: number }
+        - in: query
+          name: price_max
+          schema: { type: number }
+        - in: query
+          name: beds
+          schema: { type: integer }
+        - in: query
+          name: page
+          schema: { type: integer, default: 1 }
+        - in: query
+          name: per_page
+          schema: { type: integer, default: 20 }
+      responses:
+        '200':
+          description: search results
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  total: { type: integer }
+                  items:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Listing'
+
+  /listings/{id}:
+    get:
+      summary: Get listing details
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema: { type: string }
+      responses:
+        '200':
+          description: listing
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Listing'
+
+    put:
+      summary: Update listing
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema: { type: string }
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Listing'
+      responses:
+        '200':
+          description: updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Listing'
+
+    delete:
+      summary: Delete listing
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema: { type: string }
+      responses:
+        '204':
+          description: deleted
+
+  /media/upload:
+    post:
+      summary: Create signed upload URL (preferred)
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                filename: { type: string }
+                content_type: { type: string }
+      responses:
+        '200':
+          description: signed url
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  upload_url: { type: string }
+                  access_url: { type: string }
+
+  /bookings:
+    post:
+      summary: Create booking (holds funds)
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                listing_id: { type: string }
+                start_date: { type: string, format: date }
+                end_date: { type: string, format: date }
+      responses:
+        '201':
+          description: booking created (held)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Booking'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+
+    get:
+      summary: List user bookings (or admin filter)
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: bookings
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Booking'
+
+  /bookings/{id}:
+    get:
+      summary: Get booking
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema: { type: string }
+      responses:
+        '200':
+          description: booking
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Booking'
+
+    post:
+      summary: Actions on booking (confirm/cancel)
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema: { type: string }
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                action:
+                  type: string
+                  enum: [confirm, cancel]
+      responses:
+        '200':
+          description: action applied
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Booking'
+
+  /payments/hold:
+    post:
+      summary: Create a payment hold (escrow)
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                amount: { type: number }
+                currency: { type: string }
+                payment_method_id: { type: string }
+                metadata: { type: object }
+      responses:
+        '201':
+          description: hold created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Payment'
+
+  /payments/charge:
+    post:
+      summary: Capture a payment (charge)
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                payment_id: { type: string }
+      responses:
+        '200':
+          description: captured
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Payment'
+
+  /payments/payout:
+    post:
+      summary: Payout to connected account
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                connected_account_id: { type: string }
+                amount: { type: number }
+                currency: { type: string }
+      responses:
+        '200':
+          description: payout initiated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Payment'
+
+  /inspections:
+    post:
+      summary: Submit inspection (walkaround photos/checklist)
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                listing_id: { type: string }
+                booking_id: { type: string }
+                photos:
+                  type: array
+                  items:
+                    type: string
+                    format: binary
+                checklist:
+                  type: string
+      responses:
+        '201':
+          description: inspection created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Inspection'
+
+  /admin/reports:
+    get:
+      summary: Admin reports and metrics
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: report
+          content:
+            application/json:
+              schema:
+                type: object

@@ -44,7 +44,7 @@ export default function PWAInstallPrompt() {
     if (!deferredPrompt) return;
 
     deferredPrompt.prompt();
-    const { outcome } = await deferredPrompt.userChoice;
+    const { outcome: _outcome } = await deferredPrompt.userChoice;
     
     // console.log(`PWA install ${outcome}`);
     setDeferredPrompt(null);

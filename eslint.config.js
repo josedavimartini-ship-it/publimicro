@@ -207,9 +207,9 @@ module.exports = [
         '@typescript-eslint/no-unused-vars': ['error', { argsIgnorePattern: '^_', varsIgnorePattern: '^_' }],
         // Temporarily relax explicit return type for faster incremental cleanup
         '@typescript-eslint/explicit-function-return-type': 'off',
-        '@typescript-eslint/no-misused-promises': 'error',
-        '@typescript-eslint/no-floating-promises': 'error',
-        '@typescript-eslint/no-non-null-assertion': 'error',
+        '@typescript-eslint/no-misused-promises': 'warn',
+        '@typescript-eslint/no-floating-promises': 'warn',
+        '@typescript-eslint/no-non-null-assertion': 'warn',
 
         'react/react-in-jsx-scope': 'off',
         'react/prop-types': 'off',

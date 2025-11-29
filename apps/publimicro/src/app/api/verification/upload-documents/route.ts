@@ -62,7 +62,7 @@ export async function POST(request: NextRequest) {
 
     // Upload document front
     const frontFileName = `${user.id}/document-front-${Date.now()}.${documentFront.name.split('.').pop()}`;
-    const { data: frontData, error: frontError } = await supabase.storage
+    const { data: _frontData, error: frontError } = await supabase.storage
       .from('verification-documents')
       .upload(frontFileName, documentFront, {
         contentType: documentFront.type,
@@ -85,7 +85,7 @@ export async function POST(request: NextRequest) {
     // Upload document back (if provided)
     if (documentBack) {
       const backFileName = `${user.id}/document-back-${Date.now()}.${documentBack.name.split('.').pop()}`;
-      const { data: backData, error: backError } = await supabase.storage
+      const { data: _backData, error: backError } = await supabase.storage
         .from('verification-documents')
         .upload(backFileName, documentBack, {
           contentType: documentBack.type,
@@ -102,7 +102,7 @@ export async function POST(request: NextRequest) {
 
     // Upload selfie
     const selfieFileName = `${user.id}/selfie-${Date.now()}.${selfie.name.split('.').pop()}`;
-    const { data: selfieData, error: selfieError } = await supabase.storage
+    const { data: _selfieData, error: selfieError } = await supabase.storage
       .from('verification-documents')
       .upload(selfieFileName, selfie, {
         contentType: selfie.type,
@@ -125,7 +125,7 @@ export async function POST(request: NextRequest) {
     // Upload proof of address (if provided)
     if (proofOfAddress) {
       const addressFileName = `${user.id}/proof-of-address-${Date.now()}.${proofOfAddress.name.split('.').pop()}`;
-      const { data: addressData, error: addressError } = await supabase.storage
+      const { data: _addressData, error: addressError } = await supabase.storage
         .from('verification-documents')
         .upload(addressFileName, proofOfAddress, {
           contentType: proofOfAddress.type,

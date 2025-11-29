@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+// No React hooks are required here — keep file lean
 import { Phone } from "lucide-react";
 
 export default function FloatingWhatsApp() {

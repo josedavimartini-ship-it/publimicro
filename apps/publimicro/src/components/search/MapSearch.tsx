@@ -6,7 +6,7 @@ interface MapSearchProps {
   onLocationSelect?: (location: { lat: number; lng: number; address: string }) => void;
 }
 
-export default function MapSearch({ onLocationSelect }: MapSearchProps): JSX.Element {
+export default function MapSearch({ onLocationSelect: _onLocationSelect }: MapSearchProps): JSX.Element {
   const [searchQuery, setSearchQuery] = useState("");
   const [mapView, setMapView] = useState<"map" | "satellite">("map");
   const [showMap, setShowMap] = useState(false);

@@ -9,7 +9,7 @@
 
 export default function EmuBrandArt({ 
   className = "w-64 h-64", 
-  variant = "searching" 
+  variant: _variant = "searching" 
 }: { 
   className?: string; 
   variant?: "searching" | "standing" | "looking" 

@@ -41,8 +41,8 @@ export default function ContaPage() {
   const supabase = createClientComponentClient();
 
   const [loading, setLoading] = useState(true);
-  const [user, setUser] = useState<CurrentUser>(null);
-  const [profile, setProfile] = useState<Record<string, any> | null>(null);
+  const [_user, setUser] = useState<CurrentUser>(null);
+  const [_profile, setProfile] = useState<Record<string, any> | null>(null);
   const [activeTab, setActiveTab] = useState("overview");
 
   // Data

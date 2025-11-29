@@ -5,10 +5,9 @@
 import { useEffect, useState, useRef } from "react";
 import { useParams, useRouter } from "next/navigation";
 import { supabase } from "@/lib/supabaseClient";
-import Image from "next/image";
 import Link from "next/link";
 import dynamic from "next/dynamic";
-import { ArrowLeft, MapPin, Ruler, Bed, Bath, Car, Phone, ExternalLink, Video, Heart, Calendar, TrendingUp } from "lucide-react";
+import { ArrowLeft, MapPin, Ruler, Bed, Bath, Car, Phone, ExternalLink, Video, Calendar, TrendingUp } from "lucide-react";
 import { getKMLForProperty, fetchKMLContent } from "@/lib/kmlMapping";
 import FavoritesButton from "@/components/FavoritesButton";
 import { WhatsAppLink } from "@publimicro/ui";
@@ -67,26 +66,26 @@ interface Sitio {
 
 export default function PropertyPage() {
   const params = useParams();
-  const router = useRouter();
+  const _router = useRouter();
   const { showToast } = useToast();
-  const { t, lang } = useI18n();
-  const { user, profile, loading: authLoading } = useAuth();
+  const { t, lang: _lang } = useI18n();
+  const { user: _user, profile: _profile, loading: _authLoading } = useAuth();
   const [sitio, setSitio] = useState<Sitio | null>(null);
   const [loading, setLoading] = useState(true);
-  const [currentImageIndex, setCurrentImageIndex] = useState(0);
-  const [bidValue, setBidValue] = useState("");
-  const [bidMessage, setBidMessage] = useState("");
-  const [bidSubmitting, setBidSubmitting] = useState(false);
-  const [bidSuccess, setBidSuccess] = useState(false);
-  const [bidError, setBidError] = useState("");
+  const [currentImageIndex, _setCurrentImageIndex] = useState(0);
+  const [bidValue, _setBidValue] = useState("");
+  const [bidMessage, _setBidMessage] = useState("");
+  const [_bidSubmitting, _setBidSubmitting] = useState(false);
+  const [bidSuccess, _setBidSuccess] = useState(false);
+  const [bidError, _setBidError] = useState("");
   const [currentHighestBid, setCurrentHighestBid] = useState<number | null>(null);
   const [kmlData, setKmlData] = useState<string>(KML_DATA_FALLBACK);
   const [visitModalOpen, setVisitModalOpen] = useState(false);
-  const [proposalModalOpen, setProposalModalOpen] = useState(false);
+  const [proposalModalOpen, _setProposalModalOpen] = useState(false);
   const previouslyFocusedElement = useRef<HTMLElement | null>(null);
   // User flow enforcement state
-  const [visitBlockedReason, setVisitBlockedReason] = useState<string | null>(null);
-  const [proposalBlockedReason, setProposalBlockedReason] = useState<string | null>(null);
+  const [_visitBlockedReason, _setVisitBlockedReason] = useState<string | null>(null);
+  const [_proposalBlockedReason, _setProposalBlockedReason] = useState<string | null>(null);
 
   // Handle Escape key to close modal
   useEffect(() => {
@@ -177,7 +176,7 @@ export default function PropertyPage() {
     fetchSitio();
   }, [params?.id]);
 
-  const handleSubmitBid = async () => {
+  const _handleSubmitBid = async () => {
     setBidError("");
     setBidSuccess(false);
     
@@ -282,7 +281,7 @@ export default function PropertyPage() {
   }
 
   const photos = sitio.fotos && sitio.fotos.length > 0 ? sitio.fotos : ["/images/fallback-rancho.jpg"];
-  const currentPhoto = photos[currentImageIndex];
+  const _currentPhoto = photos[currentImageIndex];
 
   return (
     <main className="min-h-screen bg-gradient-to-b from-[#0a0a0a] via-[#0d0d0d] to-[#0a0a0a]">

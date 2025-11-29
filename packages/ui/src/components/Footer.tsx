@@ -1,6 +1,5 @@
 "use client";
 import React from "react";
-import { theme } from "../theme";
 
 export const Footer: React.FC = () => {
   return (

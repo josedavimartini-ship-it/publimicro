@@ -12,7 +12,7 @@ export async function POST(req: Request) {
 
   try {
     const body = await req.json();
-    const { ad_id, amount, visit_id, message } = body;
+    const { ad_id, amount, visit_id: _visit_id, message } = body;
 
     if (!ad_id || !amount) {
       return NextResponse.json({ error: 'Missing required fields' }, { status: 400 });

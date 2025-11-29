@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useRef } from 'react';
 import { apiPost } from '@/lib/api';
-import { X, Calendar, Clock, Video, MapPin, LogIn } from 'lucide-react';
+import { X, Calendar, Video, MapPin, LogIn } from 'lucide-react';
 import FocusLock from 'react-focus-lock';
 import { useAuth } from './AuthProvider';
 import { useRouter } from 'next/navigation';

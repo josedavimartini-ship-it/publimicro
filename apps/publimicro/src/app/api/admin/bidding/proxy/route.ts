@@ -33,7 +33,7 @@ async function ensureAdmin() {
         const list = Array.isArray(setting.value) ? setting.value : JSON.parse(setting.value);
         const normalized = list.map((e) => String(e).toLowerCase());
         if (normalized.includes(email)) return { ok: true, user };
-      } catch (_err) {
+      } catch {
         // ignore parse errors and fall back
       }
     }

@@ -2,16 +2,14 @@
 
 import Link from "next/link";
 import {
-  Home, Search, Heart, User, Menu, X,
-  TrendingUp, Award, Shield, Bell, LogOut, LayoutDashboard, FileText, Gavel, ChevronDown,
-  ThumbsUp, Megaphone, PlusCircle, Settings, Package
+  Heart, User,
+  LogOut, LayoutDashboard, ChevronDown,
+  PlusCircle, Settings, Package
 } from 'lucide-react';
-import { AnimatedHandshake } from "./AnimatedHandshake";
 import { useMemo, useState, useRef, useEffect } from "react";
 import { useAuth } from "./AuthProvider";
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 import { useRouter } from "next/navigation";
-import AccountModal from "./AccountModal";
 import AccountDashboard from "./AccountDashboard";
 import AchemeLogo from "./AchemeLogo";
 
@@ -30,7 +28,7 @@ const categories = [
 ];
 
 export function TopNavWithAuth({
-  brand = "AcheMe",
+  brand: _brand = "AcheMe",
   brandHref = "/",
   searchTarget = "local",
 }: {
@@ -40,14 +38,14 @@ export function TopNavWithAuth({
 }) {
   const [showCategories, setShowCategories] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState("all");
-  const [showAccountModal, setShowAccountModal] = useState(false);
+  const [_showAccountModal, _setShowAccountModal] = useState(false);
   const [showAccountDashboard, setShowAccountDashboard] = useState(false);
   const [showUserMenu, setShowUserMenu] = useState(false);
   const userMenuRef = useRef<HTMLDivElement>(null);
 
-  const { user, profile, loading } = useAuth();
+  const { user, profile: _profile, loading: _loading } = useAuth();
   const supabase = createClientComponentClient();
-  const router = useRouter();
+  const _router = useRouter();
 
   const searchAction = useMemo(
     () => (searchTarget === "main" ? "https://www.publimicro.com.br/search" : "/search"),

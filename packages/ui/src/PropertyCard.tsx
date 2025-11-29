@@ -54,7 +54,7 @@ export interface PropertyCardProps {
  * Bronze/Gold/Sage color palette applied throughout.
  */
 export default function PropertyCard({
-  id,
+  id: _id,
   title,
   description,
   price,
