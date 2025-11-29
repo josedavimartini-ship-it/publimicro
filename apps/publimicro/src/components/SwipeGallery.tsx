@@ -225,7 +225,7 @@ export default function SwipeGallery({
                 onClick={() => goToIndex(index)}
                 className={`w-2 h-2 rounded-full transition-all focus:outline-none focus:ring-2 focus:ring-[#A8C97F] ${
                   index === currentIndex
-                    ? "bg-[#A8C97F] w-6"
+                    ? "bg-[#6B7F5C] w-6"
                     : "bg-white/50 hover:bg-white/80"
                 }`}
                 aria-label={`Ir para imagem ${index + 1}`}
@@ -322,7 +322,7 @@ export default function SwipeGallery({
                   onClick={() => goToIndex(index)}
                   className={`w-3 h-3 rounded-full transition-all focus:outline-none focus:ring-2 focus:ring-[#A8C97F] ${
                     index === currentIndex
-                      ? "bg-[#A8C97F] w-8"
+                      ? "bg-[#6B7F5C] w-8"
                       : "bg-white/50 hover:bg-white/80"
                   }`}
                   aria-label={`Ir para imagem ${index + 1}`}

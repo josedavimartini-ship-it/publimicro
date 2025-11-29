@@ -79,7 +79,7 @@ export default function RecentlyViewed() {
 
               {/* Content */}
               <div className="p-4">
-                <h3 className="text-sm font-bold text-[#E6C98B] mb-2 group-hover:text-[#A8C97F] transition-colors line-clamp-1">
+                <h3 className="text-sm font-bold text-[#C9A87C] mb-2 group-hover:text-[#B8904D] transition-colors line-clamp-1">
                   {property.nome}
                 </h3>
 

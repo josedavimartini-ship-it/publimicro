@@ -118,7 +118,7 @@ export default function FavoritesFolders() {
         <div className="flex items-center justify-between mb-8">
           <div className="flex items-center gap-3">
             <Heart className="w-8 h-8 text-[#B7791F]" />
-            <h2 className="text-3xl font-bold text-[#E6C98B]">Meus Favoritos</h2>
+            <h2 className="text-3xl font-bold text-[#C9A87C]">Meus Favoritos</h2>
           </div>
         </div>
 
@@ -129,7 +129,7 @@ export default function FavoritesFolders() {
                 {editingId === folder.id ? (
                   <div className="flex items-center gap-2 px-4 py-3 bg-[#1a1a1a] border-2 border-[#A8C97F] rounded-xl">
                     <input type="text" defaultValue={folder.name} autoFocus onKeyDown={(e) => { if (e.key === 'Enter') renameFolder(folder.id, (e.target as HTMLInputElement).value); if (e.key === 'Escape') setEditingId(null); }} className="flex-1 bg-transparent text-[#D4A574] outline-none" />
-                    <button onClick={() => { const input = document.querySelector(`input[value="${folder.name}"]`) as HTMLInputElement | null; if (input) renameFolder(folder.id, input.value); }} className="text-[#A8C97F]"><Check className="w-4 h-4" /></button>
+                    <button onClick={() => { const input = document.querySelector(`input[value="${folder.name}"]`) as HTMLInputElement | null; if (input) renameFolder(folder.id, input.value); }} className="text-[#6B7F5C]"><Check className="w-4 h-4" /></button>
                     <button onClick={() => setEditingId(null)} className="text-[#959595]"><X className="w-4 h-4" /></button>
                   </div>
                 ) : (
@@ -166,7 +166,7 @@ export default function FavoritesFolders() {
           <div>
             {currentFolder && (
               <div className="mb-6">
-                <h3 className="text-2xl font-bold text-[#E6C98B]">{currentFolder.name}</h3>
+                <h3 className="text-2xl font-bold text-[#C9A87C]">{currentFolder.name}</h3>
                 <p className="text-[#8B9B6E]">{properties.length} propriedade{properties.length !== 1 ? 's' : ''}</p>
               </div>
             )}
@@ -193,7 +193,7 @@ export default function FavoritesFolders() {
 
                     <div className="p-6">
                       <Link href={`/imoveis/${property.id}`}>
-                        <h4 className="text-xl font-bold text-[#E6C98B] mb-2">{property.title}</h4>
+                        <h4 className="text-xl font-bold text-[#C9A87C] mb-2">{property.title}</h4>
                       </Link>
                       <p className="text-[#8B9B6E] text-sm mb-4">{property.location}</p>
                       <div className="flex items-center justify-between">

@@ -87,11 +87,11 @@ export function ActivityFeed() {
 
   return (
     <div className="flex items-center gap-3 px-4 py-3 bg-gradient-to-r from-[#1a1a1a] to-[#0d0d0d] border-2 border-[#2a2a1a] rounded-xl animate-fade-in">
-      <div className="p-2 bg-[#A8C97F]/20 rounded-full">
-        <Icon className="w-4 h-4 text-[#A8C97F]" />
+      <div className="p-2 bg-[#6B7F5C]/20 rounded-full">
+        <Icon className="w-4 h-4 text-[#6B7F5C]" />
       </div>
       <div className="flex-1 min-w-0">
-        <p className="text-[#E6C98B] text-sm font-medium truncate">
+        <p className="text-[#C9A87C] text-sm font-medium truncate">
           {currentActivity.text}
         </p>
         <p className="text-[#676767] text-xs">{currentActivity.time}</p>
@@ -143,7 +143,7 @@ export function Testimonials() {
   return (
     <div className="bg-gradient-to-br from-[#1a1a1a] to-[#0d0d0d] border-2 border-[#2a2a1a] rounded-2xl p-8 animate-fade-in">
       <div className="flex items-center gap-4 mb-6">
-        <div className="w-16 h-16 rounded-full border-2 border-[#A8C97F] relative overflow-hidden flex-shrink-0">
+        <div className="w-16 h-16 rounded-full border-2 border-[#6B7F5C] relative overflow-hidden flex-shrink-0">
           <Image
             src={testimonial.image}
             alt={testimonial.name}
@@ -154,8 +154,8 @@ export function Testimonials() {
           />
         </div>
         <div>
-          <h4 className="text-[#E6C98B] font-bold">{testimonial.name}</h4>
-          <p className="text-[#A8C97F] text-sm">{testimonial.location}</p>
+          <h4 className="text-[#C9A87C] font-bold">{testimonial.name}</h4>
+          <p className="text-[#B8A890] text-sm">{testimonial.location}</p>
           <div className="flex gap-1 mt-1">
             {[...Array(testimonial.rating)].map((_, i) => (
               <Star key={i} className="w-4 h-4 text-[#B7791F] fill-current" />
@@ -164,7 +164,7 @@ export function Testimonials() {
         </div>
       </div>
       
-      <p className="text-[#A8C97F] text-lg italic leading-relaxed">
+      <p className="text-[#B8A890] text-lg italic leading-relaxed">
         "{testimonial.text}"
       </p>
 
@@ -175,7 +175,7 @@ export function Testimonials() {
             key={index}
             onClick={() => setCurrentIndex(index)}
             className={`w-2 h-2 rounded-full transition-all ${
-              index === currentIndex ? "bg-[#A8C97F] w-6" : "bg-[#2a2a1a]"
+              index === currentIndex ? "bg-[#6B7F5C] w-6" : "bg-[#2a2a1a]"
             }`}
             aria-label={`Ver depoimento ${index + 1}`}
           />
@@ -187,10 +187,10 @@ export function Testimonials() {
 
 export function TrustBadges() {
   const badges = [
-    { icon: "✓", label: "Propriedades Verificadas", color: "text-[#A8C97F]" },
-    { icon: "🔒", label: "Pagamento Seguro", color: "text-[#0D7377]" },
-    { icon: "⭐", label: "4.8/5 Avaliação", color: "text-[#B7791F]" },
-    { icon: "🏆", label: "Melhor Plataforma 2024", color: "text-[#E6C98B]" }
+    { icon: "✓", label: "Propriedades Verificadas", color: "text-[#6B7F5C]" },
+    { icon: "🔒", label: "Pagamento Seguro", color: "text-[#2C5F6F]" },
+    { icon: "⭐", label: "4.8/5 Avaliação", color: "text-[#9B6B3E]" },
+    { icon: "🏆", label: "Melhor Plataforma 2024", color: "text-[#C9A87C]" }
   ];
 
   return (

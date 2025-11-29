@@ -134,7 +134,7 @@ export default function ProposalModal({
         <div className="bg-gradient-to-br from-[#1a1a1a] to-[#0d0d0d] border-2 border-[#2a2a1a] rounded-2xl w-full max-w-md relative shadow-2xl p-8">
           <button
             onClick={onClose}
-            className="absolute top-4 right-4 text-[#676767] hover:text-[#A8C97F] transition-colors z-10"
+            className="absolute top-4 right-4 text-[#B8A890] hover:text-[#C9A87C] transition-colors z-10"
             aria-label={t('sitioscarcara.close') || 'Close'}
           >
             <X className="w-6 h-6" />
@@ -144,7 +144,7 @@ export default function ProposalModal({
             <div className="w-16 h-16 bg-[#B87333]/20 rounded-full flex items-center justify-center mx-auto mb-4">
               <ShieldCheck className="w-8 h-8 text-[#B87333]" />
             </div>
-            <h3 className="text-2xl font-bold text-[#E6C98B] mb-3">{t('sitioscarcara.proposal_access_needed') || 'Acesso Necessário'}</h3>
+            <h3 className="text-2xl font-bold text-[#C9A87C] mb-3">{t('sitioscarcara.proposal_access_needed') || 'Acesso Necessário'}</h3>
             <p className="text-[#676767] mb-6">
               {t('sitioscarcara.proposal_requirements') || 'Para enviar propostas, é necessário ter o perfil completo, estar verificado e ter autorização (visita realizada).'}
             </p>
