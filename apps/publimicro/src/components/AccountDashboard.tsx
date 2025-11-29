@@ -2,7 +2,6 @@
 
 import { useState } from "react";
 import { useAuth } from "@/lib/authContext";
-import { supabase } from "@/lib/supabaseClient";
 import { Tabs, Tab } from "@publimicro/ui";
 import ProfileTab from "./account/ProfileTab";
 import ListingsTab from "./account/ListingsTab";

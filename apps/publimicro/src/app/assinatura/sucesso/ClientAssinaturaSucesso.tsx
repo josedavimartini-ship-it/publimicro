@@ -1,12 +1,12 @@
 "use client";
 
 import { useEffect, useState } from 'react';
-import { useRouter, useSearchParams } from 'next/navigation';
+import { useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 
 export default function ClientAssinaturaSucesso() {
   const [loading, setLoading] = useState(true);
-  const [verified, setVerified] = useState(false);
+  const [_verified, setVerified] = useState(false);
   const searchParams = useSearchParams();
 
   const sessionId = searchParams?.get('session_id');

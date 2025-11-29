@@ -2,23 +2,6 @@ import Image from "next/image";
 import Link from "next/link";
 import MapKmlViewer from "@/components/map/MapKmlViewer";
 
-// Define os parâmetros esperados da rota
-type PageParams = {
-  slug?: string;
-};
-
-// Define o tipo de dados do projeto vindo do Supabase
-interface Projeto {
-  id: string;
-  titulo: string;
-  descricao?: string;
-  imagem?: string;
-  imagens?: string;
-  status?: string;
-  slug?: string;
-  created_at?: string;
-}
-
 export default async function Page(): Promise<JSX.Element> {
   // If you still need Supabase data for hero, keep your existing query above.
   const imagensArray: string[] = [

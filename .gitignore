@@ -91,3 +91,4 @@ debug/
 .next-build-complete
 .build-complete
 Uploads/
+.eslint-errors.json

@@ -22,7 +22,7 @@ export function useCategories() {
           setLoading(false);
           return;
         }
-      } catch (_err) {
+      } catch {
         // fallback to local manifest
       }
 

@@ -50,7 +50,7 @@ export async function POST(req: Request): Promise<NextResponse> {
       mensagem,
       visitType,
       propertyId,
-      propertyTitle,
+      propertyTitle: _propertyTitle,
       isGuest,
       user_id
     } = body;

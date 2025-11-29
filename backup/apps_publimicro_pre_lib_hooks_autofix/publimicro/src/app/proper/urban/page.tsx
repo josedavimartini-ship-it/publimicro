@@ -1,0 +1,30 @@
+import Link from 'next/link';
+
+export default function ProperUrbanPage() {
+  return (
+    <main className="min-h-screen bg-gradient-to-b from-[#0a0a0a] via-[#0d0d0d] to-[#0a0a0a] py-20 px-6">
+      <div className="max-w-7xl mx-auto text-center">
+        <h1 className="text-5xl md:text-6xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-[#A8C97F] to-[#B7791F] mb-6">
+          🏙️ Proper Urban
+        </h1>
+        <p className="text-xl text-[#d8c68e] mb-8">
+          Apartamentos, casas e imóveis urbanos
+        </p>
+        
+        <div className="bg-gradient-to-br from-[#1a1a1a] to-[#0d0d0d] border-2 border-[#2a2a1a] rounded-2xl p-12">
+          <div className="text-6xl mb-6">🏙️</div>
+          <h2 className="text-2xl font-bold text-[#B7791F] mb-4">Em breve!</h2>
+          <p className="text-[#676767] mb-8">
+            Estamos preparando uma experiência incrível para você encontrar seu imóvel urbano ideal.
+          </p>
+          <Link
+            href="/proper"
+            className="inline-block px-8 py-3 border-2 border-[#A8C97F] text-[#A8C97F] hover:bg-[#A8C97F]/10 font-bold rounded-full transition-all"
+          >
+            ← Voltar para PubliProper
+          </Link>
+        </div>
+      </div>
+    </main>
+  );
+}

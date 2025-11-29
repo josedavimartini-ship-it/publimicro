@@ -93,7 +93,7 @@ export async function POST(req: NextRequest) {
               }
             }
           }
-        } catch (_err) {
+        } catch {
           // ignore and continue with next column
           continue;
         }

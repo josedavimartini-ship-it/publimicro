@@ -22,14 +22,14 @@ export function createServerSupabaseClient() {
         set(name: string, value: string, options: Record<string, any>) {
           try {
             cookieStore.set({ name, value, ...options })
-          } catch (_error) {
+          } catch {
             // Can happen in Server Components
           }
         },
         remove(name: string, options: Record<string, any>) {
           try {
             cookieStore.set({ name, value: '', ...options })
-          } catch (_error) {
+          } catch {
             // Can happen in Server Components
           }
         },

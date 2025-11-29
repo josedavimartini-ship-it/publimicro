@@ -13,7 +13,7 @@ interface Props {
 }
 
 export default function SearchTab({ onFilterChange, initialSection = DEFAULT_SECTION }: Props) {
-  const { data: categoriesManifest, loading: catsLoading } = useCategories();
+  const { data: categoriesManifest, loading: _catsLoading } = useCategories();
   const sections = useMemo(() => Object.keys(categoriesManifest || {}), [categoriesManifest]);
   const [section, setSection] = useState<string>(initialSection);
   const [query, setQuery] = useState<string>("");
@@ -74,7 +74,7 @@ export default function SearchTab({ onFilterChange, initialSection = DEFAULT_SEC
         const items = (json.suggestions || json.data || []).slice(0, 8).map((it: any) => ({ id: it.id || it.slug || it.title, label: it.title || it.name || it.slug || it.id }));
         setSuggestions(items);
         setActiveSuggestionIndex(-1);
-      } catch (err) {
+      } catch {
         // ignore
       }
     }, 300);
@@ -178,7 +178,7 @@ export default function SearchTab({ onFilterChange, initialSection = DEFAULT_SEC
         <div className="mt-6">
           <h4 className="text-sm text-[#8B9B6E] mb-2">Categorias</h4>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-3" role="listbox" aria-label="Categorias">
-            {cats.map((cat, idx) => (
+            {cats.map((cat, _idx) => (
               <button
                 key={cat.id}
                 onClick={() => onSelectCategory(cat)}

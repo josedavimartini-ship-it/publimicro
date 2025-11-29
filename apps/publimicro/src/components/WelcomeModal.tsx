@@ -2,7 +2,6 @@
 
 import { useState, useEffect, useRef } from "react";
 import { X, Home, Search, Map, TrendingUp, Heart, CheckCircle } from "lucide-react";
-import Link from "next/link";
 import FocusLock from "react-focus-lock";
 
 export default function WelcomeModal() {

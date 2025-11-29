@@ -1,3 +1,3 @@
-const testLight: JSX.IntrinsicElements["ambientLight"] = {
-  intensity: 1
+export const testLight: JSX.IntrinsicElements["ambientLight"] = {
+  intensity: 1,
 };

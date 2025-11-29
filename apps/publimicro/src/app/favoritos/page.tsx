@@ -8,7 +8,7 @@ import FavoritesFolders from "@/components/FavoritesFolders";
 import Breadcrumbs from "@/components/Breadcrumbs";
 
 export default function FavoritosPage() {
-  const [userId, setUserId] = useState<string | null>(null);
+  const [_userId, setUserId] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {

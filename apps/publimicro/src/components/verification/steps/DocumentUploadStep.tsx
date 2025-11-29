@@ -23,11 +23,6 @@ export default function DocumentUploadStep({
 }: DocumentUploadStepProps) {
   type DocumentType = 'cpf' | 'rg' | 'cnh' | 'passport';
 
-  type FormDataType = {
-    document_type: DocumentType;
-    document_number: string;
-  };
-
   const [formData, setFormData] = useState({
     document_type: initialData.document_type || 'rg' as DocumentType,
     document_number: initialData.document_number || '',

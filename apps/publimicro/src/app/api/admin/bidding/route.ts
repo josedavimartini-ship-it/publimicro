@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { createServiceSupabaseClient, createServerSupabaseClient } from '@/lib/supabaseServer';
+import { createServiceSupabaseClient } from '@/lib/supabaseServer';
 
 // Admin API (external) — header-protected using ADMIN_API_KEY
 // External scripts should call this route with header 'x-admin-key' == ADMIN_API_KEY

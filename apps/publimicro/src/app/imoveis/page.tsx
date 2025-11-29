@@ -5,7 +5,7 @@ import SearchTab, { SearchFilters } from "@/components/SearchTab";
 import { supabase } from "@/lib/supabaseClient";
 import Link from "next/link";
 import Image from "next/image";
-import { MapPin, Maximize2, DollarSign, Heart, Filter, Grid3x3, List, Scale } from "lucide-react";
+import { MapPin, Maximize2, DollarSign, Heart, Grid3x3, List, Scale } from "lucide-react";
 import Breadcrumbs from "@/components/Breadcrumbs";
 import { Skeleton } from "@/components/Skeleton";
 import { addToComparison, isInComparison } from "@/lib/comparison";
