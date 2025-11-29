@@ -60,7 +60,10 @@ export function CarcaraScene() {
       >
         <Carcara3D
           onSoundTrigger={handleSoundTrigger}
-          scale={1.5}
+          scale={2.2}
+          modelPath="/models/eagle/harpy_eagle.fbx"
+          autoRotate={true}
+          rotationSpeed={0.15}
         />
       </Suspense>
 
