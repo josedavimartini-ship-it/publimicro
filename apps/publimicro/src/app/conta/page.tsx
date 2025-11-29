@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { createClientComponentClient } from '@supabase/auth-helpers-nextjs';
 import Link from 'next/link';
-import { } from 'lucide-react';
+import { Home, Heart, TrendingUp, Clock, CheckCircle, XCircle, Calendar } from 'lucide-react';
 
 // Minimal local domain types to avoid wide `any` usage in the account page
 type CurrentUser = { id: string; email?: string | null } | null;
