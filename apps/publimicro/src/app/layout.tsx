@@ -1,9 +1,9 @@
 import { FloatingWhatsApp } from "@publimicro/ui";
-import Navbar from "@/components/Navbar";
+// Navbar removed from top-level layout to avoid unused import
 import UserQuickPanel from "@/components/UserQuickPanel";
 import BackToTop from "@/components/BackToTop";
 import MobileBottomNav from "@/components/MobileBottomNav";
-import { ToastProvider } from "@/components/ToastNotification";
+// ToastProvider not used here (kept in providers) to avoid unused import
 import PWAInstallPrompt from "@/components/PWAInstallPrompt";
 import Providers from './providers';
 import ErrorBoundaryWrapper from "@/components/ErrorBoundary";

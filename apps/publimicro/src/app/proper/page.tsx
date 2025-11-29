@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { Home, Building2, Tractor, Sparkles } from 'lucide-react';
+import { Building2, Tractor, Sparkles } from 'lucide-react';
 import { Metadata } from 'next';
 
 export const metadata: Metadata = {
