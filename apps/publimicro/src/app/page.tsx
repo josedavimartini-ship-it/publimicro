@@ -190,7 +190,7 @@ export default function PostarPage() {
     <main className="min-h-screen bg-gradient-to-b from-[#0a0a0a] via-[#1a1a1a] to-[#0a0a0a] py-12 px-6">
       <div className="max-w-4xl mx-auto">
         <div className="text-center mb-8">
-          <h1 className="text-4xl font-black text-transparent bg-clip-text bg-gradient-to-r from-[#A8C97F] to-[#0D7377] mb-4">
+          <h1 className="text-4xl font-black text-transparent bg-clip-text bg-gradient-to-r from-[#B8904D] to-[#C9A87C] mb-4">
             Anunciar Propriedade
           </h1>
           <p className="text-[#676767]">Preencha os dados para anunciar sua propriedade gratuitamente</p>
@@ -437,7 +437,7 @@ export default function PostarPage() {
           <button
             type="submit"
             disabled={submitting}
-            className="w-full px-8 py-4 bg-gradient-to-r from-[#A8C97F] to-[#0D7377] text-white font-bold rounded-lg hover:scale-105 transition disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100"
+            className="w-full px-8 py-4 bg-gradient-to-r from-[#6B7F5C] to-[#2C5F6F] hover:from-[#7A8F6B] hover:to-[#3A6F7F] text-[#D4C4A8] font-bold rounded-lg hover:scale-105 transition disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100 shadow-lg"
           >
             {submitting ? 'Publicando...' : 'Publicar Anúncio'}
           </button>
