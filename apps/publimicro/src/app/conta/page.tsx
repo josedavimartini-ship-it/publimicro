@@ -153,9 +153,9 @@ export default function ContaPage() {
                   <p className="text-[#676767]">Aqui está um resumo da sua atividade na plataforma.</p>
 
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <Link href="/postar" className="p-6 bg-gradient-to-br from-[#A8C97F]/20 to-[#0D7377]/20 border border-[#A8C97F]/50 rounded-xl hover:scale-105 transition">
-                      <Home className="w-12 h-12 text-[#A8C97F] mb-4" />
-                      <h3 className="text-xl font-bold text-[#A8C97F] mb-2">Anunciar Propriedade</h3>
+                    <Link href="/postar" className="p-6 bg-gradient-to-br from-[#6B7F5C]/20 to-[#2C5F6F]/20 border border-[#6B7F5C]/50 rounded-xl hover:scale-105 transition">
+                      <Home className="w-12 h-12 text-[#6B7F5C] mb-4" />
+                      <h3 className="text-xl font-bold text-[#C9A87C] mb-2">Anunciar Propriedade</h3>
                       <p className="text-[#676767] text-sm">Publique sua propriedade gratuitamente</p>
                     </Link>
 
@@ -175,7 +175,7 @@ export default function ContaPage() {
                     <div className="text-center py-12">
                       <Home className="w-16 h-16 text-[#676767] mx-auto mb-4" />
                       <p className="text-[#676767] mb-4">Você ainda não anunciou nenhuma propriedade</p>
-                      <Link href="/postar" className="inline-block px-6 py-3 bg-gradient-to-r from-[#A8C97F] to-[#0D7377] text-white font-bold rounded-lg hover:scale-105 transition">Anunciar Agora</Link>
+                      <Link href="/postar" className="inline-block px-6 py-3 bg-gradient-to-r from-[#6B7F5C] to-[#2C5F6F] hover:from-[#7A8F6B] hover:to-[#3A6F7F] text-[#D4C4A8] font-bold rounded-lg hover:scale-105 transition shadow-lg">Anunciar Agora</Link>
                     </div>
                   ) : (
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
