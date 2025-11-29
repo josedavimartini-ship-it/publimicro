@@ -2,41 +2,81 @@
 @tailwind components;
 @tailwind utilities;
 
-:root{
-  --bg:#0f1110;
-  --accent:#b5892b; /* warm yellow/dark gold */
-  --muted:#9e9b84;
-}
-
-html,body,#root{height:100%}
-body{
-  background:var(--bg);
-  color:var(--muted);
-  font-family: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
-}
-a{ color:var(--accent); text-decoration:none }
+/* Refined Dark Theme - Eye-friendly, sophisticated palette */
+/* Colors: Burnt bronze, moss green, petrol blue, dark amber, warm grays */
+/* Strategy: Dark charcoal backgrounds (not pure black), warm text, subtle accents */
 
 :root {
-  --bg: #0d0f0c;
-  --bg-elevated: #1a1d18;
-  --bg-card: #242821;
-  --accent: #d4a859;
-  --accent-light: #e8c57a;
-  --accent-fire: #d67e3e;
-  --accent-petroleum: #4a5759;
-  --text-primary: #e3dcc4;
-  --text-muted: #a39b7e;
-  --text-subtle: #6b6854;
-  --border: #2f3329;
-  --border-light: #3d4235;
+  /* Backgrounds (sophisticated grays) */
+  --bg-primary: #1a1a1a;       /* Main background - dark charcoal */
+  --bg-secondary: #242424;     /* Cards, panels */
+  --bg-tertiary: #2e2e2e;      /* Elevated elements */
+  --bg-overlay: #1f1f1f;       /* Modals, navigation */
+  --bg-input: #2a2a2a;         /* Form inputs */
+  --bg-light: #353535;         /* Light variant for mixed approach */
+  
+  /* Text colors (warm, excellent contrast) */
+  --text-primary: #D4C4A8;     /* Body text - warm beige */
+  --text-secondary: #B8A890;   /* Secondary text - muted beige */
+  --text-muted: #8A7F6F;       /* Disabled/placeholder */
+  --text-heading: #C9A87C;     /* Headings - light copper */
+  --text-accent: #B8904D;      /* Highlighted - burnt gold */
+  
+  /* Interactive colors */
+  --accent-moss: #6B7F5C;      /* Moss green - calming */
+  --accent-petrol: #2C5F6F;    /* Petrol blue - cool accent */
+  --accent-bronze: #8B6F47;    /* Burnt bronze - primary */
+  --accent-amber: #9B6B3E;     /* Dark amber - attention */
+  --accent-gold: #B8904D;      /* Burnt gold - emphasis */
+  
+  /* Status colors */
+  --color-success: #6B7F5C;    /* Moss green */
+  --color-warning: #9B6B3E;    /* Dark amber */
+  --color-error: #A85F4F;      /* Muted terracotta */
+  
+  /* Borders */
+  --border-default: #3a3a3a;
+  --border-subtle: #2e2e2e;
+  --border-focus: #B8904D;     /* Burnt gold */
+  --border-hover: #4a4a4a;
+  
   color-scheme: dark;
 }
 
-/* Accessible Color Improvements (WCAG AA Compliant) */
-:root {
-  --color-green-accessible: #A8C97F; /* Was #8B9B6E - now 4.5:1 contrast */
-  --color-gold-accessible: #E6C98B; /* Was #D4A574 - now 4.7:1 contrast */
-  --color-gray-accessible: #959595; /* Was #676767 - now 4.5:1 contrast */
+/* Global styles */
+html, body, #root {
+  height: 100%;
+}
+
+body {
+  background: var(--bg-primary);
+  color: var(--text-primary);
+  font-family: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+a {
+  color: var(--text-accent);
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+a:hover {
+  color: var(--text-heading);
+}
+
+/* Raised text effect for headings */
+h1, h2, .heading-raised {
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.7), 0 1px 3px rgba(201, 168, 124, 0.4);
+}
+
+h1, h2 {
+  color: var(--text-heading);
+}
+
+h3, h4, h5, h6 {
+  color: var(--text-accent);
 }
 
 /* Screen Reader Only (SR-Only) */

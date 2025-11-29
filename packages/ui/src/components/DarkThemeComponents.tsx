@@ -17,7 +17,7 @@ export function H1({ children, className = "", raised = true }: HeadingProps) {
   return (
     <h1
       className={`${componentPresets.h1} ${className}`}
-      style={raised ? textShadowStyles.raised : undefined}
+      style={raised ? textShadowStyles.copper : undefined}
     >
       {children}
     </h1>
@@ -28,7 +28,7 @@ export function H2({ children, className = "", raised = true }: HeadingProps) {
   return (
     <h2
       className={`${componentPresets.h2} ${className}`}
-      style={raised ? textShadowStyles.raised : undefined}
+      style={raised ? textShadowStyles.copper : undefined}
     >
       {children}
     </h2>
@@ -62,7 +62,7 @@ export function H4({ children, className = "", raised = false }: HeadingProps) {
 // ============================================
 
 interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
-  variant?: "primary" | "secondary" | "ghost";
+  variant?: "primary" | "secondary" | "tertiary" | "ghost";
   children: ReactNode;
   className?: string;
 }
@@ -76,6 +76,7 @@ export function DarkButton({
   const variantClasses = {
     primary: componentPresets.buttonPrimary,
     secondary: componentPresets.buttonSecondary,
+    tertiary: componentPresets.buttonTertiary,
     ghost: componentPresets.buttonGhost,
   };
 
@@ -115,8 +116,8 @@ export function DarkCard({ children, className = "", hoverable = false, onClick 
 
 export function DarkModal({ children, className = "" }: { children: ReactNode; className?: string }) {
   return (
-    <div className={`fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm`}>
-      <div className={`bg-[#1b1b1b] border border-[#3a3a3a] rounded-2xl shadow-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto ${className}`}>
+    <div className={`fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/85 backdrop-blur-sm`}>
+      <div className={`bg-[#1f1f1f] border border-[#3a3a3a] rounded-2xl shadow-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto ${className}`}>
         {children}
       </div>
     </div>
@@ -137,10 +138,10 @@ export function DarkInput({ label, error, className = "", ...props }: InputProps
     <div className={componentPresets.formField}>
       {label && <label className={componentPresets.label}>{label}</label>}
       <input
-        className={`${componentPresets.inputField} ${error ? "border-[#c86f4f]" : ""} ${className}`}
+        className={`${componentPresets.inputField} ${error ? "border-[#A85F4F]" : ""} ${className}`}
         {...props}
       />
-      {error && <p className="text-[#c86f4f] text-sm mt-1">{error}</p>}
+      {error && <p className="text-[#A85F4F] text-sm mt-1">{error}</p>}
     </div>
   );
 }
@@ -155,10 +156,10 @@ export function DarkTextarea({ label, error, className = "", ...props }: TextAre
     <div className={componentPresets.formField}>
       {label && <label className={componentPresets.label}>{label}</label>}
       <textarea
-        className={`${componentPresets.inputField} ${error ? "border-[#c86f4f]" : ""} ${className}`}
+        className={`${componentPresets.inputField} ${error ? "border-[#A85F4F]" : ""} ${className}`}
         {...props}
       />
-      {error && <p className="text-[#c86f4f] text-sm mt-1">{error}</p>}
+      {error && <p className="text-[#A85F4F] text-sm mt-1">{error}</p>}
     </div>
   );
 }
@@ -174,7 +175,7 @@ export function DarkSelect({ label, error, options, className = "", ...props }: 
     <div className={componentPresets.formField}>
       {label && <label className={componentPresets.label}>{label}</label>}
       <select
-        className={`${componentPresets.inputField} ${error ? "border-[#c86f4f]" : ""} ${className}`}
+        className={`${componentPresets.inputField} ${error ? "border-[#A85F4F]" : ""} ${className}`}
         {...props}
       >
         {options.map((opt) => (
@@ -183,7 +184,7 @@ export function DarkSelect({ label, error, options, className = "", ...props }: 
           </option>
         ))}
       </select>
-      {error && <p className="text-[#c86f4f] text-sm mt-1">{error}</p>}
+      {error && <p className="text-[#A85F4F] text-sm mt-1">{error}</p>}
     </div>
   );
 }
@@ -194,7 +195,7 @@ export function DarkSelect({ label, error, options, className = "", ...props }: 
 
 interface BadgeProps {
   children: ReactNode;
-  variant?: "success" | "warning" | "error" | "info";
+  variant?: "success" | "warning" | "error" | "info" | "bronze";
   className?: string;
 }
 
@@ -204,6 +205,7 @@ export function DarkBadge({ children, variant = "info", className = "" }: BadgeP
     warning: componentPresets.badgeWarning,
     error: componentPresets.badgeError,
     info: componentPresets.badgeInfo,
+    bronze: componentPresets.badgeBronze,
   };
 
   return (
