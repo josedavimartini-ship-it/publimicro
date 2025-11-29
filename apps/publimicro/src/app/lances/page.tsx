@@ -210,7 +210,7 @@ export default function LancesPage() {
               onClick={() => setFilter(filterOption.value as "all" | "pending" | "accepted" | "rejected")}
               className={`px-6 py-2 rounded-full font-semibold transition-all whitespace-nowrap ${
                 filter === filterOption.value
-                  ? "bg-gradient-to-r from-[#A8C97F] to-[#0D7377] text-white"
+                  ? "bg-gradient-to-r from-[#6B7F5C] to-[#2C5F6F] text-[#D4C4A8]"
                   : "bg-[#2a2a1a] text-[#A8C97F] hover:bg-[#3a3a2a]"
               }`}
             >
@@ -319,7 +319,7 @@ export default function LancesPage() {
                       <div className="flex gap-3">
                         <Link
                           href={`/imoveis/${bid.property_id}`}
-                          className="flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-[#A8C97F] to-[#0D7377] text-white font-semibold rounded-lg hover:scale-105 transition-all"
+                          className="flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-[#6B7F5C] to-[#2C5F6F] hover:from-[#7A8F6B] hover:to-[#3A6F7F] text-[#D4C4A8] font-semibold rounded-lg hover:scale-105 transition-all shadow-lg"
                         >
                           <Eye className="w-4 h-4" />
                           Ver Propriedade
@@ -356,7 +356,7 @@ export default function LancesPage() {
             </p>
             <Link
               href="/imoveis"
-              className="inline-block px-6 py-3 bg-gradient-to-r from-[#A8C97F] to-[#0D7377] text-white font-bold rounded-full hover:scale-105 transition-all"
+              className="inline-block px-6 py-3 bg-gradient-to-r from-[#6B7F5C] to-[#2C5F6F] hover:from-[#7A8F6B] hover:to-[#3A6F7F] text-[#D4C4A8] font-bold rounded-full hover:scale-105 transition-all shadow-lg"
             >
               Explorar Propriedades
             </Link>
