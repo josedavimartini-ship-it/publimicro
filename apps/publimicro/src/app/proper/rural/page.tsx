@@ -4,7 +4,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { useState, useEffect } from 'react';
 import { supabase } from '@/lib/supabaseClient';
-import { MapPin, Maximize2, DollarSign } from 'lucide-react';
+import { MapPin, Maximize2 } from 'lucide-react';
 
 interface Property {
   id: string;
