@@ -35,10 +35,10 @@ export default function VerificationPage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
+      <div className="min-h-screen bg-[#0a0a0a] flex items-center justify-center">
         <div className="text-center">
-          <div className="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mb-4" />
-          <p className="text-gray-600">Carregando...</p>
+          <div className="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-[#6B7F5C] mb-4" />
+          <p className="text-[#B8A890]">Carregando...</p>
         </div>
       </div>
     );
@@ -49,13 +49,13 @@ export default function VerificationPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
+    <div className="min-h-screen bg-gradient-to-b from-[#0a0a0a] via-[#1a1a1a] to-[#0a0a0a] py-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-4xl mx-auto">
         {/* Header */}
         <div className="text-center mb-8">
-          <div className="inline-flex items-center justify-center w-16 h-16 bg-blue-100 rounded-full mb-4">
+          <div className="inline-flex items-center justify-center w-16 h-16 bg-[#2a2a2a] border border-[#3a3a3a] rounded-full mb-4">
             <svg
-              className="w-8 h-8 text-blue-600"
+              className="w-8 h-8 text-[#6B7F5C]"
               fill="none"
               viewBox="0 0 24 24"
               stroke="currentColor"
@@ -68,16 +68,16 @@ export default function VerificationPage() {
               />
             </svg>
           </div>
-          <h1 className="text-3xl font-bold text-gray-900 mb-2">
+          <h1 className="text-3xl font-bold text-[#C9A87C] mb-2">
             Verificação de Identidade
           </h1>
-          <p className="text-lg text-gray-600 max-w-2xl mx-auto">
+          <p className="text-lg text-[#B8A890] max-w-2xl mx-auto">
             Para garantir a segurança de todos os usuários, precisamos verificar sua identidade antes de liberar recursos premium.
           </p>
         </div>
 
         {/* Benefits Banner */}
-        <div className="bg-gradient-to-r from-blue-600 to-indigo-600 rounded-lg p-6 mb-8 text-white">
+        <div className="bg-gradient-to-r from-[#6B7F5C] to-[#2C5F6F] rounded-lg p-6 mb-8 text-[#D4C4A8]">
           <h3 className="text-xl font-semibold mb-3">
             ✨ O que você ganha com a verificação:
           </h3>
@@ -88,7 +88,7 @@ export default function VerificationPage() {
               </svg>
               <div>
                 <p className="font-medium">Selo Verificado</p>
-                <p className="text-sm text-blue-100">Ganhe credibilidade nos seus anúncios</p>
+                <p className="text-sm text-[#B8A890]">Ganhe credibilidade nos seus anúncios</p>
               </div>
             </div>
             <div className="flex items-start gap-3">
@@ -97,7 +97,7 @@ export default function VerificationPage() {
               </svg>
               <div>
                 <p className="font-medium">Recursos Premium</p>
-                <p className="text-sm text-blue-100">Destaques, impulsionamentos e mais</p>
+                <p className="text-sm text-[#B8A890]">Destaques, impulsionamentos e mais</p>
               </div>
             </div>
             <div className="flex items-start gap-3">
@@ -106,22 +106,22 @@ export default function VerificationPage() {
               </svg>
               <div>
                 <p className="font-medium">Segurança</p>
-                <p className="text-sm text-blue-100">Proteja sua conta e seus dados</p>
+                <p className="text-sm text-[#B8A890]">Proteja sua conta e seus dados</p>
               </div>
             </div>
           </div>
         </div>
 
         {/* Wizard Component */}
-        <div className="bg-white rounded-lg shadow-lg p-8">
+        <div className="bg-[#2a2a2a] border border-[#3a3a3a] rounded-lg shadow-lg p-8">
           <VerificationWizard />
         </div>
 
         {/* Security Notice */}
-        <div className="mt-6 bg-gray-100 rounded-lg p-4">
+        <div className="mt-6 bg-[#2a2a2a] border border-[#3a3a3a] rounded-lg p-4">
           <div className="flex items-start gap-3">
             <svg
-              className="w-5 h-5 text-gray-600 flex-shrink-0 mt-0.5"
+              className="w-5 h-5 text-[#B8A890] flex-shrink-0 mt-0.5"
               fill="none"
               viewBox="0 0 24 24"
               stroke="currentColor"
@@ -133,11 +133,11 @@ export default function VerificationPage() {
                 d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"
               />
             </svg>
-            <div className="text-sm text-gray-700">
+            <div className="text-sm text-[#B8A890]">
               <p className="font-medium mb-1">🔒 Seus dados estão seguros</p>
               <p>
                 Todas as informações são criptografadas e armazenadas com segurança. Não compartilhamos seus dados pessoais com terceiros.{' '}
-                <a href="/privacidade" className="text-blue-600 hover:text-blue-700 font-medium">
+                <a href="/privacidade" className="text-[#6B7F5C] hover:text-[#7A8F6B] font-medium">
                   Política de Privacidade
                 </a>
               </p>
@@ -146,55 +146,55 @@ export default function VerificationPage() {
         </div>
 
         {/* FAQ */}
-        <div className="mt-8 bg-white rounded-lg p-6">
-          <h3 className="text-lg font-semibold text-gray-900 mb-4">
+        <div className="mt-8 bg-[#2a2a2a] border border-[#3a3a3a] rounded-lg p-6">
+          <h3 className="text-lg font-semibold text-[#C9A87C] mb-4">
             Perguntas Frequentes
           </h3>
           <div className="space-y-4">
             <details className="group">
-              <summary className="flex justify-between items-center cursor-pointer text-gray-900 font-medium">
+              <summary className="flex justify-between items-center cursor-pointer text-[#D4C4A8] font-medium">
                 Por que preciso verificar minha identidade?
-                <svg className="w-5 h-5 text-gray-500 group-open:rotate-180 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <svg className="w-5 h-5 text-[#B8A890] group-open:rotate-180 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
                 </svg>
               </summary>
-              <p className="mt-2 text-gray-600 text-sm">
+              <p className="mt-2 text-[#B8A890] text-sm">
                 A verificação de identidade garante a segurança de todos os usuários da plataforma, previne fraudes e aumenta a confiança nas transações.
               </p>
             </details>
 
             <details className="group">
-              <summary className="flex justify-between items-center cursor-pointer text-gray-900 font-medium">
+              <summary className="flex justify-between items-center cursor-pointer text-[#D4C4A8] font-medium">
                 Quanto tempo leva o processo?
-                <svg className="w-5 h-5 text-gray-500 group-open:rotate-180 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <svg className="w-5 h-5 text-[#B8A890] group-open:rotate-180 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
                 </svg>
               </summary>
-              <p className="mt-2 text-gray-600 text-sm">
+              <p className="mt-2 text-[#B8A890] text-sm">
                 Na maioria dos casos, a verificação é automática e leva apenas alguns minutos. Casos que exigem revisão manual podem levar até 24 horas.
               </p>
             </details>
 
             <details className="group">
-              <summary className="flex justify-between items-center cursor-pointer text-gray-900 font-medium">
+              <summary className="flex justify-between items-center cursor-pointer text-[#D4C4A8] font-medium">
                 Quais documentos são aceitos?
-                <svg className="w-5 h-5 text-gray-500 group-open:rotate-180 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <svg className="w-5 h-5 text-[#B8A890] group-open:rotate-180 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
                 </svg>
               </summary>
-              <p className="mt-2 text-gray-600 text-sm">
+              <p className="mt-2 text-[#B8A890] text-sm">
                 Aceitamos RG, CNH, Passaporte ou CPF com foto. O documento deve estar dentro da validade e com foto visível.
               </p>
             </details>
 
             <details className="group">
-              <summary className="flex justify-between items-center cursor-pointer text-gray-900 font-medium">
+              <summary className="flex justify-between items-center cursor-pointer text-[#D4C4A8] font-medium">
                 Meus dados ficam seguros?
-                <svg className="w-5 h-5 text-gray-500 group-open:rotate-180 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <svg className="w-5 h-5 text-[#B8A890] group-open:rotate-180 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
                 </svg>
               </summary>
-              <p className="mt-2 text-gray-600 text-sm">
+              <p className="mt-2 text-[#B8A890] text-sm">
                 Sim! Usamos criptografia de ponta a ponta e seguimos rigorosos padrões de segurança. Seus documentos são armazenados em servidores seguros e nunca são compartilhados.
               </p>
             </details>
