@@ -13,7 +13,7 @@ export default function GoogleEarthMap({ lat = -18.977, lng = -48.273, zoom = 15
         // Use minimal typing to avoid hard dependency on @types/googlemaps
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         const MapConstructor = (googleMaps.maps || (googleMaps as any)).Map;
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+         
         new MapConstructor(mapRef.current, {
           center: { lat, lng },
           zoom,
