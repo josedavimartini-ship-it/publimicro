@@ -1,5 +1,22 @@
 # PubliMicro AI Agent Instructions
 
+## 🔄 LATEST SESSION: November 30, 2025
+**Status:** Production setup complete, Vercel build fixed  
+**Last Commit:** `5859ba4` - turbo.json build dependencies configured  
+**Branch:** `chore/remove-cjs-scripts` (28 commits ahead)  
+**Next Steps:** See `CONTINUATION-POINT-2025-11-30.md`
+
+**Recent Changes:**
+- ✅ Fixed all 79 TypeScript errors (commit 4be387b)
+- ✅ Configured production API keys (Resend, Supabase service role)
+- ✅ Fixed Vercel build: added `dependsOn: ["^build"]` to turbo.json
+- ✅ Added env vars to turbo.json globalEnv (SUPABASE_SERVICE_ROLE_KEY, STRIPE_SECRET_KEY, RESEND_API_KEY, EMAIL_FROM)
+- 🔄 Vercel rebuilding now (expect success)
+
+**Immediate Next:** Verify Vercel deployment → Configure production env vars → Test email flows
+
+---
+
 ## Project Overview
 **PubliMicro** is a Brazilian classified ads marketplace monorepo with 9 specialized Next.js apps sharing a unified tech stack. It's a TurboPack-managed monorepo using pnpm workspaces, Supabase for auth/db, and Vercel for deployment.
 
