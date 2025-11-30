@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { apiPost } from '@/lib/api';
-import { DollarSign, ShieldCheck } from 'lucide-react';
+import { DollarSign, ShieldCheck, X, MessageSquare } from 'lucide-react';
 import { useAuth } from './AuthProvider';
 import { useI18n } from '@/lib/i18n';
 import Link from 'next/link';
