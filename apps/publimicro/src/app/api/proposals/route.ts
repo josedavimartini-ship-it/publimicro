@@ -43,9 +43,20 @@ export async function POST(req: Request) {
     // Get property details for email
     const { data: property } = await supabase
       .from('properties')
-      .select('title, user_id, user_profiles!user_id(email)')
+      .select('title, user_id')
       .eq('id', ad_id)
       .single();
+
+    // Get owner email separately
+    let ownerEmail = null;
+    if (property) {
+      const { data: owner } = await supabase
+        .from('user_profiles')
+        .select('email')
+        .eq('user_id', property.user_id)
+        .single();
+      ownerEmail = owner?.email;
+    }
 
     // Check for a completed visit for this ad
     const { data: visits } = await supabase
@@ -101,13 +112,13 @@ export async function POST(req: Request) {
     }
 
     // Send email notification to property owner
-    if (property && property.user_profiles?.email) {
+    if (property && ownerEmail) {
       await sendEmail(getProposalEmail({
         userName: profile?.full_name || user.email || 'Um interessado',
         propertyTitle: property.title,
         propertyUrl: `${process.env.NEXT_PUBLIC_SITE_URL || 'https://publimicro.com.br'}/imoveis/${ad_id}`,
         proposalAmount: new Intl.NumberFormat('pt-BR').format(amount),
-        ownerEmail: property.user_profiles.email
+        ownerEmail
       }));
     }
 

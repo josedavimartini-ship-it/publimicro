@@ -4,46 +4,29 @@ import { NextResponse } from 'next/server';
 
 /**
  * Verify admin authentication and authorization
- * Returns null if authorized, or NextResponse with error if not
+ * Returns null if authorized with userId, or NextResponse with error
  */
-export async function verifyAdminAuth(): Promise<{ authorized: true; userId: string } | { authorized: false; response: NextResponse }> {
-  try {
-    const supabase = createRouteHandlerClient({ cookies });
+export async function verifyAdminAuth(): Promise<null | NextResponse> {
+  const supabase = createRouteHandlerClient({ cookies });
 
-    // Check authentication
-    const { data: { session } } = await supabase.auth.getSession();
-    if (!session) {
-      return {
-        authorized: false,
-        response: NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
-      };
-    }
-
-    // Check if user is admin
-    const { data: profile } = await supabase
-      .from('user_profiles')
-      .select('role')
-      .eq('user_id', session.user.id)
-      .single();
-
-    if (profile?.role !== 'admin') {
-      return {
-        authorized: false,
-        response: NextResponse.json({ error: 'Forbidden - Admin access required' }, { status: 403 })
-      };
-    }
-
-    return {
-      authorized: true,
-      userId: session.user.id
-    };
-  } catch (error) {
-    console.error('Admin auth verification error:', error);
-    return {
-      authorized: false,
-      response: NextResponse.json({ error: 'Internal server error' }, { status: 500 })
-    };
+  // Check authentication
+  const { data: { session } } = await supabase.auth.getSession();
+  if (!session) {
+    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
   }
+
+  // Check if user is admin
+  const { data: profile } = await supabase
+    .from('user_profiles')
+    .select('role')
+    .eq('user_id', session.user.id)
+    .single();
+
+  if (profile?.role !== 'admin') {
+    return NextResponse.json({ error: 'Forbidden - Admin access required' }, { status: 403 });
+  }
+
+  return null; // Authorized
 }
 
 /**

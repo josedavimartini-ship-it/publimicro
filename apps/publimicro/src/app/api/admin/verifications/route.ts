@@ -15,10 +15,8 @@ export async function GET(request: Request) {
     }
 
     // Verify admin authentication
-    const authResult = await verifyAdminAuth();
-    if (!authResult.authorized) {
-      return authResult.response;
-    }
+    const authError = await verifyAdminAuth();
+    if (authError) return authError;
 
     const supabase = createRouteHandlerClient({ cookies });
 
