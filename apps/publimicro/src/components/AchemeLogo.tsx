@@ -9,7 +9,7 @@
 
 import { useState } from "react";
 
-export default function AchemeLogo({ className = "w-12 h-12", animate: _animate = false }: { className?: string; animate?: boolean }) {
+export default function AchemeLogo({ className = "w-12 h-12", animate = false }: { className?: string; animate?: boolean }) {
   const [svgLoadFailed, setSvgLoadFailed] = useState(false);
 
   // Prefer external SVG at /logo-acheme.svg when available (easy to swap by replacing public file).

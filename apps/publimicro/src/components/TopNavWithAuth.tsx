@@ -4,7 +4,7 @@ import Link from "next/link";
 import {
   Heart, User,
   LogOut, LayoutDashboard, ChevronDown,
-  PlusCircle, Settings, Package
+  PlusCircle, Settings, Package, Gavel
 } from 'lucide-react';
 import { useMemo, useState, useRef, useEffect } from "react";
 import { useAuth } from "./AuthProvider";
@@ -12,6 +12,7 @@ import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 import { useRouter } from "next/navigation";
 import AccountDashboard from "./AccountDashboard";
 import AchemeLogo from "./AchemeLogo";
+import { AnimatedHandshake } from "./AnimatedHandshake";
 
 type SearchTarget = "local" | "main";
 
@@ -43,9 +44,9 @@ export function TopNavWithAuth({
   const [showUserMenu, setShowUserMenu] = useState(false);
   const userMenuRef = useRef<HTMLDivElement>(null);
 
-  const { user, profile: _profile, loading: _loading } = useAuth();
+  const { user, profile, loading } = useAuth();
   const supabase = createClientComponentClient();
-  const _router = useRouter();
+  const router = useRouter();
 
   const searchAction = useMemo(
     () => (searchTarget === "main" ? "https://www.publimicro.com.br/search" : "/search"),

@@ -66,26 +66,26 @@ interface Sitio {
 
 export default function PropertyPage() {
   const params = useParams();
-  const _router = useRouter();
+  const router = useRouter();
   const { showToast } = useToast();
   const { t, lang: _lang } = useI18n();
-  const { user: _user, profile: _profile, loading: _authLoading } = useAuth();
+  const { user, profile, loading: authLoading } = useAuth();
   const [sitio, setSitio] = useState<Sitio | null>(null);
   const [loading, setLoading] = useState(true);
   const [currentImageIndex, _setCurrentImageIndex] = useState(0);
-  const [bidValue, _setBidValue] = useState("");
-  const [bidMessage, _setBidMessage] = useState("");
-  const [_bidSubmitting, _setBidSubmitting] = useState(false);
-  const [bidSuccess, _setBidSuccess] = useState(false);
-  const [bidError, _setBidError] = useState("");
+  const [bidValue, setBidValue] = useState("");
+  const [bidMessage, setBidMessage] = useState("");
+  const [bidSubmitting, setBidSubmitting] = useState(false);
+  const [bidSuccess, setBidSuccess] = useState(false);
+  const [bidError, setBidError] = useState("");
   const [currentHighestBid, setCurrentHighestBid] = useState<number | null>(null);
   const [kmlData, setKmlData] = useState<string>(KML_DATA_FALLBACK);
   const [visitModalOpen, setVisitModalOpen] = useState(false);
-  const [proposalModalOpen, _setProposalModalOpen] = useState(false);
+  const [proposalModalOpen, setProposalModalOpen] = useState(false);
   const previouslyFocusedElement = useRef<HTMLElement | null>(null);
   // User flow enforcement state
-  const [_visitBlockedReason, _setVisitBlockedReason] = useState<string | null>(null);
-  const [_proposalBlockedReason, _setProposalBlockedReason] = useState<string | null>(null);
+  const [visitBlockedReason, setVisitBlockedReason] = useState<string | null>(null);
+  const [proposalBlockedReason, setProposalBlockedReason] = useState<string | null>(null);
 
   // Handle Escape key to close modal
   useEffect(() => {

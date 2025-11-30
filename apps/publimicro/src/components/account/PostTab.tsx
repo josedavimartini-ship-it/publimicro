@@ -11,11 +11,11 @@ const TABS = [
 
 export default function PostTab({ user: _user }: { user: any }) {
   const [tab, setTab] = useState("detalhes");
-  const [title, _setTitle] = useState("");
-  const [description, _setDescription] = useState("");
-  const [photos, _setPhotos] = useState<string[]>([]);
-  const [location, _setLocation] = useState("");
-  const [price, _setPrice] = useState("");
+  const [title, setTitle] = useState("");
+  const [description, setDescription] = useState("");
+  const [photos, setPhotos] = useState<string[]>([]);
+  const [location, setLocation] = useState("");
+  const [price, setPrice] = useState("");
   const [suggestedPrice, _setSuggestedPrice] = useState("R$ 350.000");
   const [_preview, _setPreview] = useState(false);
   // ...add more fields as needed
