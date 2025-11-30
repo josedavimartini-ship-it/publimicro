@@ -1,6 +1,7 @@
 import { createRouteHandlerClient } from '@supabase/auth-helpers-nextjs';
 import { cookies } from 'next/headers';
 import { NextResponse } from 'next/server';
+import { sendEmail, getWelcomeEmail } from '@/lib/emailService';
 
 export async function GET(request: Request) {
   try {
@@ -21,8 +22,17 @@ export async function GET(request: Request) {
         );
       }
 
-      // Create profile if it doesn't exist
+      // Create profile if it doesn't exist and send welcome email
       if (data?.user) {
+        // Check if profile is new
+        const { data: existingProfile } = await supabase
+          .from('profiles')
+          .select('id')
+          .eq('id', data.user.id)
+          .single();
+
+        const isNewUser = !existingProfile;
+
         const { error: profileError } = await supabase
           .from('profiles')
           .upsert([
@@ -37,6 +47,14 @@ export async function GET(request: Request) {
         
         if (profileError) {
           console.error('Profile creation error:', profileError);
+        }
+
+        // Send welcome email to new users
+        if (isNewUser && data.user.email) {
+          await sendEmail(getWelcomeEmail({
+            userName: data.user.user_metadata?.full_name || data.user.email.split('@')[0],
+            userEmail: data.user.email
+          }));
         }
       }
     }

@@ -1,27 +1,26 @@
 import { createRouteHandlerClient } from '@supabase/auth-helpers-nextjs';
 import { cookies } from 'next/headers';
 import { NextResponse } from 'next/server';
+import { verifyAdminAuth, checkRateLimit, getClientIP } from '@/lib/adminAuth';
 
 export async function GET(request: Request) {
   try {
+    // Rate limiting - 100 requests per minute per IP
+    const clientIP = getClientIP(request);
+    if (!checkRateLimit(clientIP, 100, 60000)) {
+      return NextResponse.json(
+        { error: 'Too many requests. Please try again later.' },
+        { status: 429 }
+      );
+    }
+
+    // Verify admin authentication
+    const authResult = await verifyAdminAuth();
+    if (!authResult.authorized) {
+      return authResult.response;
+    }
+
     const supabase = createRouteHandlerClient({ cookies });
-
-    // Check authentication and admin role
-    const { data: { session } } = await supabase.auth.getSession();
-    if (!session) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
-    }
-
-    // Check if user is admin
-    const { data: profile } = await supabase
-      .from('user_profiles')
-      .select('role')
-      .eq('user_id', session.user.id)
-      .single();
-
-    if (profile?.role !== 'admin') {
-      return NextResponse.json({ error: 'Forbidden - Admin access required' }, { status: 403 });
-    }
 
     // Get query parameters for filtering
     const { searchParams } = new URL(request.url);

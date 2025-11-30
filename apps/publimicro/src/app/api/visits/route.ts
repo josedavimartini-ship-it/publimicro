@@ -1,8 +1,19 @@
 import { NextResponse } from 'next/server';
 import { createServerSupabaseClient } from '@/lib/supabaseServer';
+import { sendEmail, getVisitRequestEmail } from '@/lib/emailService';
+import { checkRateLimit, getClientIP } from '@/lib/adminAuth';
 
 // POST /api/visits - Create a new visit request
 export async function POST(req: Request) {
+  // Rate limiting - 10 visit requests per hour per IP
+  const clientIP = getClientIP(req);
+  if (!checkRateLimit(`visit:${clientIP}`, 10, 3600000)) {
+    return NextResponse.json(
+      { error: 'Too many visit requests. Please try again later.' },
+      { status: 429 }
+    );
+  }
+
   const supabase = createServerSupabaseClient();
   const { data: { user } } = await supabase.auth.getUser();
   
@@ -21,8 +32,15 @@ export async function POST(req: Request) {
     // Check if user has verified profile
     const { data: profile } = await supabase
       .from('user_profiles')
-      .select('profile_completed')
+      .select('profile_completed, full_name')
       .eq('id', user.id)
+      .single();
+
+    // Get property details for email
+    const { data: property } = await supabase
+      .from('properties')
+      .select('title, user_id, user_profiles!user_id(email)')
+      .eq('id', ad_id)
       .single();
 
     const { data, error } = await supabase
@@ -32,7 +50,7 @@ export async function POST(req: Request) {
         user_id: user.id,
         visit_type: visit_type || 'in_person',
         scheduled_at,
-        guest_name: guest_name || user.user_metadata?.full_name,
+        guest_name: guest_name || user.user_metadata?.full_name || profile?.full_name,
         guest_email: guest_email || user.email,
         guest_phone,
         notes,
@@ -43,6 +61,19 @@ export async function POST(req: Request) {
 
     if (error) {
       return NextResponse.json({ error: error.message }, { status: 400 });
+    }
+
+    // Send email notification to property owner
+    if (property && property.user_profiles?.email) {
+      const visitDate = new Date(scheduled_at);
+      await sendEmail(getVisitRequestEmail({
+        userName: guest_name || profile?.full_name || 'Um visitante',
+        propertyTitle: property.title,
+        propertyUrl: `${process.env.NEXT_PUBLIC_SITE_URL || 'https://publimicro.com.br'}/imoveis/${ad_id}`,
+        visitDate: visitDate.toLocaleDateString('pt-BR'),
+        visitTime: visitDate.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' }),
+        ownerEmail: property.user_profiles.email
+      }));
     }
 
     return NextResponse.json({ success: true, visit: data });
