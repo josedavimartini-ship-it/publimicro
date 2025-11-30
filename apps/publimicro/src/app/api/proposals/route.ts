@@ -1,8 +1,19 @@
 import { NextResponse } from 'next/server';
 import { createServerSupabaseClient } from '@/lib/supabaseServer';
+import { sendEmail, getProposalEmail } from '@/lib/emailService';
+import { checkRateLimit, getClientIP } from '@/lib/adminAuth';
 
 // POST /api/proposals - Create a new proposal
 export async function POST(req: Request) {
+  // Rate limiting - 5 proposals per hour per IP
+  const clientIP = getClientIP(req);
+  if (!checkRateLimit(`proposal:${clientIP}`, 5, 3600000)) {
+    return NextResponse.json(
+      { error: 'Too many proposals. Please try again later.' },
+      { status: 429 }
+    );
+  }
+
   const supabase = createServerSupabaseClient();
   const { data: { user } } = await supabase.auth.getUser();
   
@@ -21,13 +32,20 @@ export async function POST(req: Request) {
     // Verify user profile state (must have completed profile and be verified)
     const { data: profile } = await supabase
       .from('user_profiles')
-      .select('profile_completed, verified, can_place_bids')
+      .select('profile_completed, verified, can_place_bids, full_name')
       .eq('id', user.id)
       .single();
 
     if (!profile || !profile.profile_completed || !profile.verified) {
       return NextResponse.json({ error: 'Profile incomplete or not verified' }, { status: 403 });
     }
+
+    // Get property details for email
+    const { data: property } = await supabase
+      .from('properties')
+      .select('title, user_id, user_profiles!user_id(email)')
+      .eq('id', ad_id)
+      .single();
 
     // Check for a completed visit for this ad
     const { data: visits } = await supabase
@@ -80,6 +98,17 @@ export async function POST(req: Request) {
 
     if (error) {
       return NextResponse.json({ error: error.message }, { status: 400 });
+    }
+
+    // Send email notification to property owner
+    if (property && property.user_profiles?.email) {
+      await sendEmail(getProposalEmail({
+        userName: profile?.full_name || user.email || 'Um interessado',
+        propertyTitle: property.title,
+        propertyUrl: `${process.env.NEXT_PUBLIC_SITE_URL || 'https://publimicro.com.br'}/imoveis/${ad_id}`,
+        proposalAmount: new Intl.NumberFormat('pt-BR').format(amount),
+        ownerEmail: property.user_profiles.email
+      }));
     }
 
     return NextResponse.json({ success: true, proposal: data });
