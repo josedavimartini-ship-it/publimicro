@@ -59,13 +59,13 @@ pnpm dev:publimicro
    apps/publimicro/.env.local
    ```
 
-2. Add these lines (replace with your actual values):
+2. Add these lines (replace with your actual values from Stripe Dashboard):
 
 ```env
-# Stripe Configuration
-STRIPE_SECRET_KEY=sk_test_51SQX6gFTa31reGpfVAEfcZhTBhcxRMxf7SnU5JrBmpb8qfRzyMBCtKpwizy02HXhkCmaeNvhvgcBQHQYZfbnJaSO0056kUgOM8
-STRIPE_WEBHOOK_SECRET=whsec_XXXXXXXXXXXXXXXXXXXXXXXX
-NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY=pk_test_YOUR_PUBLISHABLE_KEY
+# Stripe Configuration (get from https://dashboard.stripe.com/apikeys)
+STRIPE_SECRET_KEY=sk_test_YOUR_SECRET_KEY_HERE
+STRIPE_WEBHOOK_SECRET=whsec_YOUR_WEBHOOK_SECRET_HERE
+NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY=pk_test_YOUR_PUBLISHABLE_KEY_HERE
 
 # Supabase Configuration (you should already have these)
 NEXT_PUBLIC_SUPABASE_URL=your_supabase_url

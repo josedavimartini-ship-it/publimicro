@@ -6,9 +6,17 @@ import { dirname, join } from 'path';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
-// Supabase credentials
-const supabaseUrl = 'https://rkrbygsutlgbczvpzwwo.supabase.co';
-const supabaseServiceKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJrcmJ5Z3N1dGxnYmN6dnB6d3dvIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTcyODc2NDAxMSwiZXhwIjoyMDQ0MzQwMDExfQ.U48zITG4pWNxw00fGwN2z4aF2kq-f5B-LBZi9EVgSsc';
+// Supabase credentials - Load from environment variables
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
+const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
+
+if (!supabaseUrl || !supabaseServiceKey) {
+  console.error('❌ Missing required environment variables:');
+  console.error('   NEXT_PUBLIC_SUPABASE_URL');
+  console.error('   SUPABASE_SERVICE_ROLE_KEY');
+  console.error('\nSet these in your .env file or environment before running.');
+  process.exit(1);
+}
 
 const supabase = createClient(supabaseUrl, supabaseServiceKey, {
   auth: {
