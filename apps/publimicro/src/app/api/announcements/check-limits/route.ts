@@ -5,8 +5,7 @@
 
 import { NextRequest, NextResponse } from 'next/server';
 import { canUserPost, type AnnouncementCategory } from '@/lib/postingLimits';
-import { createRouteHandlerClient } from '@supabase/auth-helpers-nextjs';
-import { cookies } from 'next/headers';
+import { createRouteSupabaseClient } from '@/lib/supabaseServer';
 
 export async function POST(request: NextRequest) {
   try {

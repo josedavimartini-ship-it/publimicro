@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import { createClientComponentClient } from '@supabase/auth-helpers-nextjs';
+import { createBrowserSupabaseClient } from '@/lib/supabaseBrowser';
 import Link from 'next/link';
 import { Home, Heart, TrendingUp, Clock, CheckCircle, XCircle, Calendar } from 'lucide-react';
 
@@ -38,7 +38,7 @@ type Favorite = {
 
 export default function ContaPage() {
   const router = useRouter();
-  const supabase = createClientComponentClient();
+  const supabase = createBrowserSupabaseClient();
 
   const [loading, setLoading] = useState(true);
   const [_user, setUser] = useState<CurrentUser>(null);

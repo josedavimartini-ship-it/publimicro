@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import { createClientComponentClient } from '@supabase/auth-helpers-nextjs';
+import { createBrowserSupabaseClient } from '@/lib/supabaseBrowser';
 
 // Step components
 import PersonalInfoStep from './steps/PersonalInfoStep';
@@ -26,7 +26,7 @@ interface VerificationData {
 
 export default function VerificationWizard() {
   const _router = useRouter();
-  const _supabase = createClientComponentClient();
+  const _supabase = createBrowserSupabaseClient();
   
   const [currentStep, setCurrentStep] = useState<VerificationStep>('personal_info');
   const [verificationData, setVerificationData] = useState<Partial<VerificationData>>({});

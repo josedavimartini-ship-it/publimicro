@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import { createClientComponentClient } from '@supabase/auth-helpers-nextjs';
+import { createBrowserSupabaseClient } from '@/lib/supabaseBrowser';
 import { Upload, X, MapPin, Home, DollarSign, Bed, Bath, Square, Calendar } from 'lucide-react';
 
 const PROPERTY_TYPES = [
@@ -18,7 +18,7 @@ const PROPERTY_TYPES = [
 
 export default function PostarPage() {
   const router = useRouter();
-  const supabase = createClientComponentClient();
+  const supabase = createBrowserSupabaseClient();
   
   const [loading, setLoading] = useState(true);
   const [submitting, setSubmitting] = useState(false);

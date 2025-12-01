@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { createClientComponentClient } from '@supabase/auth-helpers-nextjs';
+import { createBrowserSupabaseClient } from '@/lib/supabaseBrowser';
 
 interface VerificationStatus {
   verified: boolean;
@@ -17,7 +17,7 @@ export function useVerificationStatus(): VerificationStatus {
     loading: true,
   });
 
-  const supabase = createClientComponentClient();
+  const supabase = createBrowserSupabaseClient();
 
   useEffect(() => {
     void checkVerification();

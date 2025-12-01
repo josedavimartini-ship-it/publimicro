@@ -2,14 +2,14 @@
 
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { createClientComponentClient } from '@supabase/auth-helpers-nextjs';
+import { createBrowserSupabaseClient } from '@/lib/supabaseBrowser';
 import VerificationWizard from '@/components/verification/VerificationWizard';
 
 export default function VerificationPage() {
   const [loading, setLoading] = useState(true);
   const [user, setUser] = useState<any>(null);
   const router = useRouter();
-  const supabase = createClientComponentClient();
+  const supabase = createBrowserSupabaseClient();
 
   useEffect(() => {
     void checkAuth();
