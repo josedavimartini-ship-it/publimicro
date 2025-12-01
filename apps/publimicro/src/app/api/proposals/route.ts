@@ -42,8 +42,8 @@ export async function POST(req: Request) {
 
     // Get property details for email
     const { data: property } = await supabase
-      .from('properties')
-      .select('title, user_id')
+      .from('sitios')
+      .select('nome, user_id')
       .eq('id', ad_id)
       .single();
 

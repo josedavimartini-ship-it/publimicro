@@ -162,7 +162,7 @@ export default function AdminPage() {
         { count: pendingContactsCount },
         { data: avgBidData },
       ] = await Promise.all([
-        supabase.from("properties").select("*", { count: "exact", head: true }),
+        supabase.from("sitios").select("*", { count: "exact", head: true }),
         supabase.from("user_profiles").select("*", { count: "exact", head: true }),
         supabase.from("proposals").select("*", { count: "exact", head: true }),
         supabase.from("contacts").select("*", { count: "exact", head: true }),
@@ -193,12 +193,20 @@ export default function AdminPage() {
 
   const loadProperties = async () => {
     const { data } = await supabase
-      .from("properties")
-      .select("id, title, location, price, created_at")
+      .from("sitios")
+      .select("id, nome, localizacao, preco, created_at")
       .order("created_at", { ascending: false })
       .limit(20);
     
-    setProperties(data || []);
+    // Map to expected interface shape
+    const mapped = (data || []).map((s: any) => ({
+      id: s.id,
+      title: s.nome,
+      location: s.localizacao,
+      price: s.preco,
+      created_at: s.created_at,
+    }));
+    setProperties(mapped);
   };
 
   const handleMediaFilesChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -360,7 +368,7 @@ export default function AdminPage() {
 
     try {
       const { error } = await supabase
-        .from("properties")
+        .from("sitios")
         .delete()
         .eq("id", propertyId);
 

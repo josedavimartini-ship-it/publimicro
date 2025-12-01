@@ -122,12 +122,12 @@ export async function POST(req: NextRequest) {
       }
     }
 
-    // Update properties.kml_url if kmlPublicUrl present
+    // Update sitios.kml_url if kmlPublicUrl present
     if (kmlPublicUrl) {
       try {
-        await svc.from('properties').update({ kml_url: kmlPublicUrl }).eq('id', propertyId);
+        await svc.from('sitios').update({ kml_url: kmlPublicUrl }).eq('id', propertyId);
       } catch (err) {
-        console.error('Failed to update properties.kml_url', err);
+        console.error('Failed to update sitios.kml_url', err);
       }
     }
 

@@ -66,25 +66,12 @@ export default function MinhasPropostasPage() {
       // Transform and fetch property names
       const proposalsWithDetails = await Promise.all(
         (data || []).map(async (prop) => {
-          // Try to get property name from properties table first
-          let propData = await supabase
-            .from("properties")
-            .select("title")
+          // Fetch property name from sitios table
+          const { data: sitioData, error: sitioError } = await supabase
+            .from("sitios")
+            .select("nome")
             .eq("id", prop.property_id)
             .single();
-
-          // If not found in properties, try sitios (legacy)
-          if (propData.error || !propData.data) {
-            const { data: sitioData, error: sitioError } = await supabase
-              .from("sitios")
-              .select("nome")
-              .eq("id", prop.property_id)
-              .single();
-            
-            if (!sitioError && sitioData) {
-              propData = { data: { title: sitioData.nome }, error: null, count: null, status: 200, statusText: "OK" };
-            }
-          }
 
           return {
             id: prop.id,
@@ -93,7 +80,7 @@ export default function MinhasPropostasPage() {
             message: prop.message,
             status: prop.status as "pending" | "accepted" | "rejected",
             created_at: prop.created_at,
-            ad_title: propData.data?.title || "Propriedade",
+            ad_title: (!sitioError && sitioData) ? sitioData.nome : "Propriedade",
             ad_type: "property" as const,
           };
         })
