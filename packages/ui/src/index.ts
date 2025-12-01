@@ -7,6 +7,10 @@ export * from "./components/Hero";
 export * from "./components/Footer";
 export * from "./components/HighlightsCarousel";
 
+// Accessible Form Components
+export { Select } from "./components/Select";
+export { Input, PasswordInput } from "./components/Input";
+
 export { Carcara3D } from "./components/Carcara3D";
 export type { Carcara3DProps } from "./components/Carcara3D";
 
