@@ -85,11 +85,28 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <ErrorBoundaryWrapper>
           <AuthProvider>
               <Providers>
-                <a href="#main-content" className="skip-to-content sr-only focus:not-sr-only focus:absolute focus:left-2 focus:top-2 z-50 bg-[#A8C97F] text-black font-bold px-4 py-2 rounded focus:outline-none focus:ring-2 focus:ring-[#B7791F]" tabIndex={0} aria-label="Pular para o conteúdo principal">Pular para o conteúdo</a>
+                {/* Skip to content link for keyboard navigation (WCAG 2.4.1) */}
+                <a 
+                  href="#main-content" 
+                  className="skip-to-content sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 z-[100] bg-[#D4AF37] text-[#0a0a0a] font-bold px-4 py-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-[#0a0a0a] transition-all" 
+                  tabIndex={0} 
+                  aria-label="Pular para o conteúdo principal"
+                >
+                  Pular para o conteúdo
+                </a>
+                
+                {/* Live region for screen reader announcements (WCAG 4.1.3) */}
+                <div 
+                  id="live-region" 
+                  aria-live="polite" 
+                  aria-atomic="true" 
+                  className="sr-only"
+                />
+                
                 <TopNavWithAuth brand="ACHEME" brandHref="/" searchTarget="local" />
                 <div className="flex min-h-[calc(100vh-4rem)]">
                   <Sidebar side="left" />
-                  <main id="main-content" role="main" className="flex-1 min-w-0">
+                  <main id="main-content" role="main" tabIndex={-1} className="flex-1 min-w-0 focus:outline-none">
                     {children}
                   </main>
                   <Sidebar side="right" />
