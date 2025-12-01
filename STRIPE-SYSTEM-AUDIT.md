@@ -33,16 +33,16 @@
 
 ### Environment Variables (.env.local)
 ```bash
-# Stripe Keys
-NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY=pk_test_51SQX6gFTa31reGpfMijcLrYJAacTsMci34Zq1e7gPJ5xYZgsV9tIgYNiELfwn2lVhqLTMILMMJ3gVs7c4DnCEYbo006QPd0311
-STRIPE_SECRET_KEY=sk_test_51SQX6gFTa31reGpfVAEfcZhTBhcxRMxf7SnU5JrBmpb8qfRzyMBCtKpwizy02HXhkCmaeNvhvgcBQHQYZfbnJaSO0056kUgOM8
+# Stripe Keys (use your own keys from https://dashboard.stripe.com/apikeys)
+NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY=pk_test_YOUR_PUBLISHABLE_KEY_HERE
+STRIPE_SECRET_KEY=sk_test_YOUR_SECRET_KEY_HERE
 
-# Stripe Price IDs
-NEXT_PUBLIC_STRIPE_PRICE_DESTAQUE=price_1SQXY4FTa31reGpf1w2KTfGA
-NEXT_PUBLIC_STRIPE_PRICE_MARKETING=price_1SQXZxFTa31reGpf7HGHw8In
+# Stripe Price IDs (create products in Stripe Dashboard)
+NEXT_PUBLIC_STRIPE_PRICE_DESTAQUE=price_YOUR_DESTAQUE_PRICE_ID
+NEXT_PUBLIC_STRIPE_PRICE_MARKETING=price_YOUR_MARKETING_PRICE_ID
 
-# Stripe Webhook Secret
-STRIPE_WEBHOOK_SECRET=whsec_a04b24f71bdb6b47f682ac5bf8bf1596e33f3d7c8e49825d34cafe67a6d7e4a2
+# Stripe Webhook Secret (from Stripe CLI or Dashboard)
+STRIPE_WEBHOOK_SECRET=whsec_YOUR_WEBHOOK_SECRET_HERE
 ```
 
 **Status:** ✅ All keys configured

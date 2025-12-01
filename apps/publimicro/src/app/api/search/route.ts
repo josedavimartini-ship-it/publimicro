@@ -13,18 +13,31 @@ function tableForSection(section: string) {
   return "listings";
 }
 
+/**
+ * Sanitize search query to prevent SQL injection via ILIKE wildcards
+ * Escapes %, _, and \ characters that have special meaning in LIKE patterns
+ */
+function sanitizeSearchQuery(q: string): string {
+  return q.replace(/[%_\\]/g, '\\$&');
+}
+
 export async function GET(req: NextRequest) {
   // Auto-suggest endpoint: /api/search?q=...&section=...
   try {
     const { searchParams } = new URL(req.url);
-    const q = searchParams.get("q") || "";
+    const rawQuery = searchParams.get("q") || "";
     const section = searchParams.get("section") || "listings";
 
-    if (!q || q.length < 2) return NextResponse.json({ suggestions: [] });
+    if (!rawQuery || rawQuery.length < 2) return NextResponse.json({ suggestions: [] });
+    
+    // Limit query length to prevent abuse
+    const q = rawQuery.slice(0, 100);
 
     const table = tableForSection(section);
     // search title/name and description - tuned per-table
-    const ilike = `%${q}%`;
+    // Sanitize query to prevent ILIKE injection
+    const sanitized = sanitizeSearchQuery(q);
+    const ilike = `%${sanitized}%`;
 
     // Select sensible suggestion fields depending on table
     const selectFields = table === "properties" ? "id,title,slug" : "id,title,name,brand,model,slug";
@@ -80,8 +93,10 @@ export async function POST(req: NextRequest) {
     let qb: any = supabase.from(table).select("*", { count: "exact" });
 
     // Full-text-ish filters (simple ilike ranges for now)
+    // Sanitize and limit query to prevent injection
     if (query) {
-      const ilike = `%${query}%`;
+      const sanitizedQuery = sanitizeSearchQuery(String(query).slice(0, 100));
+      const ilike = `%${sanitizedQuery}%`;
       const orParts = [`title.ilike.${ilike}`, `description.ilike.${ilike}`, `location.ilike.${ilike}`];
       if (table === "listings") {
         orParts.push(`name.ilike.${ilike}`, `brand.ilike.${ilike}`, `model.ilike.${ilike}`);

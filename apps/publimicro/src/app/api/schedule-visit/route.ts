@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { createServerSupabaseClient } from "@/lib/supabaseServer";
+import { checkRateLimit, getClientIP } from "@/lib/adminAuth";
 
 interface ScheduleVisitData {
   nome: string;
@@ -31,6 +32,15 @@ interface ScheduleVisitData {
  */
 
 export async function POST(req: Request): Promise<NextResponse> {
+  // Rate limiting - 10 visit requests per hour per IP
+  const clientIP = getClientIP(req);
+  if (!checkRateLimit(`visit:${clientIP}`, 10, 3600000)) {
+    return NextResponse.json(
+      { error: "Muitas solicitações. Por favor, aguarde antes de tentar novamente." },
+      { status: 429 }
+    );
+  }
+
   const supabase = createServerSupabaseClient();
   
   try {
