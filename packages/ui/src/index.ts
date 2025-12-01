@@ -10,6 +10,10 @@ export * from "./components/HighlightsCarousel";
 export { Carcara3D } from "./components/Carcara3D";
 export type { Carcara3DProps } from "./components/Carcara3D";
 
+// AcheMe Branding
+export { AchemeLogo, AchemeLogoCompact } from "./components/AchemeLogo";
+export { NegotiationIcon, HandshakeIcon, AnimatedHandshake } from "./components/NegotiationIcon";
+
 // New shared top nav
 export { TopNav } from "./components/TopNav";
 
@@ -22,7 +26,7 @@ export { default as WhatsAppLink } from "./components/WhatsAppLink";
 export { default as PropertyCard } from "./PropertyCard";
 export type { PropertyCardProps } from "./PropertyCard";
 
-export { theme, publimicroColors } from "./theme";
+export { theme, achemeColors, publimicroColors } from "./theme";
 export type { Theme } from "./theme";
 
 // Dark Theme Configuration
