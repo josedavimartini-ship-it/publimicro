@@ -8,7 +8,7 @@ import {
 } from 'lucide-react';
 import { useMemo, useState, useRef, useEffect } from "react";
 import { useAuth } from "./AuthProvider";
-import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
+import { createBrowserSupabaseClient } from "@/lib/supabaseBrowser";
 import { useRouter } from "next/navigation";
 import AccountDashboard from "./AccountDashboard";
 import AchemeLogo from "./AchemeLogo";
@@ -45,7 +45,7 @@ export function TopNavWithAuth({
   const userMenuRef = useRef<HTMLDivElement>(null);
 
   const { user, profile, loading } = useAuth();
-  const supabase = createClientComponentClient();
+  const supabase = createBrowserSupabaseClient();
   const router = useRouter();
 
   const searchAction = useMemo(

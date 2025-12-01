@@ -1,5 +1,4 @@
-import { createRouteHandlerClient } from '@supabase/auth-helpers-nextjs';
-import { cookies } from 'next/headers';
+import { createRouteSupabaseClient } from '@/lib/supabaseServer';
 import { NextResponse } from 'next/server';
 
 /**
@@ -7,7 +6,7 @@ import { NextResponse } from 'next/server';
  * Returns null if authorized with userId, or NextResponse with error
  */
 export async function verifyAdminAuth(): Promise<null | NextResponse> {
-  const supabase = createRouteHandlerClient({ cookies });
+  const supabase = createRouteSupabaseClient();
 
   // Check authentication
   const { data: { session } } = await supabase.auth.getSession();

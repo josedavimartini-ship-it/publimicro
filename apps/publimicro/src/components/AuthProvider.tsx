@@ -1,7 +1,7 @@
 "use client";
 
 import { createContext, useContext, useEffect, useState } from "react";
-import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
+import { createBrowserSupabaseClient } from "@/lib/supabaseBrowser";
 import { User } from "@supabase/supabase-js";
 import { OnboardingModal } from "./OnboardingModal";
 
@@ -63,7 +63,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [loading, setLoading] = useState(true);
   const [showOnboarding, setShowOnboarding] = useState(false);
 
-  const supabase = createClientComponentClient();
+  const supabase = createBrowserSupabaseClient();
 
   const loadProfile = async (userId: string) => {
     try {

@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
+import { createBrowserSupabaseClient } from "@/lib/supabaseBrowser";
 import { Check, AlertCircle } from "lucide-react";
 
 interface OnboardingModalProps {
@@ -74,7 +74,7 @@ export function OnboardingModal({ isOpen, onComplete, userId }: OnboardingModalP
     terms_accepted: false,
   });
 
-  const supabase = createClientComponentClient();
+  const supabase = createBrowserSupabaseClient();
 
   // Load existing profile data if any
   useEffect(() => {

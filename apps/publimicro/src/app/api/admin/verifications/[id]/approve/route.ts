@@ -1,5 +1,4 @@
-import { createRouteHandlerClient } from '@supabase/auth-helpers-nextjs';
-import { cookies } from 'next/headers';
+import { createRouteSupabaseClient } from '@/lib/supabaseServer';
 import { NextResponse } from 'next/server';
 
 export async function POST(
@@ -7,7 +6,7 @@ export async function POST(
   { params }: { params: { id: string } }
 ) {
   try {
-    const supabase = createRouteHandlerClient({ cookies });
+    const supabase = createRouteSupabaseClient();
 
     // Check authentication and admin role
     const { data: { session } } = await supabase.auth.getSession();

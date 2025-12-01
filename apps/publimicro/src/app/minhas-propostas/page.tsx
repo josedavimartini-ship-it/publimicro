@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { useAuth } from "@/components/AuthProvider";
-import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
+import { createBrowserSupabaseClient } from "@/lib/supabaseBrowser";
 import { TrendingUp, CheckCircle, Clock, XCircle, Eye } from "lucide-react";
 import { useToast } from "@/components/ToastNotification";
 import Link from "next/link";
@@ -24,7 +24,7 @@ export default function MinhasPropostasPage() {
   const { user, loading: authLoading } = useAuth();
   const router = useRouter();
   const { showToast } = useToast();
-  const supabase = createClientComponentClient();
+  const supabase = createBrowserSupabaseClient();
 
   const [loading, setLoading] = useState(true);
   const [proposals, setProposals] = useState<Proposal[]>([]);

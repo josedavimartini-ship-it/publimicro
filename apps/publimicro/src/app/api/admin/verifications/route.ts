@@ -1,5 +1,4 @@
-import { createRouteHandlerClient } from '@supabase/auth-helpers-nextjs';
-import { cookies } from 'next/headers';
+import { createRouteSupabaseClient } from '@/lib/supabaseServer';
 import { NextResponse } from 'next/server';
 import { verifyAdminAuth, checkRateLimit, getClientIP } from '@/lib/adminAuth';
 
@@ -18,7 +17,7 @@ export async function GET(request: Request) {
     const authError = await verifyAdminAuth();
     if (authError) return authError;
 
-    const supabase = createRouteHandlerClient({ cookies });
+    const supabase = createRouteSupabaseClient();
 
     // Get query parameters for filtering
     const { searchParams } = new URL(request.url);
