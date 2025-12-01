@@ -52,12 +52,12 @@ export async function POST(req: NextRequest) {
     }
 
     if (table === "properties" || table === "both") {
-      // properties usually have a 'title' field
-      const matches = await findMatches("properties", ["title", "name"]);
+      // sitios table uses 'nome' field instead of 'title'
+      const matches = await findMatches("sitios", ["nome", "name"]);
       result.properties = { count: matches.length, rows: preview ? matches : matches.map((r) => ((r as unknown) as Record<string, unknown>).id) };
       if (!preview && matches.length > 0) {
         const ids = matches.map((r) => ((r as unknown) as Record<string, unknown>).id);
-        const { error: delErr } = await supabase.from("properties").delete().in("id", ids);
+        const { error: delErr } = await supabase.from("sitios").delete().in("id", ids);
         if (delErr) throw delErr;
         (result.properties as Record<string, unknown>)['deleted'] = ids.length;
       }

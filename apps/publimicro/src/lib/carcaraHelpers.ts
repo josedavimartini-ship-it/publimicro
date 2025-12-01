@@ -55,23 +55,23 @@ export async function fetchCanonicalSitios(opts: FetchOptions = {}) {
   try {
     // Try project-based query first
     let { data, error } = await supabase
-      .from('properties')
+      .from('sitios')
       .select('*')
       .eq('projeto', 'Sítios Carcará')
-      .order('price', { ascending: true })
+      .order('preco', { ascending: true })
       .limit(limit);
 
     if (error) {
       console.warn('fetchCanonicalSitios: projeto query error', error);
     }
 
-    // If no rows returned, fallback to canonical id list
+    // If no rows returned, fallback to canonical slug list
     if (!data || data.length === 0) {
       const { data: fbData, error: fbErr } = await supabase
-        .from('properties')
+        .from('sitios')
         .select('*')
-        .in('id', CANONICAL_CARCARA_IDS)
-        .order('price', { ascending: true });
+        .in('slug', CANONICAL_CARCARA_IDS)
+        .order('preco', { ascending: true });
 
       if (fbErr) {
         console.warn('fetchCanonicalSitios: fallback query error', fbErr);

@@ -79,7 +79,7 @@ export default function ContaPage() {
       // Fetch user-related data in parallel
 
       const [propsRes, proposalsRes, visitsRes, favsRes] = await Promise.all([
-        supabase.from("properties").select("*").eq("user_id", currentUser.id),
+        supabase.from("sitios").select("*").eq("user_id", currentUser.id),
         supabase.from("proposals").select("*").eq("user_id", currentUser.id),
         supabase.from("visits").select("*").eq("user_id", currentUser.id),
         supabase

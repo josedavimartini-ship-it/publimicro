@@ -9,12 +9,12 @@ import Breadcrumbs from "@/components/Breadcrumbs";
 
 interface Property {
   id: string;
-  title: string;
-  location: string;
-  price: number;
+  nome: string;
+  localizacao: string;
+  preco: number;
   area_total: number;
   fotos: string[];
-  description: string;
+  descricao: string;
   agua: boolean;
   energia: boolean;
   internet: boolean;
@@ -49,7 +49,7 @@ export default function ComparePage() {
   const loadProperties = async (ids: string[]) => {
     try {
       const { data, error } = await supabase
-        .from("properties")
+        .from("sitios")
         .select("*")
         .in("id", ids);
 
@@ -130,18 +130,18 @@ export default function ComparePage() {
   }
 
   const comparisonRows: ComparisonRow[] = [
-    { label: "Localização", key: "location", icon: MapPin },
+    { label: "Localização", key: "localizacao", icon: MapPin },
     { label: "Área Total", key: "area_total", suffix: " hectares", icon: Maximize2 },
     {
       label: "Preço",
-      key: "price",
+      key: "preco",
       format: (v: unknown) => (typeof v === "number" ? `R$ ${v.toLocaleString("pt-BR")}` : "-"),
       icon: DollarSign,
     },
     {
       label: "Preço por Hectare",
       key: "preco_ha",
-      format: (_v: unknown, p?: Property) => (p && p.area_total ? `R$ ${Math.round(p.price / p.area_total).toLocaleString("pt-BR")}` : "N/A"),
+      format: (_v: unknown, p?: Property) => (p && p.area_total ? `R$ ${Math.round(p.preco / p.area_total).toLocaleString("pt-BR")}` : "N/A"),
     },
     { label: "Água", key: "agua", format: (v: unknown) => (v === true ? "✅ Sim" : "❌ Não") },
     { label: "Energia Elétrica", key: "energia", format: (v: unknown) => (v === true ? "✅ Sim" : "❌ Não") },
@@ -198,7 +198,7 @@ export default function ComparePage() {
                       <button
                         onClick={() => removeProperty(property.id)}
                         className="absolute -top-2 -right-2 p-1 bg-red-500/20 text-red-400 rounded-full hover:bg-red-500/30 transition-colors"
-                        aria-label={`Remover ${property.title} da comparação`}
+                        aria-label={`Remover ${property.nome} da comparação`}
                       >
                         <X className="w-4 h-4" />
                       </button>
@@ -207,7 +207,7 @@ export default function ComparePage() {
                         {property.fotos && property.fotos[0] ? (
                           <Image
                             src={property.fotos[0]}
-                            alt={property.title}
+                            alt={property.nome}
                             width={200}
                             height={128}
                             className="w-full h-full object-cover"
@@ -224,7 +224,7 @@ export default function ComparePage() {
                         href={`/imoveis/${property.id}`}
                         className="text-[#E6C98B] font-bold hover:text-[#A8C97F] transition-colors"
                       >
-                        {property.title}
+                        {property.nome}
                       </Link>
                     </div>
                   </th>
@@ -281,7 +281,7 @@ export default function ComparePage() {
                 </td>
                 {properties.map((property) => (
                   <td key={property.id} className="p-4 text-[#676767] text-sm border-b border-[#2a2a1a]">
-                    {property.description || "Sem descrição"}
+                    {property.descricao || "Sem descrição"}
                   </td>
                 ))}
               </tr>

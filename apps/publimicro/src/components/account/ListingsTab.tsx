@@ -5,8 +5,14 @@ export default function ListingsTab({ user }: { user: any }) {
   const [listings, setListings] = useState<any[]>([]);
   useEffect(() => {
     if (!user) return;
-    supabase.from("properties").select("*", { count: "exact" }).eq("user_id", user.id).then(({ data }) => {
-      setListings(data || []);
+    supabase.from("sitios").select("*", { count: "exact" }).eq("user_id", user.id).then(({ data }) => {
+      // Map sitios columns to expected shape
+      const mapped = (data || []).map((s: any) => ({
+        ...s,
+        title: s.nome,
+        status: s.status || 'ativo',
+      }));
+      setListings(mapped);
     });
   }, [user]);
   return (

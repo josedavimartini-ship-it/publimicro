@@ -146,7 +146,7 @@ export async function POST(req: NextRequest) {
     }
 
     if (kmlPublicUrl) {
-      try { await svc.from('properties').update({ kml_url: kmlPublicUrl }).eq('id', propertyId); } catch (err) { console.error('Failed to update properties.kml_url', err); }
+      try { await svc.from('sitios').update({ kml_url: kmlPublicUrl }).eq('id', propertyId); } catch (err) { console.error('Failed to update sitios.kml_url', err); }
     }
 
     try { await svc.from('property_media_audit').insert({ property_id: propertyId, uploads, changed_by: req.headers.get('x-admin-user') || 'admin-api' }); } catch (e: unknown) { console.error('Failed to write property_media_audit', e instanceof Error ? e.message : String(e)); }

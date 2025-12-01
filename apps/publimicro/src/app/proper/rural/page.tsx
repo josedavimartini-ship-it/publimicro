@@ -6,13 +6,17 @@ import { useState, useEffect } from 'react';
 import { supabase } from '@/lib/supabaseClient';
 import { MapPin, Maximize2 } from 'lucide-react';
 
+// The 6 Carcará ranch slugs
+const CARCARA_SLUGS = ['surucua', 'juriti', 'seriema', 'mergulhao', 'bigua', 'abare'];
+
 interface Property {
   id: string;
-  title: string;
-  location: string;
-  price: number;
-  total_area: number;
+  nome: string;
+  localizacao: string;
+  preco: number;
+  area_total: number;
   fotos: string[];
+  slug: string;
 }
 
 export default function ProperRuralPage() {
@@ -21,11 +25,12 @@ export default function ProperRuralPage() {
 
   useEffect(() => {
     async function fetchProperties() {
+      // Query sitios table by slug
       const { data, error } = await supabase
-        .from('properties')
-        .select('*')
-        .in('id', ['surucua', 'juriti', 'seriema', 'mergulhao', 'bigua', 'abare'])
-        .order('price', { ascending: true });
+        .from('sitios')
+        .select('id, nome, localizacao, preco, area_total, fotos, slug')
+        .in('slug', CARCARA_SLUGS)
+        .order('preco', { ascending: true });
 
       if (!error && data) {
         setProperties(data);
@@ -89,7 +94,7 @@ export default function ProperRuralPage() {
                     {property.fotos && property.fotos[0] ? (
                       <Image
                         src={property.fotos[0]}
-                        alt={`Sítio ${property.title}`}
+                        alt={`Sítio ${property.nome}`}
                         fill
                         sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                         className="object-cover group-hover:scale-110 transition-transform duration-300"
@@ -105,19 +110,19 @@ export default function ProperRuralPage() {
                   {/* Content */}
                   <div className="p-6">
                     <h3 className="text-2xl font-bold text-[#A8C97F] mb-3 group-hover:text-[#E6C98B] transition-colors">
-                      Sítio {property.title}
+                      {property.nome}
                     </h3>
 
                     <div className="space-y-2 mb-4">
                       <div className="flex items-center gap-2 text-[#8B9B6E]">
                         <MapPin className="w-4 h-4" />
-                        <span className="text-sm">{property.location}</span>
+                        <span className="text-sm">{property.localizacao}</span>
                       </div>
 
-                      {property.total_area && (
+                      {property.area_total && (
                         <div className="flex items-center gap-2 text-[#8B9B6E]">
                           <Maximize2 className="w-4 h-4" />
-                          <span className="text-sm">{property.total_area} hectares</span>
+                          <span className="text-sm">{property.area_total} hectares</span>
                         </div>
                       )}
                     </div>
@@ -126,7 +131,7 @@ export default function ProperRuralPage() {
                     <div className="p-4 bg-[#2a2a2a]/50 rounded-xl">
                       <div className="text-xs text-[#676767] mb-1">A partir de</div>
                       <div className="font-bold text-[#E6C98B] text-xl">
-                        R$ {(property.price / 1000000).toFixed(2).replace('.', ',')}M
+                        R$ {(property.preco / 1000000).toFixed(2).replace('.', ',')}M
                       </div>
                       <div className="text-xs text-[#A8C97F] mt-2">
                         ⭐ Excelente oportunidade
