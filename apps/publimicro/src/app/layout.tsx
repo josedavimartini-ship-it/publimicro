@@ -9,6 +9,7 @@ import Providers from './providers';
 import ErrorBoundaryWrapper from "@/components/ErrorBoundary";
 import { AuthProvider } from "@/components/AuthProvider";
 import { TopNavWithAuth } from "@/components/TopNavWithAuth";
+import Sidebar from "@/components/Sidebar";
 import "./globals.css";
 
 export const metadata = {
@@ -86,10 +87,13 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
               <Providers>
                 <a href="#main-content" className="skip-to-content sr-only focus:not-sr-only focus:absolute focus:left-2 focus:top-2 z-50 bg-[#A8C97F] text-black font-bold px-4 py-2 rounded focus:outline-none focus:ring-2 focus:ring-[#B7791F]" tabIndex={0} aria-label="Pular para o conteúdo principal">Pular para o conteúdo</a>
                 <TopNavWithAuth brand="ACHEME" brandHref="/" searchTarget="local" />
-                {/* Sidebar removed - will implement as dropdown menu later */}
-                <main id="main-content" role="main">
-                  {children}
-                </main>
+                <div className="flex min-h-[calc(100vh-4rem)]">
+                  <Sidebar side="left" />
+                  <main id="main-content" role="main" className="flex-1 min-w-0">
+                    {children}
+                  </main>
+                  <Sidebar side="right" />
+                </div>
                 <UserQuickPanel />
                 <FloatingWhatsApp />
                 <BackToTop />

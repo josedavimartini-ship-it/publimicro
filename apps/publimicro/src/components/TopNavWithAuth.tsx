@@ -188,37 +188,38 @@ export function TopNavWithAuth({
               </div>
             </form>
 
-            {/* ACTIONS - Bronze/Copper Theme */}
-            <nav className="flex items-center gap-6">
-              {/* Heart icon with 'gostei' */}
+            {/* ACTIONS - Navigation icons from right to left: Account, Postar, Chat, gostei */}
+            {/* Visual order on screen (left to right): gostei, Chat, Postar, Account */}
+            <nav className="flex items-center gap-4 sm:gap-6">
+              {/* 1. Favorites (gostei) - Heart icon */}
               <Link href={favHref} className="relative flex flex-col items-center text-[#E6C98B] hover:text-[#D4AF37] transition-all group">
                 <div className="p-2 rounded-lg bg-gradient-to-br from-black/30 to-transparent shadow-lg transform-gpu transition-transform hover:-translate-y-1 hover:scale-105">
-                  <Heart className="w-7 h-7 mb-1 drop-shadow-[0_6px_18px_rgba(0,0,0,0.6)]" strokeWidth={2.5} />
+                  <Heart className="w-6 h-6 sm:w-7 sm:h-7 drop-shadow-[0_6px_18px_rgba(0,0,0,0.6)]" strokeWidth={2.5} />
                 </div>
-                <span className="text-xs font-bold mt-1">gostei</span>
+                <span className="text-[10px] sm:text-xs font-bold mt-1">gostei</span>
               </Link>
 
-              {/* Animated Handshake for Chat - renamed from 'Negociar' */}
+              {/* 2. Chat - Animated Handshake (conversations & negotiations) */}
               <Link href={chatHref} className="relative flex flex-col items-center text-[#A8C97F] hover:text-[#8B9B6E] transition-all group">
                 <div className="p-2 rounded-lg bg-gradient-to-br from-black/25 to-transparent shadow-2xl transform-gpu transition-transform hover:-translate-y-1 hover:scale-105">
-                  <AnimatedHandshake size={28} className="mb-1 drop-shadow-[0_8px_24px_rgba(0,0,0,0.6)]" />
+                  <AnimatedHandshake size={24} className="sm:hidden drop-shadow-[0_8px_24px_rgba(0,0,0,0.6)]" />
+                  <AnimatedHandshake size={28} className="hidden sm:block drop-shadow-[0_8px_24px_rgba(0,0,0,0.6)]" />
                 </div>
-                <span className="text-xs font-bold mt-1">Chat</span>
+                <span className="text-[10px] sm:text-xs font-bold mt-1">Chat</span>
               </Link>
 
-              {/* Prominent Postar Button - Bronze/Gold Gradient */}
+              {/* 3. Postar - Prominent post button */}
               <Link
                 href="/postar"
-                className="relative flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-[#D4AF37] via-[#CD7F32] to-[#B87333] hover:from-[#B87333] hover:via-[#CD7F32] hover:to-[#D4AF37] text-[#0a0a0a] rounded-xl transition-all transform-gpu hover:-translate-y-1 hover:scale-105 shadow-[0_10px_30px_rgba(212,165,116,0.12)] font-bold border-2 border-[#D4AF37]/30"
+                className="relative flex items-center gap-2 px-4 sm:px-6 py-2 sm:py-3 bg-gradient-to-r from-[#D4AF37] via-[#CD7F32] to-[#B87333] hover:from-[#B87333] hover:via-[#CD7F32] hover:to-[#D4AF37] text-[#0a0a0a] rounded-xl transition-all transform-gpu hover:-translate-y-1 hover:scale-105 shadow-[0_10px_30px_rgba(212,165,116,0.12)] font-bold border-2 border-[#D4AF37]/30"
               >
                 <div className="p-1 rounded-md bg-black/10 backdrop-blur-sm">
-                  <PlusCircle className="w-6 h-6" strokeWidth={3} />
+                  <PlusCircle className="w-5 h-5 sm:w-6 sm:h-6" strokeWidth={3} />
                 </div>
-                <span className="hidden lg:inline text-base">Postar</span>
-                <span className="lg:hidden text-base">Postar</span>
+                <span className="hidden sm:inline text-sm sm:text-base">Postar</span>
               </Link>
               
-              {/* User Account/Profile - CONDITIONAL RENDERING */}
+              {/* 4. Account - User profile/login */}
               {!loading && (
                 user && profile ? (
                   // LOGGED IN - Show user menu dropdown
