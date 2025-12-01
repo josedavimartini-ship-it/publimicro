@@ -1,6 +1,6 @@
 export const theme = {
   colors: {
-    // Original colors (keep for backwards compatibility)
+    // Core colors
     black: "#0a0a0a",
     darkgray: "#121212",
     moss: "#708238",
@@ -9,7 +9,24 @@ export const theme = {
     teal: "#00C2A8",
     gray: "#c2c2c2",
 
-    // Publimicro brand colors
+    // AcheMe brand colors (formerly publimicro)
+    acheme: {
+      background: "#0f0f0f",
+      musgo: "#2e3b32",
+      chumbo: "#1b1b1b",
+      ouro: "#cfa847",
+      "ouro-light": "#e5c97f",
+      "ouro-dark": "#b8953d",
+      ferrugem: "#a6431c",
+      areia: "#bfa97a",
+      // New accent colors
+      bronze: "#CD7F32",
+      copper: "#B87333",
+      sage: "#8B9B6E",
+      forest: "#6B7F5C",
+    },
+
+    // Legacy alias (deprecated - use acheme instead)
     publimicro: {
       background: "#0f0f0f",
       musgo: "#2e3b32",
@@ -28,7 +45,8 @@ export const theme = {
 };
 
 // Export individual color palettes for easier imports
-export const publimicroColors = theme.colors.publimicro;
+export const achemeColors = theme.colors.acheme;
+export const publimicroColors = theme.colors.publimicro; // Legacy alias
 
 // Export type for TypeScript support
 export type Theme = typeof theme;
