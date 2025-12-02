@@ -7,6 +7,7 @@ import {
 } from "lucide-react";
 import { useState, useEffect } from "react";
 import { supabase } from "@/lib/supabaseClient";
+import CarcaraHighlights from "@/components/home/CarcaraHighlights";
 
 // The 8 main sections of AcheMe (simplified names without AcheMe prefix)
 const sections = [
@@ -202,6 +203,9 @@ export default function HomePage() {
           </div>
         </div>
       </section>
+
+      {/* Sítios Carcará - Featured Project */}
+      <CarcaraHighlights />
 
       {/* 8 Sections Grid */}
       <section className="py-16 px-4">
