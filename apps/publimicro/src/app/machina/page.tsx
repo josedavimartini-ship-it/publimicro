@@ -4,10 +4,10 @@ import { useState, useMemo } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { 
-  Tractor, Factory, Wrench, Search, SlidersHorizontal, X, ChevronDown,
+  Tractor, Factory, Search, SlidersHorizontal, X,
   MapPin, Calendar, Gauge, Clock, Heart, Eye, Plus, Cog, HardHat
 } from "lucide-react";
-import { machineryBrands, machineryCategories } from "@/data/machinery";
+import { machineryBrands } from "@/data/machinery";
 
 // Machinery types for filtering
 const machineryTypes = [

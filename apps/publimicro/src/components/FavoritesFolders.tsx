@@ -129,8 +129,8 @@ export default function FavoritesFolders() {
                 {editingId === folder.id ? (
                   <div className="flex items-center gap-2 px-4 py-3 bg-[#1a1a1a] border-2 border-[#A8C97F] rounded-xl">
                     <input type="text" defaultValue={folder.name} autoFocus onKeyDown={(e) => { if (e.key === 'Enter') renameFolder(folder.id, (e.target as HTMLInputElement).value); if (e.key === 'Escape') setEditingId(null); }} className="flex-1 bg-transparent text-[#D4A574] outline-none" />
-                    <button onClick={() => { const input = document.querySelector(`input[value="${folder.name}"]`) as HTMLInputElement | null; if (input) renameFolder(folder.id, input.value); }} className="text-[#6B7F5C]"><Check className="w-4 h-4" /></button>
-                    <button onClick={() => setEditingId(null)} className="text-[#959595]"><X className="w-4 h-4" /></button>
+                    <button aria-label="Salvar nome da pasta" onClick={() => { const input = document.querySelector(`input[value="${folder.name}"]`) as HTMLInputElement | null; if (input) renameFolder(folder.id, input.value); }} className="text-[#6B7F5C]"><Check className="w-4 h-4" /></button>
+                    <button aria-label="Cancelar edição" onClick={() => setEditingId(null)} className="text-[#959595]"><X className="w-4 h-4" /></button>
                   </div>
                 ) : (
                   <div className={`flex items-center justify-between px-4 py-3 border-2 rounded-xl cursor-pointer ${selectedFolder === folder.id ? 'bg-gradient-to-r from-[#1a1a1a] to-[#0d0d0d] border-[#A8C97F]' : 'bg-[#1a1a1a] border-[#2a2a1a]'}`} onClick={() => setSelectedFolder(folder.id)}>
@@ -142,8 +142,8 @@ export default function FavoritesFolders() {
                       </div>
                     </div>
                     <div className="flex gap-2">
-                      <button onClick={(e) => { e.stopPropagation(); setEditingId(folder.id); }} className="text-[#959595]"><Edit2 className="w-4 h-4" /></button>
-                      <button onClick={(e) => { e.stopPropagation(); deleteFolder(folder.id); }} className="text-[#959595]"><Trash2 className="w-4 h-4" /></button>
+                      <button aria-label={`Renomear pasta ${folder.name}`} onClick={(e) => { e.stopPropagation(); setEditingId(folder.id); }} className="text-[#959595]"><Edit2 className="w-4 h-4" /></button>
+                      <button aria-label={`Excluir pasta ${folder.name}`} onClick={(e) => { e.stopPropagation(); deleteFolder(folder.id); }} className="text-[#959595]"><Trash2 className="w-4 h-4" /></button>
                     </div>
                   </div>
                 )}
@@ -153,8 +153,8 @@ export default function FavoritesFolders() {
             {isCreating ? (
               <div className="flex items-center gap-2 px-4 py-3 bg-[#1a1a1a] border-2 border-[#A8C97F] rounded-xl">
                 <input type="text" value={newFolderName} onChange={(e) => setNewFolderName(e.target.value)} placeholder="Nome da pasta" autoFocus onKeyDown={(e) => { if (e.key === 'Enter') createFolder(); if (e.key === 'Escape') setIsCreating(false); }} className="flex-1 bg-transparent text-[#D4A574] outline-none placeholder:text-[#676767]" />
-                <button onClick={createFolder} className="text-[#8B9B6E]"><Check className="w-4 h-4" /></button>
-                <button onClick={() => setIsCreating(false)} className="text-[#676767]"><X className="w-4 h-4" /></button>
+                <button aria-label="Criar pasta" onClick={createFolder} className="text-[#8B9B6E]"><Check className="w-4 h-4" /></button>
+                <button aria-label="Cancelar criação" onClick={() => setIsCreating(false)} className="text-[#676767]"><X className="w-4 h-4" /></button>
               </div>
             ) : (
               <button onClick={() => setIsCreating(true)} className="w-full flex items-center justify-center gap-2 px-4 py-3 bg-[#1a1a1a] border-2 border-dashed border-[#2a2a1a] rounded-xl">
@@ -201,7 +201,7 @@ export default function FavoritesFolders() {
                           {property.price && <p className="text-[#B7791F] font-bold text-lg">R$ {property.price.toLocaleString('pt-BR')}</p>}
                           {property.area_total && <p className="text-[#676767] text-sm">{property.area_total} ha</p>}
                         </div>
-                        <button onClick={() => removeFromFolder(property.id)} className="p-2 text-[#676767] hover:text-red-500 hover:bg-red-500/10 rounded-lg"><Trash2 className="w-5 h-5" /></button>
+                        <button aria-label={`Remover ${property.title} da pasta`} onClick={() => removeFromFolder(property.id)} className="p-2 text-[#676767] hover:text-red-500 hover:bg-red-500/10 rounded-lg"><Trash2 className="w-5 h-5" /></button>
                       </div>
                     </div>
                   </div>

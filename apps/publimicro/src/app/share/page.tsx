@@ -4,9 +4,9 @@ import { useState, useMemo } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { 
-  Share2, Search, SlidersHorizontal, X, MapPin, Calendar, Users,
-  Heart, Eye, Plus, Car, Home, Wrench, Camera, Laptop, Bike,
-  Music, Utensils, Clock, Star, Shield, CheckCircle
+  Share2, Search, SlidersHorizontal, X, MapPin, Users,
+  Heart, Eye, Plus, Car, Home, Wrench, Camera, Bike,
+  Star, Shield, CheckCircle
 } from "lucide-react";
 
 // Share categories

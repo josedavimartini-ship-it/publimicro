@@ -4,7 +4,7 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
 import { createBrowserSupabaseClient } from '@/lib/supabaseBrowser';
 import { 
-  Upload, X, DollarSign, MapPin, ArrowLeft, ArrowRight, 
+  X, DollarSign, MapPin, ArrowLeft, ArrowRight, 
   Check, AlertCircle, Image as ImageIcon
 } from 'lucide-react';
 import CategorySelector, { PostingCategory, CATEGORIES } from '@/components/posting/CategorySelector';
@@ -65,7 +65,8 @@ export default function UnifiedPostingPage() {
 
   // Category-specific data
   const [propertyType, setPropertyType] = useState('sitio');
-  const [propertyData, setPropertyData] = useState<any>({});
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const [propertyData, _setPropertyData] = useState<any>({});
   const [vehicleData, setVehicleData] = useState<VehicleFormData | null>(null);
   const [marineData, setMarineData] = useState<MarineFormData | null>(null);
   const [machineryData, setMachineryFormData] = useState<MachineryFormData | null>(null);
