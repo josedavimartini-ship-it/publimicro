@@ -23,7 +23,6 @@
     "@tailwindcss/postcss": "^4.1.16",
     "adm-zip": "^0.5.9",
     "clsx": "^2.1.1",
-    "fluent-ffmpeg": "^2.1.2",
     "framer-motion": "^12.23.24",
     "fs-extra": "^11.1.1",
     "leaflet": "^1.9.4",

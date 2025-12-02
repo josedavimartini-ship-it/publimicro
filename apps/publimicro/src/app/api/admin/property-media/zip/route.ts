@@ -3,7 +3,7 @@ import AdmZip from 'adm-zip';
 import path from 'path';
 import os from 'os';
 import fs from 'fs-extra';
-import ffmpeg from 'fluent-ffmpeg';
+import { transcodeVideo, generateThumbnail } from '@/lib/ffmpegUtils';
 import { randomUUID } from 'crypto';
 import { createServiceSupabaseClient } from '@/lib/supabaseServer';
 
@@ -80,45 +80,14 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
           const srcPath = path.join(tmpDir, baseFileName + path.extname(entryName));
           await fs.writeFile(srcPath, content);
 
-          // Configure ffmpeg binary.
-          // Use dynamic require for the ffmpeg installer to avoid bundler issues.
-            try {
-              // hide static require from Next/Turbopack analysis
-              const req = eval('require') as NodeRequire;
-              type FfmpegInstaller = { path?: string };
-              const ffmpegInstaller = req('@ffmpeg-installer/ffmpeg') as FfmpegInstaller;
-              if (ffmpegInstaller && ffmpegInstaller.path) {
-                ffmpeg.setFfmpegPath(ffmpegInstaller.path);
-              }
-          } catch {
-            // If dynamic require fails (e.g., in some build environments), allow an env override
-            if (process.env.FFMPEG_PATH) {
-              ffmpeg.setFfmpegPath(process.env.FFMPEG_PATH);
-            } else {
-                throw new Error('ffmpeg binary not found. Install ffmpeg or set FFMPEG_PATH env var.');
-            }
-          }
-
           const outFile = path.join(tmpDir, baseFileName + '.mp4');
           const thumbFile = path.join(tmpDir, baseFileName + '.jpg');
 
-          // Transcode to MP4 H.264 (compatible targets)
-          await new Promise<void>((res, rej) => {
-            ffmpeg(srcPath)
-              .outputOptions(['-c:v libx264', '-preset veryfast', '-crf 23', '-movflags +faststart'])
-              .size('?x720')
-              .on('end', () => res())
-              .on('error', (e) => rej(e))
-              .save(outFile);
-          });
+          // Transcode to MP4 H.264 (compatible targets) using modern ffmpeg utils
+          await transcodeVideo(srcPath, outFile, { maxHeight: 720, preset: 'veryfast', crf: 23 });
 
           // Generate a thumbnail
-          await new Promise<void>((res, rej) => {
-            ffmpeg(outFile)
-              .screenshots({ count: 1, folder: tmpDir, filename: path.basename(thumbFile), size: '640x?' })
-              .on('end', () => res())
-              .on('error', (e) => rej(e));
-          });
+          await generateThumbnail(outFile, thumbFile, { width: 640 });
 
           // Upload transcoded video
           const videoBuffer = await fs.readFile(outFile);
