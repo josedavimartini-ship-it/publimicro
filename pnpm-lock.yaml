@@ -75,8 +75,8 @@ importers:
         specifier: ^3.6.2
         version: 3.6.2
       supabase:
-        specifier: ^2.58.5
-        version: 2.58.5
+        specifier: ^2.65.0
+        version: 2.65.0
       tailwindcss:
         specifier: ^4.1.16
         version: 4.1.17
@@ -355,9 +355,6 @@ importers:
       clsx:
         specifier: ^2.1.1
         version: 2.1.1
-      fluent-ffmpeg:
-        specifier: ^2.1.2
-        version: 2.1.3
       framer-motion:
         specifier: ^12.23.24
         version: 12.23.24(react-dom@19.2.0(react@19.2.0))(react@19.2.0)
@@ -1825,9 +1822,6 @@ packages:
     resolution: {integrity: sha512-hsU18Ae8CDTR6Kgu9DYf0EbCr/a5iGL0rytQDobUcdpYOKokk8LEjVphnXkDkgpi0wYVsqrXuP0bZxJaTqdgoA==}
     engines: {node: '>= 0.4'}
 
-  async@0.2.10:
-    resolution: {integrity: sha512-eAkdoKxU6/LkKDBzLpT+t6Ff5EtfSF4wx1WfJiPEEV7WNLnDaRXk0oVysiEPm262roaachGexwUv94WhSgN5TQ==}
-
   autoprefixer@10.4.21:
     resolution: {integrity: sha512-O+A6LWV5LDHSJD3LjHYoNi4VLsj/Whi7k6zG12xTYaU4cQ8oxQGckXNX8cRHK5yOZ/ppVHe0ZBXGzSV9jXdVbQ==}
     engines: {node: ^10 || ^12 || >=14}
@@ -2255,11 +2249,6 @@ packages:
 
   flatted@3.3.3:
     resolution: {integrity: sha512-GX+ysw4PBCz0PzosHDepZGANEuFCMLrnRTiEy9McGjmkCQYwRq4A/X786G/fjM/+OjsWSU1ZrY5qyARZmO/uwg==}
-
-  fluent-ffmpeg@2.1.3:
-    resolution: {integrity: sha512-Be3narBNt2s6bsaqP6Jzq91heDgOEaDCJAXcE3qcma/EJBSy5FB4cvO31XBInuAuKBx8Kptf8dkhjK0IOru39Q==}
-    engines: {node: '>=18'}
-    deprecated: Package no longer supported. Contact Support at https://www.npmjs.com/support for more info.
 
   focus-lock@1.3.6:
     resolution: {integrity: sha512-Ik/6OCk9RQQ0T5Xw+hKNLWrjSMtv51dD4GRmJjbD5a58TIEpI5a5iXagKVl3Z5UuyslMCA8Xwnu76jQob62Yhg==}
@@ -2958,8 +2947,8 @@ packages:
     engines: {node: '>=14'}
     hasBin: true
 
-  proc-log@6.0.0:
-    resolution: {integrity: sha512-KG/XsTDN901PNfPfAMmj6N/Ywg9tM+bHK8pAz+27fS4N4Pcr+4zoYBOcGSBu6ceXYNPxkLpa4ohtfxV1XcLAfA==}
+  proc-log@6.1.0:
+    resolution: {integrity: sha512-iG+GYldRf2BQ0UDUAd6JQ/RwzaQy6mXmsk/IzlYyal4A4SNFw54MeH4/tLkF4I5WoWG9SQwuqWzS99jaFQHBuQ==}
     engines: {node: ^20.17.0 || >=22.9.0}
 
   promise-worker-transferable@1.0.4:
@@ -3275,8 +3264,8 @@ packages:
       babel-plugin-macros:
         optional: true
 
-  supabase@2.58.5:
-    resolution: {integrity: sha512-mYZSkUIePTdmwlHd26Pff8wpmjfre8gcuWzrc5QqhZgZvCXugVzAQQhcjaQisw5kusbPQWNIjUwcHYEKmejhPw==}
+  supabase@2.65.0:
+    resolution: {integrity: sha512-ZxgPs6rDjB5UWkBMr076/JlJqPnEo0DyvvAe+Jn2AgHB70oI/1AwpaahkKAgNGwWfwhDhmKFtB6diCTKeCQ6QQ==}
     engines: {npm: '>=8'}
     hasBin: true
 
@@ -3513,10 +3502,6 @@ packages:
   which-typed-array@1.1.19:
     resolution: {integrity: sha512-rEvr90Bck4WZt9HHFC4DJMsjvu7x+r6bImz0/BrbWb7A2djJ8hnZMrWnHo9F8ssv0OMErasDhftrfROTyqSDrw==}
     engines: {node: '>= 0.4'}
-
-  which@1.3.1:
-    resolution: {integrity: sha512-HxJdYWq1MTIQbJ3nw0cqssHoTNU267KlrDuGZ1WYlxDStUtKUhOaJmh112/TZmHxxUfuJqPXSOm7tDyas0OSIQ==}
-    hasBin: true
 
   which@2.0.2:
     resolution: {integrity: sha512-BLI3Tl1TW3Pvl70l3yq3Y64i+awpwXqsGBYWkkqMtnbXgrMD+yj7rhW0kuEDxzJaYXGjEW5ogapKNMEKNMjibA==}
@@ -4829,8 +4814,6 @@ snapshots:
 
   async-function@1.0.0: {}
 
-  async@0.2.10: {}
-
   autoprefixer@10.4.21(postcss@8.5.6):
     dependencies:
       browserslist: 4.27.0
@@ -4863,7 +4846,7 @@ snapshots:
     dependencies:
       cmd-shim: 8.0.0
       npm-normalize-package-bin: 5.0.0
-      proc-log: 6.0.0
+      proc-log: 6.1.0
       read-cmd-shim: 6.0.0
       write-file-atomic: 7.0.0
 
@@ -5400,11 +5383,6 @@ snapshots:
       keyv: 4.5.4
 
   flatted@3.3.3: {}
-
-  fluent-ffmpeg@2.1.3:
-    dependencies:
-      async: 0.2.10
-      which: 1.3.1
 
   focus-lock@1.3.6:
     dependencies:
@@ -6070,7 +6048,7 @@ snapshots:
 
   prettier@3.6.2: {}
 
-  proc-log@6.0.0: {}
+  proc-log@6.1.0: {}
 
   promise-worker-transferable@1.0.4:
     dependencies:
@@ -6445,7 +6423,7 @@ snapshots:
     optionalDependencies:
       '@babel/core': 7.28.5
 
-  supabase@2.58.5:
+  supabase@2.65.0:
     dependencies:
       bin-links: 6.0.0
       https-proxy-agent: 7.0.6
@@ -6733,10 +6711,6 @@ snapshots:
       get-proto: 1.0.1
       gopd: 1.2.0
       has-tostringtag: 1.0.2
-
-  which@1.3.1:
-    dependencies:
-      isexe: 2.0.0
 
   which@2.0.2:
     dependencies:
