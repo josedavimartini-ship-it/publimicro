@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
+import { createBrowserSupabaseClient } from "@/lib/supabaseBrowser";
 import { 
   Building2, Home, Trees, Waves, MapPin, BedDouble, 
   Bath, Car, Ruler, DollarSign, Filter, X, Search,
@@ -52,7 +52,7 @@ interface Property {
 }
 
 export default function SearchPage() {
-  const supabase = createClientComponentClient();
+  const supabase = createBrowserSupabaseClient();
   const [properties, setProperties] = useState<Property[]>([]);
   const [loading, setLoading] = useState(true);
   const [showFilters, setShowFilters] = useState(false);
