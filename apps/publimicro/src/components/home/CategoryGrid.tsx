@@ -41,7 +41,7 @@ const categories: Category[] = [
 
 export default function CategoryGrid(): JSX.Element {
   return (
-    <section className="py-16 bg-white">
+    <section className="py-16 bg-[#0a0a0a]">
       <div className="max-w-6xl mx-auto px-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
         {categories.map((c) => (
           <SectionCard

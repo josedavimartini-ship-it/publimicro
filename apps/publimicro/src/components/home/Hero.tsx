@@ -2,25 +2,26 @@ import Link from "next/link";
 
 export default function Hero(): JSX.Element {
   return (
-    <section className="relative flex flex-col items-center justify-center text-center py-20 bg-gradient-to-br from-amber-900 via-yellow-800 to-orange-800 text-white">
-      <h1 className="text-5xl md:text-6xl font-bold tracking-tight bg-gradient-to-r from-[#FFD700] via-[#DAA520] to-[#B87333] bg-clip-text text-transparent drop-shadow-lg">
-        ACHEME
+    <section className="relative flex flex-col items-center justify-center text-center py-20 bg-gradient-to-br from-[#1a2a1a] via-[#2a3a2a] to-[#0d1a0d]">
+      <h1 className="text-5xl md:text-6xl font-bold tracking-tight">
+        <span className="bg-gradient-to-r from-[#B87333] via-[#D4AF37] to-[#CD7F32] bg-clip-text text-transparent">Ache</span>
+        <span className="bg-gradient-to-r from-[#8B9B6E] via-[#A8C97F] to-[#6B8E23] bg-clip-text text-transparent">Me</span>
       </h1>
-      <p className="mt-4 text-lg max-w-2xl">
-        Global marketplace connecting buyers and sellers worldwide — properties, vehicles, opportunities.
+      <p className="mt-4 text-lg max-w-2xl text-[#C9A87C]">
+        Ecossistema de negócios — imóveis, veículos, oportunidades globais.
       </p>
       <div className="mt-8 flex flex-wrap justify-center gap-4">
         <Link
           href="/imoveis"
-          className="bg-amber-400 text-gray-900 font-semibold px-6 py-3 rounded-lg shadow hover:bg-amber-500 transition"
+          className="bg-gradient-to-r from-[#6B7F5C] to-[#8B9B6E] text-[#0a0a0a] font-semibold px-6 py-3 rounded-lg shadow-xl hover:from-[#8B9B6E] hover:to-[#A8C97F] transition"
         >
-          Browse Listings
+          Ver Anúncios
         </Link>
         <Link
           href="/anunciar"
-          className="bg-white/10 text-white border border-white/40 font-semibold px-6 py-3 rounded-lg hover:bg-white/20 transition"
+          className="bg-[#1a2a1a]/50 text-[#A8C97F] border-2 border-[#6B7F5C] font-semibold px-6 py-3 rounded-lg hover:bg-[#6B7F5C]/20 transition"
         >
-          Post Now
+          Anunciar Agora
         </Link>
       </div>
     </section>
