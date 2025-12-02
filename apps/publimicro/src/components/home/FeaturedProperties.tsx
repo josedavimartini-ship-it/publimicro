@@ -22,8 +22,8 @@ export default async function FeaturedProperties(): Promise<JSX.Element> {
   }
 
   return (
-    <section id="imoveis" className="py-16 px-6 md:px-12">
-      <h2 className="text-3xl font-bold text-center mb-8 text-emerald-900">
+    <section id="imoveis" className="py-16 px-6 md:px-12 bg-[#0a0a0a]">
+      <h2 className="text-3xl font-bold text-center mb-8 text-[#A8C97F]">
         Destaques – Sítios Carcará
       </h2>
 
@@ -31,7 +31,7 @@ export default async function FeaturedProperties(): Promise<JSX.Element> {
         {items?.map((item: Item) => (
           <div
             key={item.id}
-            className="bg-white shadow-lg rounded-xl overflow-hidden hover:shadow-xl transition"
+            className="bg-[#1a2a1a] shadow-lg rounded-xl overflow-hidden hover:shadow-2xl transition border-2 border-[#3a4a3a] hover:border-[#6B7F5C]"
           >
             {item.imagem && (
               <Image
@@ -43,16 +43,16 @@ export default async function FeaturedProperties(): Promise<JSX.Element> {
               />
             )}
             <div className="p-4">
-              <h3 className="text-xl font-semibold">{item.titulo}</h3>
-              <p className="text-sm text-gray-600 line-clamp-2">
+              <h3 className="text-xl font-semibold text-[#A8C97F]">{item.titulo}</h3>
+              <p className="text-sm text-[#8B9B6E] line-clamp-2">
                 {item.descricao}
               </p>
-              <p className="text-lg font-bold text-emerald-800 mt-2">
+              <p className="text-lg font-bold text-[#D4AF37] mt-2">
                 R$ {Number(item.preco || 0).toLocaleString("pt-BR")}
               </p>
               <a
                 href={`/imoveis/${item.id}`}
-                className="block mt-3 text-blue-700 font-semibold hover:underline"
+                className="block mt-3 text-[#B87333] hover:text-[#D4AF37] font-semibold hover:underline"
               >
                 Ver detalhes →
               </a>
