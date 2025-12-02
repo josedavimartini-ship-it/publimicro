@@ -4,10 +4,9 @@ import { useState, useMemo } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { 
-  ShoppingBag, Search, SlidersHorizontal, X, ChevronDown,
+  ShoppingBag, Search, SlidersHorizontal, X,
   MapPin, Heart, Eye, Plus, Grid, List, Tag, Clock,
-  Smartphone, Sofa, Shirt, Briefcase, Wrench, Baby, PawPrint, Dumbbell,
-  Laptop, Camera, Guitar, Book, Gamepad, Watch
+  Smartphone, Sofa, Shirt, Briefcase, Baby, PawPrint, Dumbbell
 } from "lucide-react";
 
 // Categories for Tudo marketplace

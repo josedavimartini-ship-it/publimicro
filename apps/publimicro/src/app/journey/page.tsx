@@ -4,9 +4,9 @@ import { useState, useMemo } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { 
-  Plane, Search, SlidersHorizontal, X, MapPin, Calendar, Star, Users,
-  Heart, Eye, Plus, Bed, UtensilsCrossed, Camera, Mountain, Palmtree,
-  Building, Tent, Waves, Clock, DollarSign
+  Plane, Search, SlidersHorizontal, X, MapPin, Star, Users,
+  Heart, Eye, Plus, Bed, UtensilsCrossed, Camera, Mountain,
+  Tent, Waves, Clock
 } from "lucide-react";
 
 // Travel categories

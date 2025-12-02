@@ -1,11 +1,10 @@
 ﻿'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import Link from 'next/link';
-import Image from 'next/image';
 import { 
   Search, Filter, MapPin, Calendar, Gauge, Fuel, Settings, 
-  Car, Bike, Truck, Grid, List, Heart, Plus, ChevronDown, X
+  Car, Bike, Truck, Grid, List, Heart, Plus, X
 } from 'lucide-react';
 import { vehicleBrands } from '@/data/vehicles';
 

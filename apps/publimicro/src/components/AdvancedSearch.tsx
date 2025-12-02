@@ -3,9 +3,9 @@
 import React, { useState, useEffect, useRef, useCallback } from "react";
 import { useRouter, usePathname, useSearchParams } from "next/navigation";
 import { 
-  Search, X, Filter, MapPin, DollarSign, ChevronDown,
+  Search, X, MapPin, ChevronDown,
   Building2, Car, Wrench, Ship, Globe, Users, Plane, ShoppingBag,
-  Sparkles, TrendingUp, Clock
+  TrendingUp, Clock
 } from "lucide-react";
 import { supabase } from "@/lib/supabaseClient";
 

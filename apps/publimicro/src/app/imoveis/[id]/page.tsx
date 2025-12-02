@@ -75,7 +75,7 @@ export default function PropertyPage() {
   const [currentImageIndex, _setCurrentImageIndex] = useState(0);
   const [bidValue, setBidValue] = useState("");
   const [bidMessage, setBidMessage] = useState("");
-  const [bidSubmitting, setBidSubmitting] = useState(false);
+  const [_bidSubmitting, setBidSubmitting] = useState(false);
   const [bidSuccess, setBidSuccess] = useState(false);
   const [bidError, setBidError] = useState("");
   const [currentHighestBid, setCurrentHighestBid] = useState<number | null>(null);
@@ -84,8 +84,8 @@ export default function PropertyPage() {
   const [proposalModalOpen, setProposalModalOpen] = useState(false);
   const previouslyFocusedElement = useRef<HTMLElement | null>(null);
   // User flow enforcement state
-  const [visitBlockedReason, setVisitBlockedReason] = useState<string | null>(null);
-  const [proposalBlockedReason, setProposalBlockedReason] = useState<string | null>(null);
+  const [_visitBlockedReason, setVisitBlockedReason] = useState<string | null>(null);
+  const [_proposalBlockedReason, setProposalBlockedReason] = useState<string | null>(null);
 
   // Handle Escape key to close modal
   useEffect(() => {

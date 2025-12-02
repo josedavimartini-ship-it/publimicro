@@ -5,8 +5,8 @@ import Link from "next/link";
 import Image from "next/image";
 import { 
   Tent, Mountain, Compass, Search, SlidersHorizontal, X, MapPin,
-  Heart, Eye, Plus, Backpack, Flashlight, TreePine, Flame, Wind,
-  CloudRain, Sun, Star, Users, Clock
+  Heart, Eye, Plus, Backpack, TreePine, Wind,
+  Sun, Star, Users, Clock
 } from "lucide-react";
 
 // Outdoor categories
