@@ -183,26 +183,17 @@ function NegotiationIconInline({ size = 28 }: { size?: number }) {
       </defs>
 
       <g style={{ transform: `rotate(${rotation}deg)`, transformOrigin: '24px 24px', transition: 'transform 0.5s ease-in-out' }}>
-        {!isDeal ? (
-          <>
-            {/* Arm wrestling mode */}
-            <path d="M 2 28 L 12 26 L 14 30 L 4 32 Z" fill="url(#sleeve1)" />
-            <path d="M 12 24 L 22 22 Q 24 24, 22 26 L 12 28 Q 10 26, 12 24" fill="url(#skinTone1)" />
-            <path d="M 20 21 L 26 20 Q 28 22, 28 25 Q 27 27, 24 27 L 20 26 Q 19 24, 20 21" fill="url(#skinTone1)" />
-            <path d="M 46 28 L 36 26 L 34 30 L 44 32 Z" fill="url(#sleeve2)" />
-            <path d="M 36 24 L 26 22 Q 24 24, 26 26 L 36 28 Q 38 26, 36 24" fill="url(#skinTone2)" />
-            <path d="M 28 21 L 22 20 Q 20 22, 20 25 Q 21 27, 24 27 L 28 26 Q 29 24, 28 21" fill="url(#skinTone2)" />
-            <rect x="8" y="34" width="32" height="4" rx="1" fill="#4A3D2C" />
-          </>
-        ) : (
-          <>
-            {/* Handshake mode */}
-            <path d="M 4 24 L 14 22 L 16 28 L 6 30 Z" fill="url(#sleeve1)" />
-            <path d="M 44 24 L 34 22 L 32 28 L 42 30 Z" fill="url(#sleeve2)" />
-            <path d="M 14 20 L 24 18 Q 26 20, 25 24 L 16 26 Q 13 24, 14 20" fill="url(#skinTone1)" />
-            <path d="M 34 20 L 24 18 Q 22 20, 23 24 L 32 26 Q 35 24, 34 20" fill="url(#skinTone2)" />
-          </>
-        )}
+        {/* Single unified handshake - no duplicate elements */}
+        {/* Left sleeve */}
+        <path d="M 4 26 L 14 24 L 16 30 L 6 32 Z" fill="url(#sleeve1)" />
+        {/* Right sleeve */}
+        <path d="M 44 26 L 34 24 L 32 30 L 42 32 Z" fill="url(#sleeve2)" />
+        {/* Left hand */}
+        <path d="M 14 22 L 24 20 Q 26 22, 25 26 L 16 28 Q 13 26, 14 22" fill="url(#skinTone1)" />
+        {/* Right hand - clasping */}
+        <path d="M 34 22 L 24 20 Q 22 22, 23 26 L 32 28 Q 35 26, 34 22" fill="url(#skinTone2)" />
+        {/* Table base - only in wrestling mode */}
+        {!isDeal && <rect x="8" y="36" width="32" height="3" rx="1" fill="#4A3D2C" />}
       </g>
 
       {showSparkles && (
@@ -281,14 +272,14 @@ export function TopNav({
             </div>
           </Link>
 
-          {/* SEARCH BAR - Bronze/Copper Theme */}
-          <form action={searchAction} method="get" className="flex-shrink-0 hidden md:flex flex-col gap-3 bg-gradient-to-b from-[#1a1a1a] to-[#0d0d0d] p-4 rounded-2xl shadow-2xl max-w-[280px] border-2 border-[#2a2a1a]">
-            <div className="flex flex-col gap-2">
+          {/* SEARCH BAR - Nature/Moss Green Theme */}
+          <form action={searchAction} method="get" className="flex-shrink-0 hidden md:flex flex-col gap-3 bg-gradient-to-b from-[#1a2a1a] to-[#0d1a0d] p-5 rounded-2xl shadow-2xl max-w-[420px] border-2 border-[#3a4a3a]">
+            <div className="flex flex-col gap-3">
               <div className="relative w-full">
                 <button
                   type="button"
                   onClick={() => setShowCategories(!showCategories)}
-                  className="w-full h-12 px-4 bg-[#1a1a1a] border-2 border-[#2a2a1a] rounded-lg text-[#E6C98B] hover:bg-[#2a2a1a] hover:border-[#A8C97F] transition-colors flex items-center justify-between gap-2 text-sm font-medium"
+                  className="w-full h-14 px-5 bg-[#1a2a1a] border-2 border-[#3a4a3a] rounded-xl text-[#A8C97F] hover:bg-[#2a3a2a] hover:border-[#6B7F5C] transition-colors flex items-center justify-between gap-2 text-sm font-medium"
                 >
                   <span className="truncate">{categories.find(c => c.value === selectedCategory)?.label || "Categoria"}</span>
                   <ChevronDown className="w-5 h-5 flex-shrink-0" />
@@ -303,7 +294,7 @@ export function TopNav({
                           setSelectedCategory(cat.value);
                           setShowCategories(false);
                         }}
-                        className="w-full text-left px-4 py-3 text-sm text-[#E6C98B] hover:bg-[#2a2a1a] hover:text-[#A8C97F] first:rounded-t-xl last:rounded-b-xl transition-colors"
+                        className="w-full text-left px-5 py-3 text-sm text-[#8B9B6E] hover:bg-[#2a3a2a] hover:text-[#A8C97F] first:rounded-t-xl last:rounded-b-xl transition-colors"
                       >
                         {cat.label}
                       </button>
@@ -316,22 +307,22 @@ export function TopNav({
                 type="text"
                 name="location"
                 placeholder="Localização"
-                className="w-full h-12 px-4 bg-[#1a1a1a] border-2 border-[#2a2a1a] text-[#E6C98B] placeholder-[#8B9B6E] focus:outline-none focus:ring-2 focus:ring-[#A8C97F] focus:border-[#A8C97F] rounded-lg text-sm font-medium"
+                className="w-full h-14 px-5 bg-[#1a2a1a] border-2 border-[#3a4a3a] text-[#A8C97F] placeholder-[#6B7F5C] focus:outline-none focus:ring-2 focus:ring-[#8B9B6E] focus:border-[#8B9B6E] rounded-xl text-sm font-medium"
               />
             </div>
 
-            <div className="flex flex-col gap-2">
+            <div className="flex flex-col gap-3">
               <input
                 type="search"
                 name="q"
                 placeholder="O que você procura?"
-                className="w-full h-12 px-4 bg-[#1a1a1a] border-2 border-[#2a2a1a] text-[#E6C98B] placeholder-[#8B9B6E] focus:outline-none focus:ring-2 focus:ring-[#A8C97F] focus:border-[#A8C97F] rounded-lg text-sm font-medium"
+                className="w-full h-14 px-5 bg-[#1a2a1a] border-2 border-[#3a4a3a] text-[#A8C97F] placeholder-[#6B7F5C] focus:outline-none focus:ring-2 focus:ring-[#8B9B6E] focus:border-[#8B9B6E] rounded-xl text-sm font-medium"
               />
               <input type="hidden" name="category" value={selectedCategory} />
 
               <button
                 type="submit"
-                className="w-full h-12 px-6 rounded-lg bg-gradient-to-r from-[#CD7F32] to-[#B87333] hover:from-[#D4AF37] hover:to-[#CD7F32] flex items-center justify-center gap-2 transition-all shadow-xl hover:shadow-2xl font-bold text-[#0a0a0a]"
+                className="w-full h-14 px-6 rounded-xl bg-gradient-to-r from-[#6B7F5C] to-[#8B9B6E] hover:from-[#8B9B6E] hover:to-[#A8C97F] flex items-center justify-center gap-2 transition-all shadow-xl hover:shadow-2xl font-bold text-[#0a0a0a]"
                 aria-label="Buscar"
               >
                 <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2.5">
@@ -342,32 +333,31 @@ export function TopNav({
             </div>
           </form>
 
-          {/* ACTIONS - Bronze/Copper Theme */}
-          <nav className="flex items-center gap-4">
-            <Link href={favHref} className="flex flex-col items-center text-[#E6C98B] hover:text-[#D4AF37] transition-all group transform hover:scale-110">
+          {/* ACTIONS - Nature/Moss Green Theme with better spacing */}
+          <nav className="flex items-center gap-6">
+            <Link href={favHref} className="flex flex-col items-center text-[#B87333] hover:text-[#D4AF37] transition-all group transform hover:scale-110">
               <Heart className="w-7 h-7 mb-1 drop-shadow-lg" strokeWidth={2.5} />
               <span className="text-xs font-bold">Favoritos</span>
             </Link>
             
             {/* Negotiation Icon - Animated Arm Wrestling / Handshake */}
-            <Link href={chatHref} className="flex flex-col items-center text-[#A8C97F] hover:text-[#8B9B6E] transition-all group transform hover:scale-110">
+            <Link href={chatHref} className="flex flex-col items-center text-[#2C5F6F] hover:text-[#3A7A8A] transition-all group transform hover:scale-110">
               <NegotiationIconInline size={28} />
               <span className="text-xs font-bold">Negociar</span>
             </Link>
             
-            {/* Prominent Free Ad Button - Bronze/Gold Gradient */}
+            {/* Prominent Free Ad Button - Nature Green Gradient with Postar label */}
             <Link
               href={postHref}
-              className="flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-[#D4AF37] via-[#CD7F32] to-[#B87333] hover:from-[#B87333] hover:via-[#CD7F32] hover:to-[#D4AF37] text-[#0a0a0a] rounded-xl transition-all hover:scale-110 shadow-2xl font-bold border-2 border-[#D4AF37]/30"
+              className="flex flex-col items-center gap-1 px-5 py-2 bg-gradient-to-r from-[#6B7F5C] via-[#8B9B6E] to-[#A8C97F] hover:from-[#8B9B6E] hover:via-[#A8C97F] hover:to-[#6B7F5C] text-[#0a0a0a] rounded-xl transition-all hover:scale-110 shadow-2xl font-bold border-2 border-[#A8C97F]/30"
             >
-              <Plus className="w-6 h-6" strokeWidth={3} />
-              <span className="hidden lg:inline text-base">Publique Grátis</span>
-              <span className="lg:hidden text-base">Anunciar</span>
+              <Plus className="w-7 h-7" strokeWidth={3} />
+              <span className="text-xs font-bold">Postar</span>
             </Link>
             
             <Link
               href={accountHref}
-              className="flex flex-col items-center px-4 py-2 border-2 border-[#CD7F32] text-[#E6C98B] hover:bg-[#CD7F32]/20 hover:border-[#D4AF37] hover:text-[#D4AF37] rounded-xl transition-all transform hover:scale-110 shadow-lg"
+              className="flex flex-col items-center px-4 py-2 border-2 border-[#6B7F5C] text-[#8B9B6E] hover:bg-[#6B7F5C]/20 hover:border-[#A8C97F] hover:text-[#A8C97F] rounded-xl transition-all transform hover:scale-110 shadow-lg"
             >
               <User className="w-7 h-7 mb-1" strokeWidth={2.5} />
               <span className="text-xs font-bold">Conta</span>
@@ -375,14 +365,14 @@ export function TopNav({
           </nav>
         </div>
 
-        {/* Mobile Search - Bronze Theme */}
+        {/* Mobile Search - Nature Theme */}
         <div className="md:hidden pb-3">
           <form action={searchAction} method="get" className="flex flex-col gap-2">
             <input
               type="search"
               name="q"
               placeholder="Buscar..."
-              className="w-full h-11 px-4 bg-[#1a1a1a] border-2 border-[#2a2a1a] rounded-lg text-[#E6C98B] placeholder-[#8B9B6E] focus:outline-none focus:ring-2 focus:ring-[#CD7F32] focus:border-[#CD7F32]"
+              className="w-full h-12 px-5 bg-[#1a2a1a] border-2 border-[#3a4a3a] rounded-xl text-[#A8C97F] placeholder-[#6B7F5C] focus:outline-none focus:ring-2 focus:ring-[#8B9B6E] focus:border-[#8B9B6E]"
             />
           </form>
         </div>
