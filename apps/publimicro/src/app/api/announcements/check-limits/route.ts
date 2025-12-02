@@ -36,7 +36,7 @@ export async function POST(request: NextRequest) {
     }
 
     // Get authenticated user
-    const supabase = createRouteHandlerClient({ cookies });
+    const supabase = createRouteSupabaseClient();
     const {
       data: { user },
       error: authError,
@@ -96,7 +96,7 @@ export async function POST(request: NextRequest) {
 export async function GET(_request: NextRequest) {
   try {
     // Get authenticated user
-    const supabase = createRouteHandlerClient({ cookies });
+    const supabase = createRouteSupabaseClient();
     const {
       data: { user },
       error: authError,

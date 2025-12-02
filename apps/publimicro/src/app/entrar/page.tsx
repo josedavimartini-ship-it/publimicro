@@ -1,13 +1,13 @@
 "use client";
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, Suspense } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { createBrowserSupabaseClient } from '@/lib/supabaseBrowser';
 import { Mail, Lock, User, Phone, ArrowRight, Loader2 } from 'lucide-react';
 import Link from 'next/link';
 import Image from 'next/image';
 
-export default function EntrarPage() {
+function EntrarContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const supabase = createBrowserSupabaseClient();
@@ -297,6 +297,22 @@ export default function EntrarPage() {
         </p>
       </div>
     </main>
+  );
+}
+
+function LoadingFallback() {
+  return (
+    <main className="min-h-screen bg-[#1A1A1A] flex items-center justify-center">
+      <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[#FF6B35]"></div>
+    </main>
+  );
+}
+
+export default function EntrarPage() {
+  return (
+    <Suspense fallback={<LoadingFallback />}>
+      <EntrarContent />
+    </Suspense>
   );
 }
 

@@ -115,7 +115,7 @@ export async function POST(req: Request) {
     if (property && ownerEmail) {
       await sendEmail(getProposalEmail({
         userName: profile?.full_name || user.email || 'Um interessado',
-        propertyTitle: property.title,
+        propertyTitle: property.nome,
         propertyUrl: `${process.env.NEXT_PUBLIC_SITE_URL || 'https://publimicro.com.br'}/imoveis/${ad_id}`,
         proposalAmount: new Intl.NumberFormat('pt-BR').format(amount),
         ownerEmail
