@@ -1,14 +1,14 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
+import { createBrowserSupabaseClient } from "@/lib/supabaseBrowser";
 import { useRouter } from "next/navigation";
 import { Heart, Trash2, Search } from "lucide-react";
 import { PropertyCard } from "@publimicro/ui";
 
 export default function FavoritesPage() {
   const router = useRouter();
-  const supabase = createClientComponentClient();
+  const supabase = createBrowserSupabaseClient();
   const [favorites, setFavorites] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [user, setUser] = useState<any>(null);

@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
+import { createBrowserSupabaseClient } from "@/lib/supabaseBrowser";
 import { Calendar, Clock, User, Phone, Mail, X, Check, AlertCircle } from "lucide-react";
 
 interface ScheduleVisitModalProps {
@@ -19,7 +19,7 @@ export default function ScheduleVisitModal({
   onClose,
   onSuccess,
 }: ScheduleVisitModalProps) {
-  const supabase = createClientComponentClient();
+  const supabase = createBrowserSupabaseClient();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const [success, setSuccess] = useState(false);

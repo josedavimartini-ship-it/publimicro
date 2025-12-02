@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect, Suspense } from "react";
-import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
+import { createBrowserSupabaseClient } from "@/lib/supabaseBrowser";
 import { useRouter, useSearchParams } from "next/navigation";
 import { 
   DollarSign, FileText, Check, AlertCircle, TrendingUp,
@@ -11,7 +11,7 @@ import {
 function ProposalContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const supabase = createClientComponentClient();
+  const supabase = createBrowserSupabaseClient();
   
   const propertyId = searchParams.get('propertyId');
   

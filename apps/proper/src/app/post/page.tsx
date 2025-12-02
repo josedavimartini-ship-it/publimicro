@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
+import { createBrowserSupabaseClient } from "@/lib/supabaseBrowser";
 import { useRouter } from "next/navigation";
 import { 
   Building2, Home, Trees, Waves, Upload, X, Plus,
@@ -32,7 +32,7 @@ const AMENITIES = [
 
 export default function PostPropertyPage() {
   const router = useRouter();
-  const supabase = createClientComponentClient();
+  const supabase = createBrowserSupabaseClient();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const [success, setSuccess] = useState(false);
