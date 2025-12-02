@@ -79,7 +79,7 @@ export async function POST(req: Request) {
       const visitDate = new Date(scheduled_at);
       await sendEmail(getVisitRequestEmail({
         userName: guest_name || profile?.full_name || 'Um visitante',
-        propertyTitle: property.title,
+        propertyTitle: property.nome,
         propertyUrl: `${process.env.NEXT_PUBLIC_SITE_URL || 'https://publimicro.com.br'}/imoveis/${ad_id}`,
         visitDate: visitDate.toLocaleDateString('pt-BR'),
         visitTime: visitDate.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' }),
