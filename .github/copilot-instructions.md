@@ -1,24 +1,32 @@
 # PubliMicro AI Agent Instructions
 
-## 🔄 LATEST SESSION: November 30, 2025
-**Status:** Production setup complete, Vercel build fixed  
-**Last Commit:** `5859ba4` - turbo.json build dependencies configured  
-**Branch:** `chore/remove-cjs-scripts` (28 commits ahead)  
-**Next Steps:** See `CONTINUATION-POINT-2025-11-30.md`
+## 🔄 LATEST SESSION: December 2, 2025
+**Status:** Documentation reorganized, dependencies updated  
+**Branch:** `audit/initial-fixes`  
+**Last Commit:** Documentation consolidation + dependency updates
 
 **Recent Changes:**
-- ✅ Fixed all 79 TypeScript errors (commit 4be387b)
-- ✅ Configured production API keys (Resend, Supabase service role)
-- ✅ Fixed Vercel build: added `dependsOn: ["^build"]` to turbo.json
-- ✅ Added env vars to turbo.json globalEnv (SUPABASE_SERVICE_ROLE_KEY, STRIPE_SECRET_KEY, RESEND_API_KEY, EMAIL_FROM)
-- 🔄 Vercel rebuilding now (expect success)
-
-**Immediate Next:** Verify Vercel deployment → Configure production env vars → Test email flows
+- ✅ Updated Next.js to 16.0.6, Turbo to 2.6.1, Supabase CLI to 2.65.0
+- ✅ Replaced deprecated fluent-ffmpeg with native child_process
+- ✅ Reorganized 85+ docs → 24 in root + archived 60+ to `docs/archive/`
+- ✅ Created consolidated guides: SETUP, AUTH, STRIPE, TESTING, DEPENDENCIES
+- ✅ Build passing with 0 warnings
 
 ---
 
 ## Project Overview
-**PubliMicro** is a Brazilian classified ads marketplace monorepo with 9 specialized Next.js apps sharing a unified tech stack. It's a TurboPack-managed monorepo using pnpm workspaces, Supabase for auth/db, and Vercel for deployment.
+**PubliMicro** is a Brazilian classified ads marketplace monorepo with 9 specialized Next.js apps sharing a unified tech stack. TurboPack-managed monorepo using pnpm workspaces, Supabase for auth/db, and Vercel for deployment.
+
+## Tech Stack (Current Versions)
+| Package | Version |
+|---------|---------|
+| Next.js | 16.0.6 |
+| React | 19.0.0 |
+| TypeScript | 5.9.0 |
+| TailwindCSS | 4.1.0 |
+| TurboRepo | 2.6.1 |
+| pnpm | 10.22.0 |
+| Supabase CLI | 2.65.0 |
 
 ## Architecture
 
@@ -26,13 +34,14 @@
 - **Apps** (`apps/`): 9 independent Next.js 16 apps (App Router) - `publimicro` (main), `proper` (real estate), `motors` (vehicles), `machina` (machinery), `outdoor`, `journey`, `global`, `share`, `tudo`
 - **Packages** (`packages/`): Shared libraries
   - `@publimicro/ui`: Shared React components (Navbar, Footer, Carcara3D, TopNav, FloatingWhatsApp, etc.)
-  - `db/`: Database schemas (legacy - Supabase migrations are the source of truth)
+  - `@publimicro/stripe`: Stripe integration utilities
   - `tsconfig/`: Shared TypeScript configs
+- **Documentation** (`docs/`): Consolidated guides in `guides/`, archived docs in `archive/`
 - **Build System**: TurboRepo with caching, filters for targeted builds
-- **Package Manager**: pnpm@10.20.0 with workspace protocol (`workspace:*`)
+- **Package Manager**: pnpm@10.22.0 with workspace protocol (`workspace:*`)
 
 ### Tech Stack
-- **Frontend**: Next.js 16, React 19, TailwindCSS 4.1, TypeScript 5.9
+- **Frontend**: Next.js 16.0.6, React 19, TailwindCSS 4.1, TypeScript 5.9
 - **Backend**: Supabase (PostgreSQL + Auth + SSR helpers)
 - **3D/Maps**: React Three Fiber, Leaflet, react-leaflet
 - **State**: Zustand, React Hook Form
@@ -184,6 +193,12 @@ NEXT_PUBLIC_UNSPLASH_ACCESS_KEY=...
 - `supabase/migrations/` - Database schema (source of truth)
 - Setup scripts: `setup-database.ps1`, `deploy-all-apps.ps1`, `quick-setup.ps1`
 
+## Documentation Structure
+- **`docs/guides/`**: Consolidated setup guides (SETUP, AUTH, STRIPE, TESTING)
+- **`docs/DEPENDENCIES.md`**: All packages, extensions, and services
+- **`docs/archive/`**: Historical session notes and completed tasks
+- **Root `.md` files**: Feature guides, deployment configs, audits
+
 ## Conventions
 - **File naming**: Use kebab-case for files (`auth-callback.tsx`), PascalCase for components
 - **Imports**: Prefer `@/` alias for app-local imports, `@publimicro/ui` for shared
@@ -193,7 +208,8 @@ NEXT_PUBLIC_UNSPLASH_ACCESS_KEY=...
 - **Error Handling**: Always wrap async operations in try/catch, show user-friendly messages via toast
 
 ## When Stuck
-1. Check relevant `.md` docs: `VERCEL-SETUP.md`, `ADMIN-PANEL.md`, `AUTHENTICATION-SETUP-GUIDE.md`
-2. Search for similar patterns: `grep -r "pattern" apps/publimicro/src/`
-3. Verify Supabase schema in latest migration file
-4. Test with: `pnpm type-check && pnpm lint`
+1. Check `docs/guides/` for setup instructions (SETUP, AUTH, STRIPE, TESTING)
+2. Check `docs/DEPENDENCIES.md` for package versions and VS Code extensions
+3. Search for similar patterns: `grep -r "pattern" apps/publimicro/src/`
+4. Verify Supabase schema in latest migration file
+5. Test with: `pnpm type-check && pnpm lint`
