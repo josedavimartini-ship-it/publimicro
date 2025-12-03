@@ -10,6 +10,20 @@ const nextConfig = {
   turbopack: {
     root: path.resolve(__dirname, '../../'),
   },
+  
+  // Image optimization - allow Supabase and Unsplash images
+  images: {
+    remotePatterns: [
+      { protocol: "https", hostname: "irrzpwzyqcubhhjeuakc.supabase.co" },
+      { protocol: "https", hostname: "*.supabase.co" },
+      { protocol: "https", hostname: "images.unsplash.com" },
+    ],
+  },
+  
+  // Allow ngrok dev origins
+  allowedDevOrigins: [
+    'https://felipe-fasciculate-chemosynthetically.ngrok-free.dev',
+  ],
 };
 
 module.exports = nextConfig;
