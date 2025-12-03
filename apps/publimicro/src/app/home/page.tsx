@@ -3,13 +3,13 @@
 import Link from "next/link";
 import { 
   Building2, Car, Wrench, Ship, Globe, Users, Plane, ShoppingBag,
-  Search, TrendingUp, Shield, Star, ArrowRight, Sparkles
+  Search, ArrowRight
 } from "lucide-react";
 import { useState, useEffect } from "react";
 import { supabase } from "@/lib/supabaseClient";
 import CarcaraHighlights from "@/components/home/CarcaraHighlights";
 
-// The 8 main sections of AcheMe (simplified names without AcheMe prefix)
+// The 8 main sections of AcheMe with Unsplash backgrounds
 const sections = [
   {
     id: "proper",
@@ -20,6 +20,7 @@ const sections = [
     href: "/imoveis",
     color: "from-[#6B7F5C] to-[#4A5A3C]",
     stats: { count: 0, label: "imóveis" },
+    bgImage: "https://images.unsplash.com/photo-1560518883-ce09059eeffa?w=400&q=80",
   },
   {
     id: "motors",
@@ -30,6 +31,7 @@ const sections = [
     href: "/motors",
     color: "from-[#CD7F32] to-[#8B5A2B]",
     stats: { count: 0, label: "veículos" },
+    bgImage: "https://images.unsplash.com/photo-1492144534655-ae79c964c9d7?w=400&q=80",
   },
   {
     id: "machina",
@@ -40,6 +42,7 @@ const sections = [
     href: "/machina",
     color: "from-[#5A5A5A] to-[#3A3A3A]",
     stats: { count: 0, label: "máquinas" },
+    bgImage: "https://images.unsplash.com/photo-1581092918056-0c4c3acd3789?w=400&q=80",
   },
   {
     id: "marine",
@@ -50,6 +53,7 @@ const sections = [
     href: "/marine",
     color: "from-[#2C5F6F] to-[#1A3A42]",
     stats: { count: 0, label: "embarcações" },
+    bgImage: "https://images.unsplash.com/photo-1567899378494-47b22a2ae96a?w=400&q=80",
   },
   {
     id: "global",
@@ -60,6 +64,7 @@ const sections = [
     href: "/global",
     color: "from-[#4A6B8A] to-[#2A4A5A]",
     stats: { count: 0, label: "países" },
+    bgImage: "https://images.unsplash.com/photo-1526778548025-fa2f459cd5c1?w=400&q=80",
   },
   {
     id: "share",
@@ -70,6 +75,7 @@ const sections = [
     href: "/share",
     color: "from-[#7A5C8B] to-[#4A3A5A]",
     stats: { count: 0, label: "ofertas" },
+    bgImage: "https://images.unsplash.com/photo-1522071820081-009f0129c71c?w=400&q=80",
   },
   {
     id: "journey",
@@ -80,6 +86,7 @@ const sections = [
     href: "/journey",
     color: "from-[#D4AF37] to-[#8B7355]",
     stats: { count: 0, label: "destinos" },
+    bgImage: "https://images.unsplash.com/photo-1469854523086-cc02fe5d8800?w=400&q=80",
   },
   {
     id: "tudo",
@@ -90,14 +97,8 @@ const sections = [
     href: "/acheme-coisas",
     color: "from-[#8B9B6E] to-[#5A6B4C]",
     stats: { count: 0, label: "anúncios" },
+    bgImage: "https://images.unsplash.com/photo-1472851294608-062f824d29cc?w=400&q=80",
   },
-];
-
-// Featured highlights
-const highlights = [
-  { icon: Shield, text: "Transações Seguras", description: "Pagamentos protegidos" },
-  { icon: TrendingUp, text: "Lances em Tempo Real", description: "Sistema de leilão integrado" },
-  { icon: Star, text: "Vendedores Verificados", description: "Confiança garantida" },
 ];
 
 export default function HomePage() {
@@ -141,65 +142,42 @@ export default function HomePage() {
 
   return (
     <div className="min-h-screen bg-[#0a0a0a]">
-      {/* Hero Section */}
-      <section className="relative py-20 px-4 overflow-hidden">
+      {/* Hero Section - Clean AcheMe Branding */}
+      <section className="relative py-16 md:py-24 px-4 overflow-hidden">
         {/* Background gradient */}
         <div className="absolute inset-0 bg-gradient-to-b from-[#1a1a1a] via-[#0d0d0d] to-[#0a0a0a]" />
         
-        {/* Decorative elements */}
-        <div className="absolute top-20 left-10 w-64 h-64 bg-[#D4AF37]/5 rounded-full blur-3xl" />
-        <div className="absolute bottom-20 right-10 w-96 h-96 bg-[#6B7F5C]/5 rounded-full blur-3xl" />
+        {/* Subtle decorative elements */}
+        <div className="absolute top-10 left-5 w-48 h-48 bg-[#D4AF37]/3 rounded-full blur-3xl" />
+        <div className="absolute bottom-10 right-5 w-64 h-64 bg-[#6B7F5C]/3 rounded-full blur-3xl" />
 
-        <div className="relative max-w-7xl mx-auto text-center">
-          {/* Main headline */}
-          <div className="mb-8">
-            <h1 className="text-5xl md:text-7xl font-black mb-4">
-              <span className="bg-gradient-to-r from-[#B87333] via-[#D4AF37] to-[#CD7F32] bg-clip-text text-transparent">
+        <div className="relative max-w-4xl mx-auto text-center">
+          {/* AcheMe Logo/Brand - Emo Art Style */}
+          <div className="mb-6">
+            <h1 className="text-6xl md:text-8xl font-black tracking-tight">
+              <span className="bg-gradient-to-br from-[#C9A87C] via-[#D4AF37] to-[#B87333] bg-clip-text text-transparent drop-shadow-2xl">
                 Ache
               </span>
-              <span className="bg-gradient-to-r from-[#8B9B6E] via-[#A8C97F] to-[#6B8E23] bg-clip-text text-transparent">
+              <span className="bg-gradient-to-br from-[#8B9B6E] via-[#A8C97F] to-[#6B8E23] bg-clip-text text-transparent drop-shadow-2xl">
                 Me
               </span>
             </h1>
-            <p className="text-xl md:text-2xl text-[#C9A87C] font-medium">
-              Ecossistema de Negócios
-            </p>
           </div>
 
-          <p className="text-lg md:text-xl text-[#B8A890] max-w-2xl mx-auto mb-10">
-            A plataforma mais completa para comprar, vender e negociar.
-            De imóveis a eletrônicos, de veículos a serviços – tudo em um só lugar.
+          {/* Simple tagline */}
+          <p className="text-lg md:text-xl text-[#B8A890]/80 max-w-md mx-auto mb-10 font-light">
+            Encontre o que você procura.
           </p>
 
-          {/* Search CTA */}
-          <div className="flex flex-col sm:flex-row gap-4 justify-center items-center mb-12">
+          {/* Single prominent CTA */}
+          <div className="flex justify-center">
             <Link
               href="/buscar"
-              className="flex items-center gap-3 px-8 py-4 bg-gradient-to-r from-[#D4AF37] via-[#CD7F32] to-[#B87333] text-[#0a0a0a] rounded-xl font-bold text-lg hover:scale-105 transition-transform shadow-xl"
+              className="flex items-center gap-3 px-10 py-4 bg-gradient-to-r from-[#6B7F5C] to-[#8B9B6E] text-white rounded-full font-semibold text-lg hover:scale-105 transition-all shadow-2xl shadow-[#6B7F5C]/20"
             >
-              <Search className="w-6 h-6" />
-              Começar a Buscar
+              <Search className="w-5 h-5" />
+              Explorar
             </Link>
-            <Link
-              href="/anunciar"
-              className="flex items-center gap-3 px-8 py-4 border-2 border-[#6B7F5C] text-[#A8C97F] rounded-xl font-bold text-lg hover:bg-[#6B7F5C]/10 transition-colors"
-            >
-              <Sparkles className="w-6 h-6" />
-              Anunciar Grátis
-            </Link>
-          </div>
-
-          {/* Trust indicators */}
-          <div className="flex flex-wrap justify-center gap-8">
-            {highlights.map((item) => (
-              <div key={item.text} className="flex items-center gap-3 text-[#8B9B6E]">
-                <item.icon className="w-5 h-5" />
-                <div className="text-left">
-                  <p className="font-medium text-[#E6C98B]">{item.text}</p>
-                  <p className="text-xs">{item.description}</p>
-                </div>
-              </div>
-            ))}
           </div>
         </div>
       </section>
@@ -219,7 +197,7 @@ export default function HomePage() {
             </p>
           </div>
 
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4 md:gap-6">
             {sections.map((section) => {
               const Icon = section.icon;
               const count = stats[section.id] || section.stats.count;
@@ -228,38 +206,47 @@ export default function HomePage() {
                 <Link
                   key={section.id}
                   href={section.href}
-                  className="group relative overflow-hidden rounded-2xl bg-gradient-to-br from-[#1a1a1a] to-[#0d0d0d] border-2 border-[#2a2a1a] hover:border-[#6B7F5C]/50 transition-all hover:scale-[1.02] hover:shadow-xl"
+                  className="group relative overflow-hidden rounded-2xl border-2 border-[#2a2a1a] hover:border-[#6B7F5C]/50 transition-all hover:scale-[1.02] hover:shadow-xl min-h-[200px]"
                 >
-                  {/* Gradient overlay on hover */}
-                  <div className={`absolute inset-0 bg-gradient-to-br ${section.color} opacity-0 group-hover:opacity-20 transition-opacity`} />
+                  {/* Background Image */}
+                  <div 
+                    className="absolute inset-0 bg-cover bg-center transition-transform duration-500 group-hover:scale-110"
+                    style={{ backgroundImage: `url(${section.bgImage})` }}
+                  />
                   
-                  <div className="relative p-6">
+                  {/* Dark overlay */}
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/60 to-black/30 group-hover:from-black/85 group-hover:via-black/50 transition-all" />
+                  
+                  {/* Colored accent overlay on hover */}
+                  <div className={`absolute inset-0 bg-gradient-to-br ${section.color} opacity-0 group-hover:opacity-30 transition-opacity`} />
+                  
+                  <div className="relative p-6 h-full flex flex-col justify-end">
                     {/* Icon */}
-                    <div className={`w-14 h-14 rounded-xl bg-gradient-to-br ${section.color} flex items-center justify-center mb-4 group-hover:scale-110 transition-transform`}>
-                      <Icon className="w-7 h-7 text-white" />
+                    <div className={`w-12 h-12 rounded-xl bg-gradient-to-br ${section.color} flex items-center justify-center mb-3 group-hover:scale-110 transition-transform shadow-lg`}>
+                      <Icon className="w-6 h-6 text-white" />
                     </div>
 
                     {/* Content */}
-                    <h3 className="text-xl font-bold text-[#E6C98B] mb-1">
+                    <h3 className="text-lg font-bold text-white mb-0.5 drop-shadow-lg">
                       {section.name}
                     </h3>
-                    <p className="text-sm text-[#C9A87C] mb-2">
+                    <p className="text-sm text-[#E6C98B] mb-1 drop-shadow">
                       {section.subtitle}
                     </p>
-                    <p className="text-xs text-[#676767] mb-4 line-clamp-2">
+                    <p className="text-xs text-gray-300/80 line-clamp-2 drop-shadow">
                       {section.description}
                     </p>
 
                     {/* Stats */}
                     {count > 0 && (
-                      <p className="text-xs text-[#8B9B6E]">
-                        <span className="font-bold text-[#A8C97F]">{count.toLocaleString("pt-BR")}</span> {section.stats.label}
+                      <p className="text-xs text-[#A8C97F] mt-2 drop-shadow">
+                        <span className="font-bold">{count.toLocaleString("pt-BR")}</span> {section.stats.label}
                       </p>
                     )}
 
                     {/* Arrow */}
-                    <div className="absolute bottom-4 right-4 opacity-0 group-hover:opacity-100 transition-opacity">
-                      <ArrowRight className="w-5 h-5 text-[#6B7F5C]" />
+                    <div className="absolute top-4 right-4 opacity-0 group-hover:opacity-100 transition-opacity">
+                      <ArrowRight className="w-5 h-5 text-white drop-shadow-lg" />
                     </div>
                   </div>
                 </Link>

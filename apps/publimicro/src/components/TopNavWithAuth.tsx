@@ -127,20 +127,21 @@ export function TopNavWithAuth({
               </div>
             </Link>
 
-            {/* SEARCH BAR - Bronze Theme */}
-            <form action={searchAction} method="get" className="flex-shrink-0 hidden md:flex flex-col gap-3 bg-gradient-to-b from-[#1a1a1a] to-[#0d0d0d] p-4 rounded-2xl shadow-2xl max-w-[280px] border-2 border-[#2a2a1a]">
-              <div className="flex flex-col gap-2">
-                <div className="relative w-full">
+            {/* SEARCH BAR - Bronze Theme - Wider */}
+            <form action={searchAction} method="get" className="flex-1 hidden md:flex flex-col gap-3 bg-gradient-to-b from-[#1a1a1a] to-[#0d0d0d] p-4 rounded-2xl shadow-2xl min-w-[320px] max-w-[420px] border-2 border-[#2a2a1a]">
+              <div className="flex gap-2">
+                {/* Category dropdown */}
+                <div className="relative w-[140px] flex-shrink-0">
                   <button
                     type="button"
                     onClick={() => setShowCategories(!showCategories)}
-                    className="w-full h-12 px-4 bg-[#1a1a1a] border-2 border-[#2a2a1a] rounded-lg text-[#C9A87C] hover:bg-[#2a2a2a] hover:border-[#6B7F5C] transition-colors flex items-center justify-between gap-2 text-sm font-medium"
+                    className="w-full h-11 px-3 bg-[#1a1a1a] border-2 border-[#2a2a1a] rounded-lg text-[#C9A87C] hover:bg-[#2a2a2a] hover:border-[#6B7F5C] transition-colors flex items-center justify-between gap-1 text-sm font-medium"
                   >
-                    <span className="truncate">{categories.find(c => c.value === selectedCategory)?.label || "Categoria"}</span>
-                    <ChevronDown className="w-5 h-5 flex-shrink-0" />
+                    <span className="truncate text-xs">{categories.find(c => c.value === selectedCategory)?.label || "Categoria"}</span>
+                    <ChevronDown className="w-4 h-4 flex-shrink-0" />
                   </button>
                   {showCategories && (
-                    <div className="absolute top-full left-0 mt-1 bg-[#1a1a1a] border-2 border-[#2a2a1a] rounded-xl shadow-2xl z-50 w-full max-h-[400px] overflow-y-auto">
+                    <div className="absolute top-full left-0 mt-1 bg-[#1a1a1a] border-2 border-[#2a2a1a] rounded-xl shadow-2xl z-50 w-[180px] max-h-[400px] overflow-y-auto">
                       {categories.map((cat) => (
                         <button
                           key={cat.value}
@@ -158,60 +159,51 @@ export function TopNavWithAuth({
                   )}
                 </div>
 
-                <input
-                  type="text"
-                  name="location"
-                  placeholder="Localização"
-                  className="w-full h-12 px-4 bg-[#1a1a1a] border-2 border-[#2a2a1a] text-[#E6C98B] placeholder-[#8B9B6E] focus:outline-none focus:ring-2 focus:ring-[#A8C97F] focus:border-[#A8C97F] rounded-lg text-sm font-medium"
-                />
-              </div>
-
-              <div className="flex flex-col gap-2">
+                {/* Search input */}
                 <input
                   type="search"
                   name="q"
                   placeholder="O que você procura?"
-                  className="w-full h-12 px-4 bg-[#1a1a1a] border-2 border-[#2a2a1a] text-[#E6C98B] placeholder-[#8B9B6E] focus:outline-none focus:ring-2 focus:ring-[#A8C97F] focus:border-[#A8C97F] rounded-lg text-sm font-medium"
+                  className="flex-1 h-11 px-4 bg-[#1a1a1a] border-2 border-[#2a2a1a] text-[#E6C98B] placeholder-[#8B9B6E] focus:outline-none focus:ring-2 focus:ring-[#A8C97F] focus:border-[#A8C97F] rounded-lg text-sm font-medium"
                 />
                 <input type="hidden" name="category" value={selectedCategory} />
 
+                {/* Search button */}
                 <button
                   type="submit"
-                  className="w-full h-12 px-6 rounded-lg bg-gradient-to-r from-[#CD7F32] to-[#B87333] hover:from-[#D4AF37] hover:to-[#CD7F32] flex items-center justify-center gap-2 transition-all shadow-xl hover:shadow-2xl font-bold text-[#0a0a0a]"
+                  className="h-11 px-5 rounded-lg bg-gradient-to-r from-[#CD7F32] to-[#B87333] hover:from-[#D4AF37] hover:to-[#CD7F32] flex items-center justify-center gap-2 transition-all shadow-xl hover:shadow-2xl font-bold text-[#0a0a0a]"
                   aria-label="Buscar"
                 >
                   <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2.5">
                     <path strokeLinecap="round" strokeLinejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
                   </svg>
-                  <span>Buscar</span>
                 </button>
               </div>
             </form>
 
-            {/* ACTIONS - Navigation icons from right to left: Account, Postar, Chat, gostei */}
-            {/* Visual order on screen (left to right): gostei, Chat, Postar, Account */}
-            <nav className="flex items-center gap-4 sm:gap-6">
+            {/* ACTIONS - Navigation icons with better spacing */}
+            <nav className="flex items-center gap-6 sm:gap-8">
               {/* 1. Favorites (gostei) - Heart icon */}
               <Link href={favHref} className="relative flex flex-col items-center text-[#E6C98B] hover:text-[#D4AF37] transition-all group">
-                <div className="p-2 rounded-lg bg-gradient-to-br from-black/30 to-transparent shadow-lg transform-gpu transition-transform hover:-translate-y-1 hover:scale-105">
+                <div className="p-2.5 rounded-lg bg-gradient-to-br from-black/30 to-transparent shadow-lg transform-gpu transition-transform hover:-translate-y-1 hover:scale-105">
                   <Heart className="w-6 h-6 sm:w-7 sm:h-7 drop-shadow-[0_6px_18px_rgba(0,0,0,0.6)]" strokeWidth={2.5} />
                 </div>
-                <span className="text-[10px] sm:text-xs font-bold mt-1">gostei</span>
+                <span className="text-[10px] sm:text-xs font-bold mt-1.5">gostei</span>
               </Link>
 
               {/* 2. Chat - Animated Handshake (conversations & negotiations) */}
               <Link href={chatHref} className="relative flex flex-col items-center text-[#A8C97F] hover:text-[#8B9B6E] transition-all group">
-                <div className="p-2 rounded-lg bg-gradient-to-br from-black/25 to-transparent shadow-2xl transform-gpu transition-transform hover:-translate-y-1 hover:scale-105">
+                <div className="p-2.5 rounded-lg bg-gradient-to-br from-black/25 to-transparent shadow-2xl transform-gpu transition-transform hover:-translate-y-1 hover:scale-105">
                   <AnimatedHandshake size={24} className="sm:hidden drop-shadow-[0_8px_24px_rgba(0,0,0,0.6)]" />
                   <AnimatedHandshake size={28} className="hidden sm:block drop-shadow-[0_8px_24px_rgba(0,0,0,0.6)]" />
                 </div>
-                <span className="text-[10px] sm:text-xs font-bold mt-1">Chat</span>
+                <span className="text-[10px] sm:text-xs font-bold mt-1.5">Chat</span>
               </Link>
 
               {/* 3. Postar - Prominent post button */}
               <Link
                 href="/postar"
-                className="relative flex items-center gap-2 px-4 sm:px-6 py-2 sm:py-3 bg-gradient-to-r from-[#D4AF37] via-[#CD7F32] to-[#B87333] hover:from-[#B87333] hover:via-[#CD7F32] hover:to-[#D4AF37] text-[#0a0a0a] rounded-xl transition-all transform-gpu hover:-translate-y-1 hover:scale-105 shadow-[0_10px_30px_rgba(212,165,116,0.12)] font-bold border-2 border-[#D4AF37]/30"
+                className="relative flex items-center gap-2 px-5 sm:px-7 py-2.5 sm:py-3 bg-gradient-to-r from-[#D4AF37] via-[#CD7F32] to-[#B87333] hover:from-[#B87333] hover:via-[#CD7F32] hover:to-[#D4AF37] text-[#0a0a0a] rounded-xl transition-all transform-gpu hover:-translate-y-1 hover:scale-105 shadow-[0_10px_30px_rgba(212,165,116,0.12)] font-bold border-2 border-[#D4AF37]/30"
               >
                 <div className="p-1 rounded-md bg-black/10 backdrop-blur-sm">
                   <PlusCircle className="w-5 h-5 sm:w-6 sm:h-6" strokeWidth={3} />
