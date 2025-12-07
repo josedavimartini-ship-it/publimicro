@@ -120,7 +120,7 @@ export function TopNavWithAuth({
                 <div className="flex items-center gap-2 relative z-10">
                   <div className="w-1 h-1 bg-[#D4AF37] rounded-full"></div>
                   <span className="text-xs bg-gradient-to-r from-[#B87333] to-[#D4AF37] bg-clip-text text-transparent font-bold tracking-wider uppercase">
-                    Encontre Tudo que Procura
+                    Negocie Online
                   </span>
                   <div className="w-1 h-1 bg-[#CD7F32] rounded-full"></div>
                 </div>
@@ -194,8 +194,7 @@ export function TopNavWithAuth({
               {/* 2. Chat - Animated Handshake (conversations & negotiations) */}
               <Link href={chatHref} className="relative flex flex-col items-center text-[#A8C97F] hover:text-[#8B9B6E] transition-all group">
                 <div className="p-2.5 rounded-lg bg-gradient-to-br from-black/25 to-transparent shadow-2xl transform-gpu transition-transform hover:-translate-y-1 hover:scale-105">
-                  <AnimatedHandshake size={24} className="sm:hidden drop-shadow-[0_8px_24px_rgba(0,0,0,0.6)]" />
-                  <AnimatedHandshake size={28} className="hidden sm:block drop-shadow-[0_8px_24px_rgba(0,0,0,0.6)]" />
+                  <AnimatedHandshake size={26} className="drop-shadow-[0_8px_24px_rgba(0,0,0,0.6)]" />
                 </div>
                 <span className="text-[10px] sm:text-xs font-bold mt-1.5">Chat</span>
               </Link>

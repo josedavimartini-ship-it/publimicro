@@ -27,6 +27,8 @@ export interface UserProfile {
   avatar_url: string | null;
   profile_completed: boolean;
   verified: boolean;
+  phone_verified?: boolean;
+  email_verified?: boolean;
   
   // Terms
   terms_accepted: boolean;

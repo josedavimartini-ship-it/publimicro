@@ -152,9 +152,9 @@ export default function HomePage() {
         <div className="absolute bottom-10 right-5 w-64 h-64 bg-[#6B7F5C]/3 rounded-full blur-3xl" />
 
         <div className="relative max-w-4xl mx-auto text-center">
-          {/* AcheMe Logo/Brand - Emo Art Style */}
-          <div className="mb-6">
-            <h1 className="text-6xl md:text-8xl font-black tracking-tight">
+          {/* AcheMe Logo/Brand - Compact */}
+          <div className="mb-4">
+            <h1 className="text-4xl md:text-5xl font-black tracking-tight">
               <span className="bg-gradient-to-br from-[#C9A87C] via-[#D4AF37] to-[#B87333] bg-clip-text text-transparent drop-shadow-2xl">
                 Ache
               </span>
@@ -164,9 +164,9 @@ export default function HomePage() {
             </h1>
           </div>
 
-          {/* Simple tagline */}
-          <p className="text-lg md:text-xl text-[#B8A890]/80 max-w-md mx-auto mb-10 font-light">
-            Encontre o que você procura.
+          {/* Short tagline */}
+          <p className="text-base md:text-lg text-[#B8A890]/80 max-w-sm mx-auto mb-8 font-light">
+            Encontre. Negocie. Feche.
           </p>
 
           {/* Single prominent CTA */}

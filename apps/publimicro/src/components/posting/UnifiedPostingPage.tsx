@@ -5,12 +5,14 @@ import { useRouter } from 'next/navigation';
 import { createBrowserSupabaseClient } from '@/lib/supabaseBrowser';
 import { 
   X, DollarSign, MapPin, ArrowLeft, ArrowRight, 
-  Check, AlertCircle, Image as ImageIcon
+  Check, AlertCircle, Image as ImageIcon, Crown
 } from 'lucide-react';
 import CategorySelector, { PostingCategory, CATEGORIES } from '@/components/posting/CategorySelector';
 import VehicleForm, { VehicleFormData } from '@/components/posting/VehicleForm';
 import MarineForm, { MarineFormData } from '@/components/posting/MarineForm';
 import MachineryForm, { MachineryFormData } from '@/components/posting/MachineryForm';
+import TierSelector from '@/components/posting/TierSelector';
+import { getTierLimits, validatePhotoCount, canPostFreeListing } from '@/lib/listingTiers';
 
 // Property types for real estate category
 const PROPERTY_TYPES = [
@@ -23,10 +25,11 @@ const PROPERTY_TYPES = [
 ];
 
 // Steps for the posting wizard
-type PostingStep = 'category' | 'details' | 'photos' | 'location' | 'pricing' | 'review';
+type PostingStep = 'category' | 'tier' | 'details' | 'photos' | 'location' | 'pricing' | 'review';
 
 const STEPS: { id: PostingStep; label: string }[] = [
   { id: 'category', label: 'Categoria' },
+  { id: 'tier', label: 'Plano' },
   { id: 'details', label: 'Detalhes' },
   { id: 'photos', label: 'Fotos' },
   { id: 'location', label: 'Localização' },
@@ -45,6 +48,10 @@ export default function UnifiedPostingPage() {
   // Wizard state
   const [currentStep, setCurrentStep] = useState<PostingStep>('category');
   const [selectedCategory, setSelectedCategory] = useState<PostingCategory | null>(null);
+
+  // Tier selection state
+  const [selectedTier, setSelectedTier] = useState<string>('free');
+  const [canUseFree, setCanUseFree] = useState(true);
 
   // Form data
   const [title, setTitle] = useState('');
@@ -76,24 +83,44 @@ export default function UnifiedPostingPage() {
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
 
-  // Check auth on mount
+  // Check auth and free tier eligibility on mount
   useEffect(() => {
     const checkUser = async () => {
       const { data: { user } } = await supabase.auth.getUser();
       setUser(user);
-      setLoading(false);
       
       if (!user) {
         router.push('/entrar?redirect=/postar');
+        return;
       }
+      
+      // Check if user can still use free tier
+      const canFree = await canPostFreeListing(user.id, supabase);
+      setCanUseFree(canFree);
+      if (!canFree) {
+        setSelectedTier('standard'); // Default to standard if free is used
+      }
+      
+      setLoading(false);
     };
     checkUser();
   }, [supabase, router]);
 
-  // Photo handling
+  // Get current tier limits
+  const tierLimits = getTierLimits(selectedTier);
+
+  // Photo handling with tier limits
   const handlePhotoChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files) {
       const newFiles = Array.from(e.target.files);
+      const maxPhotos = tierLimits?.maxPhotos || 3;
+      
+      // Check if adding these photos would exceed the limit
+      if (photos.length + newFiles.length > maxPhotos) {
+        setError(`Máximo de ${maxPhotos} fotos permitidas no plano selecionado`);
+        return;
+      }
+      
       setPhotos(prev => [...prev, ...newFiles]);
       
       newFiles.forEach(file => {
@@ -135,13 +162,18 @@ export default function UnifiedPostingPage() {
   const currentStepIndex = STEPS.findIndex(s => s.id === currentStep);
   
   const canProceed = () => {
+    const minPhotos = tierLimits?.minPhotos || 1;
+    
     switch (currentStep) {
       case 'category':
         return selectedCategory !== null;
+      case 'tier':
+        return selectedTier !== '';
       case 'details':
         return title.trim() !== '' && description.trim() !== '';
       case 'photos':
-        return photos.length >= 1;
+        const validation = validatePhotoCount(photos.length, selectedTier);
+        return validation.valid;
       case 'location':
         return city.trim() !== '' && state.trim() !== '';
       case 'pricing':
@@ -374,6 +406,31 @@ export default function UnifiedPostingPage() {
             />
           )}
 
+          {/* Step: Tier Selection */}
+          {currentStep === 'tier' && (
+            <div className="space-y-6">
+              <div className="text-center mb-6">
+                <div className="inline-flex items-center gap-2 px-4 py-2 bg-[#CD7F32]/20 rounded-full mb-4">
+                  <Crown className="w-5 h-5 text-[#CD7F32]" />
+                  <span className="text-[#CD7F32] font-semibold">Escolha seu Plano</span>
+                </div>
+                <h2 className="text-2xl font-bold text-[#D4A574]">Selecione o melhor plano para seu anúncio</h2>
+                <p className="text-[#8B9B6E] mt-2">
+                  {canUseFree 
+                    ? 'Você tem direito a 1 anúncio gratuito!' 
+                    : 'Você já utilizou seu anúncio gratuito. Escolha um plano pago.'}
+                </p>
+              </div>
+              
+              <TierSelector
+                selectedTier={selectedTier}
+                onSelectTier={setSelectedTier}
+                canUseFree={canUseFree}
+                showComparison={true}
+              />
+            </div>
+          )}
+
           {/* Step: Details */}
           {currentStep === 'details' && (
             <div className="space-y-6">
@@ -449,6 +506,23 @@ export default function UnifiedPostingPage() {
             <div className="space-y-6">
               <h2 className="text-2xl font-bold text-[#D4A574] mb-4">Fotos do Anúncio</h2>
               
+              {/* Tier limits info */}
+              <div className="bg-[#1a1a1a] border border-[#3a3a3a] rounded-lg p-4 flex items-center justify-between">
+                <div>
+                  <p className="text-[#8B9B6E] text-sm">
+                    Fotos: <span className="text-[#E6C98B] font-bold">{photos.length}</span> / {tierLimits?.maxPhotos || 3}
+                  </p>
+                  <p className="text-[#676767] text-xs mt-1">
+                    Mínimo: {tierLimits?.minPhotos || 1} foto{(tierLimits?.minPhotos || 1) > 1 ? 's' : ''}
+                  </p>
+                </div>
+                {photos.length >= (tierLimits?.maxPhotos || 3) && (
+                  <span className="text-yellow-400 text-xs bg-yellow-400/10 px-3 py-1 rounded-full">
+                    Limite atingido
+                  </span>
+                )}
+              </div>
+              
               <div className="border-2 border-dashed border-[#3a3a3a] rounded-xl p-8 text-center hover:border-[#A8C97F] transition-colors">
                 <input
                   type="file"
@@ -457,14 +531,17 @@ export default function UnifiedPostingPage() {
                   onChange={handlePhotoChange}
                   className="hidden"
                   id="photo-input"
+                  disabled={photos.length >= (tierLimits?.maxPhotos || 3)}
                 />
-                <label htmlFor="photo-input" className="cursor-pointer">
+                <label htmlFor="photo-input" className={`cursor-pointer ${photos.length >= (tierLimits?.maxPhotos || 3) ? 'opacity-50' : ''}`}>
                   <ImageIcon className="w-12 h-12 text-[#676767] mx-auto mb-4" />
                   <p className="text-[#D4A574] font-semibold mb-2">
-                    Clique para adicionar fotos
+                    {photos.length >= (tierLimits?.maxPhotos || 3) 
+                      ? 'Limite de fotos atingido' 
+                      : 'Clique para adicionar fotos'}
                   </p>
                   <p className="text-[#676767] text-sm">
-                    PNG, JPG ou WEBP. Máximo 10 fotos, 5MB cada.
+                    PNG, JPG ou WEBP. Máximo {tierLimits?.maxPhotos || 3} fotos, 5MB cada.
                   </p>
                 </label>
               </div>
@@ -499,6 +576,15 @@ export default function UnifiedPostingPage() {
                 <AlertCircle className="w-4 h-4" />
                 A primeira foto será usada como capa do anúncio
               </p>
+              
+              {/* Photo validation message */}
+              {photos.length < (tierLimits?.minPhotos || 1) && (
+                <div className="bg-red-900/20 border border-red-500/30 rounded-lg p-3">
+                  <p className="text-red-400 text-sm">
+                    ⚠️ Adicione pelo menos {tierLimits?.minPhotos || 1} foto{(tierLimits?.minPhotos || 1) > 1 ? 's' : ''} para continuar
+                  </p>
+                </div>
+              )}
             </div>
           )}
 

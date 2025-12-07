@@ -21,8 +21,8 @@ export { NegotiationIcon, HandshakeIcon, AnimatedHandshake } from "./components/
 // New shared top nav
 export { TopNav } from "./components/TopNav";
 
-// Floating WhatsApp component
-export { default as FloatingWhatsApp } from "./components/FloatingWhatsApp";
+// Floating WhatsApp component with verification
+export { default as FloatingWhatsApp, WhatsAppLockedMessage } from "./components/FloatingWhatsApp";
 // Shared WhatsApp link helper
 export { default as WhatsAppLink } from "./components/WhatsAppLink";
 
