@@ -2,6 +2,10 @@ import { supabase } from '@/lib/supabaseClient';
 
 export const CANONICAL_CARCARA_IDS = ['abare', 'bigua', 'mergulhao', 'seriema', 'juriti', 'surucua'];
 
+// Supabase storage base URL
+const SUPABASE_URL = process.env.NEXT_PUBLIC_SUPABASE_URL || 'https://irrzpwzyqcubhhjeuakc.supabase.co';
+const STORAGE_BASE = `${SUPABASE_URL}/storage/v1/object/public/imagens-sitios`;
+
 // The canonical IDs are the readable slugs used across the UI and seed data.
 // Map canonical slug -> fable key (usually the same). Keeping an explicit
 // mapping keeps the UI robust in case keys diverge later.
@@ -22,18 +26,118 @@ export function mapIdToFableKey(id?: string) {
 
 // Human-friendly display names for the six Sítios (used in UI headings/cards)
 export const ID_TO_DISPLAY_NAME: Record<string, string> = {
-  abare: 'Abaré',
-  bigua: 'Biguá',
-  mergulhao: 'Mergulhão',
-  seriema: 'Seriema',
-  juriti: 'Juriti',
-  surucua: 'Surucuá',
+  abare: 'Sítio Abaré - Refúgio do Rio',
+  bigua: 'Sítio Biguá - Majestade da Água',
+  mergulhao: 'Sítio Mergulhão - Guardião das Águas',
+  seriema: 'Sítio Seriema - A Voz do Cerrado',
+  juriti: 'Sítio Juriti - A Canção do Entardecer',
+  surucua: 'Sítio Surucuá - A Joia da Floresta',
 };
 
 export function mapIdToDisplayName(id?: string) {
   if (!id) return '';
   const key = id.toLowerCase();
   return ID_TO_DISPLAY_NAME[key] || id;
+}
+
+// Ranch cover photos from Supabase storage
+const RANCH_COVER_PHOTOS: Record<string, string> = {
+  juriti: `${STORAGE_BASE}/juriti/1762988625017-20251107_162023.jpg`,
+  mergulhao: `${STORAGE_BASE}/mergulhao/1762988792202-20251107_163212.jpg`,
+  seriema: `${STORAGE_BASE}/pordosol7.jpg`,
+  surucua: `${STORAGE_BASE}/surucua.jpg`,
+  bigua: `${STORAGE_BASE}/pordosol6lastviewofsunwide.jpg`,
+  abare: `${STORAGE_BASE}/pordosolOrange.jpg`,
+};
+
+// All verified photos for each ranch (fallback if storage API fails)
+const VERIFIED_RANCH_PHOTOS: Record<string, string[]> = {
+  juriti: [
+    `${STORAGE_BASE}/juriti/1762988625017-20251107_162023.jpg`,
+    `${STORAGE_BASE}/juriti/1762988635593-20251107_162025.jpg`,
+    `${STORAGE_BASE}/juriti/1762988648710-20251107_162052.jpg`,
+    `${STORAGE_BASE}/juriti/1762988664370-20251107_162100.jpg`,
+    `${STORAGE_BASE}/juriti/1762988673341-20251107_162143.jpg`,
+    `${STORAGE_BASE}/juriti/1762988680911-20251107_162155.jpg`,
+    `${STORAGE_BASE}/juriti/1762988692444-20251107_162239.jpg`,
+    `${STORAGE_BASE}/juriti/1762988702080-20251107_162336.jpg`,
+    `${STORAGE_BASE}/juriti/1762988708242-20251107_162356.jpg`,
+    `${STORAGE_BASE}/juriti/1762988716151-20251107_162403.jpg`,
+    `${STORAGE_BASE}/juriti/1762988783376-20251107_162537.jpg`,
+  ],
+  mergulhao: [
+    `${STORAGE_BASE}/mergulhao/1762988792202-20251107_163212.jpg`,
+    `${STORAGE_BASE}/mergulhao/1762988798001-20251107_163239.jpg`,
+    `${STORAGE_BASE}/mergulhao/1762988804234-20251107_163252.jpg`,
+    `${STORAGE_BASE}/mergulhao/1762988808343-20251107_163306.jpg`,
+    `${STORAGE_BASE}/mergulhao/1762988811097-20251107_163415.jpg`,
+    `${STORAGE_BASE}/mergulhao/1762988818468-20251107_163506.jpg`,
+    `${STORAGE_BASE}/mergulhao/1762988827710-20251107_163720.jpg`,
+    `${STORAGE_BASE}/mergulhao/1762988836535-20251107_163820.jpg`,
+    `${STORAGE_BASE}/mergulhao/1762988845235-20251107_163847.jpg`,
+    `${STORAGE_BASE}/mergulhao/1762988852528-20251107_163856.jpg`,
+    `${STORAGE_BASE}/mergulhao/1762988860014-20251107_163903.jpg`,
+  ],
+  seriema: [
+    `${STORAGE_BASE}/pordosol7.jpg`,
+  ],
+  surucua: [
+    `${STORAGE_BASE}/surucua.jpg`,
+  ],
+  bigua: [
+    `${STORAGE_BASE}/pordosol6lastviewofsunwide.jpg`,
+  ],
+  abare: [
+    `${STORAGE_BASE}/pordosolOrange.jpg`,
+  ],
+};
+
+// Verified video URLs for each ranch
+const VERIFIED_RANCH_VIDEOS: Record<string, string> = {
+  juriti: `${STORAGE_BASE}/juriti/compressed/20251107_162422_compressed.mp4`,
+  mergulhao: `${STORAGE_BASE}/mergulhao/compressed/20251107_163934_compressed.mp4`,
+};
+
+// Get cover photo for a ranch
+export function getRanchCoverPhoto(slug: string): string {
+  return RANCH_COVER_PHOTOS[slug.toLowerCase()] || `${STORAGE_BASE}/pordosol4mediumearthwide.jpg`;
+}
+
+// Get video URL for a ranch
+export function getRanchVideoUrl(slug: string): string | undefined {
+  return VERIFIED_RANCH_VIDEOS[slug.toLowerCase()];
+}
+
+// Fetch all photos for a ranch - uses verified fallback if storage API fails
+export async function fetchRanchPhotos(slug: string): Promise<string[]> {
+  const key = slug.toLowerCase();
+  
+  // First try the verified photos (reliable)
+  if (VERIFIED_RANCH_PHOTOS[key] && VERIFIED_RANCH_PHOTOS[key].length > 0) {
+    return VERIFIED_RANCH_PHOTOS[key];
+  }
+  
+  // Try storage API as backup
+  try {
+    const { data: files } = await supabase.storage
+      .from('imagens-sitios')
+      .list(slug, { limit: 50 });
+    
+    if (!files || files.length === 0) return [getRanchCoverPhoto(slug)];
+    
+    // Filter for image files only
+    const imageFiles = files.filter(f => 
+      !f.name.includes('/') && 
+      (f.name.endsWith('.jpg') || f.name.endsWith('.jpeg') || f.name.endsWith('.png') || f.name.endsWith('.webp'))
+    );
+    
+    if (imageFiles.length === 0) return [getRanchCoverPhoto(slug)];
+    
+    return imageFiles.map(f => `${STORAGE_BASE}/${slug}/${f.name}`);
+  } catch (error) {
+    console.error(`Error fetching photos for ${slug}:`, error);
+    return [getRanchCoverPhoto(slug)];
+  }
 }
 
 type FetchOptions = {
@@ -47,59 +151,74 @@ const isTestTitle = (t?: string) => {
 };
 
 /**
- * Fetch the canonical Carcará sitios. Tries to fetch by projeto='Sítios Carcará'
- * then falls back to the canonical id list. Also attaches the current highest bid.
+ * Fetch the canonical Carcará properties from the 'properties' table.
+ * Attaches photos from storage and current highest bid.
  */
 export async function fetchCanonicalSitios(opts: FetchOptions = {}) {
   const { limit = 6, hideTestListings = true } = opts;
   try {
-    // Try project-based query first
-    let { data, error } = await supabase
-      .from('sitios')
+    // Query from properties table where the ranches are stored
+    const { data, error } = await supabase
+      .from('properties')
       .select('*')
-      .eq('projeto', 'Sítios Carcará')
-      .order('preco', { ascending: true })
+      .in('slug', CANONICAL_CARCARA_IDS)
+      .eq('property_type', 'sitio')
+      .order('title', { ascending: true })
       .limit(limit);
 
     if (error) {
-      console.warn('fetchCanonicalSitios: projeto query error', error);
+      console.warn('fetchCanonicalSitios: query error', error);
+      return [];
     }
 
-    // If no rows returned, fallback to canonical slug list
     if (!data || data.length === 0) {
-      const { data: fbData, error: fbErr } = await supabase
-        .from('sitios')
-        .select('*')
-        .in('slug', CANONICAL_CARCARA_IDS)
-        .order('preco', { ascending: true });
-
-      if (fbErr) {
-        console.warn('fetchCanonicalSitios: fallback query error', fbErr);
-      }
-      data = fbData || [];
+      console.warn('fetchCanonicalSitios: no properties found');
+      return [];
     }
 
-    // Attach current highest bid for each property
-    const sitiosWithBids = await Promise.all(
-      (data || []).map(async (sitio: any) => {
+    // Transform properties to expected sitio format with photos
+    const sitiosWithPhotos = await Promise.all(
+      data.map(async (property: any) => {
+        // Get photos from storage
+        const photos = await fetchRanchPhotos(property.slug);
+        
+        // Get current highest bid
         const { data: bids } = await supabase
           .from('proposals')
           .select('amount')
-          .eq('property_id', sitio.id)
+          .eq('property_id', property.id)
           .order('amount', { ascending: false })
           .limit(1);
 
         return {
-          ...sitio,
-          current_bid: bids && bids.length > 0 ? bids[0].amount : null,
+          id: property.id,
+          slug: property.slug,
+          nome: mapIdToDisplayName(property.slug),
+          title: property.title,
+          descricao: property.description,
+          localizacao: property.city && property.state 
+            ? `${property.city}, ${property.state}` 
+            : 'Lago das Brisas, GO',
+          preco: property.price || property.expected_value,
+          area_total: property.total_area,
+          fotos: photos,
+          video_url: property.video_url,
+          destaque: property.featured,
+          latitude: property.latitude,
+          longitude: property.longitude,
+          current_bid: bids && bids.length > 0 ? bids[0].amount : property.current_highest_bid,
+          accepts_proposals: property.accepts_proposals,
+          agua: property.near_water || true,
+          energia: property.has_electricity,
+          kml_url: property.kml_url,
         };
       })
     );
 
     // Optional filtering for obvious test/demo titles
     const filtered = hideTestListings
-      ? (sitiosWithBids as any[]).filter((s) => !isTestTitle(s.nome || s.title))
-      : sitiosWithBids;
+      ? sitiosWithPhotos.filter((s) => !isTestTitle(s.nome || s.title))
+      : sitiosWithPhotos;
 
     return filtered;
   } catch (err) {

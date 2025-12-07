@@ -21,6 +21,8 @@ import FocusLock from "react-focus-lock";
 import ProposalModal from "@/components/ProposalModal";
 import { useI18n } from "@/lib/i18n";
 import { useAuth } from "@/components/AuthProvider";
+import NeighborhoodInfo, { NeighborhoodData } from "@/components/NeighborhoodInfo";
+import PropertyChatBox from "@/components/PropertyChatBox";
 
 // Dynamic import to avoid SSR issues with Leaflet
 const LeafletMapKML = dynamic(() => import("@/components/LeafletMapKML"), {
@@ -49,6 +51,7 @@ const KML_DATA_FALLBACK = `<?xml version="1.0" encoding="UTF-8"?>
 interface Sitio {
   id: string;
   nome: string;
+  user_id?: string;
   fabula?: string;
   descricao?: string;
   localizacao?: string;
@@ -62,6 +65,36 @@ interface Sitio {
   banheiros?: number;
   vagas?: number;
   coordenadas?: any;
+  slug?: string;
+  latitude?: number;
+  longitude?: number;
+  // Neighborhood data
+  nearest_hospital_name?: string;
+  nearest_hospital_distance_km?: number;
+  nearest_clinic_name?: string;
+  nearest_clinic_distance_km?: number;
+  nearest_school_name?: string;
+  nearest_school_distance_km?: number;
+  nearest_university_name?: string;
+  nearest_university_distance_km?: number;
+  nearest_supermarket_name?: string;
+  nearest_supermarket_distance_km?: number;
+  nearest_pharmacy_name?: string;
+  nearest_pharmacy_distance_km?: number;
+  nearest_gas_station_name?: string;
+  nearest_gas_station_distance_km?: number;
+  nearest_bank_name?: string;
+  nearest_bank_distance_km?: number;
+  road_condition?: 'paved' | 'gravel' | 'dirt' | 'mixed';
+  road_quality?: 'excellent' | 'good' | 'fair' | 'poor';
+  internet_available?: boolean;
+  internet_type?: 'fiber' | 'cable' | 'satellite' | '4G' | '5G' | 'none';
+  internet_speed_mbps?: number;
+  mobile_signal_quality?: 'excellent' | 'good' | 'fair' | 'poor' | 'none';
+  distance_to_city_center_km?: number;
+  nearest_city_name?: string;
+  urban_area?: boolean;
+  rural_area?: boolean;
 }
 
 export default function PropertyPage() {
@@ -397,6 +430,40 @@ export default function PropertyPage() {
                   </p>
                 </div>
               )}
+
+              {/* Neighborhood & Facilities Info */}
+              <div className="bg-[#0a0a0a] rounded-xl p-6 border border-[#2a2a1a]">
+                <NeighborhoodInfo 
+                  data={{
+                    nearest_hospital_name: sitio.nearest_hospital_name,
+                    nearest_hospital_distance_km: sitio.nearest_hospital_distance_km,
+                    nearest_clinic_name: sitio.nearest_clinic_name,
+                    nearest_clinic_distance_km: sitio.nearest_clinic_distance_km,
+                    nearest_school_name: sitio.nearest_school_name,
+                    nearest_school_distance_km: sitio.nearest_school_distance_km,
+                    nearest_university_name: sitio.nearest_university_name,
+                    nearest_university_distance_km: sitio.nearest_university_distance_km,
+                    nearest_supermarket_name: sitio.nearest_supermarket_name,
+                    nearest_supermarket_distance_km: sitio.nearest_supermarket_distance_km,
+                    nearest_pharmacy_name: sitio.nearest_pharmacy_name,
+                    nearest_pharmacy_distance_km: sitio.nearest_pharmacy_distance_km,
+                    nearest_gas_station_name: sitio.nearest_gas_station_name,
+                    nearest_gas_station_distance_km: sitio.nearest_gas_station_distance_km,
+                    nearest_bank_name: sitio.nearest_bank_name,
+                    nearest_bank_distance_km: sitio.nearest_bank_distance_km,
+                    road_condition: sitio.road_condition,
+                    road_quality: sitio.road_quality,
+                    internet_available: sitio.internet_available,
+                    internet_type: sitio.internet_type,
+                    internet_speed_mbps: sitio.internet_speed_mbps,
+                    mobile_signal_quality: sitio.mobile_signal_quality,
+                    distance_to_city_center_km: sitio.distance_to_city_center_km,
+                    nearest_city_name: sitio.nearest_city_name,
+                    urban_area: sitio.urban_area,
+                    rural_area: sitio.rural_area ?? true, // Default to rural for sitios
+                  }}
+                />
+              </div>
             </div>
 
             {/* Videos Section */}
@@ -558,6 +625,16 @@ export default function PropertyPage() {
                   <TrendingUp className="w-5 h-5" />
                   {t('sitioscarcara.submit_offer') || 'Fazer Proposta'}
                 </button>
+              </div>
+
+              {/* Chat with Seller */}
+              <div className="pt-4 border-t border-[#2a2a1a]">
+                <PropertyChatBox
+                  propertyId={sitio.id}
+                  propertyTitle={sitio.nome}
+                  sellerId={sitio.user_id || 'admin'}
+                  sellerName="Vendedor"
+                />
               </div>
             </div>
           </div>
