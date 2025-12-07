@@ -183,7 +183,7 @@ export default function BottomSheet({
         </div>
       </div>
 
-      <style jsx>{`
+      <style dangerouslySetInnerHTML={{ __html: `
         @keyframes fade-in {
           from {
             opacity: 0;
@@ -209,7 +209,7 @@ export default function BottomSheet({
         .animate-slide-up {
           animation: slide-up 0.3s cubic-bezier(0.32, 0.72, 0, 1);
         }
-      `}</style>
+      `}} />
     </>
   );
 
