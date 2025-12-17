@@ -298,16 +298,7 @@ export function HarpyEagle3D({
         </Canvas>
       </div>
       
-      <style jsx global>{`
-        @keyframes flash {
-          0% { opacity: 0; }
-          20% { opacity: 1; }
-          100% { opacity: 0; }
-        }
-        .animate-flash {
-          animation: flash 0.3s ease-out forwards;
-        }
-      `}</style>
+
     </>
   );
 }
