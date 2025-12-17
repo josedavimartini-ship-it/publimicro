@@ -225,3 +225,7 @@ select:focus-visible {
 @keyframes fadein { from { opacity: 0; transform: translateY(24px); } to { opacity: 1; transform: none; } }
 .animate-fadein { animation: fadein 1.2s cubic-bezier(.4,0,.2,1) both; }
 .animate-fadein-slow { animation: fadein 2.2s cubic-bezier(.4,0,.2,1) both; }
+
+/* Flash animation used by HarpyEagle3D */
+@keyframes flash { 0% { opacity: 0; } 20% { opacity: 1; } 100% { opacity: 0; } }
+.animate-flash { animation: flash 0.3s ease-out forwards; }
