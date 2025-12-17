@@ -1,0 +1,54 @@
+[
+  {
+    "uid": "dpl_DeXteX9eTXhMGC9ikC6paWh6rRYL",
+    "url": "publimicro-e44v1rqg8-publimicros-projects.vercel.app",
+    "created": "2025-12-17 20:45:52Z",
+    "state": "READY",
+    "readyState": "READY",
+    "errorMessage": null,
+    "inspector": "https://vercel.com/publimicros-projects/publimicro/DeXteX9eTXhMGC9ikC6paWh6rRYL",
+    "meta": {
+      "githubCommitAuthorName": "Davi",
+      "githubCommitAuthorEmail": "josedavimartini@gmail.com",
+      "githubCommitMessage": "chore(deps): finalize upgrades; add pnpm overrides for next/node-domexception; update lockfile",
+      "githubCommitOrg": "josedavimartini-ship-it",
+      "githubCommitRef": "audit/initial-fixes",
+      "githubCommitRepo": "publimicro",
+      "githubCommitSha": "557a31cf968db2fc7054db654ed11b41aef09f05",
+      "githubDeployment": "1",
+      "githubOrg": "josedavimartini-ship-it",
+      "githubRepo": "publimicro",
+      "bundler": "turbopack"
+    }
+  },
+  {
+    "uid": "dpl_CVXDBfKLjnRGgwhBc9f13oaYcaje",
+    "url": "publimicro-n3q9jz9nt-publimicros-projects.vercel.app",
+    "created": "2025-12-17 20:29:40Z",
+    "state": "READY",
+    "readyState": "READY",
+    "errorMessage": null,
+    "inspector": "https://vercel.com/publimicros-projects/publimicro/CVXDBfKLjnRGgwhBc9f13oaYcaje",
+    "meta": {
+      "githubCommitAuthorName": "Davi",
+      "githubCommitAuthorEmail": "josedavimartini@gmail.com",
+      "githubCommitMessage": "chore(deps): finalize upgrades; add pnpm overrides for next/node-domexception; update lockfile",
+      "githubCommitOrg": "josedavimartini-ship-it",
+      "githubCommitRef": "audit/initial-fixes",
+      "githubCommitRepo": "publimicro",
+      "githubCommitSha": "557a31cf968db2fc7054db654ed11b41aef09f05",
+      "githubDeployment": "1",
+      "githubOrg": "josedavimartini-ship-it",
+      "githubRepo": "publimicro",
+      "githubRepoOwnerType": "User",
+      "githubCommitRepoId": "1077205069",
+      "githubRepoId": "1077205069",
+      "githubRepoVisibility": "public",
+      "githubHost": "github.com",
+      "githubCommitAuthorLogin": "josedavimartini-ship-it",
+      "repoPushedAt": "1766003374000",
+      "branchAlias": "publimicro-git-audit-initial-fixes-publimicros-projects.vercel.app",
+      "bundler": "turbopack"
+    }
+  }
+]

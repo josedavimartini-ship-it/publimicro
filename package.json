@@ -8,7 +8,7 @@
     "build": "turbo run build",
     "build:app": "next build",
     "start": "next start",
-    "lint": "node tools/remove-eslintignore.js && node --max-old-space-size=4096 ./node_modules/.bin/eslint . --ext .js,.jsx,.ts,.tsx",
+"lint": "node tools/remove-eslintignore.js && node --max-old-space-size=4096 ./node_modules/eslint/bin/eslint.js . --ext .js,.jsx,.ts,.tsx",
     "format": "prettier --write .",
     "type-check": "tsc --noEmit"
   },
@@ -42,7 +42,7 @@
     "typescript": "^5.9.3"
   },
   "engines": {
-    "node": ">=18.0.0",
+    "node": "22.x",
     "pnpm": ">=10.22.0"
   },
   "pnpm": {

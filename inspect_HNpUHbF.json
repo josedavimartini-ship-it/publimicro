@@ -1,0 +1,27 @@
+{
+  "id": "dpl_HNpUHbFQs6oxYnHmnqJKUmZ5JM9N",
+  "name": "publimicro",
+  "url": "publimicro-iumvuax2d-publimicros-projects.vercel.app",
+  "target": "preview",
+  "readyState": "ERROR",
+  "createdAt": 1763203966489,
+  "aliases": [
+    "publimicro-git-chore-convert-scripts-esm-publimicros-projects.vercel.app"
+  ],
+  "builds": [
+    {
+      "id": "bld_cidr6zj2s",
+      "deploymentId": "dpl_HNpUHbFQs6oxYnHmnqJKUmZ5JM9N",
+      "entrypoint": ".",
+      "readyState": "READY",
+      "readyStateAt": 1763203966855,
+      "createdAt": 1763203966855,
+      "createdIn": "sfo1",
+      "use": "@vercel/vc-build",
+      "config": {},
+      "output": [],
+      "fingerprint": null
+    }
+  ],
+  "contextName": "publimicros-projects"
+}
