@@ -1,0 +1,16 @@
+{
+  // Recommended extensions for contributors. `unwantedRecommendations` suggests extensions to disable/uninstall to improve workspace performance.
+  "recommendations": [
+    "dbaeumer.vscode-eslint",
+    "esbenp.prettier-vscode"
+  ],
+  "unwantedRecommendations": [
+    "eamodio.gitlens",
+    "ms-vsliveshare.vsliveshare",
+    "ms-azuretools.vscode-docker",
+    "ms-vscode-remote.remote-ssh",
+    "ms-vscode-remote.remote-containers",
+    "ms-python.python",
+    "ms-python.vscode-pylance"
+  ]
+}
