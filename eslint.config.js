@@ -1,5 +1,13 @@
 // Flat ESLint configuration (ESLint v9+)
 // Migrated from legacy `.eslintrc.cjs` to the new flat config format.
+const tryRequire = (name) => {
+  try {
+    return require(name);
+  } catch (e) {
+    return null;
+  }
+};
+
 module.exports = [
   // Global ignores (migrated from .eslintignore)
   {
@@ -52,7 +60,7 @@ module.exports = [
   {
     files: ['**/*.js', '**/*.cjs', '**/*.mjs'],
     languageOptions: {
-      parser: require('espree'),
+      parser: tryRequire('espree'),
       parserOptions: {
         ecmaVersion: 2022,
         sourceType: 'module',
@@ -78,7 +86,7 @@ module.exports = [
   {
     files: ['**/*.{ts,tsx}'],
     languageOptions: {
-      parser: require('@typescript-eslint/parser'),
+      parser: tryRequire('@typescript-eslint/parser'),
       parserOptions: {
         ecmaVersion: 2022,
         sourceType: 'module',
@@ -115,7 +123,7 @@ module.exports = [
   {
     files: ['**/*.{js,jsx}'],
     languageOptions: {
-      parser: require('espree'),
+      parser: tryRequire('espree'),
       parserOptions: {
         ecmaVersion: 2022,
         sourceType: 'module',
