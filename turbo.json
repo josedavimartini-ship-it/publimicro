@@ -12,7 +12,9 @@
     "SUPABASE_SERVICE_ROLE_KEY",
     "STRIPE_SECRET_KEY",
     "RESEND_API_KEY",
-    "EMAIL_FROM"
+    "EMAIL_FROM",
+    "GOOGLE_CLIENT_SECRET",
+    "NEXTAUTH_SECRET"
   ],
   "tasks": {
     "build": {
