@@ -1,0 +1,12 @@
+"use client";
+
+import { useEffect, useState } from "react";
+import { supabase } from "@/lib/supabaseClient";
+import { Carcara3D } from "@publimicro/ui";
+import Image from "next/image";
+import Link from "next/link";
+import { 
+  Home, Car, Tractor, Ship, Globe, 
+  Plane, Share2, ShoppingBag, Sparkles, Calendar
+} from "lucide-react";
+// (file copied from workspace root for archival purposes)
