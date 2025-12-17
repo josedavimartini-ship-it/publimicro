@@ -2,7 +2,7 @@
   "name": "publimicro-monorepo",
   "version": "1.0.0",
   "private": true,
-  "packageManager": "pnpm@10.22.0",
+  "packageManager": "pnpm@10.26.0",
   "scripts": {
     "dev": "next dev -p 3000",
     "build": "turbo run build",
