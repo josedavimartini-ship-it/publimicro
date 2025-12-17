@@ -34,5 +34,18 @@
   "files.autoSave": "off",
   "markdownlint.enable": false,
   "typescript.tsserver.maxTsServerMemory": 512,
-  "git.autorefresh": false
+  "git.autorefresh": false,
+  "extensions.autoUpdate": false,
+  "extensions.autoCheckUpdates": false,
+  "extensions.autoCheckUpdatesInterval": 0,
+  "git.autofetch": false,
+  "telemetry.enableTelemetry": false,
+  "telemetry.enableCrashReporter": false,
+  "workbench.editor.limit.enabled": true,
+  "workbench.editor.limit": 8,
+  "workbench.editor.closeOnFileDelete": true,
+  "workbench.startupEditor": "none",
+  "search.followSymlinks": false,
+  "search.useIgnoreFiles": true,
+  "search.smartCase": true
 }
