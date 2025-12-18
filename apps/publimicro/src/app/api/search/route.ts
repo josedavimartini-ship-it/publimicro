@@ -67,8 +67,9 @@ export async function GET(req: NextRequest) {
     }
 
     return NextResponse.json({ suggestions: data || [] });
-  } catch (err) {
-    return NextResponse.json({ error: (err as Error).message || "unknown" }, { status: 500 });
+  } catch (err: unknown) {
+    const message = err instanceof Error ? err.message : String(err);
+    return NextResponse.json({ error: message || "unknown" }, { status: 500 });
   }
 }
 
@@ -90,7 +91,7 @@ export async function POST(req: NextRequest) {
     } = body || {};
 
     const table = tableForSection(section);
-    let qb: any = supabase.from(table).select("*", { count: "exact" });
+    let qb = supabase.from(table).select("*", { count: "exact" });
 
     // Full-text-ish filters (simple ilike ranges for now)
     // Sanitize and limit query to prevent injection
@@ -147,7 +148,8 @@ export async function POST(req: NextRequest) {
     if (error) return NextResponse.json({ error: error.message }, { status: 500 });
 
     return NextResponse.json({ data: data || [], count: count || 0 });
-  } catch (err) {
-    return NextResponse.json({ error: (err as Error).message || "unknown" }, { status: 500 });
+  } catch (err: unknown) {
+    const message = err instanceof Error ? err.message : String(err);
+    return NextResponse.json({ error: message || "unknown" }, { status: 500 });
   }
 }

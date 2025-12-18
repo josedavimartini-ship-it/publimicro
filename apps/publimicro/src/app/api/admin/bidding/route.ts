@@ -22,9 +22,10 @@ export async function GET(req: NextRequest) {
     if (error) throw error;
     const value = data?.value ?? false;
     return NextResponse.json({ bidding_open: value });
-  } catch (err: any) {
+  } catch (err: unknown) {
     console.error('Error reading bidding status:', err);
-    return NextResponse.json({ error: err.message || String(err) }, { status: 500 });
+    const message = err instanceof Error ? err.message : String(err);
+    return NextResponse.json({ error: message }, { status: 500 });
   }
 }
 
@@ -49,9 +50,10 @@ export async function POST(req: NextRequest) {
 
     if (error) throw error;
     return NextResponse.json({ ok: true, bidding_open: incoming });
-  } catch (err: any) {
+  } catch (err: unknown) {
     console.error('Error updating bidding status:', err);
-    return NextResponse.json({ error: err.message || String(err) }, { status: 500 });
+    const message = err instanceof Error ? err.message : String(err);
+    return NextResponse.json({ error: message }, { status: 500 });
   }
 }
 

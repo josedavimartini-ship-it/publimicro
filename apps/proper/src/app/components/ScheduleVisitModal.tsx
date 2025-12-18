@@ -73,8 +73,9 @@ export default function ScheduleVisitModal({
         if (onSuccess) onSuccess();
       }, 2000);
 
-    } catch (err: any) {
-      setError(err.message || 'Failed to schedule visit');
+    } catch (err: unknown) {
+      const message = err instanceof Error ? err.message : String(err);
+      setError(message || 'Failed to schedule visit');
     } finally {
       setLoading(false);
     }

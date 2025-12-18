@@ -19,8 +19,20 @@ function ProposalContent() {
   const [checking, setChecking] = useState(true);
   const [error, setError] = useState('');
   const [success, setSuccess] = useState(false);
-  const [property, setProperty] = useState<any>(null);
-  const [user, setUser] = useState<any>(null);
+
+  interface ProposalProperty {
+    id: string;
+    title?: string;
+    price?: number;
+    city?: string;
+    state?: string;
+    slug?: string;
+    property_type?: string;
+    transaction_type?: string;
+  }
+
+  const [property, setProperty] = useState<ProposalProperty | null>(null);
+  const [user, setUser] = useState<{ id: string; email?: string } | null>(null);
   const [visitCompleted, setVisitCompleted] = useState(false);
 
   // Form fields
@@ -79,8 +91,9 @@ function ProposalContent() {
       }
 
       setVisitCompleted(true);
-    } catch (err: any) {
-      setError(err.message || 'Failed to verify authorization');
+    } catch (err: unknown) {
+      const message = err instanceof Error ? err.message : String(err);
+      setError(message || 'Failed to verify authorization');
     } finally {
       setChecking(false);
     }
@@ -114,8 +127,9 @@ function ProposalContent() {
 
       if (bidError) throw bidError;
 
-      // Play auction sound
-      const audioContext = new (window.AudioContext || (window as any).webkitAudioContext)();
+      // Play auction sound (cross-browser AudioContext handling)
+      const AudioContextClass = (window as unknown as { AudioContext?: new () => AudioContext; webkitAudioContext?: new () => AudioContext }).AudioContext || (window as unknown as { webkitAudioContext?: new () => AudioContext }).webkitAudioContext;
+      const audioContext = new (AudioContextClass as new () => AudioContext)();
       const oscillator = audioContext.createOscillator();
       const gainNode = audioContext.createGain();
       
@@ -136,8 +150,9 @@ function ProposalContent() {
         router.push(`/lances`); // Redirect to user's bids page
       }, 3000);
 
-    } catch (err: any) {
-      setError(err.message || 'Failed to submit proposal');
+    } catch (err: unknown) {
+      const message = err instanceof Error ? err.message : String(err);
+      setError(message || 'Failed to submit proposal');
     } finally {
       setLoading(false);
     }

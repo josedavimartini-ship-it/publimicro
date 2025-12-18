@@ -9,9 +9,31 @@ import { PropertyCard } from "@publimicro/ui";
 export default function FavoritesPage() {
   const router = useRouter();
   const supabase = createBrowserSupabaseClient();
-  const [favorites, setFavorites] = useState<any[]>([]);
+
+  type FavoriteShape = {
+    id: string;
+    property: {
+      id: string;
+      title?: string;
+      description?: string;
+      property_type?: string;
+      transaction_type?: string;
+      price?: number;
+      bedrooms?: number;
+      bathrooms?: number;
+      parking_spaces?: number;
+      total_area?: number;
+      city?: string;
+      state?: string;
+      slug?: string;
+      featured?: boolean;
+      property_photos?: Array<{ url?: string; is_cover?: boolean }>;
+    };
+  };
+
+  const [favorites, setFavorites] = useState<FavoriteShape[]>([]);
   const [loading, setLoading] = useState(true);
-  const [user, setUser] = useState<any>(null);
+  const [user, setUser] = useState<{ id: string; email?: string } | null>(null);
 
   useEffect(() => {
     checkUser();
@@ -152,7 +174,7 @@ export default function FavoritesPage() {
                       bathrooms: favorite.property.bathrooms,
                       parking: favorite.property.parking_spaces
                     }}
-                    photos={favorite.property.property_photos?.map((p: any) => p.url) || []}
+                    photos={favorite.property.property_photos?.map((p: { url?: string }) => p.url) || []}
                     link={`/property/${favorite.property.slug}`}
                     type="property"
                   />

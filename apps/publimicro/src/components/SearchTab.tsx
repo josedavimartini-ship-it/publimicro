@@ -71,7 +71,7 @@ export default function SearchTab({ onFilterChange, initialSection = DEFAULT_SEC
         if (!res.ok) return;
         const json = await res.json();
         // suggestions expect id + label
-        const items = (json.suggestions || json.data || []).slice(0, 8).map((it: any) => ({ id: it.id || it.slug || it.title, label: it.title || it.name || it.slug || it.id }));
+        const items = (json.suggestions || json.data || []).slice(0, 8).map((it: Record<string, unknown>) => ({ id: String(it.id || it.slug || it.title), label: String(it.title || it.name || it.slug || it.id) }));
         setSuggestions(items);
         setActiveSuggestionIndex(-1);
       } catch {

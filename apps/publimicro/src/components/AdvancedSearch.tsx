@@ -4,7 +4,7 @@ import React, { useState, useEffect, useRef, useCallback } from "react";
 import { useRouter, usePathname, useSearchParams } from "next/navigation";
 import { 
   Search, X, MapPin, ChevronDown,
-  Building2, Car, Wrench, Ship, Globe, Users, Plane, ShoppingBag,
+  Building2, Car, Wrench, Ship, Globe, Plane, ShoppingBag,
   TrendingUp, Clock
 } from "lucide-react";
 import { supabase } from "@/lib/supabaseClient";
@@ -78,7 +78,7 @@ export default function AdvancedSearch({
   const [selectedSection, setSelectedSection] = useState(defaultSection);
   const [selectedPriceRange, setSelectedPriceRange] = useState(priceRanges[0]);
   const [location, setLocation] = useState("");
-  const [sortBy, setSortBy] = useState("relevance");
+  const [sortBy, _setSortBy] = useState("relevance");
 
   const inputRef = useRef<HTMLInputElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
@@ -172,7 +172,7 @@ export default function AdvancedSearch({
   useEffect(() => {
     const timer = setTimeout(() => {
       if (query) {
-        fetchSuggestions(query);
+        void fetchSuggestions(query);
       }
     }, 300);
 
@@ -397,7 +397,7 @@ export default function AdvancedSearch({
                   className="w-full flex items-center gap-3 p-2 rounded-lg hover:bg-[#252525] transition-colors text-left"
                 >
                   <div className="w-12 h-12 rounded-lg bg-[#252525] overflow-hidden flex-shrink-0">
-                    {/* eslint-disable-next-line @next/next/no-img-element */}
+
                     <img
                       src={result.image}
                       alt={result.title}
@@ -439,7 +439,7 @@ export default function AdvancedSearch({
                   key={index}
                   onClick={() => {
                     setQuery(search);
-                    fetchSuggestions(search);
+                    void fetchSuggestions(search);
                   }}
                   className="w-full flex items-center gap-2 px-3 py-2 rounded-lg hover:bg-[#252525] transition-colors text-left text-sm text-[#9ca3af]"
                 >
@@ -463,7 +463,7 @@ export default function AdvancedSearch({
                     key={term}
                     onClick={() => {
                       setQuery(term);
-                      fetchSuggestions(term);
+                      void fetchSuggestions(term);
                     }}
                     className="px-3 py-1 bg-[#252525] rounded-full text-xs text-[#9ca3af] hover:bg-[#333] hover:text-[#E6C98B] transition-colors"
                   >

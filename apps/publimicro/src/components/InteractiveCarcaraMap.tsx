@@ -272,7 +272,7 @@ export default function InteractiveCarcaraMap({
   }, [onlyForSale]);
 
   useEffect(() => {
-    loadAllKMLs();
+    void loadAllKMLs();
   }, [loadAllKMLs]);
 
   // Calculate polygon area using Shoelace formula

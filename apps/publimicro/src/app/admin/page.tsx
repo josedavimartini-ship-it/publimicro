@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import { useRouter } from "next/navigation";
 import { supabase } from "@/lib/supabaseClient";
 import Link from "next/link";
@@ -79,16 +79,7 @@ export default function AdminPage() {
   const [biddingOpen, setBiddingOpen] = useState<boolean | null>(null);
   const [biddingLoading, setBiddingLoading] = useState(false);
 
-  useEffect(() => {
-    void checkAdminAccess();
-  }, []);
-
-  useEffect(() => {
-    if (isAdmin) { void fetchBiddingStatus(); }
-
-  }, [isAdmin]);
-
-  const fetchBiddingStatus = async () => {
+  const fetchBiddingStatus = useCallback(async () => {
     try {
       const res = await fetch('/api/admin/bidding/proxy');
       const j = await res.json();
@@ -96,9 +87,9 @@ export default function AdminPage() {
     } catch (err) {
       console.error('Error fetching bidding status', err);
     }
-  };
+  }, []);
 
-  const toggleBidding = async (val: boolean) => {
+  const toggleBidding = useCallback(async (val: boolean) => {
     setBiddingLoading(true);
     try {
       const res = await fetch('/api/admin/bidding/proxy', {
@@ -115,43 +106,9 @@ export default function AdminPage() {
     } finally {
       setBiddingLoading(false);
     }
-  };
+  }, []);
 
-  const checkAdminAccess = async () => {
-    try {
-      const { data: { user } } = await supabase.auth.getUser();
-      
-      if (!user) {
-        router.push("/entrar");
-        return;
-      }
-
-      // Check if user is admin
-      const adminEmails = [
-        "admin@publimicro.com.br",
-        "contato@publimicro.com.br",
-        user.email, // Allow current user for testing
-      ];
-
-      const userIsAdmin = adminEmails.includes(user.email || "");
-      
-      if (!userIsAdmin) {
-        alert("Acesso negado. Apenas administradores podem acessar esta página.");
-        router.push("/");
-        return;
-      }
-
-      setIsAdmin(true);
-      await loadDashboardData();
-    } catch (error) {
-      console.error("Error checking admin access:", error);
-      router.push("/entrar");
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const loadDashboardData = async () => {
+  const loadDashboardData = useCallback(async () => {
     try {
       const [
         { count: propertiesCount },
@@ -185,13 +142,73 @@ export default function AdminPage() {
         avgBidAmount: avgBid,
       });
 
-      await loadProperties();
+      // Load properties inline to avoid referencing a block-scoped variable before declaration
+      try {
+        const { data } = await supabase
+          .from("sitios")
+          .select("id, nome, localizacao, preco, created_at")
+          .order("created_at", { ascending: false })
+          .limit(20);
+
+        const mapped = (data || []).map((s: { id: string; nome?: string; localizacao?: string; preco?: number; created_at?: string }) => ({
+          id: s.id,
+          title: s.nome || '',
+          location: s.localizacao || '',
+          price: s.preco || 0,
+          created_at: s.created_at || '',
+        }));
+        setProperties(mapped);
+      } catch (err) {
+        console.warn('Failed to load properties while building dashboard', err);
+      }
     } catch (error) {
       console.error("Error loading dashboard data:", error);
     }
-  };
+  }, []);
 
-  const loadProperties = async () => {
+  const checkAdminAccess = useCallback(async () => {
+    try {
+      const { data: { user } } = await supabase.auth.getUser();
+      
+      if (!user) {
+        router.push("/entrar");
+        return;
+      }
+
+      // Check if user is admin
+      const adminEmails = [
+        "admin@publimicro.com.br",
+        "contato@publimicro.com.br",
+        user.email, // Allow current user for testing
+      ];
+
+      const userIsAdmin = adminEmails.includes(user.email || "");
+      
+      if (!userIsAdmin) {
+        alert("Acesso negado. Apenas administradores podem acessar esta página.");
+        router.push("/");
+        return;
+      }
+
+      setIsAdmin(true);
+      await loadDashboardData();
+    } catch (error) {
+      console.error("Error checking admin access:", error);
+      router.push("/entrar");
+    } finally {
+      setLoading(false);
+    }
+  }, [router, loadDashboardData]);
+
+  useEffect(() => {
+    void checkAdminAccess();
+  }, [checkAdminAccess]);
+
+  useEffect(() => {
+    if (isAdmin) { void fetchBiddingStatus(); }
+  }, [isAdmin, fetchBiddingStatus]);
+
+  const loadProperties = useCallback(async () => {
     const { data } = await supabase
       .from("sitios")
       .select("id, nome, localizacao, preco, created_at")
@@ -199,15 +216,15 @@ export default function AdminPage() {
       .limit(20);
     
     // Map to expected interface shape
-    const mapped = (data || []).map((s: any) => ({
+    const mapped = (data || []).map((s: { id: string; nome?: string; localizacao?: string; preco?: number; created_at?: string }) => ({
       id: s.id,
-      title: s.nome,
-      location: s.localizacao,
-      price: s.preco,
-      created_at: s.created_at,
+      title: s.nome || '',
+      location: s.localizacao || '',
+      price: s.preco || 0,
+      created_at: s.created_at || '',
     }));
     setProperties(mapped);
-  };
+  }, []);
 
   const handleMediaFilesChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSelectedFilesInput(e.target.files);
@@ -300,7 +317,7 @@ export default function AdminPage() {
     }
   };
 
-  const loadBids = async () => {
+  const loadBids = useCallback(async () => {
     const { data } = await supabase
       .from("proposals")
       .select(`
@@ -317,9 +334,9 @@ export default function AdminPage() {
       .limit(50);
     
     setBids(data || []);
-  };
+  }, []);
 
-  const loadContacts = async () => {
+  const loadContacts = useCallback(async () => {
     const { data } = await supabase
       .from("contacts")
       .select("*")
@@ -327,7 +344,7 @@ export default function AdminPage() {
       .limit(50);
     
     setContacts(data || []);
-  };
+  }, []);
 
   const updateBidStatus = async (bidId: string, newStatus: string) => {
     try {
@@ -393,7 +410,7 @@ export default function AdminPage() {
     if (activeTab === "properties") { void loadProperties(); }
     if (activeTab === "bids") { void loadBids(); }
     if (activeTab === "contacts") { void loadContacts(); }
-  }, [activeTab, isAdmin]);
+  }, [activeTab, isAdmin, loadProperties, loadBids, loadContacts]);
 
   if (loading) {
     return (

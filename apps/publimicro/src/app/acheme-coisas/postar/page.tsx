@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
 import { createBrowserSupabaseClient } from '@/lib/supabaseBrowser';
 import { Upload, X, Tag, DollarSign, Package, Truck, Loader2 } from 'lucide-react';
@@ -26,12 +26,14 @@ export default function PostarCoisasPage() {
   
   const [loading, setLoading] = useState(true);
   const [submitting, setSubmitting] = useState(false);
-  const [user, setUser] = useState<any>(null);
-  const [categories, setCategories] = useState<any[]>([]);
+  type CurrentUser = { id: string; email?: string | null } | null;
+  type Category = { id: string; name: string; slug: string };
+  const [user, setUser] = useState<CurrentUser>(null);
+  const [_categories, setCategories] = useState<Category[]>([]);
   
   // Form state
   const [listingType, setListingType] = useState('sell');
-  const [categoryId, setCategoryId] = useState('');
+  const [categoryId, _setCategoryId] = useState('');
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
   const [price, setPrice] = useState('');
@@ -50,12 +52,7 @@ export default function PostarCoisasPage() {
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
 
-  useEffect(() => {
-    void checkAuth();
-    void loadCategories();
-  }, []);
-
-  const checkAuth = async () => {
+  const checkAuth = useCallback(async () => {
     try {
       const { data: { user } } = await supabase.auth.getUser();
       
@@ -71,9 +68,9 @@ export default function PostarCoisasPage() {
     } finally {
       setLoading(false);
     }
-  };
+  }, [router, supabase]);
 
-  const loadCategories = async () => {
+  const loadCategories = useCallback(async () => {
     const { data } = await supabase
       .from('categories')
       .select('id, name, slug')
@@ -81,7 +78,12 @@ export default function PostarCoisasPage() {
       .order('name');
     
     setCategories(data || []);
-  };
+  }, [supabase]);
+
+  useEffect(() => {
+    void checkAuth();
+    void loadCategories();
+  }, [checkAuth, loadCategories]);
 
   const handlePhotoChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files) {
@@ -180,9 +182,10 @@ export default function PostarCoisasPage() {
         router.push('/acheme-coisas/publicado');
       }, 2000);
 
-    } catch (error: any) {
-      console.error('Error posting listing:', error);
-      setError(error.message || 'Erro ao publicar anúncio. Tente novamente.');
+    } catch (err: unknown) {
+      console.error('Error posting listing:', err);
+      const msg = err instanceof Error ? err.message : String(err);
+      setError(msg || 'Erro ao publicar anúncio. Tente novamente.');
     } finally {
       setSubmitting(false);
     }
@@ -211,7 +214,7 @@ export default function PostarCoisasPage() {
           <p className="text-[#B8A890]">Venda, troque ou doe seus itens de forma simples</p>
         </div>
 
-        <form onSubmit={handleSubmit} className="bg-[#2a2a2a] border-2 border-[#3a3a3a] rounded-2xl p-8 space-y-6">
+        <form onSubmit={(e) => void handleSubmit(e)} className="bg-[#2a2a2a] border-2 border-[#3a3a3a] rounded-2xl p-8 space-y-6">
           {/* Listing Type */}
           <div>
             <label className="block text-[#D4C4A8] font-semibold mb-2">Tipo de Anúncio *</label>

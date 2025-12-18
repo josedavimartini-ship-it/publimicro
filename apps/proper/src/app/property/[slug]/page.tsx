@@ -108,7 +108,7 @@ export default function PropertyDetailPage() {
       
       if (data) {
         // Sort photos by display_order
-        data.property_photos.sort((a: any, b: any) => a.display_order - b.display_order);
+        data.property_photos.sort((a: { display_order?: number }, b: { display_order?: number }) => ((a.display_order ?? 0) - (b.display_order ?? 0)));
         setProperty(data);
         
         // Check if favorited
@@ -124,8 +124,9 @@ export default function PropertyDetailPage() {
           setIsFavorite(!!fav);
         }
       }
-    } catch (err: any) {
-      setError(err.message || 'Property not found');
+    } catch (err: unknown) {
+      const message = err instanceof Error ? err.message : String(err);
+      setError(message || 'Property not found');
     } finally {
       setLoading(false);
     }
@@ -181,15 +182,17 @@ export default function PropertyDetailPage() {
         router.push(`/proposta?propId=${property?.id}`);
       }, 500);
 
-    } catch (err: any) {
-      alert('Error checking authorization: ' + err.message);
+    } catch (err: unknown) {
+      const message = err instanceof Error ? err.message : String(err);
+      alert('Error checking authorization: ' + (message || 'Unknown error'));
     } finally {
       setIsCheckingVisit(false);
     }
   };
 
   const playAuctionSound = () => {
-    const audioContext = new (window.AudioContext || (window as any).webkitAudioContext)();
+    const AudioContextClass = (window as unknown as { AudioContext?: new () => AudioContext; webkitAudioContext?: new () => AudioContext }).AudioContext || (window as unknown as { webkitAudioContext?: new () => AudioContext }).webkitAudioContext;
+    const audioContext = new (AudioContextClass as new () => AudioContext)();
     const oscillator = audioContext.createOscillator();
     const gainNode = audioContext.createGain();
 
@@ -204,7 +207,7 @@ export default function PropertyDetailPage() {
 
     oscillator.start(audioContext.currentTime);
     oscillator.stop(audioContext.currentTime + 0.5);
-  };
+  }; 
 
   const toggleFavorite = async () => {
     try {

@@ -6,9 +6,20 @@ const TABS = [
   { key: "arquivadas", label: "Arquivadas" },
 ];
 
-export default function ChatTab({ user: _user }: { user: any }) {
+interface Chat {
+  id: number;
+  with: string;
+  property: { title: string; price: number; location?: string; fotos: string[] };
+  lastMessage: string;
+  unread: number;
+  status: string;
+  lastActivity: string;
+  tab: string;
+}
+
+export default function ChatTab({ user: _user }: { user?: unknown }) {
   const [tab, setTab] = useState("ativas");
-  const [chats, setChats] = useState<any[]>([]);
+  const [chats, setChats] = useState<Chat[]>([]);
   useEffect(() => {
     // TODO: Fetch user chats/negotiations from DB, filtered by tab
     setChats([

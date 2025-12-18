@@ -1,6 +1,7 @@
 ﻿"use client";
 
 import { useTranslation } from "@/lib/i18n/useTranslation";
+import type { Language } from "@/lib/i18n/translations";
 
 const languages = [
   { code: "pt-BR", flag: "🇧🇷", name: "Português (BR)" },
@@ -25,7 +26,7 @@ export default function LanguageSelector(): JSX.Element {
         {languages.map((lang) => (
           <button
             key={lang.code}
-            onClick={() => changeLanguage(lang.code as any)}
+            onClick={() => changeLanguage(lang.code as Language)}
             className={`w-full px-4 py-3 text-left text-sm hover:bg-amber-500/10 transition-all flex items-center gap-3 ${
               language === lang.code ? "text-amber-500 bg-amber-500/5" : "text-[#bfa97a]"
             }`}

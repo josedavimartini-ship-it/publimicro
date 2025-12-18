@@ -218,7 +218,7 @@ export default function ChatBalloon({
                       />
                       
                       <button
-                        onClick={handleSend}
+                        onClick={() => void handleSend()}
                         disabled={!message.trim() || sending}
                         className={`w-full py-3 rounded-xl font-bold flex items-center justify-center gap-2 transition-all ${
                           message.trim() && !sending

@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import { useRouter } from "next/navigation";
 import { useAuth } from "@/components/AuthProvider";
 import { createBrowserSupabaseClient } from "@/lib/supabaseBrowser";
@@ -36,13 +36,7 @@ export default function MinhasPropostasPage() {
     }
   }, [user, authLoading, router]);
 
-  useEffect(() => {
-    if (user) {
-      void loadProposals();
-    }
-  }, [user]);
-
-  const loadProposals = async () => {
+  const loadProposals = useCallback(async () => {
     if (!user) return;
 
     setLoading(true);
@@ -87,16 +81,23 @@ export default function MinhasPropostasPage() {
       );
 
       setProposals(proposalsWithDetails);
-    } catch (error: any) {
+    } catch (err: unknown) {
+      const message = err instanceof Error ? err.message : String(err);
       showToast({ 
         type: "error", 
         title: "Erro ao carregar propostas",
-        message: error.message 
+        message
       });
     } finally {
       setLoading(false);
     }
-  };
+  }, [supabase, user, showToast]);
+
+  useEffect(() => {
+    if (user) {
+      void loadProposals();
+    }
+  }, [user, loadProposals]);
 
   const getStatusIcon = (status: string) => {
     switch (status) {

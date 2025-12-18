@@ -1,21 +1,17 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
 import { createBrowserSupabaseClient } from '@/lib/supabaseBrowser';
 import VerificationWizard from '@/components/verification/VerificationWizard';
 
 export default function VerificationPage() {
   const [loading, setLoading] = useState(true);
-  const [user, setUser] = useState<any>(null);
+  const [user, setUser] = useState<{ id: string; email?: string } | null>(null);
   const router = useRouter();
   const supabase = createBrowserSupabaseClient();
 
-  useEffect(() => {
-    void checkAuth();
-  }, []);
-
-  const checkAuth = async () => {
+  const checkAuth = useCallback(async () => {
     try {
       const { data: { session } } = await supabase.auth.getSession();
       
@@ -31,7 +27,11 @@ export default function VerificationPage() {
     } finally {
       setLoading(false);
     }
-  };
+  }, [supabase, router]);
+
+  useEffect(() => {
+    void checkAuth();
+  }, [checkAuth]);
 
   if (loading) {
     return (

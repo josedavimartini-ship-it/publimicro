@@ -201,7 +201,7 @@ export function getTierLimits(tierId: string): ListingTierLimits | undefined {
  * Check if user can post free listing
  * Returns true if user hasn't used their free listing yet
  */
-export async function canPostFreeListing(userId: string, supabase: any): Promise<boolean> {
+export async function canPostFreeListing(userId: string, supabase: { from: (table: string) => unknown }): Promise<boolean> {
   const { count, error } = await supabase
     .from('listings')
     .select('*', { count: 'exact', head: true })

@@ -161,7 +161,7 @@ export default function SearchPage() {
     return config ? config.icon : Building2;
   };
 
-  const getCoverPhoto = (photos: any[]) => {
+  const getCoverPhoto = (photos: Array<{ is_cover?: boolean; url?: string }>) => {
     const cover = photos?.find(p => p.is_cover);
     return cover?.url || photos?.[0]?.url || '/images/placeholder-property.jpg';
   };

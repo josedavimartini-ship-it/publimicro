@@ -1,12 +1,14 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import { MapContainer, TileLayer, Polygon, Popup, useMap } from "react-leaflet";
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
 
 interface LeafletMapKMLProps {
   kmlData: string;
+  center?: [number, number];
+  zoom?: number;
 }
 
 // Component to fit bounds after polygons are rendered
@@ -22,7 +24,7 @@ function FitBounds({ bounds }: { bounds: L.LatLngBoundsExpression | null }) {
   return null;
 }
 
-export default function LeafletMapKML({ kmlData }: LeafletMapKMLProps) {
+export default function LeafletMapKML({ kmlData, center, zoom = 15 }: LeafletMapKMLProps) {
   const [polygons, setPolygons] = useState<Array<{
     name: string;
     description: string;
@@ -32,11 +34,7 @@ export default function LeafletMapKML({ kmlData }: LeafletMapKMLProps) {
   }>>([]);
   const [bounds, setBounds] = useState<L.LatLngBounds | null>(null);
 
-  useEffect(() => {
-    parseKMLData(kmlData);
-  }, [kmlData]);
-
-  const parseKMLData = (kml: string) => {
+  const parseKMLData = useCallback((kml: string) => {
     try {
       const parser = new DOMParser();
       const xmlDoc = parser.parseFromString(kml, "text/xml");
@@ -93,7 +91,11 @@ export default function LeafletMapKML({ kmlData }: LeafletMapKMLProps) {
     } catch (err) {
       console.error("Error parsing KML:", err);
     }
-  };
+  }, []);
+
+  useEffect(() => {
+    parseKMLData(kmlData);
+  }, [kmlData, parseKMLData]);
 
   // Calculate polygon area using Shoelace formula (approximate for small areas)
   const calculatePolygonArea = (coordinates: [number, number][]): number => {
@@ -123,12 +125,13 @@ export default function LeafletMapKML({ kmlData }: LeafletMapKMLProps) {
 
   // Default center (Corumbaíba area)
   const defaultCenter: [number, number] = [-18.2810, -48.8310];
+  const initialCenter = center || defaultCenter;
 
   return (
     <div className="relative w-full h-full min-h-[600px]">
       <MapContainer
-        center={defaultCenter}
-        zoom={15}
+        center={initialCenter}
+        zoom={zoom}
         className="w-full h-full rounded-2xl overflow-hidden shadow-2xl"
         style={{ height: "100%", minHeight: "600px" }}
       >

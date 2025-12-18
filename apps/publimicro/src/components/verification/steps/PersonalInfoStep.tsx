@@ -9,7 +9,7 @@ interface PersonalInfoStepProps {
     date_of_birth: string;
     phone_number: string;
   }>;
-  onSubmit: (data: any) => void;
+  onSubmit: (data: { full_name: string; cpf: string; date_of_birth: string; phone_number?: string }) => void;
   loading: boolean;
 }
 
@@ -117,7 +117,7 @@ export default function PersonalInfoStep({
         Para garantir a segurança da plataforma, precisamos verificar sua identidade.
       </p>
 
-      <form onSubmit={handleSubmit} className="space-y-6">
+      <form onSubmit={(e) => void handleSubmit(e)} className="space-y-6">
         {/* Full Name */}
         <div>
           <label htmlFor="full_name" className="block text-sm font-medium text-gray-700 mb-2">

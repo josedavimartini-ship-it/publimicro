@@ -1,5 +1,5 @@
-export default async function Page({ params }: any) {
-  const { section } = await params;
+export default async function Page({ params }: { params: { section: string } }) {
+  const { section } = params;
 
   const titleMap: Record<string, string> = {
     alugueis: "Aluguéis de curto prazo / viagens",

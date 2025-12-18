@@ -78,5 +78,5 @@ export interface SearchFilters {
   location?: string;
   sortBy?: string;
   searchType?: string;
-  [key: string]: any;
+  [key: string]: unknown;
 }

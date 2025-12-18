@@ -26,7 +26,7 @@ export default function ContactVisitForm({
 
   return (
     <form
-      onSubmit={handleSubmit}
+      onSubmit={(e) => void handleSubmit(e)}
       className="p-4 border rounded-md bg-white shadow-sm space-y-4"
     >
       <h2 className="text-xl font-semibold">Agendar Visita</h2>

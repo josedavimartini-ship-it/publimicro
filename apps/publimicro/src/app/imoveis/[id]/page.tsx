@@ -21,7 +21,7 @@ import FocusLock from "react-focus-lock";
 import ProposalModal from "@/components/ProposalModal";
 import { useI18n } from "@/lib/i18n";
 import { useAuth } from "@/components/AuthProvider";
-import NeighborhoodInfo, { NeighborhoodData } from "@/components/NeighborhoodInfo";
+import NeighborhoodInfo from "@/components/NeighborhoodInfo";
 import PropertyChatBox from "@/components/PropertyChatBox";
 
 // Dynamic import to avoid SSR issues with Leaflet
@@ -64,7 +64,7 @@ interface Sitio {
   quartos?: number;
   banheiros?: number;
   vagas?: number;
-  coordenadas?: any;
+  coordenadas?: { lat?: number; lng?: number } | number[];
   slug?: string;
   latitude?: number;
   longitude?: number;
@@ -206,7 +206,7 @@ export default function PropertyPage() {
       }
     }
 
-    fetchSitio();
+    void fetchSitio();
   }, [params?.id]);
 
   const _handleSubmitBid = async () => {
@@ -277,15 +277,16 @@ export default function PropertyPage() {
       setTimeout(() => {
         setBidSuccess(false);
       }, 5000);
-    } catch (error: any) {
+    } catch (error) {
       console.error("Error submitting bid:", error);
-      setBidError(error.message || "Erro ao enviar lance. Tente novamente.");
+      const msg = error && typeof error === 'object' && 'message' in error ? (error as { message?: string }).message : String(error);
+      setBidError(msg || "Erro ao enviar lance. Tente novamente.");
       
       // Show error toast
       showToast({
         type: "error",
         title: "Erro ao enviar lance",
-        message: error.message || "Tente novamente mais tarde."
+        message: msg || "Tente novamente mais tarde."
       });
     } finally {
       setBidSubmitting(false);

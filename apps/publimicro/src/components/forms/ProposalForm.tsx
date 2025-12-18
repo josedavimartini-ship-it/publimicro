@@ -209,7 +209,7 @@ export default function ProposalForm({
         </div>
       </div>
 
-      <form onSubmit={handleSubmit} className="space-y-4">
+      <form onSubmit={(e) => void handleSubmit(e)} className="space-y-4">
         {/* Personal Info */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div>

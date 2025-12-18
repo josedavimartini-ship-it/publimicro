@@ -137,10 +137,11 @@ export async function POST(req: Request) {
     });
 
     return NextResponse.json({ url: session.url });
-  } catch (error: any) {
-    console.error("Erro ao criar sessão de checkout:", error);
+  } catch (error) {
+    const message = error && typeof error === 'object' && 'message' in error ? (error as { message?: string }).message : String(error);
+    console.error("Erro ao criar sessão de checkout:", message);
     return NextResponse.json(
-      { error: error.message || "Erro ao criar sessão de pagamento" },
+      { error: message || "Erro ao criar sessão de pagamento" },
       { status: 500 }
     );
   }

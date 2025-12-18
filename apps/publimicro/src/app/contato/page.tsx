@@ -138,7 +138,7 @@ export default function ContatoPage() {
               </div>
             )}
 
-            <form onSubmit={handleSubmit} className="space-y-4">
+            <form onSubmit={(e) => void handleSubmit(e)} className="space-y-4">
               <div>
                 <label className="block text-[#D4C4A8] font-semibold mb-2">Nome *</label>
                 <input

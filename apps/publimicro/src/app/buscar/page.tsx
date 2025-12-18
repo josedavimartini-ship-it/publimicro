@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, Suspense } from "react";
+import { useState, useEffect, Suspense, useCallback } from "react";
 import { useSearchParams } from "next/navigation";
 import SearchTab, { SearchFilters } from "@/components/SearchTab";
 import { supabase } from "@/lib/supabaseClient";
@@ -35,83 +35,83 @@ function SearchPageContent() {
   });
   const [totalResults, setTotalResults] = useState(0);
 
-  useEffect(() => {
-    void performSearch();
-  }, [filters]);
-
-  const performSearch = async () => {
+  const performSearch = useCallback(async () => {
     setLoading(true);
 
-    try {
-      // Query sitios table (actual table with property data)
-      let queryBuilder = supabase
-        .from("sitios")
-        .select("id, nome, localizacao, preco, area_total, fotos, descricao, created_at", {
-          count: "exact",
-        });
+  try {
+    // Query sitios table (actual table with property data)
+    let queryBuilder = supabase
+      .from("sitios")
+      .select("id, nome, localizacao, preco, area_total, fotos, descricao, created_at", {
+        count: "exact",
+      });
 
-      // Text search
-      if (filters.query) {
-        queryBuilder = queryBuilder.or(
-          `nome.ilike.%${filters.query}%,localizacao.ilike.%${filters.query}%,descricao.ilike.%${filters.query}%`
-        );
-      }
-
-      // Price filter
-      if (Number(filters.priceMin) > 0) {
-        queryBuilder = queryBuilder.gte("preco", Number(filters.priceMin));
-      }
-      if (Number(filters.priceMax) < 10000000) {
-        queryBuilder = queryBuilder.lte("preco", Number(filters.priceMax));
-      }
-
-      // Area filter
-      if (Number(filters.areaMin) > 0) {
-        queryBuilder = queryBuilder.gte("area_total", Number(filters.areaMin));
-      }
-      if (Number(filters.areaMax) < 1000) {
-        queryBuilder = queryBuilder.lte("area_total", Number(filters.areaMax));
-      }
-
-      // Location filter
-      if (filters.location) {
-        queryBuilder = queryBuilder.ilike("localizacao", `%${filters.location}%`);
-      }
-
-      // Sorting
-      switch (filters.sortBy) {
-        case "price_asc":
-          queryBuilder = queryBuilder.order("preco", { ascending: true });
-          break;
-        case "price_desc":
-          queryBuilder = queryBuilder.order("preco", { ascending: false });
-          break;
-        case "area_desc":
-          queryBuilder = queryBuilder.order("area_total", { ascending: false });
-          break;
-        case "newest":
-          queryBuilder = queryBuilder.order("created_at", { ascending: false });
-          break;
-        default:
-          // Relevance - order by created_at desc as default
-          queryBuilder = queryBuilder.order("created_at", { ascending: false });
-          break;
-      }
-
-      const { data, error, count } = await queryBuilder;
-
-      if (error) throw error;
-
-      setProperties(data || []);
-      setTotalResults(count || 0);
-    } catch (error) {
-      console.error("Search error:", error);
-      setProperties([]);
-      setTotalResults(0);
-    } finally {
-      setLoading(false);
+    // Text search
+    if (filters.query) {
+      queryBuilder = queryBuilder.or(
+        `nome.ilike.%${filters.query}%,localizacao.ilike.%${filters.query}%,descricao.ilike.%${filters.query}%`
+      );
     }
-  };
+
+    // Price filter
+    if (Number(filters.priceMin) > 0) {
+      queryBuilder = queryBuilder.gte("preco", Number(filters.priceMin));
+    }
+    if (Number(filters.priceMax) < 10000000) {
+      queryBuilder = queryBuilder.lte("preco", Number(filters.priceMax));
+    }
+
+    // Area filter
+    if (Number(filters.areaMin) > 0) {
+      queryBuilder = queryBuilder.gte("area_total", Number(filters.areaMin));
+    }
+    if (Number(filters.areaMax) < 1000) {
+      queryBuilder = queryBuilder.lte("area_total", Number(filters.areaMax));
+    }
+
+    // Location filter
+    if (filters.location) {
+      queryBuilder = queryBuilder.ilike("localizacao", `%${filters.location}%`);
+    }
+
+    // Sorting
+    switch (filters.sortBy) {
+      case "price_asc":
+        queryBuilder = queryBuilder.order("preco", { ascending: true });
+        break;
+      case "price_desc":
+        queryBuilder = queryBuilder.order("preco", { ascending: false });
+        break;
+      case "area_desc":
+        queryBuilder = queryBuilder.order("area_total", { ascending: false });
+        break;
+      case "newest":
+        queryBuilder = queryBuilder.order("created_at", { ascending: false });
+        break;
+      default:
+        // Relevance - order by created_at desc as default
+        queryBuilder = queryBuilder.order("created_at", { ascending: false });
+        break;
+    }
+
+    const { data, error, count } = await queryBuilder;
+
+    if (error) throw error;
+
+    setProperties(data || []);
+    setTotalResults(count || 0);
+  } catch (error) {
+    console.error("Search error:", error);
+    setProperties([]);
+    setTotalResults(0);
+  } finally {
+    setLoading(false);
+  }
+}, [filters]);
+
+  useEffect(() => {
+    void performSearch();
+  }, [performSearch]);
 
   return (
     <div className="min-h-screen bg-[#0a0a0a]">
@@ -291,11 +291,7 @@ function SearchPageContent() {
 
 export default function SearchPage() {
   return (
-    <Suspense fallback={
-      <div className="min-h-screen bg-[#0a0a0a] flex items-center justify-center">
-        <div className="text-[#E6C98B] text-xl">Carregando busca...</div>
-      </div>
-    }>
+    <Suspense fallback={<div className="min-h-screen bg-[#0a0a0a] flex items-center justify-center"><div className="text-[#E6C98B] text-xl">Carregando busca...</div></div>}>
       <SearchPageContent />
     </Suspense>
   );

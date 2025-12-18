@@ -245,10 +245,11 @@ export async function POST(req: Request) {
       error: 'Unexpected verification status' 
     }, { status: 500 });
     
-  } catch (error: any) {
-    console.error('Signup error:', error);
+  } catch (error) {
+    const message = error && typeof error === 'object' && 'message' in error ? (error as { message?: string }).message : String(error);
+    console.error('Signup error:', message);
     return NextResponse.json({ 
-      error: error.message || 'Signup failed' 
+      error: message || 'Signup failed' 
     }, { status: 500 });
   }
 }

@@ -1,6 +1,6 @@
 // Centralized API helper for client-side calls
 
-export async function apiPost(url: string, body: any) {
+export async function apiPost(url: string, body: unknown) {
   const res = await fetch(url, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },

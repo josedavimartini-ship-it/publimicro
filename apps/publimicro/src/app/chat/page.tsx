@@ -304,7 +304,6 @@ export default function ChatPage() {
                     {/* Avatar */}
                     <div className="relative flex-shrink-0">
                       {conv.participant.avatar ? (
-                        // eslint-disable-next-line @next/next/no-img-element
                         <img
                           src={conv.participant.avatar}
                           alt={conv.participant.name}
@@ -379,7 +378,6 @@ export default function ChatPage() {
                 {/* User Info */}
                 <div className="flex items-center gap-3 flex-1">
                   {selectedConversation.participant.avatar ? (
-                    // eslint-disable-next-line @next/next/no-img-element
                     <img
                       src={selectedConversation.participant.avatar}
                       alt={selectedConversation.participant.name}
@@ -422,7 +420,6 @@ export default function ChatPage() {
               {selectedConversation.listing && (
                 <div className="p-3 bg-[#1a1a1a] border-b border-[#2a2a2a] flex items-center gap-3">
                   {selectedConversation.listing.image && (
-                    // eslint-disable-next-line @next/next/no-img-element
                     <img
                       src={selectedConversation.listing.image}
                       alt={selectedConversation.listing.title}

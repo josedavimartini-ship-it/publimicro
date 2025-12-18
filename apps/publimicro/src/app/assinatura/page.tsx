@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
 import { createBrowserSupabaseClient } from '@/lib/supabaseBrowser';
 import { Check, Star, Zap, Crown, Loader2 } from 'lucide-react';
@@ -61,15 +61,11 @@ export default function AssinaturaPage() {
   const supabase = createBrowserSupabaseClient();
   
   const [loading, setLoading] = useState(true);
-  const [user, setUser] = useState<any>(null);
+  const [user, setUser] = useState<{ id: string; email?: string } | null>(null);
   const [currentPlan, setCurrentPlan] = useState<string>('free');
   const [processingPlan, setProcessingPlan] = useState<string | null>(null);
 
-  useEffect(() => {
-    void checkAuth();
-  }, []);
-
-  const checkAuth = async () => {
+  const checkAuth = useCallback(async () => {
     try {
       const { data: { user } } = await supabase.auth.getUser();
       setUser(user);
@@ -91,7 +87,11 @@ export default function AssinaturaPage() {
     } finally {
       setLoading(false);
     }
-  };
+  }, [supabase]);
+
+  useEffect(() => {
+    void checkAuth();
+  }, [checkAuth]);
 
   const handleSelectPlan = async (planId: string) => {
     if (!user) {
@@ -208,7 +208,7 @@ export default function AssinaturaPage() {
                 </ul>
 
                 <button
-                  onClick={() => handleSelectPlan(plan.id)}
+                  onClick={() => { void handleSelectPlan(plan.id); }}
                   disabled={isCurrentPlan || processingPlan === plan.id}
                   className={`w-full py-3 rounded-lg font-bold transition-all ${
                     isCurrentPlan

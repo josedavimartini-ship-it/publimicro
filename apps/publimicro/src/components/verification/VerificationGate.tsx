@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
 import { createBrowserSupabaseClient } from '@/lib/supabaseBrowser';
 
@@ -19,11 +19,7 @@ export function useVerificationStatus(): VerificationStatus {
 
   const supabase = createBrowserSupabaseClient();
 
-  useEffect(() => {
-    void checkVerification();
-  }, []);
-
-  const checkVerification = async () => {
+  const checkVerification = useCallback(async () => {
     try {
       const { data: { session } } = await supabase.auth.getSession();
       
@@ -44,7 +40,11 @@ export function useVerificationStatus(): VerificationStatus {
       console.error('Error checking verification:', error);
       setStatus({ verified: false, status: 'not_started', loading: false });
     }
-  };
+  }, [supabase]);
+
+  useEffect(() => {
+    void checkVerification();
+  }, [checkVerification]);
 
   return status;
 }

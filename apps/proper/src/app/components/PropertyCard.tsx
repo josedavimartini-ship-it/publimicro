@@ -33,7 +33,7 @@ interface PropertyCardProps {
   onFazerProposta?: () => void;
 }
 
-const PROPERTY_TYPE_ICONS: Record<string, any> = {
+const PROPERTY_TYPE_ICONS: Record<string, React.ComponentType<{ className?: string }>> = {
   apartment: Building2,
   house: Home,
   chacara: Trees,
@@ -61,7 +61,7 @@ export default function PropertyCard({
     }).format(price);
   };
 
-  const getCoverPhoto = (photos: any[]) => {
+  const getCoverPhoto = (photos: Array<{ url?: string; is_cover?: boolean }>) => {
     const cover = photos?.find(p => p.is_cover);
     return cover?.url || photos?.[0]?.url || '/images/placeholder-property.jpg';
   };

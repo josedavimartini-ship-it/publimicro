@@ -23,20 +23,27 @@ export async function POST(req: Request) {
   if (!id || !['approve', 'reject'].includes(action)) {
     return NextResponse.json({ error: 'Invalid request' }, { status: 400 });
   }
-  let update: any = {};
+  type UpdatePayload = {
+    verification_status: 'approved' | 'rejected';
+    verified_at: string;
+    verification_passed: boolean;
+    rejection_reason: string | null;
+  };
+
+  let update: UpdatePayload;
   if (action === 'approve') {
     update = {
       verification_status: 'approved',
       verified_at: new Date().toISOString(),
       verification_passed: true,
-      rejection_reason: null
+      rejection_reason: null,
     };
-  } else if (action === 'reject') {
+  } else {
     update = {
       verification_status: 'rejected',
       verified_at: new Date().toISOString(),
       verification_passed: false,
-      rejection_reason: 'Rejected by admin review.'
+      rejection_reason: 'Rejected by admin review.',
     };
   }
   await supabase
