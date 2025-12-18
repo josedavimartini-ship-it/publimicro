@@ -1,4 +1,4 @@
-import { NextRequest, NextResponse } from "next/server";
+﻿import { NextRequest, NextResponse } from "next/server";
 import { createServiceSupabaseClient } from "@/lib/supabaseServer";
 
 // Admin-only preview endpoint to locate rows containing a phone number across
@@ -87,8 +87,8 @@ export async function POST(req: NextRequest) {
                 if (digits && (digits.includes(phone) || phone.includes(digits) || digits.endsWith(phone.slice(-8)))) {
                   // attach entire row object for inspection
                   const rid = row['id'];
-                  const exists = found.find((f) => String(f['id']) === String(rid));
-                  if (!exists) found.push({ id: rid, column: col, value: val, row });
+                  const _exists = found.find((f) => String(f['id']) === String(rid));
+                  if (!_exists) found.push({ id: rid, column: col, value: val, row });
                 }
               }
             }
@@ -116,6 +116,7 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: msg }, { status: 500 });
   }
 }
+
 
 
 
