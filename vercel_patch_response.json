@@ -1,0 +1,208 @@
+{
+  "accountId": "team_ayij9Fh9hLYplAtJAhJiJMKL",
+  "speedInsights": {
+    "id": "toCKwkIrEt1DVHt8vDR95spiSFg",
+    "hasData": false,
+    "enabledAt": 1761213818157
+  },
+  "autoExposeSystemEnvs": true,
+  "autoAssignCustomDomains": true,
+  "autoAssignCustomDomainsUpdatedBy": "system",
+  "buildCommand": "turbo run build --filter=@publimicro/publimicro",
+  "createdAt": 1760574128879,
+  "crons": {
+    "enabledAt": 1760574155293,
+    "disabledAt": null,
+    "updatedAt": 1762484068561,
+    "deploymentId": "dpl_4pbjJ2TabFuPJZwMrfuc1Z8zcKvV",
+    "definitions": []
+  },
+  "devCommand": null,
+  "directoryListing": true,
+  "env": [
+    {
+      "target": [
+        "development",
+        "preview",
+        "production"
+      ],
+      "configurationId": null,
+      "customEnvironmentIds": [],
+      "id": "bYh4M4wBpeHh5UWb",
+      "key": "NEXT_PUBLIC_SUPABASE_URL",
+      "createdAt": 1760963337031,
+      "updatedAt": 1760963337031,
+      "createdBy": "fp9PEEvhAzYR7UgGqtkFXyzY",
+      "updatedBy": null,
+      "type": "encrypted",
+      "value": "yE9ioQJC1NnSoqGTRrquywP4bPXIITs/a8Gw2/4gFCvA32Tq8/1ws+vAm9D7GVq3f+HK6EFc6TpkWpXHqvi5gA=="
+    },
+    {
+      "target": [
+        "development",
+        "preview",
+        "production"
+      ],
+      "configurationId": null,
+      "customEnvironmentIds": [],
+      "id": "M7YjNCdagcmKsvhY",
+      "key": "NEXT_PUBLIC_SUPABASE_ANON_KEY",
+      "createdAt": 1760963337031,
+      "updatedAt": 1760963337031,
+      "createdBy": "fp9PEEvhAzYR7UgGqtkFXyzY",
+      "updatedBy": null,
+      "type": "encrypted",
+      "value": "zYVPPGnA/jn7acd47gazlUxS4lGsy54t2htlA7fZ6hd+p7IY5EivPVCgcd9Z9HCc6EVmfIjr4hazOA4RypM3K+Qeq+SN1mLcWHhC31Sprrh7YqI2ayYclyN8vorlbqi8p20Vmt8NKpd+VRX22YDkeYU+oTg0HxM9p1WFn1qllVJetEzyhNk/VznedKcfOGfQd338gkD1DrVHgnForBddX5W5QeuRs6wJHSDTgfAgn1zJl84dCKC0oot8so+BHFl2h55OErdCE8dnR7qPMUBMzw29K/e4t1anVYe1l9YjJ0MG7CSW3LkKA15HuhpzzXdU"
+    },
+    {
+      "target": [
+        "development",
+        "preview",
+        "production"
+      ],
+      "configurationId": null,
+      "customEnvironmentIds": [],
+      "id": "5QmqFoeiczzzJImJ",
+      "key": "SUPABASE_SERVICE_ROLE_KEY",
+      "createdAt": 1760963337031,
+      "updatedAt": 1760963337031,
+      "createdBy": "fp9PEEvhAzYR7UgGqtkFXyzY",
+      "updatedBy": null,
+      "type": "encrypted",
+      "value": "m6Ljz7JvyVpCOG/VHBG7+DXRNUxogp60tuuWk35xQbgIqCzA+SBkmOSs5aucrGkNTdDF3HDWWkurBtV5nm2RILayduYi7HKoMPRH10IeVHfErpqm34hiCosjb67kwhGiIJ9kcGzk/ih4LygcoQXvS3uApYCbXdoN01aOYlo3PDqOoaqbPBEfEFlHQRZ08eVYWYI3kAgcai7JQ5ymu2TgJo7YG62OckV+UoVaN6jtO98Ay/pM1C/bf+8teTIKtkmsQuJBfDO0HFbr7FcCKlB96D07IJXxWZEwmbSForhe2LdMYjLoY7HAW9+T+4PilYq3"
+    },
+    {
+      "target": [
+        "development",
+        "preview",
+        "production"
+      ],
+      "configurationId": null,
+      "customEnvironmentIds": [],
+      "id": "RIAOxnYLAnTgQ0Zr",
+      "key": "NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY",
+      "createdAt": 1760963337031,
+      "updatedAt": 1760963337031,
+      "createdBy": "fp9PEEvhAzYR7UgGqtkFXyzY",
+      "updatedBy": null,
+      "type": "encrypted",
+      "value": "s5cLBewyOb+r6APyAalqbhGKjkxM/zV0DRBo+sssjvI3hBS83kgQH+cDoSGypM3r4n/kmFuxTpWxCbtDmKJGLGGlaSLvu+SI3yVOuwtfbsHSwp2VOd5iUzSzMqhdmKghbFDx823fe6T6dfjL4BvADPUMysZnlCgCQFVOJM824dk="
+    },
+    {
+      "target": [
+        "development",
+        "preview",
+        "production"
+      ],
+      "configurationId": null,
+      "customEnvironmentIds": [],
+      "id": "sIYOWxZBySQqyDDW",
+      "key": "STRIPE_SECRET_KEY",
+      "createdAt": 1760963337031,
+      "updatedAt": 1760963337031,
+      "createdBy": "fp9PEEvhAzYR7UgGqtkFXyzY",
+      "updatedBy": null,
+      "type": "encrypted",
+      "value": "tLTU06GGCMEcweT0TocyXMJ8drA5kXs1JTyvn5EEARJ74B2XUYSx7VK/33efnNF/xEBMih2pLkCgNOY7K1utDnXOpoIh6DYSnEF7sTqRWygXpTz4DPEo2Ly78o0UXCIpoz7S6BjT3kNsQu/0e/U82eDmXQkM2AybwGyld6KowZA="
+    },
+    {
+      "target": [
+        "production"
+      ],
+      "configurationId": null,
+      "id": "VXVsg6bw4alWWVIH",
+      "key": "NEXT_PUBLIC_HOME_URL",
+      "createdAt": 1761621802678,
+      "updatedAt": 1761621802678,
+      "createdBy": "fp9PEEvhAzYR7UgGqtkFXyzY",
+      "updatedBy": null,
+      "type": "encrypted",
+      "value": "NmKBxGVLq/h8k+mFE59XEz8L23qB5O4qDFdpDQpAE3QMEDqPYULIX0uwaLTLBfPS"
+    }
+  ],
+  "framework": "nextjs",
+  "gitForkProtection": true,
+  "gitLFS": true,
+  "id": "prj_8HR6rZgGD5H5RA2XzXD2KpCqcpCU",
+  "installCommand": "pnpm install",
+  "lastRollbackTarget": null,
+  "lastAliasRequest": null,
+  "name": "publimicro",
+  "nodeVersion": "22.x",
+  "outputDirectory": null,
+  "productionDeploymentsFastLane": true,
+  "publicSource": null,
+  "defaultResourceConfig": {
+    "fluid": true,
+    "functionDefaultRegions": [
+      "iad1"
+    ],
+    "functionDefaultTimeout": 300,
+    "functionDefaultMemoryType": "standard",
+    "functionZeroConfigFailover": false,
+    "elasticConcurrencyEnabled": false
+  },
+  "resourceConfig": {
+    "fluid": true,
+    "functionDefaultRegions": [
+      "iad1"
+    ]
+  },
+  "rootDirectory": "apps/publimicro",
+  "serverlessFunctionRegion": "iad1",
+  "sourceFilesOutsideRootDirectory": true,
+  "enableAffectedProjectsDeployments": true,
+  "ssoProtection": {
+    "deploymentType": "all_except_custom_domains"
+  },
+  "updatedAt": 1766015716551,
+  "live": false,
+  "gitComments": {
+    "onCommit": false,
+    "onPullRequest": true
+  },
+  "gitProviderOptions": {
+    "createDeployments": "enabled"
+  },
+  "webAnalytics": {
+    "id": "SKa2QkNU3T7ACa8ZnBl1KF7U5"
+  },
+  "oidcTokenConfig": {
+    "enabled": true,
+    "issuerMode": "team"
+  },
+  "hasDeployments": true,
+  "link": {
+    "type": "github",
+    "repo": "publimicro",
+    "repoId": 1077205069,
+    "org": "josedavimartini-ship-it",
+    "repoOwnerId": 233740597,
+    "gitCredentialId": "cred_23ad6f9085820709c7129fbc8800b0ca9d2b93ba",
+    "productionBranch": "main",
+    "sourceless": true,
+    "createdAt": 1760574128837,
+    "updatedAt": 1760574128837,
+    "deployHooks": []
+  },
+  "latestDeployments": [],
+  "targets": {},
+  "deploymentExpiration": {
+    "expirationDays": 180,
+    "expirationDaysProduction": 365,
+    "expirationDaysCanceled": 30,
+    "expirationDaysErrored": 90,
+    "deploymentsToKeep": 10
+  },
+  "protectionBypass": {
+    "rsX3zrG2HtLzdpaUEOMvj4GhxPx1vayn": {
+      "scope": "automation-bypass",
+      "isEnvVar": true,
+      "createdAt": 1766007039716,
+      "createdBy": "fp9PEEvhAzYR7UgGqtkFXyzY"
+    }
+  },
+  "features": {
+    "webAnalytics": false
+  }
+}
