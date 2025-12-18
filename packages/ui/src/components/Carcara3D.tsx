@@ -1,8 +1,8 @@
 "use client";
 
-import { useRef, Suspense, useEffect } from "react";
+import { useRef, Suspense, useEffect, useState } from "react";
 import { Canvas, useFrame } from "@react-three/fiber";
-import { useGLTF, useFBX, OrbitControls } from "@react-three/drei";
+import { OrbitControls } from "@react-three/drei";
 import type { Group } from "three";
 
 interface CarcaraModelProps {
@@ -20,15 +20,39 @@ function CarcaraModel({ scale = 2.5, onAnimationStart, onAnimationComplete, auto
   const isAnimating = useRef(false);
   const flightOffset = useRef(0);
 
-  // Auto-detect format based on file extension
-  const isFBX = modelPath.toLowerCase().endsWith('.fbx');
-  
-  // Load model based on format
-  const glbModel = !isFBX ? useGLTF(modelPath) : { scene: null };
-  const fbxModel = isFBX ? useFBX(modelPath) : null;
-  
-  // Use the appropriate scene
-  const scene = isFBX ? fbxModel : glbModel.scene;
+  const [sceneObj, setSceneObj] = useState<Group | null>(null);
+
+  useEffect(() => {
+    let mounted = true;
+    const ext = (modelPath || '').split('.').pop()?.toLowerCase();
+    if (ext === 'fbx') {
+      // dynamic import to avoid requiring example loader typings at build-time
+      import('three/examples/jsm/loaders/FBXLoader').then((mod: any) => {
+        const FBXLoader: any = mod.FBXLoader;
+        const loader = new FBXLoader();
+        loader.load(
+          modelPath,
+          (obj: any) => { if (mounted) setSceneObj(obj as Group); },
+          undefined,
+          (err: any) => { console.warn('FBX load error', modelPath, err); }
+        );
+      }).catch((err) => console.warn('FBX loader import failed', err));
+    } else {
+      import('three/examples/jsm/loaders/GLTFLoader').then((mod: any) => {
+        const GLTFLoader: any = mod.GLTFLoader;
+        const loader = new GLTFLoader();
+        loader.load(
+          modelPath,
+          (gltf: any) => { if (mounted) setSceneObj(gltf.scene as Group); },
+          undefined,
+          (err: any) => { console.warn('GLTF load error', modelPath, err); }
+        );
+      }).catch((err) => console.warn('GLTF loader import failed', err));
+    }
+    return () => { mounted = false; };
+  }, [modelPath]);
+
+  const scene = sceneObj;
 
   useEffect(() => {
     if (modelRef.current) {

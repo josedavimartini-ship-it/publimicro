@@ -1,4 +1,4 @@
-import { createServerClient, type CookieOptions } from '@supabase/ssr'
+﻿import { createServerClient, type CookieOptions } from '@supabase/ssr'
 import { cookies } from 'next/headers'
 
 // Minimal CookieStore interface used by the Supabase SSR helper
@@ -22,7 +22,7 @@ interface CookieStore {
  */
 export function createServerSupabaseClient() {
   // cookies() typing may differ across Next versions; narrow to a small interface instead of `any`
-  const cookieStore = cookies() as unknown as CookieStore;
+  const _cookieStore = cookies() as unknown as CookieStore;
   
   return createServerClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
@@ -30,20 +30,31 @@ export function createServerSupabaseClient() {
     {
       cookies: {
         get(name: string) {
-          return cookieStore.get(name)?.value
+          try {
+            const v = (_cookieStore as any).get?.(name);
+            // If the underlying API is async, we can't await here; return undefined
+            if (v && typeof v.then === 'function') return undefined;
+            return v?.value;
+          } catch {
+            return undefined;
+          }
         },
         set(name: string, value: string, options: CookieOptions) {
           try {
-            cookieStore.set({ name, value, ...options })
+            const payload: any = { name, value, ...options };
+            if (payload.expires instanceof Date) payload.expires = payload.expires.getTime();
+            (_cookieStore as any).set?.(payload);
           } catch {
-            // Can happen in Server Components
+            // ignore
           }
         },
         remove(name: string, options: CookieOptions) {
           try {
-            cookieStore.set({ name, value: '', ...options })
+            const payload: any = { name, value: '', ...options };
+            if (payload.expires instanceof Date) payload.expires = payload.expires.getTime();
+            (_cookieStore as any).set?.(payload);
           } catch {
-            // Can happen in Server Components
+            // ignore
           }
         },
       },
@@ -93,6 +104,7 @@ export function createServiceSupabaseClient() {
     }
   )
 }
+
 
 
 
