@@ -104,8 +104,9 @@ export default function ProposalModal({
         setInstallments(1);
         setMessage('');
       }, 3000);
-    } catch (err: any) {
-      setError(err.message);
+    } catch (err) {
+      const message = err && typeof err === 'object' && 'message' in err ? (err as { message?: string }).message : String(err);
+      setError(message);
     } finally {
       setLoading(false);
     }
@@ -218,7 +219,7 @@ export default function ProposalModal({
               </p>
             </div>
           ) : (
-            <form onSubmit={handleSubmit} className="space-y-5">
+            <form onSubmit={(e) => void handleSubmit(e)} className="space-y-5">
               <div className="bg-yellow-900/20 border border-yellow-500/50 rounded-lg p-4">
                 <h4 className="text-sm font-bold text-yellow-400 mb-2">⚠️ {t('sitioscarcara.important') || 'Importante:'}</h4>
                 <ul className="text-xs text-yellow-300 space-y-1">

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, Suspense } from 'react';
+import { useState, useEffect, Suspense, useCallback } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { createBrowserSupabaseClient } from '@/lib/supabaseBrowser';
 import { Mail, Lock, User, Phone, ArrowRight, Loader2 } from 'lucide-react';
@@ -26,11 +26,7 @@ function EntrarContent() {
 
   const redirectTo = searchParams.get('redirect') || '/';
 
-  useEffect(() => {
-    void checkAuth();
-  }, []);
-
-  const checkAuth = async () => {
+  const checkAuth = useCallback(async () => {
     try {
       const { data: { user } } = await supabase.auth.getUser();
       if (user) {
@@ -41,7 +37,11 @@ function EntrarContent() {
     } finally {
       setCheckingAuth(false);
     }
-  };
+  }, [supabase, router, redirectTo]);
+
+  useEffect(() => {
+    void checkAuth();
+  }, [checkAuth]);
 
   const handleSignIn = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -315,18 +315,6 @@ export default function EntrarPage() {
     </Suspense>
   );
 }
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 

@@ -4,7 +4,25 @@ import CANONICAL_PROPERS from '@/lib/AcheMeRuralPropers.json';
 import { fetchCanonicalSitios, mapCanonicalPropersToSitios } from '@/lib/carcaraHelpers';
 import { PropertyCard } from '@publimicro/ui';
 
-type Sitio = any;
+interface Sitio {
+  id: string;
+  openingOffer?: number;
+  lance_inicial?: number;
+  preco?: number;
+  estimatedMarketValue?: number;
+  zona?: string;
+  localizacao?: string;
+  location?: string;
+  tagline?: string;
+  nome?: string;
+  title?: string;
+  current_bid?: number;
+  destaque?: boolean;
+  fotos?: string[];
+  tamanho?: number;
+  area_total?: number;
+  total_area?: number;
+}
 
 export default function CarcaraHighlights({ limit = 6, hideTestListings = true }: { limit?: number; hideTestListings?: boolean }) {
   const [sitios, setSitios] = useState<Sitio[]>([]);
@@ -52,7 +70,7 @@ export default function CarcaraHighlights({ limit = 6, hideTestListings = true }
             <div key={i} className="h-80 bg-gradient-to-br from-[#1a1a1a] to-[#0d0d0d] rounded-xl animate-pulse" />
           ))
         ) : (
-          sitios.map((s: any) => {
+          sitios.map((s: Sitio) => {
             const opening = s.openingOffer || s.lance_inicial || s.preco || null;
             const estimated = s.estimatedMarketValue || null;
             const locationText = `${s.zona || 'Zona Rural'} - ${s.localizacao || s.location || 'Corumbaíba/GO'}`;

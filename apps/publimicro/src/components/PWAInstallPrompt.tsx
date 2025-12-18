@@ -3,8 +3,13 @@
 import { useEffect, useState } from "react";
 import { Download, X } from "lucide-react";
 
+interface BeforeInstallPromptEvent extends Event {
+  prompt: () => Promise<void> | void;
+  userChoice: Promise<{ outcome: 'accepted' | 'dismissed' }>;
+}
+
 export default function PWAInstallPrompt() {
-  const [deferredPrompt, setDeferredPrompt] = useState<any>(null);
+  const [deferredPrompt, setDeferredPrompt] = useState<BeforeInstallPromptEvent | null>(null);
   const [showPrompt, setShowPrompt] = useState(false);
 
   useEffect(() => {
@@ -25,7 +30,7 @@ export default function PWAInstallPrompt() {
 
     const handler = (e: Event) => {
       e.preventDefault();
-      setDeferredPrompt(e);
+      setDeferredPrompt(e as BeforeInstallPromptEvent);
       
       // Show prompt after 10 seconds
       setTimeout(() => {
@@ -43,10 +48,13 @@ export default function PWAInstallPrompt() {
   const handleInstall = async () => {
     if (!deferredPrompt) return;
 
-    deferredPrompt.prompt();
-    const { outcome: _outcome } = await deferredPrompt.userChoice;
-    
-    // console.log(`PWA install ${outcome}`);
+    try {
+      await deferredPrompt.prompt();
+      const { outcome: _outcome } = await deferredPrompt.userChoice;
+    } catch {
+      // ignore
+    }
+
     setDeferredPrompt(null);
     setShowPrompt(false);
   };
@@ -76,13 +84,13 @@ export default function PWAInstallPrompt() {
 
             <div className="flex gap-3">
               <button
-                onClick={handleInstall}
+                onClick={() => void handleInstall()}
                 className="flex-1 px-4 py-2 bg-gradient-to-r from-[#6B7F5C] to-[#2C5F6F] text-[#D4C4A8] font-bold rounded-xl hover:scale-105 transition-transform shadow-lg"
               >
                 Instalar
               </button>
               <button
-                onClick={handleDismiss}
+                onClick={() => void handleDismiss()}
                 className="px-4 py-2 text-[#B8A890] hover:text-[#C9A87C] transition-colors"
               >
                 Agora não

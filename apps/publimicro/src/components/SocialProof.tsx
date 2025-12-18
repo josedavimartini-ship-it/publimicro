@@ -39,7 +39,7 @@ export function ActivityFeed() {
     id: string;
     text: string;
     time: string;
-    icon: any;
+    icon: React.ComponentType<{ className?: string }>;
   }>>([]);
 
   useEffect(() => {
@@ -136,7 +136,7 @@ export function Testimonials() {
     }, 6000);
 
     return () => clearInterval(interval);
-  }, []);
+  }, [testimonials.length]);
 
   const testimonial = testimonials[currentIndex];
 

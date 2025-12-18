@@ -49,7 +49,7 @@ interface PropertyMapSearchProps {
 export default function PropertyMapSearch({
   properties,
   onFilterByBounds,
-  showListView = true,
+  showListView: _showListView = true,
 }: PropertyMapSearchProps) {
   const [viewMode, setViewMode] = useState<'map' | 'list' | 'split'>('split');
   const [selectedProperty, setSelectedProperty] = useState<Property | null>(null);

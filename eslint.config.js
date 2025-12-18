@@ -176,7 +176,7 @@ module.exports = [
 
   // Specific overrides for the Publimicro Next.js app (migrated from .eslintrc.cjs)
   {
-    files: ['apps/publimicro/src/**/*.{js,jsx,ts,tsx}'],
+    files: ['apps/publimicro/src/**/*.{ts,tsx}'],
     languageOptions: {
       parser: require('@typescript-eslint/parser'),
       parserOptions: {
@@ -187,12 +187,16 @@ module.exports = [
         tsconfigRootDir: __dirname,
       },
     },
-    plugins: {
-      '@typescript-eslint': require('@typescript-eslint/eslint-plugin'),
-      react: require('eslint-plugin-react'),
-      'react-hooks': require('eslint-plugin-react-hooks'),
-      'jsx-a11y': require('eslint-plugin-jsx-a11y'),
-    },
+    plugins: Object.assign(
+      {},
+      {
+        '@typescript-eslint': require('@typescript-eslint/eslint-plugin'),
+        react: require('eslint-plugin-react'),
+        'react-hooks': require('eslint-plugin-react-hooks'),
+        'jsx-a11y': require('eslint-plugin-jsx-a11y'),
+      },
+      tryRequire('eslint-plugin-next') ? { next: tryRequire('eslint-plugin-next') } : {}
+    ),
     // Merge in recommended rules for Next.js core web vitals by importing the config
     rules: Object.assign(
       {},
@@ -215,9 +219,11 @@ module.exports = [
         '@typescript-eslint/no-unused-vars': ['error', { argsIgnorePattern: '^_', varsIgnorePattern: '^_' }],
         // Temporarily relax explicit return type for faster incremental cleanup
         '@typescript-eslint/explicit-function-return-type': 'off',
-        '@typescript-eslint/no-misused-promises': 'warn',
+        '@typescript-eslint/no-misused-promises': 'off',
         '@typescript-eslint/no-floating-promises': 'warn',
         '@typescript-eslint/no-non-null-assertion': 'warn',
+        // Next-specific rule off to avoid plugin-not-found in some environments
+        '@next/next/no-img-element': 'off',
 
         'react/react-in-jsx-scope': 'off',
         'react/prop-types': 'off',

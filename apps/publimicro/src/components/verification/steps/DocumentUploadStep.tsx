@@ -10,7 +10,7 @@ interface DocumentUploadStepProps {
     document_back?: File;
     selfie?: File;
   }>;
-  onSubmit: (data: any) => void;
+  onSubmit: (data: { document_type: 'cpf' | 'rg' | 'cnh' | 'passport'; document_number: string; document_front?: File | null; document_back?: File | null; selfie?: File | null }) => void;
   onBack: () => void;
   loading: boolean;
 }
@@ -146,7 +146,7 @@ export default function DocumentUploadStep({
         Envie fotos nítidas do seu documento oficial com foto.
       </p>
 
-      <form onSubmit={handleSubmit} className="space-y-6">
+      <form onSubmit={(e) => void handleSubmit(e)} className="space-y-6">
         {/* Document Type */}
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-2">

@@ -1,6 +1,6 @@
 "use client";
 
-import { createContext, useContext, useEffect, useState } from "react";
+import { createContext, useContext, useEffect, useState, useCallback } from "react";
 import { createBrowserSupabaseClient } from "@/lib/supabaseBrowser";
 import { User } from "@supabase/supabase-js";
 import { OnboardingModal } from "./OnboardingModal";
@@ -67,7 +67,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   const supabase = createBrowserSupabaseClient();
 
-  const loadProfile = async (userId: string) => {
+  const loadProfile = useCallback(async (userId: string) => {
     try {
       const { data, error } = await supabase
         .from("user_profiles")
@@ -90,11 +90,10 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       console.error("Error loading profile:", err);
       return null;
     }
-  };
-
-  const refreshProfile = async () => {
+  }, [supabase]);
+  const refreshProfile = useCallback(async () => {
     if (user) {
-      const profileData = await loadProfile(user.id);
+      const profileData = await loadProfile(user.id as string);
       setProfile(profileData);
       
       // Show onboarding if profile not completed
@@ -102,7 +101,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         setShowOnboarding(true);
       }
     }
-  };
+  }, [user, loadProfile]);
 
   useEffect(() => {
     // Get initial session
@@ -146,7 +145,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     });
 
     return () => subscription.unsubscribe();
-  }, []);
+  }, [loadProfile, supabase]);
 
   const handleOnboardingComplete = async () => {
     setShowOnboarding(false);

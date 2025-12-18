@@ -177,8 +177,29 @@ export async function fetchCanonicalSitios(opts: FetchOptions = {}) {
     }
 
     // Transform properties to expected sitio format with photos
+    interface PropertyRow {
+      id: string;
+      slug: string;
+      title?: string;
+      description?: string;
+      city?: string;
+      state?: string;
+      price?: number;
+      expected_value?: number;
+      total_area?: number;
+      video_url?: string;
+      featured?: boolean;
+      latitude?: number;
+      longitude?: number;
+      accepts_proposals?: boolean;
+      near_water?: boolean;
+      has_electricity?: boolean;
+      kml_url?: string;
+      current_highest_bid?: number;
+    }
+
     const sitiosWithPhotos = await Promise.all(
-      data.map(async (property: any) => {
+      data.map(async (property: PropertyRow) => {
         // Get photos from storage
         const photos = await fetchRanchPhotos(property.slug);
         
@@ -232,7 +253,7 @@ export async function fetchCanonicalSitios(opts: FetchOptions = {}) {
  * Sitio shape the UI expects. Accepts an array of canonical records so the
  * caller controls the source (keeps helper pure and testable).
  */
-export function mapCanonicalPropersToSitios(canonical: Array<any>) {
+export function mapCanonicalPropersToSitios(canonical: Array<Record<string, unknown>>) {
   if (!Array.isArray(canonical)) return [];
   return canonical.map((p) => ({
     id: p.slug,

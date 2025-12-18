@@ -1,6 +1,6 @@
 ﻿"use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { supabase } from "@/lib/supabaseClient";
 import Link from "next/link";
 import Image from "next/image";
@@ -32,27 +32,7 @@ export default function LancesPage() {
   const [filter, setFilter] = useState<"all" | "pending" | "accepted" | "rejected">("all");
   const [_userId, setUserId] = useState<string | null>(null);
 
-  useEffect(() => {
-    void loadUserAndBids();
-  }, [filter]);
-
-  const loadUserAndBids = async () => {
-    try {
-      const { data: { user } } = await supabase.auth.getUser();
-      
-      if (!user) {
-        window.location.href = "/entrar";
-        return;
-      }
-
-      setUserId(user.id);
-      await loadBids(user.id);
-    } catch (error) {
-      console.error("Error loading user:", error);
-    }
-  };
-
-  const loadBids = async (userId: string) => {
+  const loadBids = useCallback(async (userId: string) => {
     setLoading(true);
     try {
       let query = supabase
@@ -109,7 +89,27 @@ export default function LancesPage() {
     } finally {
       setLoading(false);
     }
-  };
+  }, [filter]);
+
+  const loadUserAndBids = useCallback(async () => {
+    try {
+      const { data: { user } } = await supabase.auth.getUser();
+      
+      if (!user) {
+        window.location.href = "/entrar";
+        return;
+      }
+
+      setUserId(user.id);
+      await loadBids(user.id);
+    } catch (error) {
+      console.error("Error loading user:", error);
+    }
+  }, [loadBids]);
+
+  useEffect(() => {
+    void loadUserAndBids();
+  }, [filter, loadUserAndBids]);
 
   const getStatusIcon = (status: string) => {
     switch (status) {

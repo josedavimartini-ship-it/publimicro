@@ -1,10 +1,11 @@
 ﻿"use client";
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
 import { createBrowserSupabaseClient } from '@/lib/supabaseBrowser';
 import Link from 'next/link';
 import { Home, Heart, TrendingUp, Clock, CheckCircle, XCircle, Calendar } from 'lucide-react';
+import type { UserProfile } from '@/components/AuthProvider';
 
 // Minimal local domain types to avoid wide `any` usage in the account page
 type CurrentUser = { id: string; email?: string | null } | null;
@@ -42,7 +43,7 @@ export default function ContaPage() {
 
   const [loading, setLoading] = useState(true);
   const [_user, setUser] = useState<CurrentUser>(null);
-  const [_profile, setProfile] = useState<Record<string, any> | null>(null);
+  const [_profile, setProfile] = useState<UserProfile | null>(null);
   const [activeTab, setActiveTab] = useState("overview");
 
   // Data
@@ -51,11 +52,7 @@ export default function ContaPage() {
   const [visits, setVisits] = useState<Visit[]>([]);
   const [favorites, setFavorites] = useState<Favorite[]>([]);
 
-  useEffect(() => {
-    void checkUser();
-  }, []);
-
-  const checkUser = async () => {
+  const checkUser = useCallback(async () => {
     try {
       const { data } = await supabase.auth.getUser();
       const currentUser = data?.user ?? null;
@@ -98,7 +95,11 @@ export default function ContaPage() {
       console.error("Error checking user", err);
       router.push("/entrar?redirect=/conta");
     }
-  };
+  }, [supabase, router]);
+
+  useEffect(() => {
+    void checkUser();
+  }, [checkUser]);
 
   return (
     <main className="min-h-screen bg-[#0a0a0a] py-12">

@@ -228,7 +228,17 @@ export const FREE_LISTING_CONFIG: FreeListingConfig = {
 };
 
 // Verification status helper functions
-export function getVerificationLevel(profile: any): VerificationLevel {
+interface UserProfile {
+  gov_br_verified?: boolean;
+  fully_verified?: boolean;
+  document_verified?: boolean;
+  documents_pending?: boolean;
+  phone_verified?: boolean;
+  email_verified?: boolean;
+  free_listing_used?: boolean;
+}
+
+export function getVerificationLevel(profile?: UserProfile): VerificationLevel {
   if (!profile) return 'unverified';
   
   if (profile.gov_br_verified) return 'gov_br_verified';
@@ -242,7 +252,7 @@ export function getVerificationLevel(profile: any): VerificationLevel {
 }
 
 export function canPerformAction(
-  profile: any, 
+  profile: UserProfile | undefined, 
   action: string
 ): { allowed: boolean; reason?: string; required_level?: VerificationLevel } {
   const currentLevel = getVerificationLevel(profile);
@@ -286,11 +296,11 @@ export function canPerformAction(
   };
 }
 
-export function hasUsedFreeListing(profile: any): boolean {
+export function hasUsedFreeListing(profile?: UserProfile): boolean {
   return profile?.free_listing_used === true;
 }
 
-export function canPostFreeListing(profile: any): { 
+export function canPostFreeListing(profile?: UserProfile): { 
   allowed: boolean; 
   reason?: string 
 } {

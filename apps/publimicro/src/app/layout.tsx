@@ -1,5 +1,4 @@
-﻿import { FloatingWhatsApp } from "@publimicro/ui";
-import FloatingWhatsAppWrapper from "@/components/FloatingWhatsAppWrapper";
+﻿import FloatingWhatsAppWrapper from "@/components/FloatingWhatsAppWrapper";
 // Navbar removed from top-level layout to avoid unused import
 import UserQuickPanel from "@/components/UserQuickPanel";
 import BackToTop from "@/components/BackToTop";

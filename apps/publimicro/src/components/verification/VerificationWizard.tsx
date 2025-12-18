@@ -89,8 +89,9 @@ export default function VerificationWizard() {
 
       setVerificationData({ ...verificationData, ...data });
       setCurrentStep('documents');
-    } catch (error: any) {
-      alert(error.message || 'Erro ao salvar informações pessoais');
+    } catch (err: unknown) {
+      const message = err instanceof Error ? err.message : String(err);
+      alert(message || 'Erro ao salvar informações pessoais');
     } finally {
       setLoading(false);
     }
@@ -124,8 +125,9 @@ export default function VerificationWizard() {
       await runAutomatedChecks();
       
       setCurrentStep('processing');
-    } catch (error: any) {
-      alert(error.message || 'Erro ao fazer upload dos documentos');
+    } catch (err: unknown) {
+      const message = err instanceof Error ? err.message : String(err);
+      alert(message || 'Erro ao fazer upload dos documentos');
       setLoading(false);
     }
   };

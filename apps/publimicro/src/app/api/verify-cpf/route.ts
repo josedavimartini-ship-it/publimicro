@@ -84,10 +84,11 @@ export async function POST(req: Request) {
       message: 'CPF validated successfully'
     });
     
-  } catch (error: any) {
-    console.error('CPF validation error:', error);
+  } catch (err: unknown) {
+    console.error('CPF validation error:', err);
+    const message = err instanceof Error ? err.message : String(err);
     return NextResponse.json({ 
-      error: error.message || 'CPF validation failed' 
+      error: message || 'CPF validation failed' 
     }, { status: 500 });
   }
 }

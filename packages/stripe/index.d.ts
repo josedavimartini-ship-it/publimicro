@@ -1,2 +1,2 @@
 export const apiVersion: string;
-export function createStripe(secretKey: string): any;
+export function createStripe(secretKey: string): unknown;

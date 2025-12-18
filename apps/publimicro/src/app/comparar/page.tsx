@@ -241,7 +241,7 @@ export default function ComparePage() {
                   >
                     <td className="p-4 text-[#8B9B6E] font-semibold border-b border-[#2a2a1a] sticky left-0 bg-inherit">
                       <div className="flex items-center gap-2">
-                        {Icon ? React.createElement(Icon as any, { className: "w-4 h-4" }) : null}
+                        {Icon ? React.createElement(Icon as React.ComponentType<{ className?: string }>, { className: "w-4 h-4" }) : null}
                         {row.label}
                       </div>
                     </td>

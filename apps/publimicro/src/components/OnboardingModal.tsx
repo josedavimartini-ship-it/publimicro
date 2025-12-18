@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { createBrowserSupabaseClient } from "@/lib/supabaseBrowser";
 import { Check, AlertCircle } from "lucide-react";
 
@@ -77,13 +77,7 @@ export function OnboardingModal({ isOpen, onComplete, userId }: OnboardingModalP
   const supabase = createBrowserSupabaseClient();
 
   // Load existing profile data if any
-  useEffect(() => {
-    if (isOpen && userId) {
-      void loadProfileData();
-    }
-  }, [isOpen, userId]);
-
-  const loadProfileData = async () => {
+  const loadProfileData = useCallback(async () => {
     try {
       const { data, error } = await supabase
         .from("user_profiles")
@@ -98,19 +92,25 @@ export function OnboardingModal({ isOpen, onComplete, userId }: OnboardingModalP
           phone: data.phone || "",
           birth_date: data.birth_date || "",
           cep: data.cep || "",
-          street: data.street || "",
+          street: data.logradouro || data.street || "",
           number: data.number || "",
           complement: data.complement || "",
-          neighborhood: data.neighborhood || "",
-          city: data.city || "",
-          state: data.state || "",
+          neighborhood: data.bairro || data.neighborhood || "",
+          city: data.localidade || data.city || "",
+          state: data.uf || data.state || "",
           terms_accepted: data.terms_accepted || false,
         });
       }
     } catch (err) {
       console.error("Error loading profile:", err);
     }
-  };
+  }, [supabase, userId]);
+
+  useEffect(() => {
+    if (isOpen && userId) {
+      void loadProfileData();
+    }
+  }, [isOpen, userId, loadProfileData]);
 
   // Format CPF: 000.000.000-00
   const formatCPF = (value: string) => {
@@ -336,8 +336,9 @@ export function OnboardingModal({ isOpen, onComplete, userId }: OnboardingModalP
 
       // Success - close modal and refresh
       onComplete();
-    } catch (err: any) {
-      setError(err.message || "Erro ao salvar perfil");
+    } catch (err: unknown) {
+      const message = typeof err === 'string' ? err : err instanceof Error ? err.message : 'Erro ao salvar perfil';
+      setError(message);
     } finally {
       setLoading(false);
     }
@@ -373,7 +374,7 @@ export function OnboardingModal({ isOpen, onComplete, userId }: OnboardingModalP
             <div className={`flex-1 h-2 rounded-full ${step >= 3 ? 'bg-[#A8C97F]' : 'bg-[#2a2a2a]'}`} />
           </div>
 
-          <form onSubmit={handleSubmit}>
+          <form onSubmit={(e) => void handleSubmit(e)}>
             {/* Step 1: Personal Information */}
             {step === 1 && (
               <div className="space-y-4">

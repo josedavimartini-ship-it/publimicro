@@ -1,6 +1,6 @@
 ﻿"use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import SearchTab, { SearchFilters } from "@/components/SearchTab";
 import { supabase } from "@/lib/supabaseClient";
 import Link from "next/link";
@@ -41,11 +41,7 @@ export default function ImoveisPage() {
   });
   const [totalResults, setTotalResults] = useState(0);
 
-  useEffect(() => {
-    void loadProperties();
-  }, [filters]);
-
-  const loadProperties = async () => {
+  const loadProperties = useCallback(async () => {
     setLoading(true);
 
     try {
@@ -141,7 +137,11 @@ export default function ImoveisPage() {
     } finally {
       setLoading(false);
     }
-  };
+  }, [supabase, filters]);
+
+  useEffect(() => {
+    void loadProperties();
+  }, [loadProperties]);
 
   return (
     <div className="min-h-screen bg-[#0a0a0a]">

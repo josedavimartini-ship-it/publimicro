@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-export default function ProfileTab({ user, profile }: { user: any; profile: any }) {
+export default function ProfileTab({ user, profile }: { user?: { email?: string }; profile?: { full_name?: string; phone?: string } }) {
   const [editing, setEditing] = useState(false);
   // ...fields and handlers for editing profile...
   return (

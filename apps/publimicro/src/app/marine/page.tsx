@@ -5,7 +5,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { 
   Ship, Anchor, Sailboat, Waves, Filter, X, Search, MapPin, 
-  Heart, Eye, ChevronDown, Plus, Ruler, Calendar, Fuel, Users
+  Heart, Eye, ChevronDown, Plus, Ruler, Calendar
 } from "lucide-react";
 import { marineBrands } from "@/data/marine";
 

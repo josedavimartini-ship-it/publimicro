@@ -88,8 +88,9 @@ export async function POST(req: Request) {
     }
 
     return NextResponse.json({ success: true, visit: data });
-  } catch (error: any) {
-    return NextResponse.json({ error: error.message }, { status: 500 });
+  } catch (error) {
+    const message = error && typeof error === 'object' && 'message' in error ? (error as { message?: string }).message : String(error);
+    return NextResponse.json({ error: message }, { status: 500 });
   }
 }
 

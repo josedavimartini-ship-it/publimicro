@@ -9,7 +9,7 @@ const TABS = [
   { key: "resumo", label: "Resumo" },
 ];
 
-export default function PostTab({ user: _user }: { user: any }) {
+export default function PostTab({ user: _user }: { user?: unknown }) {
   const [tab, setTab] = useState("detalhes");
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");

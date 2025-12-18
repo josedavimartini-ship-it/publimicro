@@ -1,8 +1,7 @@
 "use client";
 
-import { useEffect, useRef } from "react";
-
-// Use global `window.google` declared in repo-level d.ts
+import { useEffect, useState } from "react";
+import LeafletMapKML from "@/components/LeafletMapKML";
 
 type MapKmlViewerProps = {
   kmlUrl: string; // e.g. "/maps/carcara.kml"
@@ -15,62 +14,29 @@ export default function MapKmlViewer({
   center = { lat: -18.2795, lng: -48.8325 },
   zoom = 15,
 }: MapKmlViewerProps) {
-  const ref = useRef<HTMLDivElement | null>(null);
+  const [kmlData, setKmlData] = useState<string | null>(null);
 
   useEffect(() => {
-    let map: any = null;
-    let kmlLayer: any = null;
-
-    const init = async () => {
-      const apiKey = process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY;
-      if (!apiKey) {
-        console.warn("Missing NEXT_PUBLIC_GOOGLE_MAPS_API_KEY");
+    let cancelled = false;
+    const fetchKml = async () => {
+      try {
+        const res = await fetch(kmlUrl);
+        if (!res.ok) throw new Error(`Failed to fetch KML: ${res.status}`);
+        const text = await res.text();
+        if (!cancelled) setKmlData(text);
+      } catch (err) {
+        console.warn("MapKmlViewer: failed to load KML, ensure the file exists and is accessible", err);
       }
-      // Load Google Maps script (one-time)
-      if (!window.google?.maps) {
-        await new Promise<void>((resolve, reject) => {
-          const script = document.createElement("script");
-          script.src = `https://maps.googleapis.com/maps/api/js?key=${apiKey}&v=weekly`;
-          script.async = true;
-          script.onload = () => resolve();
-          script.onerror = () => reject(new Error("Failed to load Google Maps"));
-          document.head.appendChild(script);
-        });
-      }
-      if (!ref.current) return;
-
-      map = new window.google.maps.Map(ref.current, {
-        center: center as unknown as any,
-        zoom,
-        mapTypeId: "satellite",
-        disableDefaultUI: false,
-        styles: [
-          { elementType: "geometry", stylers: [{ color: "#0b0b0b" }] },
-          { elementType: "labels.text.fill", stylers: [{ color: "#bfa97a" }] },
-          { elementType: "labels.text.stroke", stylers: [{ color: "#0b0b0b" }] },
-        ],
-      });
-
-      kmlLayer = new window.google.maps.KmlLayer({
-        url: `${location.origin}${kmlUrl}`,
-        map: map as any,
-        preserveViewport: false,
-        suppressInfoWindows: false,
-      });
-
-      kmlLayer.addListener("status_changed", () => {
-        const status = kmlLayer?.getStatus();
-        if (status !== "OK") console.warn("KML status:", status);
-      });
     };
 
-    void init();
-    return () => {
-      // Maps API cleans itself when element is removed; just null refs
-      map = null;
-      kmlLayer = null;
-    };
-  }, [kmlUrl, center, zoom]);
+    void fetchKml();
+    return () => { cancelled = true; };
+  }, [kmlUrl]);
 
-  return <div ref={ref} className="w-full h-[420px] rounded-xl border border-[#242424]" />;
+  if (!kmlData) {
+    return <div className="w-full h-[420px] rounded-xl border border-[#242424] flex items-center justify-center text-sm text-[#8B9B6E]">Carregando mapa...</div>;
+  }
+
+  // Delegate to the existing Leaflet-based KML parser and renderer
+  return <LeafletMapKML kmlData={kmlData} center={[center.lat, center.lng]} zoom={zoom} />;
 }

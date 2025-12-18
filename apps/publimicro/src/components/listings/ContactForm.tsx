@@ -33,7 +33,7 @@ export default function ContactForm({ itemTitle }: ContactFormProps): JSX.Elemen
         Contate o anunciante sobre &quot;{itemTitle}&quot;
       </h2>
 
-      <form onSubmit={handleSubmit} className="space-y-4">
+      <form onSubmit={(e) => void handleSubmit(e)} className="space-y-4">
         <input
           type="text"
           placeholder="Seu nome completo"

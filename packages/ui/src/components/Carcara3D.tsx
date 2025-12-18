@@ -2,7 +2,7 @@
 
 import { useRef, Suspense, useEffect, useState } from "react";
 import { Canvas, useFrame } from "@react-three/fiber";
-import { OrbitControls } from "@react-three/drei";
+import { OrbitControls, useGLTF, useFBX } from "@react-three/drei";
 import type { Group } from "three";
 
 interface CarcaraModelProps {
@@ -28,26 +28,44 @@ function CarcaraModel({ scale = 2.5, onAnimationStart, onAnimationComplete, auto
     if (ext === 'fbx') {
       // dynamic import to avoid requiring example loader typings at build-time
       // @ts-ignore - dynamic import of example loader may not have typings in this environment
-      import('three/examples/jsm/loaders/FBXLoader').then((mod: any) => {
-        const FBXLoader: any = mod.FBXLoader;
+      import('three/examples/jsm/loaders/FBXLoader').then((mod) => {
+        const FBXLoader = mod.FBXLoader as unknown as {
+          new (): {
+            load: (
+              url: string,
+              onLoad: (obj: Group) => void,
+              onProgress?: (progress: ProgressEvent) => void,
+              onError?: (err: unknown) => void
+            ) => void;
+          };
+        };
         const loader = new FBXLoader();
         loader.load(
           modelPath,
-          (obj: any) => { if (mounted) setSceneObj(obj as Group); },
+          (obj: Group) => { if (mounted) setSceneObj(obj as Group); },
           undefined,
-          (err: any) => { console.warn('FBX load error', modelPath, err); }
+          (err: unknown) => { console.warn('FBX load error', modelPath, err); }
         );
       }).catch((err) => console.warn('FBX loader import failed', err));
     } else {
       // @ts-ignore - dynamic import of example loader may not have typings in this environment
-      import('three/examples/jsm/loaders/GLTFLoader').then((mod: any) => {
-        const GLTFLoader: any = mod.GLTFLoader;
+      import('three/examples/jsm/loaders/GLTFLoader').then((mod) => {
+        const GLTFLoader = mod.GLTFLoader as unknown as {
+          new (): {
+            load: (
+              url: string,
+              onLoad: (gltf: { scene: Group }) => void,
+              onProgress?: (progress: ProgressEvent) => void,
+              onError?: (err: unknown) => void
+            ) => void;
+          };
+        };
         const loader = new GLTFLoader();
         loader.load(
           modelPath,
-          (gltf: any) => { if (mounted) setSceneObj(gltf.scene as Group); },
+          (gltf: { scene: Group }) => { if (mounted) setSceneObj(gltf.scene as Group); },
           undefined,
-          (err: any) => { console.warn('GLTF load error', modelPath, err); }
+          (err: unknown) => { console.warn('GLTF load error', modelPath, err); }
         );
       }).catch((err) => console.warn('GLTF loader import failed', err));
     }
@@ -124,8 +142,8 @@ export function Carcara3D({ className = "", onSoundTrigger, scale = 2.5, autoRot
         useGLTF.preload?.(modelPath);
       } else if (ext === 'fbx') {
         // Some drei versions don't expose preload for FBX; try if present
-        // @ts-ignore
-        (useFBX as any).preload?.(modelPath);
+        // Try a safe cast for optional preload API
+        (useFBX as unknown as { preload?: (p: string) => void }).preload?.(modelPath);
       }
     } catch (err) {
       // eslint-disable-next-line no-console

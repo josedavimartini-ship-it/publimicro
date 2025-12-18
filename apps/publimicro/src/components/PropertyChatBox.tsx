@@ -92,32 +92,37 @@ export default function PropertyChatBox({
       }
     }
 
-    loadConversation();
+    void loadConversation();
 
     // Subscribe to new messages
-    const channel = supabase
-      .channel(`property_chat_${propertyId}_${user.id}`)
-      .on('postgres_changes', {
-        event: 'INSERT',
-        schema: 'public',
-        table: 'messages',
-        filter: conversationId ? `conversation_id=eq.${conversationId}` : undefined
-      }, (payload) => {
-        const newMsg = payload.new as Message;
-        setMessages(prev => [...prev, newMsg]);
-        
-        // Mark as read if we're the receiver and chat is open
-        if (newMsg.sender_id !== user.id && isExpanded) {
-          supabase
-            .from('messages')
-            .update({ read: true })
-            .eq('id', newMsg.id);
-        }
-      })
-      .subscribe();
+    let channel: ReturnType<typeof supabase.channel> | null = null;
+    void (async () => {
+      channel = await supabase
+        .channel(`property_chat_${propertyId}_${user.id}`)
+        .on('postgres_changes', {
+          event: 'INSERT',
+          schema: 'public',
+          table: 'messages',
+          filter: conversationId ? `conversation_id=eq.${conversationId}` : undefined
+        }, (payload) => {
+          const newMsg = payload.new as Message;
+          setMessages(prev => [...prev, newMsg]);
+          
+          // Mark as read if we're the receiver and chat is open
+          if (newMsg.sender_id !== user.id && isExpanded) {
+            void supabase
+              .from('messages')
+              .update({ read: true })
+              .eq('id', newMsg.id);
+          }
+        })
+        .subscribe();
+    })();
 
     return () => {
-      supabase.removeChannel(channel);
+      if (channel) {
+        void supabase.removeChannel(channel);
+      }
     };
   }, [isExpanded, user, propertyId, sellerId, conversationId]);
 
@@ -136,7 +141,7 @@ export default function PropertyChatBox({
       setUnreadCount(count || 0);
     }
 
-    checkUnread();
+    void checkUnread();
   }, [user, propertyId]);
 
   const handleSendMessage = async (e: React.FormEvent) => {
@@ -188,7 +193,7 @@ export default function PropertyChatBox({
     }
     
     // Check if profile exists and is verified (phone_verified is optional)
-    const isVerified = profile?.verified || (profile as any)?.phone_verified;
+    const isVerified = Boolean(profile?.verified || profile?.phone_verified);
     if (!isVerified) {
       alert('Por favor, verifique sua conta antes de enviar mensagens.');
       router.push('/conta?tab=verificacao');

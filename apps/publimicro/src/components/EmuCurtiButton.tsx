@@ -116,7 +116,7 @@ export default function EmuCurtiButton({
 
   return (
     <motion.button
-      onClick={handleToggleFavorite}
+      onClick={(e) => void handleToggleFavorite(e)}
       disabled={loading}
       className={`flex flex-col items-center justify-center gap-1 transition-all ${className} ${
         loading ? 'opacity-50 cursor-wait' : 'cursor-pointer'

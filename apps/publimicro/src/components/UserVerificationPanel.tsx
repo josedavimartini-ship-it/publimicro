@@ -3,9 +3,9 @@
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { 
-  Shield, CheckCircle, Clock, AlertTriangle, 
+  Shield, CheckCircle, Clock, 
   Camera, FileText, Smartphone, Mail, 
-  ExternalLink, Upload, X, Eye
+  ExternalLink, Upload
 } from 'lucide-react';
 import { 
   VERIFICATION_LEVELS, 
@@ -14,7 +14,17 @@ import {
 } from '@/lib/userVerification';
 
 interface UserVerificationPanelProps {
-  profile: any;
+  profile?: {
+    email_verified?: boolean;
+    phone_verified?: boolean;
+    document_verified?: boolean;
+    documents_pending?: boolean;
+    selfie_verified?: boolean;
+    gov_br_verified?: boolean;
+    profile_completed?: boolean;
+    verified?: boolean;
+    can_place_bids?: boolean;
+  };
   onVerificationComplete?: () => void;
 }
 
@@ -23,8 +33,8 @@ export default function UserVerificationPanel({
   onVerificationComplete 
 }: UserVerificationPanelProps) {
   const [activeStep, setActiveStep] = useState<string | null>(null);
-  const [uploading, setUploading] = useState(false);
-  const [showCamera, setShowCamera] = useState(false);
+  const [_uploading, setUploading] = useState(false);
+  const [_showCamera, setShowCamera] = useState(false);
 
   const currentLevel = getVerificationLevel(profile);
   const levelInfo = VERIFICATION_LEVELS[currentLevel];
@@ -79,11 +89,11 @@ export default function UserVerificationPanel({
     }
   };
 
-  const handlePhoneVerification = () => {
+  const _handlePhoneVerification = () => {
     setActiveStep('phone');
   };
 
-  const handleDocumentUpload = async (docType: string, file: File) => {
+  const _handleDocumentUpload = async (docType: string, file: File) => {
     setUploading(true);
     try {
       const formData = new FormData();
@@ -171,7 +181,7 @@ export default function UserVerificationPanel({
 
       {/* Verification Steps */}
       <div className="space-y-4">
-        {verificationSteps.map((step, index) => {
+        {verificationSteps.map((step) => {
           const Icon = step.icon;
           const isActive = activeStep === step.id;
           
@@ -250,7 +260,7 @@ export default function UserVerificationPanel({
                     <div className="px-4 pb-4 pt-2 border-t border-[#2a2a1a]">
                       {step.id === 'email' && (
                         <button
-                          onClick={handleEmailVerification}
+                          onClick={() => void handleEmailVerification()}
                           className="w-full py-3 bg-gradient-to-r from-[#D4AF37] to-[#B8962A] text-[#0a0a0a] font-bold rounded-xl hover:opacity-90 transition-opacity"
                         >
                           Reenviar Email de Verificação

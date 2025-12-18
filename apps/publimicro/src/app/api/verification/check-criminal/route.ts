@@ -146,11 +146,28 @@ export async function POST(_request: NextRequest) {
       );
     }
 
-    const serasaData = await serasaResponse.json();
+    const serasaData: unknown = await serasaResponse.json();
+
+    // Helper to safely extract nested arrays from unknown data
+    const getArrayAt = (obj: unknown, path: string[]): unknown[] => {
+      let cur: unknown = obj;
+      for (const p of path) {
+        if (typeof cur !== 'object' || cur === null) return [];
+        cur = (cur as Record<string, unknown>)[p];
+      }
+      return Array.isArray(cur) ? (cur as unknown[]) : [];
+    };
 
     // Parse Serasa response and categorize criminal history
     let criminalRecordStatus: string = 'clean';
-    const criminalDetails: any = {
+    const criminalDetails: {
+      has_pending_cases: boolean;
+      has_convictions: boolean;
+      serious_crimes: boolean;
+      convictions: unknown[];
+      pending_cases: unknown[];
+      checked_at: string;
+    } = {
       has_pending_cases: false,
       has_convictions: false,
       serious_crimes: false,
@@ -165,15 +182,16 @@ export async function POST(_request: NextRequest) {
       'tráfico de drogas', 'associação criminosa', 'organização criminosa'
     ];
 
-    if (serasaData.criminal_record?.convictions?.length > 0) {
+    const convictions = getArrayAt(serasaData, ['criminal_record', 'convictions']);
+    if (convictions.length > 0) {
       criminalDetails.has_convictions = true;
-      criminalDetails.convictions = serasaData.criminal_record.convictions;
+      criminalDetails.convictions = convictions;
 
-      const hasSeriousCrimes = serasaData.criminal_record.convictions.some((conviction: any) =>
-        seriousCrimeKeywords.some(keyword => 
-          conviction.crime_type?.toLowerCase().includes(keyword)
-        )
-      );
+      const hasSeriousCrimes = convictions.some((conviction: unknown) => {
+        if (typeof conviction !== 'object' || conviction === null) return false;
+        const crimeType = String((conviction as Record<string, unknown>)['crime_type'] ?? '').toLowerCase();
+        return seriousCrimeKeywords.some(keyword => crimeType.includes(keyword));
+      });
 
       if (hasSeriousCrimes) {
         criminalRecordStatus = 'serious_crimes';
@@ -182,9 +200,10 @@ export async function POST(_request: NextRequest) {
       }
     }
 
-    if (serasaData.pending_cases?.cases?.length > 0) {
+    const pendingCases = getArrayAt(serasaData, ['pending_cases', 'cases']);
+    if (pendingCases.length > 0) {
       criminalDetails.has_pending_cases = true;
-      criminalDetails.pending_cases = serasaData.pending_cases.cases;
+      criminalDetails.pending_cases = pendingCases;
       
       if (criminalRecordStatus === 'clean') {
         criminalRecordStatus = 'pending_cases';
@@ -192,9 +211,15 @@ export async function POST(_request: NextRequest) {
     }
 
     // Parse credit information
-    const creditScore = serasaData.credit_score?.score || null;
+    const creditScore = (() => {
+      if (typeof serasaData !== 'object' || serasaData === null) return null;
+      const cs = (serasaData as Record<string, unknown>)['credit_score'];
+      if (!cs || typeof cs !== 'object') return null;
+      const score = (cs as Record<string, unknown>)['score'];
+      return typeof score === 'number' ? score : null;
+    })();
+
     let creditStatus = 'not_checked';
-    
     if (creditScore !== null) {
       if (creditScore >= 800) creditStatus = 'excellent';
       else if (creditScore >= 600) creditStatus = 'good';
@@ -202,7 +227,13 @@ export async function POST(_request: NextRequest) {
       else creditStatus = 'poor';
     }
 
-    const creditRestrictions = serasaData.credit_restrictions?.restrictions || [];
+    const creditRestrictions = (() => {
+      if (typeof serasaData !== 'object' || serasaData === null) return [] as unknown[];
+      const cr = (serasaData as Record<string, unknown>)['credit_restrictions'];
+      if (!cr || typeof cr !== 'object') return [] as unknown[];
+      const restrictions = (cr as Record<string, unknown>)['restrictions'];
+      return Array.isArray(restrictions) ? restrictions : [];
+    })();
     if (creditRestrictions.length > 0) {
       creditStatus = 'restricted';
     }

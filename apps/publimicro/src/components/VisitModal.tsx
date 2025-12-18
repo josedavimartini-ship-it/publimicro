@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, useCallback } from 'react';
 import { apiPost } from '@/lib/api';
 import { X, Calendar, Video, MapPin, LogIn } from 'lucide-react';
 import FocusLock from 'react-focus-lock';
@@ -39,6 +39,13 @@ export default function VisitModal({ adId, adTitle, open, onClose }: VisitModalP
     }
   }, [open]);
 
+  const handleClose = useCallback(() => {
+    onClose();
+    if (previouslyFocusedElement.current) {
+      previouslyFocusedElement.current.focus();
+    }
+  }, [onClose]);
+
   // Handle Escape key
   useEffect(() => {
     const handleEscape = (e: KeyboardEvent) => {
@@ -54,7 +61,7 @@ export default function VisitModal({ adId, adTitle, open, onClose }: VisitModalP
     return () => {
       document.removeEventListener('keydown', handleEscape);
     };
-  }, [open]);
+  }, [open, handleClose]);
 
   // Detect mobile screen size
   useEffect(() => {
@@ -63,13 +70,6 @@ export default function VisitModal({ adId, adTitle, open, onClose }: VisitModalP
     window.addEventListener('resize', checkMobile);
     return () => window.removeEventListener('resize', checkMobile);
   }, []);
-
-  const handleClose = () => {
-    onClose();
-    if (previouslyFocusedElement.current) {
-      previouslyFocusedElement.current.focus();
-    }
-  };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
     setForm({ ...form, [e.target.name]: e.target.value });
@@ -96,8 +96,9 @@ export default function VisitModal({ adId, adTitle, open, onClose }: VisitModalP
           notes: '',
         });
       }, 2000);
-    } catch (err: any) {
-      setError(err?.message || 'Erro ao agendar visita. Tente novamente mais tarde.');
+    } catch (err) {
+      const message = err && typeof err === 'object' && 'message' in err ? (err as { message?: string }).message : String(err);
+      setError(message || 'Erro ao agendar visita. Tente novamente mais tarde.');
     } finally {
       setLoading(false);
     }
@@ -156,7 +157,7 @@ export default function VisitModal({ adId, adTitle, open, onClose }: VisitModalP
               <p className="text-green-300 text-sm">Entraremos em contato em breve para confirmar.</p>
             </div>
           ) : (
-            <form onSubmit={handleSubmit} className="space-y-4">
+            <form onSubmit={(e) => void handleSubmit(e)} className="space-y-4">
               <div>
                 <label className="block text-sm font-medium text-[#B7791F] mb-2">Nome Completo *</label>
                 <input type="text" name="guest_name" placeholder="Seu nome completo" value={form.guest_name} onChange={handleChange} className="w-full px-4 py-3 bg-[#232323] border border-[#0D7377] rounded-lg text-[#f2e6b1] placeholder-[#676767] focus:outline-none focus:border-[#0D7377]" required />

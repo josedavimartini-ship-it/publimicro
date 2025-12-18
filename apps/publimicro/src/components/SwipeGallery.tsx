@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useRef, useEffect, TouchEvent } from "react";
+import { useState, useRef, useEffect, useCallback, TouchEvent } from "react";
 import Image from "next/image";
 import { ChevronLeft, ChevronRight, X, Maximize2 } from "lucide-react";
 
@@ -87,19 +87,19 @@ export default function SwipeGallery({
     touchEndX.current = 0;
   };
 
-  const goToPrevious = () => {
+  const goToPrevious = useCallback(() => {
     const newIndex = currentIndex === 0 ? images.length - 1 : currentIndex - 1;
     setCurrentIndex(newIndex);
     onImageChange?.(newIndex);
     setAnnouncement(`Image ${newIndex + 1} of ${images.length}`);
-  };
+  }, [currentIndex, images, onImageChange]);
 
-  const goToNext = () => {
+  const goToNext = useCallback(() => {
     const newIndex = currentIndex === images.length - 1 ? 0 : currentIndex + 1;
     setCurrentIndex(newIndex);
     onImageChange?.(newIndex);
     setAnnouncement(`Image ${newIndex + 1} of ${images.length}`);
-  };
+  }, [currentIndex, images, onImageChange]);
 
   const goToIndex = (index: number) => {
     setCurrentIndex(index);
@@ -117,7 +117,7 @@ export default function SwipeGallery({
 
     window.addEventListener("keydown", handleKeyDown);
     return () => window.removeEventListener("keydown", handleKeyDown);
-  }, [currentIndex, isFullscreen]);
+  }, [goToPrevious, goToNext, isFullscreen]);
 
   // Prevent scroll when in fullscreen
   useEffect(() => {

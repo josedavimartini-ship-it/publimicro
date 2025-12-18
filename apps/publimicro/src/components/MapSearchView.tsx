@@ -55,7 +55,7 @@ export default function MapSearchView({
         mapRef.current = null;
       }
     };
-  }, []);
+  }, [center, zoom]);
 
   // Update map center and zoom
   useEffect(() => {
@@ -125,7 +125,7 @@ export default function MapSearchView({
       const marker = L.marker([property.latitude, property.longitude], {
         icon: customIcon,
         zIndexOffset: isSelected ? 1000 : 0,
-      }).addTo(mapRef.current!);
+      }).addTo(mapRef.current as L.Map);
 
       // Popup content
       const popupContent = `
@@ -156,7 +156,7 @@ export default function MapSearchView({
 
       markersRef.current.push(marker);
     });
-  }, [properties, selectedPropertyId]);
+  }, [properties, selectedPropertyId, onPropertyClick]);
 
   return (
     <>

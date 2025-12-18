@@ -60,9 +60,10 @@ export async function GET(_req: NextRequest) {
 
     if (error) throw error;
     return NextResponse.json({ bidding_open: data?.value ?? false });
-  } catch (err: any) {
+  } catch (err: unknown) {
     console.error('proxy: error reading bidding:', err);
-    return NextResponse.json({ error: err.message || String(err) }, { status: 500 });
+    const message = err instanceof Error ? err.message : String(err);
+    return NextResponse.json({ error: message }, { status: 500 });
   }
 }
 
@@ -111,9 +112,10 @@ export async function POST(req: NextRequest) {
     }
 
     return NextResponse.json({ ok: true, bidding_open: incoming });
-  } catch (err: any) {
+  } catch (err: unknown) {
     console.error('proxy: error updating bidding:', err);
-    return NextResponse.json({ error: err.message || String(err) }, { status: 500 });
+    const message = err instanceof Error ? err.message : String(err);
+    return NextResponse.json({ error: message }, { status: 500 });
   }
 }
 

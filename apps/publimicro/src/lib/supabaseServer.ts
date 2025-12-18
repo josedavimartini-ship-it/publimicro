@@ -31,9 +31,10 @@ export function createServerSupabaseClient() {
       cookies: {
         get(name: string) {
           try {
-            const v = (_cookieStore as any).get?.(name);
+            const getter = (_cookieStore as unknown as { get?: (name: string) => { value: string } | undefined }).get;
+            const v = getter?.(name);
             // If the underlying API is async, we can't await here; return undefined
-            if (v && typeof v.then === 'function') return undefined;
+            if (v && typeof (v as unknown as { then?: Function }).then === 'function') return undefined;
             return v?.value;
           } catch {
             return undefined;
@@ -41,22 +42,25 @@ export function createServerSupabaseClient() {
         },
         set(name: string, value: string, options: CookieOptions) {
           try {
-            const payload: any = { name, value, ...options };
-            if (payload.expires instanceof Date) payload.expires = payload.expires.getTime();
-            (_cookieStore as any).set?.(payload);
+            const payload: Record<string, unknown> = { name, value, ...options } as Record<string, unknown>;
+            if (payload.expires instanceof Date) payload.expires = (payload.expires as Date).getTime();
+            const setter = (_cookieStore as unknown as { set?: (c: { name: string; value: string } & Record<string, unknown>) => void }).set;
+            setter?.(payload as { name: string; value: string } & Record<string, unknown>);
           } catch {
             // ignore
           }
         },
         remove(name: string, options: CookieOptions) {
           try {
-            const payload: any = { name, value: '', ...options };
-            if (payload.expires instanceof Date) payload.expires = payload.expires.getTime();
-            (_cookieStore as any).set?.(payload);
+            const payload: Record<string, unknown> = { name, value: '', ...options } as Record<string, unknown>;
+            if (payload.expires instanceof Date) payload.expires = (payload.expires as Date).getTime();
+            const setter = (_cookieStore as unknown as { set?: (c: { name: string; value: string } & Record<string, unknown>) => void }).set;
+            setter?.(payload as { name: string; value: string } & Record<string, unknown>);
           } catch {
             // ignore
           }
         },
+
       },
     }
   )

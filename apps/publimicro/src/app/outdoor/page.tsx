@@ -20,8 +20,8 @@ const outdoorCategories = [
   { id: "guias", label: "Guias & Tours", icon: Compass },
 ];
 
-// Equipment types
-const equipmentTypes = [
+// Equipment types (currently unused)
+const _equipmentTypes = [
   "Barracas", "Sacos de dormir", "Mochilas", "Lanternas", "Fogareiros",
   "Cordas", "Capacetes", "Mosquetões", "Roupas técnicas"
 ];

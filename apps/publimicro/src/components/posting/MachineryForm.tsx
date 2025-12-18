@@ -62,7 +62,7 @@ export default function MachineryForm({ onDataChange }: MachineryFormProps) {
   const [modelSearch, setModelSearch] = useState('');
   const [showBrandDropdown, setShowBrandDropdown] = useState(false);
   const [showModelDropdown, setShowModelDropdown] = useState(false);
-  const [selectedCategory, setSelectedCategory] = useState<string>('');
+  const [selectedCategory, setSelectedCategory] = useState<('agricultural' | 'construction' | 'industrial' | 'forestry') | ''>('');
 
   const [formData, setFormData] = useState<MachineryFormData>({
     category: '',
@@ -86,7 +86,7 @@ export default function MachineryForm({ onDataChange }: MachineryFormProps) {
   // Filter brands based on search and category
   const filteredBrands = machineryBrands.filter(brand => {
     const matchesSearch = brand.name.toLowerCase().includes(brandSearch.toLowerCase());
-    const matchesCategory = !selectedCategory || brand.types.includes(selectedCategory as any);
+    const matchesCategory = !selectedCategory || brand.types.includes(selectedCategory);
     return matchesSearch && matchesCategory;
   });
 
