@@ -1,0 +1,59 @@
+name: Playwright Smoke
+
+on:
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  smoke:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node + pnpm
+        uses: pnpm/action-setup@v2
+        with:
+          node-version: '22'
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile=false
+
+      - name: Build publimicro
+        run: pnpm -w turbo run build --filter=@publimicro/publimicro
+
+      - name: Start publimicro (production)
+        run: pnpm -C apps/publimicro start &
+
+      - name: Wait for server
+        run: |
+          for i in {1..30}; do
+            if curl -sS http://127.0.0.1:3000 >/dev/null; then
+              echo "server ready" && break
+            fi
+            sleep 2
+          done
+
+      - name: Install Playwright browser
+        run: npx playwright install chromium
+
+      - name: Run smoke script
+        env:
+          SAVE_ARTIFACTS: '1'
+        run: node tools/smoke-whatsapp.js http://127.0.0.1:3000
+
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: smoke-artifacts
+          path: |
+            tools/artifacts/**
+            tools/artifacts-audit-batch-c-final.zip
+
+      - name: Post smoke result comment on PR
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          echo "Smoke tests completed — artifacts uploaded to workflow artifacts (smoke-artifacts)." > /tmp/smoke_comment.txt
+          gh pr comment ${{ github.event.pull_request.number }} --repo ${{ github.repository }} --body-file /tmp/smoke_comment.txt
