@@ -221,7 +221,7 @@ export async function validateCPF(cpf: string): Promise<{
     }
   } catch (error) {
     // API unavailable, but CPF format is valid
-    console.log('ReceitaWS unavailable, using local validation only');
+    console.warn('ReceitaWS unavailable, using local validation only', error);
   }
   
   return { valid: true }; // Format is valid even if API is down

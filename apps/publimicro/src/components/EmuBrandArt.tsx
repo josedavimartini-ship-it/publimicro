@@ -1,4 +1,4 @@
-'use client';
+﻿'use client';
 
 /**
  * ACHEME Emu Brand Art
@@ -345,6 +345,7 @@ export function EmuIconArt({ className = "w-32 h-32" }: { className?: string }) 
     </svg>
   );
 }
+
 
 
 

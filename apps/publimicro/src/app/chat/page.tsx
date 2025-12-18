@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useState, useEffect, useRef } from "react";
 import { useAuth } from "@/components/AuthProvider";
@@ -624,6 +624,7 @@ export default function ChatPage() {
     </div>
   );
 }
+
 
 
 

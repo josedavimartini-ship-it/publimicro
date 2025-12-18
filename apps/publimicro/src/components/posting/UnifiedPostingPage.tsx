@@ -72,7 +72,7 @@ export default function UnifiedPostingPage() {
 
   // Category-specific data
   const [propertyType, setPropertyType] = useState('sitio');
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+   
   const [propertyData, _setPropertyData] = useState<any>({});
   const [vehicleData, setVehicleData] = useState<VehicleFormData | null>(null);
   const [marineData, setMarineData] = useState<MarineFormData | null>(null);
@@ -162,7 +162,7 @@ export default function UnifiedPostingPage() {
   const currentStepIndex = STEPS.findIndex(s => s.id === currentStep);
   
   const canProceed = () => {
-    const minPhotos = tierLimits?.minPhotos || 1;
+    const _minPhotos = tierLimits?.minPhotos || 1;
     
     switch (currentStep) {
       case 'category':

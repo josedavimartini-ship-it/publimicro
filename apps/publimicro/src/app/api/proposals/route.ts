@@ -1,4 +1,4 @@
-import { NextResponse } from 'next/server';
+﻿import { NextResponse } from 'next/server';
 import { createServerSupabaseClient } from '@/lib/supabaseServer';
 import { sendEmail, getProposalEmail } from '@/lib/emailService';
 import { checkRateLimit, getClientIP } from '@/lib/adminAuth';
@@ -149,6 +149,7 @@ export async function GET(_req: Request) {
 
   return NextResponse.json(data);
 }
+
 
 
 

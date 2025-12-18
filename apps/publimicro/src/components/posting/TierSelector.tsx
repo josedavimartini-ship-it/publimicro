@@ -2,7 +2,7 @@
 
 import React from 'react';
 import { Check, X } from 'lucide-react';
-import { LISTING_TIERS, ListingTier, getTierComparisonFeatures, formatTierPrice } from '@/lib/listingTiers';
+import { LISTING_TIERS, getTierComparisonFeatures, formatTierPrice } from '@/lib/listingTiers';
 
 interface TierSelectorProps {
   selectedTier: string;

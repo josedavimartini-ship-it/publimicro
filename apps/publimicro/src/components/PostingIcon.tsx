@@ -19,7 +19,6 @@ export default function PostingIcon({
   showLabel = true,
   className = ''
 }: PostingIconProps) {
-  const [isAnimating, setIsAnimating] = useState(false);
   const [phase, setPhase] = useState<'idle' | 'insert' | 'glow' | 'complete'>('idle');
 
   const sizeConfig = {
@@ -31,14 +30,12 @@ export default function PostingIcon({
   // Animation cycle every 5 seconds
   useEffect(() => {
     const animationCycle = () => {
-      setIsAnimating(true);
       setPhase('insert');
       
       setTimeout(() => setPhase('glow'), 800);
       setTimeout(() => setPhase('complete'), 1400);
       setTimeout(() => {
         setPhase('idle');
-        setIsAnimating(false);
       }, 2000);
     };
 

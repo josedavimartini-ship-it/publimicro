@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useEffect, useState } from "react";
 import CATEGORIES_BY_SECTION from "@/lib/categories";
@@ -43,6 +43,7 @@ export function useCategories() {
 }
 
 export default useCategories;
+
 
 
 

@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 import React, { useEffect, useState } from 'react';
 import CANONICAL_PROPERS from '@/lib/AcheMeRuralPropers.json';
 import { fetchCanonicalSitios, mapCanonicalPropersToSitios } from '@/lib/carcaraHelpers';
@@ -81,6 +81,7 @@ export default function CarcaraHighlights({ limit = 6, hideTestListings = true }
     </section>
   );
 }
+
 
 
 

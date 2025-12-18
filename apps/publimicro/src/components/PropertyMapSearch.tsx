@@ -1,8 +1,8 @@
 'use client';
 
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect } from 'react';
 import dynamic from 'next/dynamic';
-import { MapPin, X, Search, Maximize2, DollarSign, List, Map, Filter } from 'lucide-react';
+import { MapPin, X, Maximize2, List, Map, Filter } from 'lucide-react';
 import Link from 'next/link';
 import Image from 'next/image';
 
