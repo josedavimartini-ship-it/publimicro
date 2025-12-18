@@ -25,7 +25,17 @@ try {
     process.exit(2);
   }
 
-  const browser = await chromium.launch({ headless: true });
+    // Launch Chromium with extra flags to reduce GPU/OS-related crashes on Windows
+    const browser = await chromium.launch({
+      headless: true,
+      args: [
+        '--disable-gpu',
+        '--disable-software-rasterizer',
+        '--disable-dev-shm-usage',
+        '--no-sandbox',
+        '--no-zygote'
+      ]
+    });
   page = null;
   try {
     const viewports = [
@@ -33,13 +43,19 @@ try {
       { name: 'mobile', width: 375, height: 812 }
     ];
 
-    // If user passed a root URL (no path), also try the /projetos/carcara page which
-    // is known to include a floating WhatsApp CTA in this app. This improves the
-    // chance of finding anchors without extra manual navigation.
+    // If user passed a root URL (no path), also try common pages that are likely
+    // to contain the WhatsApp CTA or important UI (imoveis, entrar, conta, carcará)
+    // This improves the chance of finding anchors without extra manual navigation.
     const extraPaths = [];
     try {
       const u = new URL(url);
-      if (u.pathname === '/' || u.pathname === '') extraPaths.push('/projetos/carcara');
+      if (u.pathname === '/' || u.pathname === '') {
+        extraPaths.push('/projetos/carcara');
+        // Additional pages to smoke by default
+        extraPaths.push('/imoveis');
+        extraPaths.push('/entrar');
+        extraPaths.push('/conta');
+      }
     } catch (e) {
       // ignore — if URL parsing fails we'll just use the provided string
     }
@@ -79,17 +95,38 @@ try {
 
         const entry = { path: target, waAnchors: [], floating: [] };
         try {
-          await page.goto(target, { waitUntil: 'networkidle', timeout: 30000 });
-          await page.waitForTimeout(1200);
+              // Try to navigate and capture the response status. If networkidle times out
+              // fall back to domcontentloaded and still capture the final response.
+              let navResponse = null;
+              try {
+                navResponse = await page.goto(target, { waitUntil: 'networkidle', timeout: 30000 });
+              } catch (navErr) {
+                // networkidle can hang in dev mode (HMR / ServiceWorker / streaming); fallback
+                if (/Timeout/.test(navErr.message)) {
+                  console.warn('networkidle timeout, retrying with domcontentloaded for', target);
+                  navResponse = await page.goto(target, { waitUntil: 'domcontentloaded', timeout: 45000 });
+                } else throw navErr;
+              }
 
-          // scroll to trigger scroll-based CTAs
-          await page.evaluate(() => window.scrollTo({ top: 1000, behavior: 'instant' }));
-          await page.waitForTimeout(600);
+              // Save response status when available so we can detect 404/500 pages
+              entry.status = navResponse ? navResponse.status() : null;
 
-          const waAnchors = await page.$$eval(
-            'a[href*="wa.me"], a[href*="api.whatsapp.com"], a[href*="whatsapp:"]',
-            els => els.map(e => ({ href: e.href, outerHTML: e.outerHTML }))
-          );
+              await page.waitForTimeout(1200);
+            // scroll to trigger scroll-based CTAs
+            await page.evaluate(() => window.scrollTo({ top: 1000, behavior: 'instant' }));
+            await page.waitForTimeout(600);
+
+            // Record whether the page includes the main content container (quick health check)
+            try {
+              entry.mainContentExists = await page.$eval('#main-content', () => true);
+            } catch (e) {
+              entry.mainContentExists = false;
+            }
+
+            const waAnchors = await page.$$eval(
+              'a[href*="wa.me"], a[href*="api.whatsapp.com"], a[href*="whatsapp:"]',
+              els => els.map(e => ({ href: e.href, outerHTML: e.outerHTML }))
+            );
           entry.waAnchors = waAnchors;
 
           const floatingSelectors = [
