@@ -93,7 +93,7 @@ apps/publimicro/src/components/:
 
 **Current State:**
 - Only GLB format supported via `@react-three/drei` useGLTF
-- Model path: `/models/carcara.glb`
+- Model path: `/models/eagle/harpy_eagle.fbx`
 - User has eagle FBX model ready to replace
 
 **Required Changes:**

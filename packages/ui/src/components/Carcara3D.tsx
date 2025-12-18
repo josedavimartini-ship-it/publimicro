@@ -14,7 +14,7 @@ interface CarcaraModelProps {
   modelPath?: string;
 }
 
-function CarcaraModel({ scale = 2.5, onAnimationStart, onAnimationComplete, autoRotate = false, rotationSpeed: rotationSpeedProp = 0.3, modelPath = '/models/carcara.glb' }: CarcaraModelProps) {
+function CarcaraModel({ scale = 2.5, onAnimationStart, onAnimationComplete, autoRotate = false, rotationSpeed: rotationSpeedProp = 0.3, modelPath = '/models/eagle/harpy_eagle.fbx' }: CarcaraModelProps) {
   const modelRef = useRef<Group | null>(null);
   const rotationSpeed = useRef(rotationSpeedProp);
   const isAnimating = useRef(false);
@@ -88,12 +88,19 @@ export interface Carcara3DProps {
   ariaLabel?: string;
 }
 
-export function Carcara3D({ className = "", onSoundTrigger, scale = 2.5, autoRotate = false, rotationSpeed = 0.3, modelPath = '/models/carcara.glb', ariaLabel = 'Carcará 3D model' }: Carcara3DProps) {
+export function Carcara3D({ className = "", onSoundTrigger, scale = 2.5, autoRotate = false, rotationSpeed = 0.3, modelPath = '/models/eagle/harpy_eagle.fbx', ariaLabel = 'Carcará 3D model' }: Carcara3DProps) {
   // preload the model path to reduce visual load when first shown
   useEffect(() => {
     try {
-      // @ts-ignore - three/drei exposes preload in runtime
-      useGLTF.preload?.(modelPath);
+      const ext = (modelPath || '').split('.').pop()?.toLowerCase();
+      if (ext === 'glb' || ext === 'gltf') {
+        // @ts-ignore - drei exposes preload for GLTF when available
+        useGLTF.preload?.(modelPath);
+      } else if (ext === 'fbx') {
+        // Some drei versions don't expose preload for FBX; try if present
+        // @ts-ignore
+        (useFBX as any).preload?.(modelPath);
+      }
     } catch (err) {
       // eslint-disable-next-line no-console
       console.warn('carcara model preload failed', modelPath, err);
@@ -135,4 +142,3 @@ export function Carcara3D({ className = "", onSoundTrigger, scale = 2.5, autoRot
   );
 }
 
-useGLTF.preload("/models/carcara.glb");
