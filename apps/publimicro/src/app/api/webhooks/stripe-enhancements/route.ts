@@ -1,4 +1,4 @@
-import { NextRequest, NextResponse } from 'next/server';
+﻿import { NextRequest, NextResponse } from 'next/server';
 import { createClient } from '@supabase/supabase-js';
 import type { SupabaseClient } from '@supabase/supabase-js';
 import Stripe from 'stripe';
@@ -262,6 +262,7 @@ export async function GET() {
     { status: 405 }
   );
 }
+
 
 
 

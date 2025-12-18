@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useState, useEffect, useRef } from "react";
 import { X, Home, Search, Map, TrendingUp, Heart, CheckCircle } from "lucide-react";
@@ -203,6 +203,7 @@ export default function WelcomeModal() {
     </div>
   );
 }
+
 
 
 

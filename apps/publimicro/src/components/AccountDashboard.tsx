@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useState } from "react";
 import { useAuth } from "@/lib/authContext";
@@ -34,6 +34,7 @@ export default function AccountDashboard({ open, onClose }: { open: boolean; onC
     </div>
   );
 }
+
 
 
 

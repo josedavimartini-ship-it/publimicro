@@ -1,4 +1,4 @@
-import { FloatingWhatsApp } from "@publimicro/ui";
+﻿import { FloatingWhatsApp } from "@publimicro/ui";
 import FloatingWhatsAppWrapper from "@/components/FloatingWhatsAppWrapper";
 // Navbar removed from top-level layout to avoid unused import
 import UserQuickPanel from "@/components/UserQuickPanel";
@@ -124,6 +124,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     </html>
   );
 }
+
 
 
 

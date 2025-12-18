@@ -1,4 +1,4 @@
-import { NextRequest, NextResponse } from 'next/server';
+﻿import { NextRequest, NextResponse } from 'next/server';
 import { createServiceSupabaseClient } from '@/lib/supabaseServer';
 
 // Admin API (external) — header-protected using ADMIN_API_KEY
@@ -54,6 +54,7 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: err.message || String(err) }, { status: 500 });
   }
 }
+
 
 
 

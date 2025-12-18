@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useState, useEffect } from "react";
 import SearchTab, { SearchFilters } from "@/components/SearchTab";
@@ -382,6 +382,7 @@ export default function ImoveisPage() {
     </div>
   );
 }
+
 
 
 

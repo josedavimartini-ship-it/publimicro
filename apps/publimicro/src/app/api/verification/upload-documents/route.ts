@@ -1,4 +1,4 @@
-import { NextRequest, NextResponse } from 'next/server';
+﻿import { NextRequest, NextResponse } from 'next/server';
 import { createRouteSupabaseClient } from '@/lib/supabaseServer';
 
 /**
@@ -181,6 +181,7 @@ export async function POST(request: NextRequest) {
     );
   }
 }
+
 
 
 

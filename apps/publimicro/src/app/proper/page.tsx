@@ -1,4 +1,4 @@
-import Link from 'next/link';
+﻿import Link from 'next/link';
 import { Building2, Tractor, Sparkles } from 'lucide-react';
 import { Metadata } from 'next';
 
@@ -99,6 +99,7 @@ export default function PubliProperPage() {
     </main>
   );
 }
+
 
 
 

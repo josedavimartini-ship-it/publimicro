@@ -27,6 +27,7 @@ function CarcaraModel({ scale = 2.5, onAnimationStart, onAnimationComplete, auto
     const ext = (modelPath || '').split('.').pop()?.toLowerCase();
     if (ext === 'fbx') {
       // dynamic import to avoid requiring example loader typings at build-time
+      // @ts-ignore - dynamic import of example loader may not have typings in this environment
       import('three/examples/jsm/loaders/FBXLoader').then((mod: any) => {
         const FBXLoader: any = mod.FBXLoader;
         const loader = new FBXLoader();
@@ -38,6 +39,7 @@ function CarcaraModel({ scale = 2.5, onAnimationStart, onAnimationComplete, auto
         );
       }).catch((err) => console.warn('FBX loader import failed', err));
     } else {
+      // @ts-ignore - dynamic import of example loader may not have typings in this environment
       import('three/examples/jsm/loaders/GLTFLoader').then((mod: any) => {
         const GLTFLoader: any = mod.GLTFLoader;
         const loader = new GLTFLoader();

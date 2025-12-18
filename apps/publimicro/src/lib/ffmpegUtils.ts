@@ -3,7 +3,6 @@
  * Replaces deprecated fluent-ffmpeg package
  */
 import { spawn } from 'child_process';
-import path from 'path';
 
 // Get ffmpeg path from @ffmpeg-installer/ffmpeg or environment
 function getFfmpegPath(): string {
@@ -113,7 +112,7 @@ export async function generateThumbnail(
  * Get video duration in seconds
  */
 export async function getVideoDuration(inputPath: string): Promise<number> {
-  return new Promise((resolve, reject) => {
+  return new Promise((resolve) => {
     const ffmpegPath = getFfmpegPath();
     // Use ffprobe if available, otherwise use ffmpeg
     const ffprobePath = ffmpegPath.replace(/ffmpeg(\.exe)?$/i, 'ffprobe$1');

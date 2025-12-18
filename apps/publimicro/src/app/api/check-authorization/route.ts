@@ -1,4 +1,4 @@
-import { NextResponse } from "next/server";
+﻿import { NextResponse } from "next/server";
 
 export async function GET(req: Request): Promise<NextResponse> {
   try {
@@ -28,6 +28,7 @@ export async function GET(req: Request): Promise<NextResponse> {
     return NextResponse.json({ authorized: false }, { status: 200 });
   }
 }
+
 
 
 

@@ -182,7 +182,7 @@ export default function TudoPage() {
 
   // Filter listings
   const filteredListings = useMemo(() => {
-    let result = mockListings.filter((listing) => {
+    const result = mockListings.filter((listing) => {
       // Category filter
       if (selectedCategory !== "all" && listing.category !== selectedCategory) return false;
       

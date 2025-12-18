@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { MessageCircle, X, Send, ChevronDown, ChevronUp, User, Clock, AlertCircle } from 'lucide-react';
+import { MessageCircle, X, Send, ChevronDown, ChevronUp, User, Clock } from 'lucide-react';
 import { supabase } from '@/lib/supabaseClient';
 import { useAuth } from './AuthProvider';
 import { useRouter } from 'next/navigation';
