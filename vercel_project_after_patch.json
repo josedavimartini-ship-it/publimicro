@@ -1,0 +1,482 @@
+{
+  "accountId": "team_ayij9Fh9hLYplAtJAhJiJMKL",
+  "speedInsights": {
+    "id": "toCKwkIrEt1DVHt8vDR95spiSFg",
+    "hasData": false,
+    "enabledAt": 1761213818157
+  },
+  "autoExposeSystemEnvs": true,
+  "autoAssignCustomDomains": true,
+  "autoAssignCustomDomainsUpdatedBy": "system",
+  "buildCommand": "turbo run build --filter=@publimicro/publimicro",
+  "createdAt": 1760574128879,
+  "crons": {
+    "enabledAt": 1760574155293,
+    "disabledAt": null,
+    "updatedAt": 1762484068561,
+    "deploymentId": "dpl_4pbjJ2TabFuPJZwMrfuc1Z8zcKvV",
+    "definitions": []
+  },
+  "devCommand": null,
+  "directoryListing": true,
+  "env": [
+    {
+      "target": [
+        "development",
+        "preview",
+        "production"
+      ],
+      "configurationId": null,
+      "customEnvironmentIds": [],
+      "id": "bYh4M4wBpeHh5UWb",
+      "key": "NEXT_PUBLIC_SUPABASE_URL",
+      "createdAt": 1760963337031,
+      "updatedAt": 1760963337031,
+      "createdBy": "fp9PEEvhAzYR7UgGqtkFXyzY",
+      "updatedBy": null,
+      "type": "encrypted",
+      "value": "yE9ioQJC1NnSoqGTRrquywP4bPXIITs/a8Gw2/4gFCvA32Tq8/1ws+vAm9D7GVq3f+HK6EFc6TpkWpXHqvi5gA=="
+    },
+    {
+      "target": [
+        "development",
+        "preview",
+        "production"
+      ],
+      "configurationId": null,
+      "customEnvironmentIds": [],
+      "id": "M7YjNCdagcmKsvhY",
+      "key": "NEXT_PUBLIC_SUPABASE_ANON_KEY",
+      "createdAt": 1760963337031,
+      "updatedAt": 1760963337031,
+      "createdBy": "fp9PEEvhAzYR7UgGqtkFXyzY",
+      "updatedBy": null,
+      "type": "encrypted",
+      "value": "zYVPPGnA/jn7acd47gazlUxS4lGsy54t2htlA7fZ6hd+p7IY5EivPVCgcd9Z9HCc6EVmfIjr4hazOA4RypM3K+Qeq+SN1mLcWHhC31Sprrh7YqI2ayYclyN8vorlbqi8p20Vmt8NKpd+VRX22YDkeYU+oTg0HxM9p1WFn1qllVJetEzyhNk/VznedKcfOGfQd338gkD1DrVHgnForBddX5W5QeuRs6wJHSDTgfAgn1zJl84dCKC0oot8so+BHFl2h55OErdCE8dnR7qPMUBMzw29K/e4t1anVYe1l9YjJ0MG7CSW3LkKA15HuhpzzXdU"
+    },
+    {
+      "target": [
+        "development",
+        "preview",
+        "production"
+      ],
+      "configurationId": null,
+      "customEnvironmentIds": [],
+      "id": "5QmqFoeiczzzJImJ",
+      "key": "SUPABASE_SERVICE_ROLE_KEY",
+      "createdAt": 1760963337031,
+      "updatedAt": 1760963337031,
+      "createdBy": "fp9PEEvhAzYR7UgGqtkFXyzY",
+      "updatedBy": null,
+      "type": "encrypted",
+      "value": "m6Ljz7JvyVpCOG/VHBG7+DXRNUxogp60tuuWk35xQbgIqCzA+SBkmOSs5aucrGkNTdDF3HDWWkurBtV5nm2RILayduYi7HKoMPRH10IeVHfErpqm34hiCosjb67kwhGiIJ9kcGzk/ih4LygcoQXvS3uApYCbXdoN01aOYlo3PDqOoaqbPBEfEFlHQRZ08eVYWYI3kAgcai7JQ5ymu2TgJo7YG62OckV+UoVaN6jtO98Ay/pM1C/bf+8teTIKtkmsQuJBfDO0HFbr7FcCKlB96D07IJXxWZEwmbSForhe2LdMYjLoY7HAW9+T+4PilYq3"
+    },
+    {
+      "target": [
+        "development",
+        "preview",
+        "production"
+      ],
+      "configurationId": null,
+      "customEnvironmentIds": [],
+      "id": "RIAOxnYLAnTgQ0Zr",
+      "key": "NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY",
+      "createdAt": 1760963337031,
+      "updatedAt": 1760963337031,
+      "createdBy": "fp9PEEvhAzYR7UgGqtkFXyzY",
+      "updatedBy": null,
+      "type": "encrypted",
+      "value": "s5cLBewyOb+r6APyAalqbhGKjkxM/zV0DRBo+sssjvI3hBS83kgQH+cDoSGypM3r4n/kmFuxTpWxCbtDmKJGLGGlaSLvu+SI3yVOuwtfbsHSwp2VOd5iUzSzMqhdmKghbFDx823fe6T6dfjL4BvADPUMysZnlCgCQFVOJM824dk="
+    },
+    {
+      "target": [
+        "development",
+        "preview",
+        "production"
+      ],
+      "configurationId": null,
+      "customEnvironmentIds": [],
+      "id": "sIYOWxZBySQqyDDW",
+      "key": "STRIPE_SECRET_KEY",
+      "createdAt": 1760963337031,
+      "updatedAt": 1760963337031,
+      "createdBy": "fp9PEEvhAzYR7UgGqtkFXyzY",
+      "updatedBy": null,
+      "type": "encrypted",
+      "value": "tLTU06GGCMEcweT0TocyXMJ8drA5kXs1JTyvn5EEARJ74B2XUYSx7VK/33efnNF/xEBMih2pLkCgNOY7K1utDnXOpoIh6DYSnEF7sTqRWygXpTz4DPEo2Ly78o0UXCIpoz7S6BjT3kNsQu/0e/U82eDmXQkM2AybwGyld6KowZA="
+    },
+    {
+      "target": [
+        "production"
+      ],
+      "configurationId": null,
+      "id": "VXVsg6bw4alWWVIH",
+      "key": "NEXT_PUBLIC_HOME_URL",
+      "createdAt": 1761621802678,
+      "updatedAt": 1761621802678,
+      "createdBy": "fp9PEEvhAzYR7UgGqtkFXyzY",
+      "updatedBy": null,
+      "type": "encrypted",
+      "value": "NmKBxGVLq/h8k+mFE59XEz8L23qB5O4qDFdpDQpAE3QMEDqPYULIX0uwaLTLBfPS"
+    }
+  ],
+  "framework": "nextjs",
+  "gitForkProtection": true,
+  "gitLFS": true,
+  "id": "prj_8HR6rZgGD5H5RA2XzXD2KpCqcpCU",
+  "installCommand": "pnpm install",
+  "lastRollbackTarget": null,
+  "lastAliasRequest": null,
+  "name": "publimicro",
+  "nodeVersion": "22.x",
+  "outputDirectory": null,
+  "productionDeploymentsFastLane": true,
+  "publicSource": null,
+  "defaultResourceConfig": {
+    "fluid": true,
+    "functionDefaultRegions": [
+      "iad1"
+    ],
+    "functionDefaultTimeout": 300,
+    "functionDefaultMemoryType": "standard",
+    "functionZeroConfigFailover": false,
+    "elasticConcurrencyEnabled": false
+  },
+  "resourceConfig": {
+    "fluid": true,
+    "functionDefaultRegions": [
+      "iad1"
+    ]
+  },
+  "rootDirectory": "apps/publimicro",
+  "serverlessFunctionRegion": "iad1",
+  "sourceFilesOutsideRootDirectory": true,
+  "enableAffectedProjectsDeployments": true,
+  "ssoProtection": {
+    "deploymentType": "all_except_custom_domains"
+  },
+  "updatedAt": 1766015716551,
+  "live": false,
+  "gitComments": {
+    "onCommit": false,
+    "onPullRequest": true
+  },
+  "gitProviderOptions": {
+    "createDeployments": "enabled"
+  },
+  "webAnalytics": {
+    "id": "SKa2QkNU3T7ACa8ZnBl1KF7U5"
+  },
+  "oidcTokenConfig": {
+    "enabled": true,
+    "issuerMode": "team"
+  },
+  "hasDeployments": true,
+  "link": {
+    "type": "github",
+    "repo": "publimicro",
+    "repoId": 1077205069,
+    "org": "josedavimartini-ship-it",
+    "repoOwnerId": 233740597,
+    "gitCredentialId": "cred_23ad6f9085820709c7129fbc8800b0ca9d2b93ba",
+    "productionBranch": "main",
+    "sourceless": true,
+    "createdAt": 1760574128837,
+    "updatedAt": 1760574128837,
+    "deployHooks": []
+  },
+  "latestDeployments": [
+    {
+      "alias": [
+        "publimicro-git-audit-initial-fixes-publimicros-projects.vercel.app"
+      ],
+      "aliasAssigned": null,
+      "automaticAliases": [
+        "publimicro-git-audit-initial-fixes-publimicros-projects.vercel.app"
+      ],
+      "builds": [],
+      "createdAt": 1766015594831,
+      "createdIn": "sfo1",
+      "creator": {
+        "uid": "fp9PEEvhAzYR7UgGqtkFXyzY",
+        "email": "josedavimartini@gmail.com",
+        "username": "josedavimartini-ship-it",
+        "githubLogin": "josedavimartini-ship-it"
+      },
+      "deploymentHostname": "publimicro-xrkev7ffh-publimicros-projects",
+      "forced": false,
+      "id": "dpl_B9M51wzFPhwVq5kjbCJBEevL6cPx",
+      "meta": {
+        "githubCommitAuthorName": "Davi",
+        "githubCommitAuthorEmail": "josedavimartini@gmail.com",
+        "githubCommitMessage": "chore(lint): make ESLint config resilient to missing parser/plugins; run autofixes",
+        "githubCommitOrg": "josedavimartini-ship-it",
+        "githubCommitRef": "audit/initial-fixes",
+        "githubCommitRepo": "publimicro",
+        "githubCommitSha": "0df192854b926ec43f3ca953e486912c2cf4554d",
+        "githubDeployment": "1",
+        "githubOrg": "josedavimartini-ship-it",
+        "githubRepo": "publimicro",
+        "githubRepoOwnerType": "User",
+        "githubCommitRepoId": "1077205069",
+        "githubRepoId": "1077205069",
+        "githubRepoVisibility": "public",
+        "githubHost": "github.com",
+        "githubCommitAuthorLogin": "josedavimartini-ship-it",
+        "repoPushedAt": "1766015590000",
+        "branchAlias": "publimicro-git-audit-initial-fixes-publimicros-projects.vercel.app"
+      },
+      "name": "publimicro",
+      "plan": "hobby",
+      "private": true,
+      "readyState": "QUEUED",
+      "target": null,
+      "teamId": "team_ayij9Fh9hLYplAtJAhJiJMKL",
+      "type": "LAMBDAS",
+      "url": "publimicro-xrkev7ffh-publimicros-projects.vercel.app",
+      "userId": "fp9PEEvhAzYR7UgGqtkFXyzY",
+      "withCache": false,
+      "previewCommentsEnabled": true,
+      "oidcTokenClaims": {
+        "sub": "owner:publimicros-projects:project:publimicro:environment:preview",
+        "iss": "https://oidc.vercel.com/publimicros-projects",
+        "scope": "owner:publimicros-projects:project:publimicro:environment:preview",
+        "aud": "https://vercel.com/publimicros-projects",
+        "owner": "publimicros-projects",
+        "owner_id": "team_ayij9Fh9hLYplAtJAhJiJMKL",
+        "project": "publimicro",
+        "project_id": "prj_8HR6rZgGD5H5RA2XzXD2KpCqcpCU",
+        "environment": "preview",
+        "plan": "hobby"
+      }
+    },
+    {
+      "alias": [
+        "publimicro-git-audit-initial-fixes-publimicros-projects.vercel.app"
+      ],
+      "aliasAssigned": 1766013956570,
+      "aliasError": null,
+      "automaticAliases": [
+        "publimicro-git-audit-initial-fixes-publimicros-projects.vercel.app"
+      ],
+      "builds": [],
+      "createdAt": 1766013835036,
+      "createdIn": "sfo1",
+      "creator": {
+        "uid": "fp9PEEvhAzYR7UgGqtkFXyzY",
+        "email": "josedavimartini@gmail.com",
+        "username": "josedavimartini-ship-it",
+        "githubLogin": "josedavimartini-ship-it"
+      },
+      "deploymentHostname": "publimicro-aet7ncnvu-publimicros-projects",
+      "forced": false,
+      "id": "dpl_H9zKiT8891pDhDFWCNZsvRwuT3be",
+      "meta": {
+        "githubCommitAuthorName": "Davi",
+        "githubCommitAuthorEmail": "josedavimartini@gmail.com",
+        "githubCommitMessage": "chore(build): pin Node engine 22.x, add turbo env globals, fix eslint bin invocation",
+        "githubCommitOrg": "josedavimartini-ship-it",
+        "githubCommitRef": "audit/initial-fixes",
+        "githubCommitRepo": "publimicro",
+        "githubCommitSha": "3c0bd8dd234902ccf9ed6852f83efe7c91d01488",
+        "githubDeployment": "1",
+        "githubOrg": "josedavimartini-ship-it",
+        "githubRepo": "publimicro",
+        "githubRepoOwnerType": "User",
+        "githubCommitRepoId": "1077205069",
+        "githubRepoId": "1077205069",
+        "githubRepoVisibility": "public",
+        "githubHost": "github.com",
+        "githubCommitAuthorLogin": "josedavimartini-ship-it",
+        "repoPushedAt": "1766013829000",
+        "branchAlias": "publimicro-git-audit-initial-fixes-publimicros-projects.vercel.app",
+        "bundler": "turbopack"
+      },
+      "monorepoManager": "turbo",
+      "name": "publimicro",
+      "plan": "hobby",
+      "private": true,
+      "readyState": "READY",
+      "readySubstate": "STAGED",
+      "target": null,
+      "teamId": "team_ayij9Fh9hLYplAtJAhJiJMKL",
+      "type": "LAMBDAS",
+      "url": "publimicro-aet7ncnvu-publimicros-projects.vercel.app",
+      "userId": "fp9PEEvhAzYR7UgGqtkFXyzY",
+      "withCache": false,
+      "buildingAt": 1766013836317,
+      "readyAt": 1766013956396,
+      "previewCommentsEnabled": true,
+      "oidcTokenClaims": {
+        "sub": "owner:publimicros-projects:project:publimicro:environment:preview",
+        "iss": "https://oidc.vercel.com/publimicros-projects",
+        "scope": "owner:publimicros-projects:project:publimicro:environment:preview",
+        "aud": "https://vercel.com/publimicros-projects",
+        "owner": "publimicros-projects",
+        "owner_id": "team_ayij9Fh9hLYplAtJAhJiJMKL",
+        "project": "publimicro",
+        "project_id": "prj_8HR6rZgGD5H5RA2XzXD2KpCqcpCU",
+        "environment": "preview",
+        "plan": "hobby"
+      }
+    }
+  ],
+  "targets": {
+    "production": {
+      "alias": [
+        "publimicro.vercel.app",
+        "www.publimicro.com.br",
+        "publimicro-publimicros-projects.vercel.app",
+        "publimicro-git-main-publimicros-projects.vercel.app",
+        "publimicro.com.br"
+      ],
+      "aliasAssigned": 1762484068567,
+      "aliasError": null,
+      "automaticAliases": [
+        "publimicro-publimicros-projects.vercel.app",
+        "publimicro-git-main-publimicros-projects.vercel.app"
+      ],
+      "builds": [],
+      "createdAt": 1762483921267,
+      "createdIn": "sfo1",
+      "creator": {
+        "uid": "fp9PEEvhAzYR7UgGqtkFXyzY",
+        "email": "josedavimartini@gmail.com",
+        "username": "josedavimartini-ship-it",
+        "githubLogin": "josedavimartini-ship-it"
+      },
+      "deploymentHostname": "publimicro-j1bvz3zoo-publimicros-projects",
+      "forced": false,
+      "id": "dpl_4pbjJ2TabFuPJZwMrfuc1Z8zcKvV",
+      "meta": {
+        "githubCommitAuthorName": "Davi",
+        "githubCommitAuthorEmail": "josedavimartini@gmail.com",
+        "githubCommitMessage": "feat: comprehensive system updates and AcheMeCoisas marketplace integration\n\nAuthentication Enhancements:\n- Complete TopNavWithAuth rewrite with bronze/copper/gold theme\n- Conditional 'Conta' button (logged in → dropdown menu, not logged → Entrar link)\n- User dropdown with 6 items: Minha Conta, Meus Anúncios, Lances, Favoritos, Configurações + Logout\n- Added Microsoft OAuth integration (handler + UI button)\n- Added Apple OAuth integration (handler + UI button)\n- Added avatar_url to UserProfile interface\n- Avatar display with verification badge (✓ Verificado)\n\nCode Quality & Fixes:\n- Fixed SearchFilters interface - added missing searchType property (4 files)\n- Fixed PropertyResult interface to match database schema (title, location, price)\n- Updated all search rendering code to use correct field names\n- Removed noEmitOnError from UI package tsconfig to fix dist build\n- Updated turbo.json UI build outputs configuration\n\nDependency Updates:\n- eslint-plugin-react-hooks: 5.2.0 → 7.0.1 (major update)\n- three: 0.180",
+        "githubCommitOrg": "josedavimartini-ship-it",
+        "githubCommitRef": "main",
+        "githubCommitRepo": "publimicro",
+        "githubCommitSha": "036ca836ec973e890beafe5a35ce8505ebad2d1c",
+        "githubDeployment": "1",
+        "githubOrg": "josedavimartini-ship-it",
+        "githubRepo": "publimicro",
+        "githubRepoOwnerType": "User",
+        "githubCommitRepoId": "1077205069",
+        "githubRepoId": "1077205069",
+        "githubRepoVisibility": "public",
+        "githubHost": "github.com",
+        "githubCommitAuthorLogin": "josedavimartini-ship-it",
+        "repoPushedAt": "1762483915000",
+        "branchAlias": "publimicro-git-main-publimicros-projects.vercel.app"
+      },
+      "monorepoManager": "turbo",
+      "name": "publimicro",
+      "plan": "hobby",
+      "private": true,
+      "readyState": "READY",
+      "readySubstate": "PROMOTED",
+      "target": "production",
+      "teamId": "team_ayij9Fh9hLYplAtJAhJiJMKL",
+      "type": "LAMBDAS",
+      "url": "publimicro-j1bvz3zoo-publimicros-projects.vercel.app",
+      "userId": "fp9PEEvhAzYR7UgGqtkFXyzY",
+      "withCache": false,
+      "buildingAt": 1762484015329,
+      "readyAt": 1762484068256,
+      "previewCommentsEnabled": true,
+      "oidcTokenClaims": {
+        "sub": "owner:publimicros-projects:project:publimicro:environment:production",
+        "iss": "https://oidc.vercel.com/publimicros-projects",
+        "scope": "owner:publimicros-projects:project:publimicro:environment:production",
+        "aud": "https://vercel.com/publimicros-projects",
+        "owner": "publimicros-projects",
+        "owner_id": "team_ayij9Fh9hLYplAtJAhJiJMKL",
+        "project": "publimicro",
+        "project_id": "prj_8HR6rZgGD5H5RA2XzXD2KpCqcpCU",
+        "environment": "production",
+        "plan": "hobby"
+      }
+    },
+    "preview": {
+      "alias": [
+        "publimicro-git-audit-initial-fixes-publimicros-projects.vercel.app"
+      ],
+      "aliasAssigned": null,
+      "automaticAliases": [
+        "publimicro-git-audit-initial-fixes-publimicros-projects.vercel.app"
+      ],
+      "builds": [],
+      "createdAt": 1766015594831,
+      "createdIn": "sfo1",
+      "creator": {
+        "uid": "fp9PEEvhAzYR7UgGqtkFXyzY",
+        "email": "josedavimartini@gmail.com",
+        "username": "josedavimartini-ship-it",
+        "githubLogin": "josedavimartini-ship-it"
+      },
+      "deploymentHostname": "publimicro-xrkev7ffh-publimicros-projects",
+      "forced": false,
+      "id": "dpl_B9M51wzFPhwVq5kjbCJBEevL6cPx",
+      "meta": {
+        "githubCommitAuthorName": "Davi",
+        "githubCommitAuthorEmail": "josedavimartini@gmail.com",
+        "githubCommitMessage": "chore(lint): make ESLint config resilient to missing parser/plugins; run autofixes",
+        "githubCommitOrg": "josedavimartini-ship-it",
+        "githubCommitRef": "audit/initial-fixes",
+        "githubCommitRepo": "publimicro",
+        "githubCommitSha": "0df192854b926ec43f3ca953e486912c2cf4554d",
+        "githubDeployment": "1",
+        "githubOrg": "josedavimartini-ship-it",
+        "githubRepo": "publimicro",
+        "githubRepoOwnerType": "User",
+        "githubCommitRepoId": "1077205069",
+        "githubRepoId": "1077205069",
+        "githubRepoVisibility": "public",
+        "githubHost": "github.com",
+        "githubCommitAuthorLogin": "josedavimartini-ship-it",
+        "repoPushedAt": "1766015590000",
+        "branchAlias": "publimicro-git-audit-initial-fixes-publimicros-projects.vercel.app"
+      },
+      "name": "publimicro",
+      "plan": "hobby",
+      "private": true,
+      "readyState": "QUEUED",
+      "target": null,
+      "teamId": "team_ayij9Fh9hLYplAtJAhJiJMKL",
+      "type": "LAMBDAS",
+      "url": "publimicro-xrkev7ffh-publimicros-projects.vercel.app",
+      "userId": "fp9PEEvhAzYR7UgGqtkFXyzY",
+      "withCache": false,
+      "previewCommentsEnabled": true,
+      "oidcTokenClaims": {
+        "sub": "owner:publimicros-projects:project:publimicro:environment:preview",
+        "iss": "https://oidc.vercel.com/publimicros-projects",
+        "scope": "owner:publimicros-projects:project:publimicro:environment:preview",
+        "aud": "https://vercel.com/publimicros-projects",
+        "owner": "publimicros-projects",
+        "owner_id": "team_ayij9Fh9hLYplAtJAhJiJMKL",
+        "project": "publimicro",
+        "project_id": "prj_8HR6rZgGD5H5RA2XzXD2KpCqcpCU",
+        "environment": "preview",
+        "plan": "hobby"
+      }
+    }
+  },
+  "deploymentExpiration": {
+    "expirationDays": 180,
+    "expirationDaysProduction": 365,
+    "expirationDaysCanceled": 30,
+    "expirationDaysErrored": 90,
+    "deploymentsToKeep": 10
+  },
+  "protectionBypass": {
+    "rsX3zrG2HtLzdpaUEOMvj4GhxPx1vayn": {
+      "scope": "automation-bypass",
+      "isEnvVar": true,
+      "createdAt": 1766007039716,
+      "createdBy": "fp9PEEvhAzYR7UgGqtkFXyzY"
+    }
+  },
+  "features": {
+    "webAnalytics": false
+  }
+}
