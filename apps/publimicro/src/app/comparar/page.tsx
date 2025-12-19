@@ -48,13 +48,14 @@ export default function ComparePage() {
 
   const loadProperties = async (ids: string[]) => {
     try {
-      const { data, error } = await supabase
+      const res = await supabase
         .from("sitios")
         .select("*")
         .in("id", ids);
 
-      if (error) throw error;
-      setProperties(data || []);
+      if (res.error) throw res.error;
+      const rows = res.data as Property[] | null;
+      setProperties(rows ?? []);
     } catch (error) {
       console.error("Error loading properties:", error);
     } finally {
