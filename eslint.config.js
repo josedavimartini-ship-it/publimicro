@@ -1,5 +1,5 @@
 // Flat ESLint configuration (ESLint v9+)
-// eol: normalize to LF
+// eol: normalized to LF
 // Migrated from legacy `.eslintrc.cjs` to the new flat config format.
 const tryRequire = (name) => {
   try {
