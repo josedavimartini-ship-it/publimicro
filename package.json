@@ -42,7 +42,7 @@
     "tailwindcss": "^4.1.16",
     "turbo": "^2.6.1",
     "typescript": "^5.9.3",
-    "eslint-formatter-unix": "^1.0.1"
+    "eslint-formatter-unix": "^9.0.1"
   },
   "engines": {
     "node": "22.x",
