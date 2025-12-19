@@ -198,11 +198,14 @@ export async function fetchCanonicalSitios(opts: FetchOptions = {}) {
       current_highest_bid?: number;
     }
 
+    const rows = data as unknown as PropertyRow[];
+
     const sitiosWithPhotos = await Promise.all(
-      data.map(async (property: PropertyRow) => {
-        // Get photos from storage
-        const photos = await fetchRanchPhotos(property.slug);
-        
+      rows.map(async (property) => {
+        // Get photos from storage (ensure slug is string)
+        const slug = String(property.slug ?? '');
+        const photos = slug ? await fetchRanchPhotos(slug) : [getRanchCoverPhoto(slug || '')];
+
         // Get current highest bid
         const { data: bids } = await supabase
           .from('proposals')
@@ -211,27 +214,27 @@ export async function fetchCanonicalSitios(opts: FetchOptions = {}) {
           .order('amount', { ascending: false })
           .limit(1);
 
+        const currentBid = Array.isArray(bids) && bids.length > 0 ? (bids[0] as { amount?: number }).amount : property.current_highest_bid ?? null;
+
         return {
-          id: property.id,
-          slug: property.slug,
-          nome: mapIdToDisplayName(property.slug),
+          id: String(property.id),
+          slug,
+          nome: mapIdToDisplayName(slug),
           title: property.title,
           descricao: property.description,
-          localizacao: property.city && property.state 
-            ? `${property.city}, ${property.state}` 
-            : 'Lago das Brisas, GO',
-          preco: property.price || property.expected_value,
-          area_total: property.total_area,
+          localizacao: property.city && property.state ? `${property.city}, ${property.state}` : 'Lago das Brisas, GO',
+          preco: property.price ?? property.expected_value ?? null,
+          area_total: property.total_area ?? null,
           fotos: photos,
           video_url: property.video_url,
-          destaque: property.featured,
-          latitude: property.latitude,
-          longitude: property.longitude,
-          current_bid: bids && bids.length > 0 ? bids[0].amount : property.current_highest_bid,
-          accepts_proposals: property.accepts_proposals,
-          agua: property.near_water || true,
-          energia: property.has_electricity,
-          kml_url: property.kml_url,
+          destaque: Boolean(property.featured),
+          latitude: typeof property.latitude === 'number' ? property.latitude : undefined,
+          longitude: typeof property.longitude === 'number' ? property.longitude : undefined,
+          current_bid: typeof currentBid === 'number' ? currentBid : null,
+          accepts_proposals: Boolean(property.accepts_proposals),
+          agua: Boolean(property.near_water),
+          energia: Boolean(property.has_electricity),
+          kml_url: property.kml_url ?? null,
         };
       })
     );
@@ -253,24 +256,48 @@ export async function fetchCanonicalSitios(opts: FetchOptions = {}) {
  * Sitio shape the UI expects. Accepts an array of canonical records so the
  * caller controls the source (keeps helper pure and testable).
  */
+type CanonicalEntry = {
+  slug?: string;
+  title?: string;
+  latitude?: number | string;
+  longitude?: number | string;
+  short?: string;
+  fotos?: string[];
+  kml_url?: string;
+  total_area?: number | string;
+  tagline?: string;
+  estimatedMarketValue?: number | null;
+  openingOffer?: number | null;
+  moodboard?: string[] | null;
+  purpose?: string | null;
+};
+
 export function mapCanonicalPropersToSitios(canonical: Array<Record<string, unknown>>) {
   if (!Array.isArray(canonical)) return [];
-  return canonical.map((p) => ({
-    id: p.slug,
-    slug: p.slug,
-    title: p.title,
-    nome: p.title,
-    location: `${p.latitude},${p.longitude}`,
-    localizacao: p.short || `${p.latitude},${p.longitude}`,
-    fotos: p.fotos || [],
-    kml_url: p.kml_url,
-    short: p.short,
-    total_area: p.total_area || null,
-    current_bid: null,
-    tagline: p.tagline || null,
-    estimatedMarketValue: p.estimatedMarketValue || null,
-    openingOffer: p.openingOffer || null,
-    moodboard: p.moodboard || null,
-    purpose: p.purpose || null,
-  }));
+
+  return (canonical as CanonicalEntry[]).map((p) => {
+    const slug = String(p.slug ?? '');
+    const title = String(p.title ?? '');
+    const latitude = p.latitude !== undefined ? String(p.latitude) : '';
+    const longitude = p.longitude !== undefined ? String(p.longitude) : '';
+
+    return {
+      id: slug || title,
+      slug,
+      title: title || undefined,
+      nome: title || undefined,
+      location: latitude && longitude ? `${latitude},${longitude}` : undefined,
+      localizacao: p.short || (latitude && longitude ? `${latitude},${longitude}` : undefined),
+      fotos: Array.isArray(p.fotos) ? p.fotos : [],
+      kml_url: p.kml_url ?? undefined,
+      short: p.short ?? undefined,
+      total_area: p.total_area ?? null,
+      current_bid: null,
+      tagline: p.tagline ?? null,
+      estimatedMarketValue: p.estimatedMarketValue ?? null,
+      openingOffer: p.openingOffer ?? null,
+      moodboard: p.moodboard ?? null,
+      purpose: p.purpose ?? null,
+    };
+  });
 }
