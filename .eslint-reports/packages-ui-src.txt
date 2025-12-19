@@ -1,0 +1,7 @@
+C:\projetos\publimicro\packages\ui\src\components\Carcara3D.tsx:47:31: Unexpected console statement. [Warning/no-console]
+C:\projetos\publimicro\packages\ui\src\components\Carcara3D.tsx:49:25: Unexpected console statement. [Warning/no-console]
+C:\projetos\publimicro\packages\ui\src\components\Carcara3D.tsx:68:31: Unexpected console statement. [Warning/no-console]
+C:\projetos\publimicro\packages\ui\src\components\Carcara3D.tsx:70:25: Unexpected console statement. [Warning/no-console]
+C:\projetos\publimicro\packages\ui\src\components\WhatsAppLink.tsx:28:29: Unexpected any. Specify a different type. [Warning/@typescript-eslint/no-explicit-any]
+
+5 problems

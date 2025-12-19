@@ -1,0 +1,22 @@
+
+> publimicro-monorepo@1.0.0 lint C:\projetos\publimicro
+> node tools/remove-eslintignore.js && node --max-old-space-size=4096 ./node_modules/eslint/bin/eslint.js . --ext .js,.jsx,.ts,.tsx "--fix" "--max-warnings=0"
+
+.eslintignore not present
+
+Oops! Something went wrong! :(
+
+ESLint: 9.39.2
+
+TypeError: Key "languageOptions": Key "parser": Expected object with parse() or parseForESLint() method.
+    at new Config (C:\projetos\publimicro\node_modules\.pnpm\eslint@9.39.2_jiti@2.6.1\node_modules\eslint\lib\config\config.js:436:10)
+    at [finalizeConfig] (C:\projetos\publimicro\node_modules\.pnpm\eslint@9.39.2_jiti@2.6.1\node_modules\eslint\lib\config\flat-config-array.js:212:10)
+    at FlatConfigArray.getConfigWithStatus (C:\projetos\publimicro\node_modules\.pnpm\@eslint+config-array@0.21.1\node_modules\@eslint\config-array\dist\cjs\index.cjs:1409:55)
+    at FlatConfigArray.getConfig (C:\projetos\publimicro\node_modules\.pnpm\@eslint+config-array@0.21.1\node_modules\@eslint\config-array\dist\cjs\index.cjs:1427:15)
+    at entryFilter (C:\projetos\publimicro\node_modules\.pnpm\eslint@9.39.2_jiti@2.6.1\node_modules\eslint\lib\eslint\eslint-helpers.js:323:27)
+    at async NodeHfs.<anonymous> (file:///C:/projetos/publimicro/node_modules/.pnpm/@humanfs+core@0.19.1/node_modules/@humanfs/core/src/hfs.js:574:24)
+    at async NodeHfs.walk (file:///C:/projetos/publimicro/node_modules/.pnpm/@humanfs+core@0.19.1/node_modules/@humanfs/core/src/hfs.js:614:3)
+    at async globSearch (C:\projetos\publimicro\node_modules\.pnpm\eslint@9.39.2_jiti@2.6.1\node_modules\eslint\lib\eslint\eslint-helpers.js:364:20)
+    at async Promise.allSettled (index 0)
+    at async globMultiSearch (C:\projetos\publimicro\node_modules\.pnpm\eslint@9.39.2_jiti@2.6.1\node_modules\eslint\lib\eslint\eslint-helpers.js:455:18)
+ÔÇëELIFECYCLEÔÇë Command failed with exit code 2.

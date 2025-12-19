@@ -1,0 +1,5 @@
+C:\projetos\publimicro\apps\journey\src\app\layout.tsx:4:8: 'Link' is defined but never used. [Warning/@typescript-eslint/no-unused-vars]
+C:\projetos\publimicro\apps\journey\src\app\layout.tsx:6:7: 'HOME_URL' is assigned a value but never used. [Warning/@typescript-eslint/no-unused-vars]
+C:\projetos\publimicro\apps\journey\src\app\page.tsx:7:21: 'Users' is defined but never used. [Warning/@typescript-eslint/no-unused-vars]
+
+3 problems

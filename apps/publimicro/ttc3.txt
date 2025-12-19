@@ -1,0 +1,4 @@
+apps/publimicro/.next/dev/types/routes.d.ts(167,8): error TS1109: Expression expected.
+apps/publimicro/.next/dev/types/routes.d.ts(168,6): error TS1109: Expression expected.
+apps/publimicro/.next/dev/types/routes.d.ts(169,4): error TS1109: Expression expected.
+apps/publimicro/.next/dev/types/routes.d.ts(175,1): error TS1160: Unterminated template literal.

@@ -1,0 +1,9 @@
+C:\projetos\publimicro\apps\motors\src\app\page.tsx:6:15: 'Star' is defined but never used. [Warning/@typescript-eslint/no-unused-vars]
+C:\projetos\publimicro\apps\motors\src\app\page.tsx:6:29: 'Zap' is defined but never used. [Warning/@typescript-eslint/no-unused-vars]
+C:\projetos\publimicro\apps\motors\src\app\page.tsx:6:34: 'Users' is defined but never used. [Warning/@typescript-eslint/no-unused-vars]
+C:\projetos\publimicro\apps\motors\src\app\page.tsx:7:11: 'DollarSign' is defined but never used. [Warning/@typescript-eslint/no-unused-vars]
+C:\projetos\publimicro\apps\motors\src\app\page.tsx:7:23: 'CheckCircle' is defined but never used. [Warning/@typescript-eslint/no-unused-vars]
+C:\projetos\publimicro\apps\motors\src\app\page.tsx:8:31: 'TrendingUp' is defined but never used. [Warning/@typescript-eslint/no-unused-vars]
+C:\projetos\publimicro\apps\motors\src\app\page.tsx:8:43: 'Award' is defined but never used. [Warning/@typescript-eslint/no-unused-vars]
+
+7 problems

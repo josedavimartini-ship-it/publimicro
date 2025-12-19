@@ -1,0 +1,4 @@
+
+> publimicro-monorepo@1.0.0 type-check C:\projetos\publimicro
+> tsc --noEmit
+
