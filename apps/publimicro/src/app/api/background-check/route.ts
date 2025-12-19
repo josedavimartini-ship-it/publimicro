@@ -30,15 +30,23 @@ export async function POST(req: Request) {
   const supabase = createServerSupabaseClient();
   
   try {
-    const body: BackgroundCheckRequest = await req.json();
-  const { cpf, full_name, birth_date, email, pending_verification_id, cidade, estado } = body;
-    
-    if (!cpf || !full_name) {
-      return NextResponse.json({ 
-        error: 'CPF and full name are required' 
-      }, { status: 400 });
+    const raw = await req.json() as unknown;
+    if (typeof raw !== 'object' || raw === null) {
+      return NextResponse.json({ error: 'invalid request body' }, { status: 400 });
     }
-    
+    const body = raw as Record<string, unknown>;
+    const cpf = String(body.cpf ?? "").trim();
+    const full_name = String(body.full_name ?? "").trim();
+    const birth_date = body.birth_date ? String(body.birth_date) : undefined;
+    const email = body.email ? String(body.email) : undefined;
+    const pending_verification_id = body.pending_verification_id ? String(body.pending_verification_id) : undefined;
+    const cidade = body.cidade ? String(body.cidade) : undefined;
+    const estado = body.estado ? String(body.estado) : undefined;
+
+    if (!cpf || !full_name) {
+      return NextResponse.json({ error: 'CPF and full name are required' }, { status: 400 });
+    }
+
     const cleanCPF = cpf.replace(/\D/g, '');
     
     // ============================================
