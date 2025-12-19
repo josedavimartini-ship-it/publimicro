@@ -35,7 +35,7 @@ export default function WhatsAppLink({
       console.warn('WhatsApp analytics push failed', err);
     }
     if (typeof onClick === 'function') {
-      onClick(e as any);
+      onClick(e);
     }
   };
 
