@@ -5,7 +5,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
 import { 
-  Plane, Ship, Car, Users, Shield, TrendingUp, 
+  Plane, Car, Users, Shield, TrendingUp, 
   Calendar, DollarSign, Globe, ChevronRight, 
   Sparkles, Award, Clock, CheckCircle2, ArrowRight,
   Sailboat, Crown
