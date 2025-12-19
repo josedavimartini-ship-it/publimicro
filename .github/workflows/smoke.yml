@@ -41,7 +41,14 @@ jobs:
       - name: Run smoke script
         env:
           SAVE_ARTIFACTS: '1'
-        run: node tools/smoke-whatsapp.js http://127.0.0.1:3000
+          VERCEL_PROTECTION_BYPASS: ${{ github.event.inputs['bypass-token'] || secrets.VERCEL_PROTECTION_BYPASS }}
+        run: |
+          # If a preview URL is provided (workflow_dispatch), use it; otherwise default to local server
+          PREVIEW_URL="${{ github.event.inputs['preview-url'] }}"
+          if [ -z "$PREVIEW_URL" ]; then
+            PREVIEW_URL="http://127.0.0.1:3000"
+          fi
+          node tools/smoke-whatsapp.js "$PREVIEW_URL"
 
       - name: Upload artifacts
         uses: actions/upload-artifact@v4
