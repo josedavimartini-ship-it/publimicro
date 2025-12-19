@@ -8,6 +8,18 @@ const tryRequire = (name) => {
   }
 };
 
+// Cache optional plugins/parsers so we don't set `parser: null` in the
+// flat config (ESLint expects a parser object with parse()/parseForESLint()).
+const espree = tryRequire('espree');
+const tsParser = tryRequire('@typescript-eslint/parser');
+const tsESLintPlugin = tryRequire('@typescript-eslint/eslint-plugin');
+const reactPlugin = tryRequire('eslint-plugin-react');
+const reactHooksPlugin = tryRequire('eslint-plugin-react-hooks');
+const jsxA11yPlugin = tryRequire('eslint-plugin-jsx-a11y');
+const eslintConfigNext = tryRequire('eslint-config-next');
+const eslintPluginNext = tryRequire('eslint-plugin-next');
+
+
 module.exports = [
   // Global ignores (migrated from .eslintignore)
   {
@@ -60,7 +72,7 @@ module.exports = [
   {
     files: ['**/*.js', '**/*.cjs', '**/*.mjs'],
     languageOptions: {
-      parser: tryRequire('espree'),
+      ...(espree && typeof espree.parse === 'function' ? { parser: espree } : {}),
       parserOptions: {
         ecmaVersion: 2022,
         sourceType: 'module',
@@ -86,7 +98,7 @@ module.exports = [
   {
     files: ['**/*.{ts,tsx}'],
     languageOptions: {
-      parser: tryRequire('@typescript-eslint/parser'),
+      ...(tsParser && (typeof tsParser.parse === 'function' || typeof tsParser.parseForESLint === 'function') ? { parser: tsParser } : {}),
       parserOptions: {
         ecmaVersion: 2022,
         sourceType: 'module',
@@ -94,11 +106,12 @@ module.exports = [
         // For TypeScript we enable typed linting where tsconfig applies.
       },
     },
-    plugins: {
-      '@typescript-eslint': require('@typescript-eslint/eslint-plugin'),
-      react: require('eslint-plugin-react'),
-      'react-hooks': require('eslint-plugin-react-hooks'),
-    },
+    plugins: Object.assign(
+      {},
+      tsESLintPlugin ? { '@typescript-eslint': tsESLintPlugin } : {},
+      reactPlugin ? { react: reactPlugin } : {},
+      reactHooksPlugin ? { 'react-hooks': reactHooksPlugin } : {}
+    ),
     rules: {
       // TypeScript-specific rules (apply to ts/tsx files)
       '@typescript-eslint/no-unused-vars': ['warn', { argsIgnorePattern: '^_' }],
@@ -123,17 +136,14 @@ module.exports = [
   {
     files: ['**/*.{js,jsx}'],
     languageOptions: {
-      parser: tryRequire('espree'),
+      ...(espree && typeof espree.parse === 'function' ? { parser: espree } : {}),
       parserOptions: {
         ecmaVersion: 2022,
         sourceType: 'module',
         ecmaFeatures: { jsx: true },
       },
     },
-    plugins: {
-      react: require('eslint-plugin-react'),
-      'react-hooks': require('eslint-plugin-react-hooks'),
-    },
+    plugins: Object.assign({}, reactPlugin ? { react: reactPlugin } : {}, reactHooksPlugin ? { 'react-hooks': reactHooksPlugin } : {}),
     rules: {
       // JS files get a conservative rule set; keep console warnings and prefer-const
       'no-console': 'warn',
@@ -154,7 +164,7 @@ module.exports = [
       'packages/*/**/src/**/*.{ts,tsx}',
     ],
     languageOptions: {
-      parser: require('@typescript-eslint/parser'),
+      ...(tsParser && (typeof tsParser.parse === 'function' || typeof tsParser.parseForESLint === 'function') ? { parser: tsParser } : {}),
       parserOptions: {
         ecmaVersion: 2022,
         sourceType: 'module',
@@ -168,9 +178,7 @@ module.exports = [
         tsconfigRootDir: __dirname,
       },
     },
-    plugins: {
-      '@typescript-eslint': require('@typescript-eslint/eslint-plugin'),
-    },
+    plugins: tsESLintPlugin ? { '@typescript-eslint': tsESLintPlugin } : {},
     rules: {},
   },
 
@@ -178,7 +186,7 @@ module.exports = [
   {
     files: ['apps/publimicro/src/**/*.{ts,tsx}'],
     languageOptions: {
-      parser: require('@typescript-eslint/parser'),
+      ...(tsParser && (typeof tsParser.parse === 'function' || typeof tsParser.parseForESLint === 'function') ? { parser: tsParser } : {}),
       parserOptions: {
         ecmaVersion: 2022,
         sourceType: 'module',
@@ -189,13 +197,8 @@ module.exports = [
     },
     plugins: Object.assign(
       {},
-      {
-        '@typescript-eslint': require('@typescript-eslint/eslint-plugin'),
-        react: require('eslint-plugin-react'),
-        'react-hooks': require('eslint-plugin-react-hooks'),
-        'jsx-a11y': require('eslint-plugin-jsx-a11y'),
-      },
-      tryRequire('eslint-plugin-next') ? { next: tryRequire('eslint-plugin-next') } : {}
+      Object.assign({}, tsESLintPlugin ? { '@typescript-eslint': tsESLintPlugin } : {}, reactPlugin ? { react: reactPlugin } : {}, reactHooksPlugin ? { 'react-hooks': reactHooksPlugin } : {}, jsxA11yPlugin ? { 'jsx-a11y': jsxA11yPlugin } : {}),
+      eslintPluginNext ? { next: eslintPluginNext } : {}
     ),
     // Merge in recommended rules for Next.js core web vitals by importing the config
     rules: Object.assign(
@@ -203,7 +206,7 @@ module.exports = [
       // Next.js core-web-vitals rules (if available)
       (function getNextCoreRules() {
         try {
-          const cfg = require('eslint-config-next');
+          const cfg = eslintConfigNext || require('eslint-config-next');
           const rules = (cfg && cfg.configs && cfg.configs['core-web-vitals'] && cfg.configs['core-web-vitals'].rules) || {};
           // Filter out rules that reference the @next plugin namespace because
           // the plugin is not a separate installable package; keep only the
@@ -240,6 +243,7 @@ module.exports = [
       react: { version: 'detect' },
     },
   },
+
   // Final override: ensure scripts folders can use console (placed last to take precedence)
   {
     files: [
