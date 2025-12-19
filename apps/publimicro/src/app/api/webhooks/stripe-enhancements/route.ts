@@ -110,13 +110,20 @@ export async function POST(request: NextRequest) {
 async function handleCheckoutCompleted(session: Stripe.Checkout.Session, supabase: SupabaseClient) {
   // console.log('Processing checkout.session.completed:', session.id);
 
-  const {
-    user_id,
-    announcement_id,
-    category: _category,
-    enhancement_type,
-    price_brl,
-  } = (session.metadata || {}) as Record<string, string>;
+  function parseMetadata(raw: unknown): Record<string, string> {
+    if (typeof raw !== 'object' || raw === null) return {};
+    try {
+      return Object.fromEntries(Object.entries(raw as Record<string, unknown>).map(([k, v]) => [k, String(v ?? '')]));
+    } catch {
+      return {};
+    }
+  }
+
+  const metadata = parseMetadata(session.metadata);
+  const user_id = metadata.user_id;
+  const announcement_id = metadata.announcement_id;
+  const enhancement_type = metadata.enhancement_type;
+  const price_brl = metadata.price_brl;
 
   if (!user_id || !announcement_id || !enhancement_type) {
     console.error('Missing required metadata in checkout session');
