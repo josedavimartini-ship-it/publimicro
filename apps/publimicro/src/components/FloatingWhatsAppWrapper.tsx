@@ -2,7 +2,7 @@
 
 import { FloatingWhatsApp, WhatsAppLockedMessage } from "@publimicro/ui";
 import { useAuth } from "./AuthProvider";
-import { usePathname, useRouter } from 'next/navigation';
+import { usePathname } from 'next/navigation';
 
 /**
  * Wrapper for FloatingWhatsApp that checks user verification and subscription status.

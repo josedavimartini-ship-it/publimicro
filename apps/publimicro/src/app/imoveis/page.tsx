@@ -137,7 +137,7 @@ export default function ImoveisPage() {
     } finally {
       setLoading(false);
     }
-  }, [supabase, filters]);
+  }, [filters]);
 
   useEffect(() => {
     void loadProperties();

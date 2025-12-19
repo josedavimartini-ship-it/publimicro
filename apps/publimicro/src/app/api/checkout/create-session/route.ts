@@ -24,18 +24,21 @@ export async function POST(req: Request) {
       );
     }
 
-    // Criar cliente Supabase com o token do usuário
-    const supabase = createClient(
-      process.env.NEXT_PUBLIC_SUPABASE_URL!,
-      process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
-      {
-        global: {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
+    // Criar cliente Supabase com o token do usuário (validate env vars)
+    const SUPABASE_URL = process.env.NEXT_PUBLIC_SUPABASE_URL;
+    const SUPABASE_ANON = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+    if (!SUPABASE_URL || !SUPABASE_ANON) {
+      console.error('Missing Supabase env vars for checkout:create-session');
+      return NextResponse.json({ error: 'Server misconfiguration' }, { status: 500 });
+    }
+
+    const supabase = createClient(SUPABASE_URL, SUPABASE_ANON, {
+      global: {
+        headers: {
+          Authorization: `Bearer ${token}`,
         },
-      }
-    );
+      },
+    });
 
     // Verificar autenticação
     const {

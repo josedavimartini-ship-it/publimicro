@@ -2,8 +2,8 @@
 
 import { motion } from 'framer-motion';
 import { 
-  ShoppingBag, Package, Smartphone, Laptop, Home, Car,
-  Shirt, Baby, Wrench, Book, Music, Dumbbell,
+  ShoppingBag, Package, Smartphone, Home, Car,
+  Shirt, Baby, Dumbbell,
   ArrowRight, Star, TrendingUp, Shield, Zap, Users,
   Heart, Gift, Sparkles, Search, Tag, CheckCircle
 } from 'lucide-react';

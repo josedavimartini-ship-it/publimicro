@@ -258,39 +258,39 @@ export default function PropertyMapSearch({
               />
 
               {/* Property Markers */}
-              {filteredProperties.map((property) => (
-                <Marker
-                  key={property.id}
-                  position={[property.latitude!, property.longitude!]}
-                >
-                  <Popup maxWidth={280}>
-                    <div className="p-1">
-                      {property.fotos && property.fotos[0] && (
-                        <div className="relative w-full h-24 mb-2 rounded overflow-hidden">
-                          <Image
-                            src={property.fotos[0]}
-                            alt={property.nome}
-                            fill
-                            className="object-cover"
-                          />
-                        </div>
-                      )}
-                      <h3 className="font-bold text-gray-900 text-sm">{property.nome}</h3>
-                      {property.preco && (
-                        <p className="text-[#CD7F32] font-bold text-sm mt-1">
-                          R$ {property.preco.toLocaleString('pt-BR')}
-                        </p>
-                      )}
-                      <Link
-                        href={`/imoveis/${property.slug || property.id}`}
-                        className="mt-2 block w-full text-center py-1.5 bg-[#CD7F32] text-white text-xs font-semibold rounded hover:bg-[#B87333] transition-colors"
-                      >
-                        Ver detalhes
-                      </Link>
-                    </div>
-                  </Popup>
-                </Marker>
-              ))}
+              {filteredProperties.map((property) => {
+                if (typeof property.latitude !== 'number' || typeof property.longitude !== 'number') return null;
+                return (
+                  <Marker key={property.id} position={[property.latitude, property.longitude]}>
+                    <Popup maxWidth={280}>
+                      <div className="p-1">
+                        {property.fotos && property.fotos[0] && (
+                          <div className="relative w-full h-24 mb-2 rounded overflow-hidden">
+                            <Image
+                              src={property.fotos[0]}
+                              alt={property.nome}
+                              fill
+                              className="object-cover"
+                            />
+                          </div>
+                        )}
+                        <h3 className="font-bold text-gray-900 text-sm">{property.nome}</h3>
+                        {property.preco && (
+                          <p className="text-[#CD7F32] font-bold text-sm mt-1">
+                            R$ {property.preco.toLocaleString('pt-BR')}
+                          </p>
+                        )}
+                        <Link
+                          href={`/imoveis/${property.slug || property.id}`}
+                          className="mt-2 block w-full text-center py-1.5 bg-[#CD7F32] text-white text-xs font-semibold rounded hover:bg-[#B87333] transition-colors"
+                        >
+                          Ver detalhes
+                        </Link>
+                      </div>
+                    </Popup>
+                  </Marker>
+                );
+              })}
 
               {/* Selection rectangle */}
               {selectionBounds && (

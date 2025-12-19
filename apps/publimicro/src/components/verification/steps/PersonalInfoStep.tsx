@@ -49,7 +49,8 @@ export default function PersonalInfoStep({
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    let { name, value } = e.target;
+    const { name } = e.target;
+    let value = e.target.value;
 
     if (name === 'cpf') {
       value = formatCPF(value);
