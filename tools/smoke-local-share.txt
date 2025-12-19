@@ -1,0 +1,82 @@
+Launched browser: chromium
+Failed to create context/page (attempt 1/3): browserContext.newPage: Target page, context or browser has been closed
+{
+  "desktop": {
+    "viewport": {
+      "name": "desktop",
+      "width": 1280,
+      "height": 800
+    },
+    "checks": [
+      {
+        "path": "http://localhost:3006",
+        "waAnchors": [],
+        "floating": [],
+        "error": "page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:3006/\nCall log:\n\u001b[2m  - navigating to \"http://localhost:3006/\", waiting until \"networkidle\"\u001b[22m\n"
+      },
+      {
+        "path": "http://localhost:3006/projetos/carcara",
+        "waAnchors": [],
+        "floating": [],
+        "error": "page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:3006/projetos/carcara\nCall log:\n\u001b[2m  - navigating to \"http://localhost:3006/projetos/carcara\", waiting until \"networkidle\"\u001b[22m\n"
+      },
+      {
+        "path": "http://localhost:3006/imoveis",
+        "waAnchors": [],
+        "floating": [],
+        "error": "page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:3006/imoveis\nCall log:\n\u001b[2m  - navigating to \"http://localhost:3006/imoveis\", waiting until \"networkidle\"\u001b[22m\n"
+      },
+      {
+        "path": "http://localhost:3006/entrar",
+        "waAnchors": [],
+        "floating": [],
+        "error": "page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:3006/entrar\nCall log:\n\u001b[2m  - navigating to \"http://localhost:3006/entrar\", waiting until \"networkidle\"\u001b[22m\n"
+      },
+      {
+        "path": "http://localhost:3006/conta",
+        "waAnchors": [],
+        "floating": [],
+        "error": "page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:3006/conta\nCall log:\n\u001b[2m  - navigating to \"http://localhost:3006/conta\", waiting until \"networkidle\"\u001b[22m\n"
+      }
+    ]
+  },
+  "mobile": {
+    "viewport": {
+      "name": "mobile",
+      "width": 375,
+      "height": 812
+    },
+    "checks": [
+      {
+        "path": "http://localhost:3006",
+        "waAnchors": [],
+        "floating": [],
+        "error": "page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:3006/\nCall log:\n\u001b[2m  - navigating to \"http://localhost:3006/\", waiting until \"networkidle\"\u001b[22m\n"
+      },
+      {
+        "path": "http://localhost:3006/projetos/carcara",
+        "waAnchors": [],
+        "floating": [],
+        "error": "page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:3006/projetos/carcara\nCall log:\n\u001b[2m  - navigating to \"http://localhost:3006/projetos/carcara\", waiting until \"networkidle\"\u001b[22m\n"
+      },
+      {
+        "path": "http://localhost:3006/imoveis",
+        "waAnchors": [],
+        "floating": [],
+        "error": "page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:3006/imoveis\nCall log:\n\u001b[2m  - navigating to \"http://localhost:3006/imoveis\", waiting until \"networkidle\"\u001b[22m\n"
+      },
+      {
+        "path": "http://localhost:3006/entrar",
+        "waAnchors": [],
+        "floating": [],
+        "error": "page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:3006/entrar\nCall log:\n\u001b[2m  - navigating to \"http://localhost:3006/entrar\", waiting until \"networkidle\"\u001b[22m\n"
+      },
+      {
+        "path": "http://localhost:3006/conta",
+        "waAnchors": [],
+        "floating": [],
+        "error": "page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:3006/conta\nCall log:\n\u001b[2m  - navigating to \"http://localhost:3006/conta\", waiting until \"networkidle\"\u001b[22m\n"
+      }
+    ]
+  }
+}
