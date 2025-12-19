@@ -47,6 +47,8 @@ try {
         '--disable-accelerated-2d-canvas',
         '--disable-software-rasterizer',
         '--disable-dev-shm-usage',
+        '--single-process',
+        '--disable-gpu-sandbox',
         '--no-sandbox',
         '--no-zygote',
         '--disable-setuid-sandbox',
