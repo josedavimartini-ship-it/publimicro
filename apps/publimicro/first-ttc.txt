@@ -1,0 +1,9 @@
+Scope: 2 of 13 workspace projects
+apps/publimicro type-check$ tsc --noEmit "--silent"
+. type-check$ tsc --noEmit "--silent"
+. type-check: error TS5023: Unknown compiler option '--silent'.
+apps/publimicro type-check: error TS5023: Unknown compiler option '--silent'.
+. type-check: Failed
+ÔÇëERR_PNPM_RECURSIVE_RUN_FIRST_FAILÔÇë publimicro-monorepo@1.0.0 type-check: `tsc --noEmit "--silent"`
+Exit status 1
+apps/publimicro type-check: Failed

@@ -1,0 +1,24 @@
+
+<--- Last few GCs --->
+
+[10044:00000290A5951000]   137256 ms: Mark-Compact 1768.5 (1803.9) -> 1767.2 (1803.9) MB, pooled: 2 MB, 2128.52 / 0.00 ms  (average mu = 0.365, current mu = 0.043) allocation failure; scavenge might not succeed
+[10044:00000290A5951000]   139337 ms: Mark-Compact (reduce) 1769.3 (1804.1) -> 1768.6 (1802.3) MB, pooled: 0 MB, 1165.67 / 0.00 ms  (+ 257.5 ms in 0 steps since start of marking, biggest step 0.0 ms, walltime since start of marking 1625 ms) (average mu = 
+
+<--- JS stacktrace --->
+
+FATAL ERROR: Reached heap limit Allocation failed - JavaScript heap out of memory
+----- Native stack trace -----
+
+ 1: 00007FF6D87470F7 node::SetCppgcReference+18039
+ 2: 00007FF6D86AAA18 v8::base::CPU::num_virtual_address_bits+102920
+ 3: 00007FF6D92AF151 v8::Isolate::ReportExternalAllocationLimitReached+65
+ 4: 00007FF6D929BCD6 v8::Function::Experimental_IsNopFunction+3302
+ 5: 00007FF6D90F8420 v8::internal::StrongRootAllocatorBase::StrongRootAllocatorBase+33904
+ 6: 00007FF6D90F4AAA v8::internal::StrongRootAllocatorBase::StrongRootAllocatorBase+19194
+ 7: 00007FF6D910B08C v8::Isolate::GetHeapProfiler+8012
+ 8: 00007FF6D910B90A v8::Isolate::GetHeapProfiler+10186
+ 9: 00007FF6D911C2FB v8::Isolate::GetHeapProfiler+78267
+10: 00007FF6D8DE93FB v8::base::AddressSpaceReservation::AddressSpaceReservation+323419
+11: 00007FF6D936A5FE v8::PropertyDescriptor::writable+726222
+12: 00007FF6D92CD9AA v8::PropertyDescriptor::writable+84090
+13: 00007FF659691DFB 

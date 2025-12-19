@@ -1,0 +1,39 @@
+2025-12-19T14:29:21.485Z eslint:cli CLI args: [ 'eslint.config.js', '--debug' ]
+2025-12-19T14:29:21.501Z eslint:cli Using flat config? true
+2025-12-19T14:29:21.529Z eslint:cli Running on files
+2025-12-19T14:29:21.538Z eslint:eslint Using config loader LegacyConfigLoader
+2025-12-19T14:29:21.540Z eslint:eslint Using file patterns: eslint.config.js
+2025-12-19T14:29:21.540Z eslint:eslint Deleting cache file at C:\projetos\publimicro\.eslintcache
+2025-12-19T14:29:21.547Z eslint:config-loader Calculating config for file C:\projetos\publimicro\eslint.config.js
+2025-12-19T14:29:21.548Z eslint:config-loader Searching for eslint.config.js
+2025-12-19T14:29:21.559Z eslint:config-loader [Legacy]: Calculating config for C:\projetos\publimicro\eslint.config.js
+2025-12-19T14:29:21.560Z eslint:config-loader [Legacy]: Using config file C:\projetos\publimicro\eslint.config.js and base path C:\projetos\publimicro
+2025-12-19T14:29:21.560Z eslint:config-loader Calculating config array from config file C:\projetos\publimicro\eslint.config.js and base path C:\projetos\publimicro
+2025-12-19T14:29:21.563Z eslint:config-loader Loading config file C:\projetos\publimicro\eslint.config.js
+2025-12-19T14:29:21.564Z eslint:config-loader Loading config from C:\projetos\publimicro\eslint.config.js
+2025-12-19T14:29:21.564Z eslint:config-loader Config file URL is file:///C:/projetos/publimicro/eslint.config.js
+2025-12-19T14:29:25.286Z eslint:rules Loading rule 'consistent-return' (remaining=291)
+2025-12-19T14:29:25.393Z eslint:rules Loading rule 'dot-notation' (remaining=290)
+2025-12-19T14:29:25.458Z eslint:rules Loading rule 'init-declarations' (remaining=289)
+2025-12-19T14:29:25.474Z eslint:rules Loading rule 'max-params' (remaining=288)
+2025-12-19T14:29:25.654Z eslint:rules Loading rule 'no-dupe-class-members' (remaining=287)
+2025-12-19T14:29:25.686Z eslint:rules Loading rule 'no-empty-function' (remaining=286)
+2025-12-19T14:29:25.768Z eslint:rules Loading rule 'no-invalid-this' (remaining=285)
+2025-12-19T14:29:25.785Z eslint:rules Loading rule 'no-loop-func' (remaining=284)
+2025-12-19T14:29:25.796Z eslint:rules Loading rule 'no-loss-of-precision' (remaining=283)
+2025-12-19T14:29:25.804Z eslint:rules Loading rule 'no-magic-numbers' (remaining=282)
+2025-12-19T14:29:26.532Z eslint:rules Loading rule 'no-restricted-imports' (remaining=281)
+2025-12-19T14:29:27.168Z eslint:rules Loading rule 'no-unused-expressions' (remaining=280)
+2025-12-19T14:29:27.251Z eslint:rules Loading rule 'no-useless-constructor' (remaining=279)
+2025-12-19T14:29:27.322Z eslint:rules Loading rule 'prefer-destructuring' (remaining=278)
+2025-12-19T14:29:37.477Z eslint:config-loader Config file C:\projetos\publimicro\eslint.config.js is not empty
+2025-12-19T14:29:37.482Z eslint:eslint 1 file(s) found in 15939 ms
+2025-12-19T14:29:37.482Z eslint:eslint Linting in single-thread mode.
+2025-12-19T14:29:37.483Z eslint:config-loader Looking up cached config for C:\projetos\publimicro\eslint.config.js
+2025-12-19T14:29:37.484Z eslint:config-loader [Legacy]: Looking up cached config for C:\projetos\publimicro
+
+C:\projetos\publimicro\eslint.config.js
+  0:0  warning  File ignored because of a matching ignore pattern. Use "--no-ignore" to disable file ignore settings or use "--no-warn-ignored" to suppress this warning
+
+Ô£û 1 problem (0 errors, 1 warning)
+

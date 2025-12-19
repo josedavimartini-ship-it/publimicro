@@ -1,0 +1,4 @@
+C:\projetos\publimicro\apps\outdoor\src\app\page.tsx:6:31: 'Wind' is defined but never used. [Warning/@typescript-eslint/no-unused-vars]
+C:\projetos\publimicro\apps\outdoor\src\app\page.tsx:6:37: 'Sun' is defined but never used. [Warning/@typescript-eslint/no-unused-vars]
+
+2 problems

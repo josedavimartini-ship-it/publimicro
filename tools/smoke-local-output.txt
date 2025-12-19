@@ -1,0 +1,81 @@
+Launched browser: chromium
+{
+  "desktop": {
+    "viewport": {
+      "name": "desktop",
+      "width": 1280,
+      "height": 800
+    },
+    "checks": [
+      {
+        "path": "http://localhost:3000",
+        "waAnchors": [],
+        "floating": [],
+        "error": "page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:3000/\nCall log:\n\u001b[2m  - navigating to \"http://localhost:3000/\", waiting until \"networkidle\"\u001b[22m\n"
+      },
+      {
+        "path": "http://localhost:3000/projetos/carcara",
+        "waAnchors": [],
+        "floating": [],
+        "error": "page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:3000/projetos/carcara\nCall log:\n\u001b[2m  - navigating to \"http://localhost:3000/projetos/carcara\", waiting until \"networkidle\"\u001b[22m\n"
+      },
+      {
+        "path": "http://localhost:3000/imoveis",
+        "waAnchors": [],
+        "floating": [],
+        "error": "page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:3000/imoveis\nCall log:\n\u001b[2m  - navigating to \"http://localhost:3000/imoveis\", waiting until \"networkidle\"\u001b[22m\n"
+      },
+      {
+        "path": "http://localhost:3000/entrar",
+        "waAnchors": [],
+        "floating": [],
+        "error": "page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:3000/entrar\nCall log:\n\u001b[2m  - navigating to \"http://localhost:3000/entrar\", waiting until \"networkidle\"\u001b[22m\n"
+      },
+      {
+        "path": "http://localhost:3000/conta",
+        "waAnchors": [],
+        "floating": [],
+        "error": "page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:3000/conta\nCall log:\n\u001b[2m  - navigating to \"http://localhost:3000/conta\", waiting until \"networkidle\"\u001b[22m\n"
+      }
+    ]
+  },
+  "mobile": {
+    "viewport": {
+      "name": "mobile",
+      "width": 375,
+      "height": 812
+    },
+    "checks": [
+      {
+        "path": "http://localhost:3000",
+        "waAnchors": [],
+        "floating": [],
+        "error": "page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:3000/\nCall log:\n\u001b[2m  - navigating to \"http://localhost:3000/\", waiting until \"networkidle\"\u001b[22m\n"
+      },
+      {
+        "path": "http://localhost:3000/projetos/carcara",
+        "waAnchors": [],
+        "floating": [],
+        "error": "page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:3000/projetos/carcara\nCall log:\n\u001b[2m  - navigating to \"http://localhost:3000/projetos/carcara\", waiting until \"networkidle\"\u001b[22m\n"
+      },
+      {
+        "path": "http://localhost:3000/imoveis",
+        "waAnchors": [],
+        "floating": [],
+        "error": "page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:3000/imoveis\nCall log:\n\u001b[2m  - navigating to \"http://localhost:3000/imoveis\", waiting until \"networkidle\"\u001b[22m\n"
+      },
+      {
+        "path": "http://localhost:3000/entrar",
+        "waAnchors": [],
+        "floating": [],
+        "error": "page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:3000/entrar\nCall log:\n\u001b[2m  - navigating to \"http://localhost:3000/entrar\", waiting until \"networkidle\"\u001b[22m\n"
+      },
+      {
+        "path": "http://localhost:3000/conta",
+        "waAnchors": [],
+        "floating": [],
+        "error": "page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:3000/conta\nCall log:\n\u001b[2m  - navigating to \"http://localhost:3000/conta\", waiting until \"networkidle\"\u001b[22m\n"
+      }
+    ]
+  }
+}

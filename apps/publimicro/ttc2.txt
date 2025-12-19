@@ -1,0 +1,4 @@
+apps/publimicro/src/app/api/admin/phone-preview/route.ts(85,29): error TS2352: Conversion of type 'ParserError<`Expected identifier at \`${GenericStringError}\``>' to type 'Record<string, unknown>' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.
+  Index signature for type 'string' is missing in type '{ error: true; } & String'.
+apps/publimicro/src/components/FloatingWhatsAppWrapper.tsx(38,44): error TS2339: Property 'subscription_tier' does not exist on type 'UserProfile'.
+apps/publimicro/src/components/FloatingWhatsAppWrapper.tsx(38,74): error TS2339: Property 'subscription_active' does not exist on type 'UserProfile'.
