@@ -1,0 +1,102 @@
+ÔÇëWARNÔÇë GET https://registry.npmjs.org/three error (ERR_SOCKET_TIMEOUT). Will retry in 10 seconds. 2 retries left.
+ÔÇëWARNÔÇë GET https://registry.npmjs.org/rimraf error (ERR_SOCKET_TIMEOUT). Will retry in 10 seconds. 2 retries left.
+ÔÇëWARNÔÇë GET https://registry.npmjs.org/supabase error (ECONNRESET). Will retry in 10 seconds. 2 retries left.
+ÔÇëWARNÔÇë GET https://registry.npmjs.org/@eslint%2Feslintrc error (ECONNRESET). Will retry in 10 seconds. 2 retries left.
+ÔÇëWARNÔÇë GET https://registry.npmjs.org/clsx error (ECONNRESET). Will retry in 10 seconds. 2 retries left.
+ÔÇëWARNÔÇë GET https://registry.npmjs.org/supabase error (ETIMEDOUT). Will retry in 1 minute. 1 retries left.
+ÔÇëWARNÔÇë GET https://registry.npmjs.org/espree error (ECONNRESET). Will retry in 10 seconds. 2 retries left.
+ÔÇëWARNÔÇë GET https://registry.npmjs.org/@headlessui%2Freact error (ECONNRESET). Will retry in 10 seconds. 2 retries left.
+ÔÇëWARNÔÇë GET https://registry.npmjs.org/autoprefixer error (ECONNRESET). Will retry in 10 seconds. 2 retries left.
+ÔÇëWARNÔÇë GET https://registry.npmjs.org/rimraf error (ETIMEDOUT). Will retry in 1 minute. 1 retries left.
+ÔÇëWARNÔÇë GET https://registry.npmjs.org/@types%2Freact error (ECONNRESET). Will retry in 10 seconds. 2 retries left.
+ÔÇëWARNÔÇë GET https://registry.npmjs.org/tailwind-variants error (ECONNRESET). Will retry in 10 seconds. 2 retries left.
+ÔÇëWARNÔÇë GET https://registry.npmjs.org/@supabase%2Fssr error (ECONNRESET). Will retry in 10 seconds. 2 retries left.
+ÔÇëWARNÔÇë GET https://registry.npmjs.org/@react-three%2Fdrei error (ECONNRESET). Will retry in 10 seconds. 2 retries left.
+ÔÇëWARNÔÇë GET https://registry.npmjs.org/eslint-formatter-unix error (ECONNRESET). Will retry in 10 seconds. 2 retries left.
+ÔÇëWARNÔÇë GET https://registry.npmjs.org/@typescript-eslint%2Feslint-plugin error (ECONNRESET). Will retry in 10 seconds. 2 retries left.
+ÔÇëWARNÔÇë GET https://registry.npmjs.org/three error (ETIMEDOUT). Will retry in 1 minute. 1 retries left.
+ÔÇëWARNÔÇë GET https://registry.npmjs.org/tailwindcss error (ECONNRESET). Will retry in 10 seconds. 2 retries left.
+ÔÇëWARNÔÇë GET https://registry.npmjs.org/playwright-chromium error (ECONNRESET). Will retry in 10 seconds. 2 retries left.
+ÔÇëWARNÔÇë GET https://registry.npmjs.org/@types%2Fnode error (ECONNRESET). Will retry in 10 seconds. 2 retries left.
+ÔÇëWARNÔÇë GET https://registry.npmjs.org/@ffmpeg-installer%2Fffmpeg error (ECONNRESET). Will retry in 10 seconds. 2 retries left.
+ÔÇëWARNÔÇë GET https://registry.npmjs.org/eslint error (ECONNRESET). Will retry in 10 seconds. 2 retries left.
+ÔÇëWARNÔÇë GET https://registry.npmjs.org/@react-three%2Ffiber error (ECONNRESET). Will retry in 10 seconds. 2 retries left.
+ÔÇëWARNÔÇë GET https://registry.npmjs.org/eslint-plugin-jsx-a11y error (ECONNRESET). Will retry in 10 seconds. 2 retries left.
+ÔÇëWARNÔÇë GET https://registry.npmjs.org/react-icons error (ECONNRESET). Will retry in 10 seconds. 2 retries left.
+ÔÇëWARNÔÇë GET https://registry.npmjs.org/eslint-plugin-react-hooks error (ECONNRESET). Will retry in 10 seconds. 2 retries left.
+ÔÇëWARNÔÇë GET https://registry.npmjs.org/react-dom error (ECONNRESET). Will retry in 10 seconds. 2 retries left.
+ÔÇëWARNÔÇë GET https://registry.npmjs.org/next error (ECONNRESET). Will retry in 10 seconds. 2 retries left.
+ÔÇëWARNÔÇë GET https://registry.npmjs.org/turbo error (ECONNRESET). Will retry in 10 seconds. 2 retries left.
+ÔÇëWARNÔÇë GET https://registry.npmjs.org/eslint-config-next error (ECONNRESET). Will retry in 10 seconds. 2 retries left.
+ÔÇëWARNÔÇë GET https://registry.npmjs.org/react error (ECONNRESET). Will retry in 10 seconds. 2 retries left.
+ÔÇëWARNÔÇë GET https://registry.npmjs.org/stripe error (ECONNRESET). Will retry in 10 seconds. 2 retries left.
+ÔÇëWARNÔÇë GET https://registry.npmjs.org/@typescript-eslint%2Fparser error (ECONNRESET). Will retry in 10 seconds. 2 retries left.
+ÔÇëWARNÔÇë GET https://registry.npmjs.org/react-hook-form error (ECONNRESET). Will retry in 10 seconds. 2 retries left.
+ÔÇëWARNÔÇë GET https://registry.npmjs.org/eslint-plugin-react error (ECONNRESET). Will retry in 10 seconds. 2 retries left.
+ÔÇëWARNÔÇë GET https://registry.npmjs.org/typescript error (ECONNRESET). Will retry in 10 seconds. 2 retries left.
+ÔÇëWARNÔÇë GET https://registry.npmjs.org/@radix-ui%2Freact-dialog error (ECONNRESET). Will retry in 10 seconds. 2 retries left.
+ÔÇëWARNÔÇë GET https://registry.npmjs.org/@eslint%2Feslintrc error (ENOTFOUND). Will retry in 1 minute. 1 retries left.
+ÔÇëWARNÔÇë GET https://registry.npmjs.org/espree error (ENOTFOUND). Will retry in 1 minute. 1 retries left.
+ÔÇëWARNÔÇë GET https://registry.npmjs.org/@headlessui%2Freact error (ENOTFOUND). Will retry in 1 minute. 1 retries left.
+ÔÇëWARNÔÇë GET https://registry.npmjs.org/autoprefixer error (ENOTFOUND). Will retry in 1 minute. 1 retries left.
+ÔÇëWARNÔÇë GET https://registry.npmjs.org/@types%2Freact error (ENOTFOUND). Will retry in 1 minute. 1 retries left.
+ÔÇëWARNÔÇë GET https://registry.npmjs.org/tailwind-variants error (ENOTFOUND). Will retry in 1 minute. 1 retries left.
+ÔÇëWARNÔÇë GET https://registry.npmjs.org/@supabase%2Fssr error (ENOTFOUND). Will retry in 1 minute. 1 retries left.
+ÔÇëWARNÔÇë GET https://registry.npmjs.org/@react-three%2Fdrei error (ENOTFOUND). Will retry in 1 minute. 1 retries left.
+ÔÇëWARNÔÇë GET https://registry.npmjs.org/eslint-formatter-unix error (ENOTFOUND). Will retry in 1 minute. 1 retries left.
+ÔÇëWARNÔÇë GET https://registry.npmjs.org/@typescript-eslint%2Feslint-plugin error (ENOTFOUND). Will retry in 1 minute. 1 retries left.
+ÔÇëWARNÔÇë GET https://registry.npmjs.org/tailwindcss error (ENOTFOUND). Will retry in 1 minute. 1 retries left.
+ÔÇëWARNÔÇë GET https://registry.npmjs.org/playwright-chromium error (ENOTFOUND). Will retry in 1 minute. 1 retries left.
+ÔÇëWARNÔÇë GET https://registry.npmjs.org/@types%2Fnode error (ENOTFOUND). Will retry in 1 minute. 1 retries left.
+ÔÇëWARNÔÇë GET https://registry.npmjs.org/@ffmpeg-installer%2Fffmpeg error (ENOTFOUND). Will retry in 1 minute. 1 retries left.
+ÔÇëWARNÔÇë GET https://registry.npmjs.org/eslint error (ENOTFOUND). Will retry in 1 minute. 1 retries left.
+ÔÇëWARNÔÇë GET https://registry.npmjs.org/clsx error (ENOTFOUND). Will retry in 1 minute. 1 retries left.
+ÔÇëWARNÔÇë GET https://registry.npmjs.org/@react-three%2Ffiber error (ENOTFOUND). Will retry in 1 minute. 1 retries left.
+ÔÇëWARNÔÇë GET https://registry.npmjs.org/eslint-plugin-jsx-a11y error (ENOTFOUND). Will retry in 1 minute. 1 retries left.
+ÔÇëWARNÔÇë GET https://registry.npmjs.org/react-icons error (ENOTFOUND). Will retry in 1 minute. 1 retries left.
+ÔÇëWARNÔÇë GET https://registry.npmjs.org/eslint-plugin-react-hooks error (ENOTFOUND). Will retry in 1 minute. 1 retries left.
+ÔÇëWARNÔÇë GET https://registry.npmjs.org/react-dom error (ENOTFOUND). Will retry in 1 minute. 1 retries left.
+ÔÇëWARNÔÇë GET https://registry.npmjs.org/next error (ENOTFOUND). Will retry in 1 minute. 1 retries left.
+ÔÇëWARNÔÇë GET https://registry.npmjs.org/turbo error (ENOTFOUND). Will retry in 10 seconds. 2 retries left.
+ÔÇëWARNÔÇë GET https://registry.npmjs.org/eslint-config-next error (ENOTFOUND). Will retry in 10 seconds. 2 retries left.
+ÔÇëWARNÔÇë GET https://registry.npmjs.org/react error (ENOTFOUND). Will retry in 10 seconds. 2 retries left.
+ÔÇëWARNÔÇë GET https://registry.npmjs.org/stripe error (ENOTFOUND). Will retry in 10 seconds. 2 retries left.
+ÔÇëWARNÔÇë GET https://registry.npmjs.org/@typescript-eslint%2Fparser error (ENOTFOUND). Will retry in 10 seconds. 2 retries left.
+ÔÇëWARNÔÇë GET https://registry.npmjs.org/react-hook-form error (ENOTFOUND). Will retry in 10 seconds. 2 retries left.
+ÔÇëWARNÔÇë GET https://registry.npmjs.org/eslint-plugin-react error (ENOTFOUND). Will retry in 10 seconds. 2 retries left.
+ÔÇëWARNÔÇë GET https://registry.npmjs.org/typescript error (ENOTFOUND). Will retry in 10 seconds. 2 retries left.
+ÔÇëWARNÔÇë GET https://registry.npmjs.org/@radix-ui%2Freact-dialog error (ENOTFOUND). Will retry in 10 seconds. 2 retries left.
+ÔÇëWARNÔÇë GET https://registry.npmjs.org/turbo error (ENOTFOUND). Will retry in 1 minute. 1 retries left.
+ÔÇëWARNÔÇë GET https://registry.npmjs.org/eslint-config-next error (ENOTFOUND). Will retry in 1 minute. 1 retries left.
+ÔÇëWARNÔÇë Request took 39401ms: https://registry.npmjs.org/eslint-plugin-react
+ÔÇëWARNÔÇë Request took 40867ms: https://registry.npmjs.org/stripe
+ÔÇëWARNÔÇë Request took 41401ms: https://registry.npmjs.org/@radix-ui%2Freact-dialog
+ÔÇëWARNÔÇë Request took 42043ms: https://registry.npmjs.org/react-hook-form
+ÔÇëWARNÔÇë Request took 42221ms: https://registry.npmjs.org/react
+ÔÇëWARNÔÇë Request took 44325ms: https://registry.npmjs.org/typescript
+ÔÇëWARNÔÇë Request took 48214ms: https://registry.npmjs.org/@typescript-eslint%2Fparser
+ÔÇëWARNÔÇë Request took 99711ms: https://registry.npmjs.org/rimraf
+ÔÇëWARNÔÇë Request took 99845ms: https://registry.npmjs.org/three
+ÔÇëWARNÔÇë Request took 99977ms: https://registry.npmjs.org/supabase
+ÔÇëWARNÔÇë Request took 124631ms: https://registry.npmjs.org/tailwind-variants
+ÔÇëWARNÔÇë Request took 124737ms: https://registry.npmjs.org/eslint-formatter-unix
+ÔÇëWARNÔÇë Request took 124705ms: https://registry.npmjs.org/@ffmpeg-installer%2Fffmpeg
+ÔÇëWARNÔÇë Request took 124804ms: https://registry.npmjs.org/@eslint%2Feslintrc
+ÔÇëWARNÔÇë Request took 124968ms: https://registry.npmjs.org/autoprefixer
+ÔÇëWARNÔÇë Request took 126385ms: https://registry.npmjs.org/clsx
+ÔÇëWARNÔÇë Request took 126482ms: https://registry.npmjs.org/@supabase%2Fssr
+ÔÇëWARNÔÇë Request took 126795ms: https://registry.npmjs.org/eslint-plugin-jsx-a11y
+ÔÇëWARNÔÇë Request took 126817ms: https://registry.npmjs.org/react-icons
+ÔÇëWARNÔÇë Request took 126879ms: https://registry.npmjs.org/espree
+ÔÇëWARNÔÇë Request took 127221ms: https://registry.npmjs.org/@react-three%2Ffiber
+ÔÇëWARNÔÇë Request took 127689ms: https://registry.npmjs.org/@types%2Freact
+ÔÇëWARNÔÇë Request took 127935ms: https://registry.npmjs.org/@headlessui%2Freact
+ÔÇëWARNÔÇë Request took 128092ms: https://registry.npmjs.org/eslint
+ÔÇëWARNÔÇë Request took 129057ms: https://registry.npmjs.org/@react-three%2Fdrei
+ÔÇëWARNÔÇë Request took 129668ms: https://registry.npmjs.org/@types%2Fnode
+ÔÇëWARNÔÇë Request took 130261ms: https://registry.npmjs.org/react-dom
+ÔÇëWARNÔÇë Request took 130880ms: https://registry.npmjs.org/eslint-plugin-react-hooks
+ÔÇëWARNÔÇë Request took 131219ms: https://registry.npmjs.org/tailwindcss
+ÔÇëWARNÔÇë Request took 132364ms: https://registry.npmjs.org/playwright-chromium
+ÔÇëWARNÔÇë Request took 133794ms: https://registry.npmjs.org/@typescript-eslint%2Feslint-plugin
+ÔÇëWARNÔÇë Request took 136535ms: https://registry.npmjs.org/next
