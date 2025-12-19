@@ -35,62 +35,68 @@ export async function POST(req: NextRequest) {
   if (!auth.ok) return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
 
   try {
+    type FilePayload = { name?: string; base64?: string; mime?: string; thumbnail?: string };
+    type KmlPayload = { name?: string; base64?: string; mime?: string };
+    type UploadResult = { name: string; publicUrl?: string; path?: string; thumbnail?: string | null; error?: string; placeholderId?: string };
+
     const raw = await req.json() as unknown;
     if (typeof raw !== 'object' || raw === null) {
       return NextResponse.json({ error: 'invalid request body' }, { status: 400 });
     }
-    const body = raw as { property_id?: unknown; files?: unknown; kmlFile?: unknown };
-    const propertyId = body.property_id;
-    const files = Array.isArray(body.files) ? (body.files as Array<Record<string, unknown>>) : [];
+    const body = raw as Record<string, unknown>;
+    const propertyId = String(body.property_id ?? "").trim();
+    const files = Array.isArray(body.files) ? (body.files as Array<unknown>) : [];
     const kml = (body.kmlFile && typeof body.kmlFile === 'object') ? (body.kmlFile as Record<string, unknown>) : undefined;
 
     if (!propertyId) return NextResponse.json({ error: 'property_id is required' }, { status: 400 });
 
     const svc = createServiceSupabaseClient();
-    const uploads: Array<Record<string, unknown>> = [];
+    const uploads: UploadResult[] = [];
 
     // Upload files to bucket 'property-photos'
-    for (const f of files) {
+    for (const rawF of files) {
       try {
-        const folder = `properties/${String(propertyId)}`;
-        const fname = String(f?.name ?? 'file');
+        const f = (rawF as Record<string, unknown>) || {};
+        const folder = `properties/${propertyId}`;
+        const fname = String(f.name ?? 'file');
         const name = `${folder}/${Date.now()}_${Math.random().toString(36).slice(2,8)}_${fname}`;
-        const base64 = String((f as Record<string, unknown>)?.base64 ?? '');
+        const base64 = String(f.base64 ?? '');
         const buffer = Buffer.from(base64, 'base64');
-        const contentType = String((f as Record<string, unknown>)?.mime ?? 'application/octet-stream');
+        const contentType = String(f.mime ?? 'application/octet-stream');
         const { error: upErr } = await svc.storage.from('property-photos').upload(name, buffer, { contentType, upsert: false });
         if (upErr) {
-          const upErrMsg = upErr && typeof upErr === 'object' && 'message' in upErr ? String(((upErr as unknown) as Record<string, unknown>)['message']) : String(upErr);
+          const upErrMsg = upErr && typeof upErr === 'object' && 'message' in upErr ? String((upErr as Record<string, unknown>)['message']) : String(upErr);
           uploads.push({ name: fname, error: upErrMsg });
           continue;
         }
         const { data } = svc.storage.from('property-photos').getPublicUrl(name);
         const publicUrl = data && typeof data === 'object' && 'publicUrl' in data ? String((data as Record<string, unknown>)['publicUrl']) : undefined;
-        uploads.push({ name: fname, publicUrl, path: name });
+        uploads.push({ name: fname, publicUrl, path: name, thumbnail: (f.thumbnail as string) || null });
       } catch (e: unknown) {
         const msg = e instanceof Error ? e.message : String(e);
-        uploads.push({ name: String((f as Record<string, unknown>)?.name ?? 'file'), error: msg });
+        uploads.push({ name: String((rawF as any)?.name ?? 'file'), error: msg });
       }
     }
 
     let kmlPublicUrl: string | null = null;
     if (kml && typeof kml.base64 === 'string') {
       try {
-        const kname = String(kml.name ?? 'map.kml');
-        const name = `properties/${String(propertyId)}/kml_${Date.now()}_${Math.random().toString(36).slice(2,8)}_${kname}`;
-        const buffer = Buffer.from(String(kml.base64), 'base64');
-        const contentType = String(kml.mime ?? 'application/vnd.google-earth.kml+xml');
+        const kmlPayload: KmlPayload = { name: String(kml.name ?? 'map.kml'), base64: String(kml.base64), mime: String(kml.mime ?? 'application/vnd.google-earth.kml+xml') };
+        const kname = kmlPayload.name;
+        const name = `properties/${propertyId}/kml_${Date.now()}_${Math.random().toString(36).slice(2,8)}_${kname}`;
+        const buffer = Buffer.from(kmlPayload.base64, 'base64');
+        const contentType = kmlPayload.mime;
         const { error: kErr } = await svc.storage.from('property-photos').upload(name, buffer, { contentType, upsert: false });
         if (!kErr) {
           const { data } = svc.storage.from('property-photos').getPublicUrl(name);
-                kmlPublicUrl = data && typeof data === 'object' && 'publicUrl' in data ? String((data as Record<string, unknown>)['publicUrl']) : null;
+          kmlPublicUrl = data && typeof data === 'object' && 'publicUrl' in data ? String((data as Record<string, unknown>)['publicUrl']) : null;
         } else {
-          const kErrMsg = kErr && typeof kErr === 'object' && 'message' in kErr ? String(((kErr as unknown) as Record<string, unknown>)['message']) : String(kErr);
+          const kErrMsg = kErr && typeof kErr === 'object' && 'message' in kErr ? String((kErr as Record<string, unknown>)['message']) : String(kErr);
           uploads.push({ name: kname, error: kErrMsg });
         }
       } catch (e: unknown) {
         const msg = e instanceof Error ? e.message : String(e);
-        uploads.push({ name: String(kml.name ?? 'map.kml'), error: msg });
+        uploads.push({ name: String(kml?.name ?? 'map.kml'), error: msg });
       }
     }
 
