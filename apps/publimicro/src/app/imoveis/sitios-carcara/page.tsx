@@ -1,6 +1,6 @@
 ﻿import Image from "next/image";
 import Link from "next/link";
-import MapKmlViewer from "@/components/map/MapKmlViewer";
+import MapKmlViewerClient from '@/components/map/MapKmlViewerClient';
 
 export default async function Page(): Promise<JSX.Element> {
   // If you still need Supabase data for hero, keep your existing query above.
@@ -40,7 +40,7 @@ export default async function Page(): Promise<JSX.Element> {
         <p className="text-sm text-[#bfa97a] mb-4">
           Visualize os polígonos das unidades diretamente no mapa.
         </p>
-        <MapKmlViewer kmlUrl="/maps/carcara.kml" />
+        <MapKmlViewerClient kmlUrl="/maps/carcara.kml" />
 
         {/* Gallery */}
         <h3 className="text-xl font-semibold text-amber-400 mt-10 mb-4">

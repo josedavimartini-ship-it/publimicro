@@ -2,6 +2,7 @@
 import { Navbar, Footer } from "@publimicro/ui"
 import Link from "next/link"
 import { WhatsAppLink } from "@publimicro/ui"
+import FloatingWhatsAppWrapper from "@/components/FloatingWhatsAppWrapper"
 
 export const metadata: Metadata = {
   title: "Destaques Premium — Publimicro",
@@ -345,6 +346,9 @@ export default function DestaquesPage() {
       </section>
 
       <Footer />
+
+      {/* Floating WhatsApp - only for verified users */}
+      <FloatingWhatsAppWrapper />
     </main>
   )
 }

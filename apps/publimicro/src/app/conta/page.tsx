@@ -6,6 +6,7 @@ import { createBrowserSupabaseClient } from '@/lib/supabaseBrowser';
 import Link from 'next/link';
 import { Home, Heart, TrendingUp, Clock, CheckCircle, XCircle, Calendar } from 'lucide-react';
 import type { UserProfile } from '@/components/AuthProvider';
+import FloatingWhatsAppWrapper from "@/components/FloatingWhatsAppWrapper";
 
 // Minimal local domain types to avoid wide `any` usage in the account page
 type CurrentUser = { id: string; email?: string | null } | null;
@@ -283,6 +284,9 @@ export default function ContaPage() {
           )}
         </section>
       </div>
+
+      {/* Floating WhatsApp - only for verified users */}
+      <FloatingWhatsAppWrapper />
     </main>
   );
 }

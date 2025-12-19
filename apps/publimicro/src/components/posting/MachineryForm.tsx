@@ -27,7 +27,9 @@ export interface MachineryFormData {
   location: string;
 }
 
-const MACHINERY_CATEGORIES = [
+type MachineryCategoryId = 'agricultural' | 'construction' | 'industrial' | 'forestry';
+
+const MACHINERY_CATEGORIES: { id: MachineryCategoryId; label: string; types: string[] }[] = [
   { id: 'agricultural', label: 'Agrícola', types: ['Trator', 'Colheitadeira', 'Plantadeira', 'Pulverizador', 'Enfardadeira'] },
   { id: 'construction', label: 'Construção', types: ['Escavadeira', 'Retroescavadeira', 'Pá Carregadeira', 'Rolo Compactador', 'Motoniveladora'] },
   { id: 'industrial', label: 'Industrial', types: ['Empilhadeira', 'Guindaste', 'Compressor', 'Gerador', 'Plataforma Elevatória'] }
@@ -103,7 +105,7 @@ export default function MachineryForm({ onDataChange }: MachineryFormProps) {
     onDataChange(formData);
   }, [formData, onDataChange]);
 
-  const handleCategoryChange = (category: string) => {
+  const handleCategoryChange = (category: ('agricultural' | 'construction' | 'industrial' | 'forestry') | '') => {
     setSelectedCategory(category);
     setFormData(prev => ({ 
       ...prev, 

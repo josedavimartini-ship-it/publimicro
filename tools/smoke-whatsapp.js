@@ -25,17 +25,67 @@ try {
     process.exit(2);
   }
 
-    // Launch Chromium with extra flags to reduce GPU/OS-related crashes on Windows
-    const browser = await chromium.launch({
-      headless: true,
-      args: [
+    // Try to require Firefox (fall back if Chromium is unstable on the host)
+    let firefox = null;
+    try {
+      ({ firefox } = require('playwright-firefox'));
+    } catch (err) {
+      try {
+        const req = createRequire(process.cwd() + '/');
+        ({ firefox } = req('playwright-firefox'));
+      } catch (err2) {
+        firefox = null;
+      }
+    }
+
+    // Launch a browser with retries; prefer Chromium but fall back to Firefox on repeated failures
+    let browserName = 'chromium';
+    async function launchBrowserWithRetry(retries = 3, delayMs = 1000) {
+      const baseArgs = [
         '--disable-gpu',
+        '--disable-gpu-compositing',
+        '--disable-accelerated-2d-canvas',
         '--disable-software-rasterizer',
         '--disable-dev-shm-usage',
         '--no-sandbox',
-        '--no-zygote'
-      ]
-    });
+        '--no-zygote',
+        '--disable-setuid-sandbox',
+        '--disable-extensions',
+        '--disable-background-timer-throttling',
+        '--disable-renderer-backgrounding',
+        '--disable-background-networking',
+        '--no-first-run',
+        '--no-default-browser-check'
+      ];
+
+      // Try Chromium first
+      for (let i = 0; i < retries; i++) {
+        try {
+          return await chromium.launch({ headless: true, args: baseArgs });
+        } catch (err) {
+          console.warn(`Chromium launch failed (attempt ${i + 1}/${retries}): ${err.message}`);
+          if (i < retries - 1) await new Promise(r => setTimeout(r, delayMs));
+        }
+      }
+
+      // If Chromium failed, try Firefox if available
+      if (firefox) {
+        for (let i = 0; i < retries; i++) {
+          try {
+            browserName = 'firefox';
+            return await firefox.launch({ headless: true });
+          } catch (err) {
+            console.warn(`Firefox launch failed (attempt ${i + 1}/${retries}): ${err.message}`);
+            if (i < retries - 1) await new Promise(r => setTimeout(r, delayMs));
+          }
+        }
+      }
+
+      // final attempt: try Chromium without extra args
+      return await chromium.launch({ headless: true });
+    }
+    let browser = await launchBrowserWithRetry();
+    console.log(`Launched browser: ${browserName}`);
   page = null;
   try {
     const viewports = [
@@ -71,12 +121,44 @@ try {
       // create a fresh context + page per viewport to avoid cross-contamination
       const userAgent =
         'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36';
-      const context = await browser.newContext({
-        viewport: { width: vp.width, height: vp.height },
-        userAgent,
-      });
-      const page = await context.newPage();
-      page.on('console', msg => console.log('PAGE:', msg.text()));
+      let context, page;
+      // If a Vercel protection bypass token is provided via env var, use it
+      const bypassToken = process.env.VERCEL_PROTECTION_BYPASS;
+      let extraHeaders = {};
+      if (bypassToken) {
+        // Do not print the raw token; log a masked indicator instead
+        const masked = `${bypassToken.slice(0, 4)}...${bypassToken.slice(-4)}`;
+        console.log(`Using Vercel protection bypass header (masked=${masked})`);
+        extraHeaders['x-vercel-protection-bypass'] = bypassToken;
+      }
+
+      // Attempt to create context/page and recover by relaunching browser if needed
+      for (let attempt = 0; attempt < 3; attempt++) {
+        try {
+          // If the browser object is no longer connected, relaunch it
+          if (typeof browser.isConnected === 'function' && !browser.isConnected()) {
+            console.warn('Browser disconnected; relaunching...');
+            try { await browser.close(); } catch (e) {}
+            browser = await launchBrowserWithRetry();
+          }
+
+          context = await browser.newContext({
+            viewport: { width: vp.width, height: vp.height },
+            userAgent,
+            extraHTTPHeaders: extraHeaders,
+          });
+          page = await context.newPage();
+          page.on('console', msg => console.log('PAGE:', msg.text()));
+          break; // success
+        } catch (err) {
+          console.warn(`Failed to create context/page (attempt ${attempt + 1}/3): ${err.message}`);
+          try { if (context) await context.close(); } catch (e) {}
+          try { await browser.close(); } catch (e) {}
+          if (attempt === 2) throw err;
+          browser = await launchBrowserWithRetry();
+          await new Promise(r => setTimeout(r, 800));
+        }
+      }
 
       const pathsToCheck = [url, ...extraPaths];
       for (const p of pathsToCheck) {
@@ -147,7 +229,7 @@ try {
               const artifactsDir = path.join(process.cwd(), 'artifacts');
               if (!fs.existsSync(artifactsDir)) fs.mkdirSync(artifactsDir, { recursive: true });
               const safeName = (s) => s.replace(/[^a-z0-9.-]/gi, '_').slice(0, 120);
-              const base = `${vp.name}--${safeName(new URL(target).pathname || 'root')}`;
+              const base = `${vp.name}--${browserName}--${safeName(new URL(target).pathname || 'root')}`;
               const png = path.join(artifactsDir, `${base}.png`);
               const htmlFile = path.join(artifactsDir, `${base}.html`);
               await page.screenshot({ path: png, fullPage: true });
@@ -173,6 +255,10 @@ try {
     console.error('ERROR', err.message);
     process.exitCode = 1;
   } finally {
-    await browser.close();
+    try {
+      if (browser) await browser.close();
+    } catch (e) {
+      console.warn('Error closing browser:', e.message);
+    }
   }
 })();

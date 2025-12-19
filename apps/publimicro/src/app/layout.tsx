@@ -1,5 +1,4 @@
-﻿import FloatingWhatsAppWrapper from "@/components/FloatingWhatsAppWrapper";
-// Navbar removed from top-level layout to avoid unused import
+﻿// Navbar removed from top-level layout to avoid unused import
 import UserQuickPanel from "@/components/UserQuickPanel";
 import BackToTop from "@/components/BackToTop";
 import MobileBottomNav from "@/components/MobileBottomNav";
@@ -112,7 +111,6 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                   <Sidebar side="right" />
                 </div>
                 <UserQuickPanel />
-                <FloatingWhatsAppWrapper />
                 <BackToTop />
                 <MobileBottomNav />
                 <PWAInstallPrompt />
