@@ -34,6 +34,7 @@
     "eslint-plugin-next": "^0.0.0",
     "eslint-plugin-react": "^7.37.5",
     "eslint-plugin-react-hooks": "^7.0.1",
+    "espree": "^9.6.1",
     "playwright-chromium": "^1.57.0",
     "postcss": "^8.5.6",
     "prettier": "^3.6.2",
@@ -55,7 +56,12 @@
       "node-domexception": "2.0.2"
     },
     "onlyBuiltDependencies": [
-      "supabase"
+      "supabase",
+      "playwright-chromium"
+    ],
+    "ignoredBuiltDependencies": [
+      "playwright-chromium",
+      "unrs-resolver"
     ]
   }
 }
