@@ -23,6 +23,7 @@ import { useI18n } from "@/lib/i18n";
 import { useAuth } from "@/components/AuthProvider";
 import NeighborhoodInfo from "@/components/NeighborhoodInfo";
 import PropertyChatBox from "@/components/PropertyChatBox";
+import FloatingWhatsAppWrapper from "@/components/FloatingWhatsAppWrapper";
 
 // Dynamic import to avoid SSR issues with Leaflet
 const LeafletMapKML = dynamic(() => import("@/components/LeafletMapKML"), {
@@ -753,6 +754,9 @@ export default function PropertyPage() {
           }}
         />
       )}
+
+      {/* Floating WhatsApp - only shows for verified users via wrapper */}
+      <FloatingWhatsAppWrapper />
     </main>
   );
 }

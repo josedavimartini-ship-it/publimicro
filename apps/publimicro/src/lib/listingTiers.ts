@@ -201,12 +201,14 @@ export function getTierLimits(tierId: string): ListingTierLimits | undefined {
  * Check if user can post free listing
  * Returns true if user hasn't used their free listing yet
  */
-export async function canPostFreeListing(userId: string, supabase: { from: (table: string) => unknown }): Promise<boolean> {
+import type { SupabaseClient } from '@supabase/supabase-js';
+
+export async function canPostFreeListing(userId: string, supabase: SupabaseClient): Promise<boolean> {
   const { count, error } = await supabase
     .from('listings')
     .select('*', { count: 'exact', head: true })
     .eq('user_id', userId)
-    .eq('tier', 'free');
+    .eq('tier', 'free') as unknown as { count?: number | null; error?: any };
   
   if (error) {
     console.error('Error checking free listing:', error);
