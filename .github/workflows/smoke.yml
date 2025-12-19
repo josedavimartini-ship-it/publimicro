@@ -12,10 +12,15 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Setup Node + pnpm
-        uses: pnpm/action-setup@v2
+      - name: Setup Node
+        uses: actions/setup-node@v4
         with:
           node-version: '22'
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v2
+        with:
+          version: 'latest'
 
       - name: Install dependencies
         run: pnpm install --frozen-lockfile=false
@@ -41,13 +46,25 @@ jobs:
       - name: Run smoke script
         env:
           SAVE_ARTIFACTS: '1'
-          VERCEL_PROTECTION_BYPASS: ${{ github.event.inputs['bypass-token'] || secrets.VERCEL_PROTECTION_BYPASS }}
+          BYPASS_INPUT: ${{ github.event.inputs['bypass-token'] || '' }}
         run: |
           # If a preview URL is provided (workflow_dispatch), use it; otherwise default to local server
           PREVIEW_URL="${{ github.event.inputs['preview-url'] }}"
           if [ -z "$PREVIEW_URL" ]; then
             PREVIEW_URL="http://127.0.0.1:3000"
           fi
+
+          # Prefer input token; if not set, fall back to repo secret at runtime
+          VERCEL_PROTECTION_BYPASS="$BYPASS_INPUT"
+          if [ -z "$VERCEL_PROTECTION_BYPASS" ] && [ -n "${{ secrets.VERCEL_PROTECTION_BYPASS }}" ]; then
+            VERCEL_PROTECTION_BYPASS="${{ secrets.VERCEL_PROTECTION_BYPASS }}"
+          fi
+
+          if [ -n "$VERCEL_PROTECTION_BYPASS" ]; then
+            echo "Using Vercel bypass token (masked): ${VERCEL_PROTECTION_BYPASS:0:4}...${VERCEL_PROTECTION_BYPASS: -4}"
+            export VERCEL_PROTECTION_BYPASS
+          fi
+
           node tools/smoke-whatsapp.js "$PREVIEW_URL"
 
       - name: Upload artifacts
@@ -55,8 +72,8 @@ jobs:
         with:
           name: smoke-artifacts
           path: |
-            tools/artifacts/**
-            tools/artifacts-audit-batch-c-final.zip
+            artifacts/**
+            artifacts/smoke-artifacts-batch-c.zip
 
       - name: Post smoke result comment on PR
         env:
