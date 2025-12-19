@@ -37,13 +37,17 @@ export async function POST(req: NextRequest) {
   const MAX_FILES = Number(process.env.ADMIN_MAX_UPLOAD_FILES || DEFAULT_MAX_FILES);
 
   try {
+    type FilePayload = { name?: string; base64?: string; mime?: string };
+    type KmlPayload = { name?: string; base64?: string; mime?: string };
+    type UploadResult = { name: string; publicUrl?: string; path?: string; error?: string };
+
     const raw = await req.json() as unknown;
     if (typeof raw !== 'object' || raw === null) {
       return NextResponse.json({ error: 'invalid request body' }, { status: 400 });
     }
-    const body = raw as { property_id?: unknown; files?: unknown; kmlFile?: unknown };
-    const propertyId = body.property_id;
-    const files = Array.isArray(body.files) ? (body.files as Array<Record<string, unknown>>) : [];
+    const body = raw as Record<string, unknown>;
+    const propertyId = String(body.property_id ?? "").trim();
+    const files = Array.isArray(body.files) ? (body.files as Array<unknown>) : [];
     const kml = (body.kmlFile && typeof body.kmlFile === 'object') ? (body.kmlFile as Record<string, unknown>) : undefined;
 
     if (!propertyId) return NextResponse.json({ error: 'property_id is required' }, { status: 400 });
@@ -52,16 +56,17 @@ export async function POST(req: NextRequest) {
     const svc = createServiceSupabaseClient();
     const uploads: Array<Record<string, unknown>> = [];
 
-    for (const f of files) {
-      const nameRaw = String((f as Record<string, unknown>)?.name ?? 'file');
-      const mime = String((f as Record<string, unknown>)?.mime ?? '').toLowerCase();
+    for (const rawF of files) {
+      const f = (rawF as Record<string, unknown>) || {};
+      const nameRaw = String(f.name ?? 'file');
+      const mime = String(f.mime ?? '').toLowerCase();
       if (!isMimeAllowed(mime)) {
         uploads.push({ name: nameRaw, error: 'MIME type not allowed' });
         continue;
       }
 
       // Quick size check using base64 length when available
-      const base64 = String((f as Record<string, unknown>)?.base64 ?? '');
+      const base64 = String(f.base64 ?? '');
       const estimatedBytes = Math.floor((base64.length * 3) / 4);
       if (estimatedBytes > MAX_BYTES) {
         uploads.push({ name: nameRaw, error: `File exceeds max size of ${Math.round(MAX_BYTES / (1024 * 1024))}MB` });
@@ -75,7 +80,7 @@ export async function POST(req: NextRequest) {
         const buffer = Buffer.from(base64, 'base64');
         const { error: upErr } = await svc.storage.from('property-photos').upload(path, buffer, { contentType: mime || 'application/octet-stream', upsert: false });
         if (upErr) {
-          const upErrMsg = upErr && typeof upErr === 'object' && 'message' in upErr ? String(((upErr as unknown) as Record<string, unknown>)['message']) : String(upErr);
+          const upErrMsg = upErr && typeof upErr === 'object' && 'message' in upErr ? String((upErr as Record<string, unknown>)['message']) : String(upErr);
           uploads.push({ name: nameRaw, error: upErrMsg });
           continue;
         }
