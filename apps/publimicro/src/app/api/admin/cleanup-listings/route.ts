@@ -40,7 +40,9 @@ export async function POST(req: NextRequest) {
           if (data && data.length > 0) {
             // append unique ids
             for (const r of data) {
-              if (!found.find((f) => String((f as Record<string, unknown>).id) === String(((r as unknown) as Record<string, unknown>).id))) found.push((r as unknown) as Record<string, unknown>);
+              const row = r as Record<string, unknown>;
+              const idStr = String(row.id ?? "");
+              if (!found.find((f) => String(f.id) === idStr)) found.push(row);
             }
           }
         } catch {
@@ -54,9 +56,9 @@ export async function POST(req: NextRequest) {
     if (table === "properties" || table === "both") {
       // sitios table uses 'nome' field instead of 'title'
       const matches = await findMatches("sitios", ["nome", "name"]);
-      result.properties = { count: matches.length, rows: preview ? matches : matches.map((r) => ((r as unknown) as Record<string, unknown>).id) };
+      result.properties = { count: matches.length, rows: preview ? matches : matches.map((r) => String((r as Record<string, unknown>).id ?? "")) };
       if (!preview && matches.length > 0) {
-        const ids = matches.map((r) => ((r as unknown) as Record<string, unknown>).id);
+        const ids = matches.map((r) => String((r as Record<string, unknown>).id ?? ""));
         const { error: delErr } = await supabase.from("sitios").delete().in("id", ids);
         if (delErr) throw delErr;
         (result.properties as Record<string, unknown>)['deleted'] = ids.length;
@@ -66,9 +68,9 @@ export async function POST(req: NextRequest) {
     if (table === "listings" || table === "both") {
       // listings may have 'title' or 'name' depending on schema; try both
       const matches = await findMatches("listings", ["title", "name"]);
-      result.listings = { count: matches.length, rows: preview ? matches : matches.map((r) => ((r as unknown) as Record<string, unknown>).id) };
+      result.listings = { count: matches.length, rows: preview ? matches : matches.map((r) => String((r as Record<string, unknown>).id ?? "")) };
       if (!preview && matches.length > 0) {
-        const ids = matches.map((r) => ((r as unknown) as Record<string, unknown>).id);
+        const ids = matches.map((r) => String((r as Record<string, unknown>).id ?? ""));
         const { error: delErr } = await supabase.from("listings").delete().in("id", ids);
         if (delErr) throw delErr;
         (result.listings as Record<string, unknown>)['deleted'] = ids.length;
