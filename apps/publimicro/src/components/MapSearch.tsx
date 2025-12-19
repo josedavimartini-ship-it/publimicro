@@ -15,7 +15,7 @@ export default function MapSearch({ onLocationSelect: _onLocationSelect }: MapSe
     e.preventDefault();
     setShowMap(true);
     // TODO: Implement actual geocoding and map display
-    console.log("Searching for:", searchQuery);
+    console.warn("Searching for:", searchQuery);
   };
 
   return (

@@ -208,10 +208,10 @@ export async function canPostFreeListing(userId: string, supabase: SupabaseClien
     .from('listings')
     .select('*', { count: 'exact', head: true })
     .eq('user_id', userId)
-    .eq('tier', 'free') as unknown as { count?: number | null; error?: any };
+    .eq('tier', 'free') as unknown as { count?: number | null; error?: unknown };
   
   if (error) {
-    console.error('Error checking free listing:', error);
+    console.error('Error checking free listing:', String(error));
     return false;
   }
   

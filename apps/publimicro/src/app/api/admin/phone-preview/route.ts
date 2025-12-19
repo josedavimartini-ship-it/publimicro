@@ -11,7 +11,7 @@ export async function POST(req: NextRequest) {
   }
 
   try {
-      type PhonePreviewRequest = { phone?: string };
+      type _PhonePreviewRequest = { phone?: string };
       const raw = await req.json() as unknown;
       if (typeof raw !== 'object' || raw === null) {
         return NextResponse.json({ error: 'invalid request body' }, { status: 400 });

@@ -7,7 +7,7 @@ import { createServerSupabaseClient } from '@/lib/supabaseServer';
  * INTERNAL USE ONLY - Called by server-side processes
  */
 
-interface BackgroundCheckRequest {
+interface _BackgroundCheckRequest {
   cpf: string;
   full_name: string;
   birth_date?: string;

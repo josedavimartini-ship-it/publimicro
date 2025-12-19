@@ -24,9 +24,13 @@ export function createServerSupabaseClient() {
   // cookies() typing may differ across Next versions; narrow to a small interface instead of `any`
   const _cookieStore = cookies() as unknown as CookieStore;
   
+  const URL = process.env.NEXT_PUBLIC_SUPABASE_URL;
+  const ANON = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+  if (!URL || !ANON) throw new Error('Missing NEXT_PUBLIC_SUPABASE_URL or NEXT_PUBLIC_SUPABASE_ANON_KEY');
+
   return createServerClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+    URL,
+    ANON,
     {
       cookies: {
         get(name: string) {

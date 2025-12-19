@@ -37,9 +37,9 @@ export async function POST(req: NextRequest) {
   const MAX_FILES = Number(process.env.ADMIN_MAX_UPLOAD_FILES || DEFAULT_MAX_FILES);
 
   try {
-    type FilePayload = { name?: string; base64?: string; mime?: string };
-    type KmlPayload = { name?: string; base64?: string; mime?: string };
-    type UploadResult = { name: string; publicUrl?: string; path?: string; error?: string };
+    type _FilePayload = { name?: string; base64?: string; mime?: string };
+    type _KmlPayload = { name?: string; base64?: string; mime?: string };
+    type _UploadResult = { name: string; publicUrl?: string; path?: string; error?: string };
 
     const raw = await req.json() as unknown;
     if (typeof raw !== 'object' || raw === null) {

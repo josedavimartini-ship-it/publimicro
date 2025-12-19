@@ -467,7 +467,7 @@ export default function ChatPage() {
                           </span>
                         </div>
                         <p className="text-2xl font-bold text-[#D4AF37]">
-                          {formatPrice(msg.offerAmount!)}
+                          {typeof msg.offerAmount === 'number' ? formatPrice(msg.offerAmount) : '—'}
                         </p>
                         {msg.offerStatus === "pending" && !msg.fromMe && (
                           <div className="flex gap-2 mt-3">
