@@ -11,13 +11,14 @@ export async function POST(req: NextRequest) {
   }
 
   try {
-    const raw = await req.json() as unknown;
-    if (typeof raw !== 'object' || raw === null) {
-      return NextResponse.json({ error: 'invalid request body' }, { status: 400 });
-    }
-    const body = raw as { phone?: unknown };
-    const phone = String(body.phone ?? "").replace(/\D/g, "");
-    if (!phone || phone.length < 4) return NextResponse.json({ error: "phone must be provided (at least 4 digits)" }, { status: 400 });
+      type PhonePreviewRequest = { phone?: string };
+      const raw = await req.json() as unknown;
+      if (typeof raw !== 'object' || raw === null) {
+        return NextResponse.json({ error: 'invalid request body' }, { status: 400 });
+      }
+      const rawObj = raw as Record<string, unknown>;
+      const phoneInput = typeof rawObj.phone === 'string' ? rawObj.phone : String(rawObj.phone ?? "");
+      const phone = phoneInput.replace(/\D/g, "");
 
     // Candidate tables and columns to probe
     const tables = [
@@ -81,13 +82,14 @@ export async function POST(req: NextRequest) {
             if (data && data.length > 0) {
               for (const r of data) {
                 // Normalize the candidate value server-side in JS and ensure the digits match
-                const row = (r as unknown) as Record<string, unknown>;
-                const val = String(row[col as string] ?? "");
+                const row = r as Record<string, unknown>;
+                const rawVal = row[col as string];
+                const val = (typeof rawVal === 'string' || typeof rawVal === 'number') ? String(rawVal) : "";
                 const digits = val.replace(/\D/g, "");
                 if (digits && (digits.includes(phone) || phone.includes(digits) || digits.endsWith(phone.slice(-8)))) {
                   // attach entire row object for inspection
-                  const rid = row['id'];
-                  const _exists = found.find((f) => String(f['id']) === String(rid));
+                  const rid = String(row['id'] ?? "");
+                  const _exists = found.find((f) => String(f['id']) === rid);
                   if (!_exists) found.push({ id: rid, column: col, value: val, row });
                 }
               }
