@@ -5,7 +5,7 @@
   "scripts": {
     "dev": "next dev -p 3000",
     "admin-upload-cli": "node ./scripts/admin-upload-cli.js",
-    "prebuild": "node ../../scripts/clean-turbod.mjs",
+    "prebuild": "node ../../scripts/prebuild-cross-platform.mjs",
     "build": "next build && node ./scripts/mark-next-built.mjs",
     "start": "next start",
     "lint": "eslint --config ../../.eslintrc.cjs . --ext .js,.jsx,.ts,.tsx",
