@@ -226,14 +226,14 @@ export default function PropertyChatBox({
     return (
       <motion.button
         onClick={handleExpand}
-        className="fixed bottom-24 right-4 md:relative md:bottom-auto md:right-auto flex items-center gap-2 px-4 py-3 bg-gradient-to-r from-[#6B7F5C] to-[#5A6B4D] text-white rounded-full shadow-lg hover:shadow-xl transition-all hover:scale-105 z-40"
+        className="fixed bottom-24 right-4 md:relative md:bottom-auto md:right-auto flex items-center gap-2 px-4 py-3 bg-gradient-to-r from-[#6B7F5C] to-[#5A6B4D] text-warm rounded-full shadow-lg hover:shadow-xl transition-all hover:scale-105 z-40"
         whileHover={{ scale: 1.05 }}
         whileTap={{ scale: 0.95 }}
       >
         <MessageCircle className="w-5 h-5" />
         <span className="font-semibold">Conversar com {sellerName}</span>
         {unreadCount > 0 && (
-          <span className="absolute -top-2 -right-2 w-6 h-6 bg-red-500 text-white text-xs font-bold rounded-full flex items-center justify-center">
+          <span className="absolute -top-2 -right-2 w-6 h-6 bg-red-500 text-warm text-xs font-bold rounded-full flex items-center justify-center">
             {unreadCount > 9 ? '9+' : unreadCount}
           </span>
         )}
@@ -267,7 +267,7 @@ export default function PropertyChatBox({
         </div>
         <div className="flex items-center gap-2">
           <button className="p-1 hover:bg-white/10 rounded">
-            {isMinimized ? <ChevronUp className="w-5 h-5 text-white" /> : <ChevronDown className="w-5 h-5 text-white" />}
+            {isMinimized ? <ChevronUp className="w-5 h-5 text-warm" /> : <ChevronDown className="w-5 h-5 text-warm" />}
           </button>
           <button 
             onClick={(e) => {
@@ -346,13 +346,13 @@ export default function PropertyChatBox({
                   value={newMessage}
                   onChange={(e) => setNewMessage(e.target.value)}
                   placeholder="Digite sua mensagem..."
-                  className="flex-1 px-4 py-2 bg-[#0a0a0a] border border-[#2a2a2a] rounded-full text-white placeholder-[#676767] focus:outline-none focus:border-[#6B7F5C] text-sm"
+                  className="flex-1 px-4 py-2 bg-[#0a0a0a] border border-[#2a2a2a] rounded-full text-warm placeholder-[#676767] focus:outline-none focus:border-[#6B7F5C] text-sm"
                   disabled={sending}
                 />
                 <button
                   type="submit"
                   disabled={!newMessage.trim() || sending}
-                  className="p-2 bg-[#6B7F5C] text-white rounded-full hover:bg-[#7A8F6B] disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                  className="p-2 bg-[#6B7F5C] text-warm rounded-full hover:bg-[#7A8F6B] disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
                 >
                   {sending ? (
                     <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin" />

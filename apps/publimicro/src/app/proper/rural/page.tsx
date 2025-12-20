@@ -91,9 +91,8 @@ export default function ProperRuralPage() {
                 >
                   {/* Image */}
                   <div className="relative w-full h-64 bg-[#2a2a1a] overflow-hidden">
-                    {property.fotos && property.fotos[0] ? (
                       <Image
-                        src={property.fotos[0]}
+                        src={getFirstPhoto(property.fotos)}
                         alt={`Sítio ${property.nome}`}
                         fill
                         sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"

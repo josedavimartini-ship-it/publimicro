@@ -7,6 +7,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { MapPin, Maximize2, DollarSign, Heart, Grid3x3, List, Scale } from "lucide-react";
 import Breadcrumbs from "@/components/Breadcrumbs";
+import { getFirstPhoto } from '@/lib/photoUtils';
 import { Skeleton } from "@/components/Skeleton";
 import { addToComparison, isInComparison } from "@/lib/comparison";
 import { useToast } from "@/components/ToastNotification";
@@ -225,10 +226,10 @@ export default function ImoveisPage() {
                 }`}
               >
                 {/* Image */}
-                <div className={`relative bg-[#2a2a1a] overflow-hidden ${viewMode === "grid" ? "w-full h-64" : "w-64 h-48 flex-shrink-0"}`}>
-                  {property.fotos && property.fotos[0] ? (
+                <div className={`relative bg-[#2a2a1a] overflow-hidden ${viewMode === "grid" ? "w-full h-64 min-h-[256px]" : "w-64 h-48 min-h-[192px] flex-shrink-0"}`}>
+                  {property.fotos && property.fotos.length > 0 ? (
                     <Image
-                      src={property.fotos[0]}
+                      src={getFirstPhoto(property.fotos)}
                       alt={property.nome}
                       fill
                       sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"

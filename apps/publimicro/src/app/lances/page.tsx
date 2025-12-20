@@ -6,6 +6,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { TrendingUp, Clock, CheckCircle, XCircle, AlertCircle, Eye, DollarSign } from "lucide-react";
 import Breadcrumbs from "@/components/Breadcrumbs";
+import { getFirstPhoto } from '@/lib/photoUtils';
 import { Skeleton } from "@/components/Skeleton";
 
 interface Bid {
@@ -237,10 +238,10 @@ export default function LancesPage() {
                   <div className="flex flex-col md:flex-row gap-6">
                     {/* Property Image */}
                     <div className="w-full md:w-48 h-32 bg-[#2a2a1a] rounded-lg overflow-hidden flex-shrink-0">
-                      {bid.properties?.fotos && bid.properties.fotos[0] ? (
+                      {bid.properties?.fotos && bid.properties.fotos.length > 0 ? (
                         <Image
-                          src={bid.properties.fotos[0]}
-                          alt={bid.properties.title || "Propriedade"}
+                          src={getFirstPhoto(bid.properties?.fotos)}
+                          alt={bid.properties?.title || "Propriedade"}
                           width={192}
                           height={128}
                           className="w-full h-full object-cover"

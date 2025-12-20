@@ -1,0 +1,830 @@
+{
+  "total": 82,
+  "ok": 82,
+  "failed": 0,
+  "codeBuckets": {
+    "2xx": 82
+  },
+  "results": [
+    {
+      "url": "https://irrzpwzyqcubhhjeuakc.supabase.co/storage/v1/object/public/imagens-sitios/juriti/1762988680911-20251107_162155.jpg",
+      "source": "verify-uploads.results.json",
+      "id": "1017da43-5c3d-44f1-b050-571ebb5be796",
+      "status": 200,
+      "note": "OK",
+      "ok": true,
+      "contentType": "text/plain;charset=UTF-8",
+      "contentLength": null
+    },
+    {
+      "url": "https://irrzpwzyqcubhhjeuakc.supabase.co/storage/v1/object/public/imagens-sitios/juriti/1762988625017-20251107_162023.jpg",
+      "source": "verify-uploads.results.json",
+      "id": "d21cacf7-dbb1-4e8c-b641-859dea4fa251",
+      "status": 200,
+      "note": "OK",
+      "ok": true,
+      "contentType": "text/plain;charset=UTF-8",
+      "contentLength": null
+    },
+    {
+      "url": "https://irrzpwzyqcubhhjeuakc.supabase.co/storage/v1/object/public/imagens-sitios/mergulhao/1762988792202-20251107_163212.jpg",
+      "source": "verify-uploads.results.json",
+      "id": "06dc2b41-e395-48bd-8f4c-2a40ebb26dd7",
+      "status": 200,
+      "note": "OK",
+      "ok": true,
+      "contentType": "text/plain;charset=UTF-8",
+      "contentLength": null
+    },
+    {
+      "url": "https://irrzpwzyqcubhhjeuakc.supabase.co/storage/v1/object/public/imagens-sitios/juriti/1762988702080-20251107_162336.jpg",
+      "source": "verify-uploads.results.json",
+      "id": "cff4aaba-a853-4fd5-832a-f75a0ddcbcb5",
+      "status": 200,
+      "note": "OK",
+      "ok": true,
+      "contentType": "text/plain;charset=UTF-8",
+      "contentLength": null
+    },
+    {
+      "url": "https://irrzpwzyqcubhhjeuakc.supabase.co/storage/v1/object/public/imagens-sitios/juriti/1762988783376-20251107_162537.jpg",
+      "source": "verify-uploads.results.json",
+      "id": "66495d70-2a72-4882-bda4-70d1a57af164",
+      "status": 200,
+      "note": "OK",
+      "ok": true,
+      "contentType": "text/plain;charset=UTF-8",
+      "contentLength": null
+    },
+    {
+      "url": "https://irrzpwzyqcubhhjeuakc.supabase.co/storage/v1/object/public/imagens-sitios/juriti/1762988664370-20251107_162100.jpg",
+      "source": "verify-uploads.results.json",
+      "id": "1feebf3a-8ec1-4eee-963b-6cffd2f7138b",
+      "status": 200,
+      "note": "OK",
+      "ok": true,
+      "contentType": "text/plain;charset=UTF-8",
+      "contentLength": null
+    },
+    {
+      "url": "https://irrzpwzyqcubhhjeuakc.supabase.co/storage/v1/object/public/imagens-sitios/juriti/1762988716151-20251107_162403.jpg",
+      "source": "verify-uploads.results.json",
+      "id": "01b4b119-943f-45ce-b229-c9a92a3a0100",
+      "status": 200,
+      "note": "OK",
+      "ok": true,
+      "contentType": "text/plain;charset=UTF-8",
+      "contentLength": null
+    },
+    {
+      "url": "https://irrzpwzyqcubhhjeuakc.supabase.co/storage/v1/object/public/imagens-sitios/juriti/1762988708242-20251107_162356.jpg",
+      "source": "verify-uploads.results.json",
+      "id": "c77b51a7-618d-4208-8b4f-e814c707e71b",
+      "status": 200,
+      "note": "OK",
+      "ok": true,
+      "contentType": "text/plain;charset=UTF-8",
+      "contentLength": null
+    },
+    {
+      "url": "https://irrzpwzyqcubhhjeuakc.supabase.co/storage/v1/object/public/imagens-sitios/juriti/1762988635593-20251107_162025.jpg",
+      "source": "verify-uploads.results.json",
+      "id": "8484950d-1b24-4ee1-b7a8-1b870740dcdc",
+      "status": 200,
+      "note": "OK",
+      "ok": true,
+      "contentType": "text/plain;charset=UTF-8",
+      "contentLength": null
+    },
+    {
+      "url": "https://irrzpwzyqcubhhjeuakc.supabase.co/storage/v1/object/public/imagens-sitios/juriti/1762988673341-20251107_162143.jpg",
+      "source": "verify-uploads.results.json",
+      "id": "46a6b01b-4e01-409a-9043-704636c81233",
+      "status": 200,
+      "note": "OK",
+      "ok": true,
+      "contentType": "text/plain;charset=UTF-8",
+      "contentLength": null
+    },
+    {
+      "url": "https://irrzpwzyqcubhhjeuakc.supabase.co/storage/v1/object/public/imagens-sitios/juriti/1762988692444-20251107_162239.jpg",
+      "source": "verify-uploads.results.json",
+      "id": "86f8c552-e937-4cef-8dca-769d26b592b3",
+      "status": 200,
+      "note": "OK",
+      "ok": true,
+      "contentType": "text/plain;charset=UTF-8",
+      "contentLength": null
+    },
+    {
+      "url": "https://irrzpwzyqcubhhjeuakc.supabase.co/storage/v1/object/public/imagens-sitios/juriti/1762988648710-20251107_162052.jpg",
+      "source": "verify-uploads.results.json",
+      "id": "17257e5f-c166-4258-9e01-9cef42f7136a",
+      "status": 200,
+      "note": "OK",
+      "ok": true,
+      "contentType": "text/plain;charset=UTF-8",
+      "contentLength": null
+    },
+    {
+      "url": "https://irrzpwzyqcubhhjeuakc.supabase.co/storage/v1/object/public/imagens-sitios/mergulhao/1762988798001-20251107_163239.jpg",
+      "source": "verify-uploads.results.json",
+      "id": "8746a3ab-24ee-41b9-b181-7d4fb138f632",
+      "status": 200,
+      "note": "OK",
+      "ok": true,
+      "contentType": "text/plain;charset=UTF-8",
+      "contentLength": null
+    },
+    {
+      "url": "https://irrzpwzyqcubhhjeuakc.supabase.co/storage/v1/object/public/imagens-sitios/mergulhao/1762988852528-20251107_163856.jpg",
+      "source": "verify-uploads.results.json",
+      "id": "13ffb4ea-0ee2-4523-bda2-6dfe4da806de",
+      "status": 200,
+      "note": "OK",
+      "ok": true,
+      "contentType": "text/plain;charset=UTF-8",
+      "contentLength": null
+    },
+    {
+      "url": "https://irrzpwzyqcubhhjeuakc.supabase.co/storage/v1/object/public/imagens-sitios/mergulhao/1762988818468-20251107_163506.jpg",
+      "source": "verify-uploads.results.json",
+      "id": "d36aa5d1-cad1-42b7-9a5e-3d27b731c273",
+      "status": 200,
+      "note": "OK",
+      "ok": true,
+      "contentType": "text/plain;charset=UTF-8",
+      "contentLength": null
+    },
+    {
+      "url": "https://irrzpwzyqcubhhjeuakc.supabase.co/storage/v1/object/public/imagens-sitios/mergulhao/1762988827710-20251107_163720.jpg",
+      "source": "verify-uploads.results.json",
+      "id": "a63fc388-5940-4d85-b34b-b32269406c1f",
+      "status": 200,
+      "note": "OK",
+      "ok": true,
+      "contentType": "text/plain;charset=UTF-8",
+      "contentLength": null
+    },
+    {
+      "url": "https://irrzpwzyqcubhhjeuakc.supabase.co/storage/v1/object/public/imagens-sitios/mergulhao/1762988811097-20251107_163415.jpg",
+      "source": "verify-uploads.results.json",
+      "id": "20e69bfa-bc3f-4bd4-89d9-3aa8a3bc1421",
+      "status": 200,
+      "note": "OK",
+      "ok": true,
+      "contentType": "text/plain;charset=UTF-8",
+      "contentLength": null
+    },
+    {
+      "url": "https://irrzpwzyqcubhhjeuakc.supabase.co/storage/v1/object/public/imagens-sitios/mergulhao/1762988808343-20251107_163306.jpg",
+      "source": "verify-uploads.results.json",
+      "id": "978467e3-140a-4e5d-ae2c-c4a129c6c9b2",
+      "status": 200,
+      "note": "OK",
+      "ok": true,
+      "contentType": "text/plain;charset=UTF-8",
+      "contentLength": null
+    },
+    {
+      "url": "https://irrzpwzyqcubhhjeuakc.supabase.co/storage/v1/object/public/imagens-sitios/juriti/20251107_162023.jpg",
+      "source": "verify-uploads.results.json",
+      "id": "2a8a9e2a-496a-40a1-8a0d-fa52cb95c409",
+      "status": 200,
+      "note": "OK",
+      "ok": true,
+      "contentType": "image/jpeg",
+      "contentLength": "9718898"
+    },
+    {
+      "url": "https://irrzpwzyqcubhhjeuakc.supabase.co/storage/v1/object/public/imagens-sitios/mergulhao/1762988836535-20251107_163820.jpg",
+      "source": "verify-uploads.results.json",
+      "id": "fec82021-fcea-435f-bc40-9706def8c2fb",
+      "status": 200,
+      "note": "OK",
+      "ok": true,
+      "contentType": "text/plain;charset=UTF-8",
+      "contentLength": null
+    },
+    {
+      "url": "https://irrzpwzyqcubhhjeuakc.supabase.co/storage/v1/object/public/imagens-sitios/mergulhao/1762988804234-20251107_163252.jpg",
+      "source": "verify-uploads.results.json",
+      "id": "c58fa982-278b-4a3f-94ac-9526f750da7c",
+      "status": 200,
+      "note": "OK",
+      "ok": true,
+      "contentType": "text/plain;charset=UTF-8",
+      "contentLength": null
+    },
+    {
+      "url": "https://irrzpwzyqcubhhjeuakc.supabase.co/storage/v1/object/public/imagens-sitios/mergulhao/1762988860014-20251107_163903.jpg",
+      "source": "verify-uploads.results.json",
+      "id": "77aa7921-a181-4a9c-97af-6eeb306db9a7",
+      "status": 200,
+      "note": "OK",
+      "ok": true,
+      "contentType": "text/plain;charset=UTF-8",
+      "contentLength": null
+    },
+    {
+      "url": "https://irrzpwzyqcubhhjeuakc.supabase.co/storage/v1/object/public/imagens-sitios/mergulhao/1762988845235-20251107_163847.jpg",
+      "source": "verify-uploads.results.json",
+      "id": "0010573a-3044-4bfd-860d-22dcb0b2fe64",
+      "status": 200,
+      "note": "OK",
+      "ok": true,
+      "contentType": "text/plain;charset=UTF-8",
+      "contentLength": null
+    },
+    {
+      "url": "https://irrzpwzyqcubhhjeuakc.supabase.co/storage/v1/object/public/imagens-sitios/juriti/20251107_162052.jpg",
+      "source": "verify-uploads.results.json",
+      "id": "f84aa22e-04c7-46e7-a553-d27dcd375cf6",
+      "status": 200,
+      "note": "OK",
+      "ok": true,
+      "contentType": "image/jpeg",
+      "contentLength": "11929142"
+    },
+    {
+      "url": "https://irrzpwzyqcubhhjeuakc.supabase.co/storage/v1/object/public/imagens-sitios/juriti/20251107_162025.jpg",
+      "source": "verify-uploads.results.json",
+      "id": "8b2f2761-f0d8-4e74-9676-d2256cca2e53",
+      "status": 200,
+      "note": "OK",
+      "ok": true,
+      "contentType": "image/jpeg",
+      "contentLength": "9328090"
+    },
+    {
+      "url": "https://irrzpwzyqcubhhjeuakc.supabase.co/storage/v1/object/public/imagens-sitios/juriti/20251107_162155.jpg",
+      "source": "verify-uploads.results.json",
+      "id": "e77301aa-68f5-4d24-a6c0-8c9d6a796d0c",
+      "status": 200,
+      "note": "OK",
+      "ok": true,
+      "contentType": "image/jpeg",
+      "contentLength": "9302508"
+    },
+    {
+      "url": "https://irrzpwzyqcubhhjeuakc.supabase.co/storage/v1/object/public/imagens-sitios/mergulhao/20251107_163239.jpg",
+      "source": "verify-uploads.results.json",
+      "id": "46ff5e87-c165-4304-9ce9-d8a7f1d9b0db",
+      "status": 200,
+      "note": "OK",
+      "ok": true,
+      "contentType": "image/jpeg",
+      "contentLength": "7297792"
+    },
+    {
+      "url": "https://irrzpwzyqcubhhjeuakc.supabase.co/storage/v1/object/public/imagens-sitios/juriti/20251107_162239.jpg",
+      "source": "verify-uploads.results.json",
+      "id": "c75d8ed0-1200-45fc-a806-51d6829e902e",
+      "status": 200,
+      "note": "OK",
+      "ok": true,
+      "contentType": "image/jpeg",
+      "contentLength": "10465666"
+    },
+    {
+      "url": "https://irrzpwzyqcubhhjeuakc.supabase.co/storage/v1/object/public/imagens-sitios/juriti/20251107_162143.jpg",
+      "source": "verify-uploads.results.json",
+      "id": "0e107c58-ce7f-4f19-9417-04399dc700df",
+      "status": 200,
+      "note": "OK",
+      "ok": true,
+      "contentType": "image/jpeg",
+      "contentLength": "7843679"
+    },
+    {
+      "url": "https://irrzpwzyqcubhhjeuakc.supabase.co/storage/v1/object/public/imagens-sitios/mergulhao/20251107_163212.jpg",
+      "source": "verify-uploads.results.json",
+      "id": "425a310e-1707-4ebd-b785-64b781a7d44a",
+      "status": 200,
+      "note": "OK",
+      "ok": true,
+      "contentType": "image/jpeg",
+      "contentLength": "9355285"
+    },
+    {
+      "url": "https://irrzpwzyqcubhhjeuakc.supabase.co/storage/v1/object/public/imagens-sitios/juriti/20251107_162100.jpg",
+      "source": "verify-uploads.results.json",
+      "id": "588c2408-8438-4d45-8769-c78042cbbbc9",
+      "status": 200,
+      "note": "OK",
+      "ok": true,
+      "contentType": "image/jpeg",
+      "contentLength": "8067666"
+    },
+    {
+      "url": "https://irrzpwzyqcubhhjeuakc.supabase.co/storage/v1/object/public/imagens-sitios/juriti/20251107_162336.jpg",
+      "source": "verify-uploads.results.json",
+      "id": "a0cd3534-dd38-452c-8b6e-8cb71057cf43",
+      "status": 200,
+      "note": "OK",
+      "ok": true,
+      "contentType": "image/jpeg",
+      "contentLength": "5889190"
+    },
+    {
+      "url": "https://irrzpwzyqcubhhjeuakc.supabase.co/storage/v1/object/public/imagens-sitios/mergulhao/20251107_163252.jpg",
+      "source": "verify-uploads.results.json",
+      "id": "b1231bcc-0543-45bb-bca3-b678ca92ab1a",
+      "status": 200,
+      "note": "OK",
+      "ok": true,
+      "contentType": "image/jpeg",
+      "contentLength": "4151973"
+    },
+    {
+      "url": "https://irrzpwzyqcubhhjeuakc.supabase.co/storage/v1/object/public/imagens-sitios/juriti/20251107_162356.jpg",
+      "source": "verify-uploads.results.json",
+      "id": "304eb56f-bca7-4e9e-826a-9b5bce7b418a",
+      "status": 200,
+      "note": "OK",
+      "ok": true,
+      "contentType": "image/jpeg",
+      "contentLength": "9705659"
+    },
+    {
+      "url": "https://irrzpwzyqcubhhjeuakc.supabase.co/storage/v1/object/public/imagens-sitios/mergulhao/20251107_163306.jpg",
+      "source": "verify-uploads.results.json",
+      "id": "5eb86d8f-e004-4c75-ac5c-fefa3807db09",
+      "status": 200,
+      "note": "OK",
+      "ok": true,
+      "contentType": "image/jpeg",
+      "contentLength": "4230360"
+    },
+    {
+      "url": "https://irrzpwzyqcubhhjeuakc.supabase.co/storage/v1/object/public/imagens-sitios/juriti/20251107_162403.jpg",
+      "source": "verify-uploads.results.json",
+      "id": "d96ec26d-ce28-4e6e-ac42-4046ec5cc40b",
+      "status": 200,
+      "note": "OK",
+      "ok": true,
+      "contentType": "image/jpeg",
+      "contentLength": "11043673"
+    },
+    {
+      "url": "https://irrzpwzyqcubhhjeuakc.supabase.co/storage/v1/object/public/imagens-sitios/juriti/20251107_162537.jpg",
+      "source": "verify-uploads.results.json",
+      "id": "da4913db-75f0-42ed-8981-86c05e66f612",
+      "status": 200,
+      "note": "OK",
+      "ok": true,
+      "contentType": "image/jpeg",
+      "contentLength": "11625480"
+    },
+    {
+      "url": "https://irrzpwzyqcubhhjeuakc.supabase.co/storage/v1/object/public/imagens-sitios/mergulhao/20251107_163506.jpg",
+      "source": "verify-uploads.results.json",
+      "id": "c24be025-9948-4eec-990c-161f6b486987",
+      "status": 200,
+      "note": "OK",
+      "ok": true,
+      "contentType": "image/jpeg",
+      "contentLength": "16949829"
+    },
+    {
+      "url": "https://irrzpwzyqcubhhjeuakc.supabase.co/storage/v1/object/public/imagens-sitios/mergulhao/20251107_163720.jpg",
+      "source": "verify-uploads.results.json",
+      "id": "d64225be-23e9-41e9-9ed4-1548ff8e4e9e",
+      "status": 200,
+      "note": "OK",
+      "ok": true,
+      "contentType": "image/jpeg",
+      "contentLength": "11379540"
+    },
+    {
+      "url": "https://irrzpwzyqcubhhjeuakc.supabase.co/storage/v1/object/public/imagens-sitios/mergulhao/20251107_163856.jpg",
+      "source": "verify-uploads.results.json",
+      "id": "c1608d5c-8324-4a9b-9409-8763a3b14cff",
+      "status": 200,
+      "note": "OK",
+      "ok": true,
+      "contentType": "image/jpeg",
+      "contentLength": "12371698"
+    },
+    {
+      "url": "https://irrzpwzyqcubhhjeuakc.supabase.co/storage/v1/object/public/imagens-sitios/mergulhao/20251107_163820.jpg",
+      "source": "verify-uploads.results.json",
+      "id": "db697f9d-1aea-4248-859a-133599ad03f0",
+      "status": 200,
+      "note": "OK",
+      "ok": true,
+      "contentType": "image/jpeg",
+      "contentLength": "7647131"
+    },
+    {
+      "url": "https://irrzpwzyqcubhhjeuakc.supabase.co/storage/v1/object/public/imagens-sitios/mergulhao/20251107_163415.jpg",
+      "source": "verify-uploads.results.json",
+      "id": "b2718d31-ff43-415b-98f0-ff73b43b463d",
+      "status": 200,
+      "note": "OK",
+      "ok": true,
+      "contentType": "image/jpeg",
+      "contentLength": "12074486"
+    },
+    {
+      "url": "https://irrzpwzyqcubhhjeuakc.supabase.co/storage/v1/object/public/imagens-sitios/mergulhao%2Fcompressed%2F20251107_163934_compressed.mp4",
+      "source": "verify-uploads.results.json",
+      "id": "4f9909dd-b9c1-4bdc-9b28-c56b19eb2c94",
+      "status": 200,
+      "note": "OK",
+      "ok": true,
+      "contentType": "video/mp4",
+      "contentLength": "7923025"
+    },
+    {
+      "url": "https://irrzpwzyqcubhhjeuakc.supabase.co/storage/v1/object/public/imagens-sitios/mergulhao/20251107_163847.jpg",
+      "source": "verify-uploads.results.json",
+      "id": "6c04c4de-6423-4f78-876b-a932d80704f2",
+      "status": 200,
+      "note": "OK",
+      "ok": true,
+      "contentType": "image/jpeg",
+      "contentLength": "10394096"
+    },
+    {
+      "url": "https://irrzpwzyqcubhhjeuakc.supabase.co/storage/v1/object/public/imagens-sitios/juriti%2F20251107_162025.jpg",
+      "source": "verify-uploads.results.json",
+      "id": "cb569808-5bea-4d0e-bfe8-09304ad323a4",
+      "status": 200,
+      "note": "OK",
+      "ok": true,
+      "contentType": "image/jpeg",
+      "contentLength": "9328090"
+    },
+    {
+      "url": "https://irrzpwzyqcubhhjeuakc.supabase.co/storage/v1/object/public/imagens-sitios/juriti%2F20251107_162052.jpg",
+      "source": "verify-uploads.results.json",
+      "id": "4aacc458-7215-4a8a-bdb7-46a5d0107d95",
+      "status": 200,
+      "note": "OK",
+      "ok": true,
+      "contentType": "image/jpeg",
+      "contentLength": "11929142"
+    },
+    {
+      "url": "https://irrzpwzyqcubhhjeuakc.supabase.co/storage/v1/object/public/imagens-sitios/mergulhao/20251107_163903.jpg",
+      "source": "verify-uploads.results.json",
+      "id": "03308203-0ba0-4f05-a864-ac52b59611a5",
+      "status": 200,
+      "note": "OK",
+      "ok": true,
+      "contentType": "image/jpeg",
+      "contentLength": "3023016"
+    },
+    {
+      "url": "https://irrzpwzyqcubhhjeuakc.supabase.co/storage/v1/object/public/imagens-sitios/juriti%2F20251107_162100.jpg",
+      "source": "verify-uploads.results.json",
+      "id": "1f145437-4e89-479d-95c2-4cb1f5ecd25f",
+      "status": 200,
+      "note": "OK",
+      "ok": true,
+      "contentType": "image/jpeg",
+      "contentLength": "8067666"
+    },
+    {
+      "url": "https://irrzpwzyqcubhhjeuakc.supabase.co/storage/v1/object/public/imagens-sitios/juriti%2Fcompressed%2F20251107_162422_compressed.mp4",
+      "source": "verify-uploads.results.json",
+      "id": "d18e4fc1-1df8-42d9-864c-1f3f38011902",
+      "status": 200,
+      "note": "OK",
+      "ok": true,
+      "contentType": "video/mp4",
+      "contentLength": "20832266"
+    },
+    {
+      "url": "https://irrzpwzyqcubhhjeuakc.supabase.co/storage/v1/object/public/imagens-sitios/juriti%2Fphotos%2F20251113_164219.jpg",
+      "source": "verify-uploads.results.json",
+      "id": "c3ac817b-0410-471f-b550-68619f4712fb",
+      "status": 200,
+      "note": "OK",
+      "ok": true,
+      "contentType": "image/jpeg",
+      "contentLength": "7267739"
+    },
+    {
+      "url": "https://irrzpwzyqcubhhjeuakc.supabase.co/storage/v1/object/public/imagens-sitios/juriti%2F20251107_162023.jpg",
+      "source": "verify-uploads.results.json",
+      "id": "9aac4e20-c183-4000-a0af-dcef18ddebbc",
+      "status": 200,
+      "note": "OK",
+      "ok": true,
+      "contentType": "image/jpeg",
+      "contentLength": "9718898"
+    },
+    {
+      "url": "https://irrzpwzyqcubhhjeuakc.supabase.co/storage/v1/object/public/imagens-sitios/juriti%2F20251107_162143.jpg",
+      "source": "verify-uploads.results.json",
+      "id": "5fbcc52b-10fe-4d4d-9a0f-c1c6e48d2027",
+      "status": 200,
+      "note": "OK",
+      "ok": true,
+      "contentType": "image/jpeg",
+      "contentLength": "7843679"
+    },
+    {
+      "url": "https://irrzpwzyqcubhhjeuakc.supabase.co/storage/v1/object/public/imagens-sitios/juriti%2F20251107_162336.jpg",
+      "source": "verify-uploads.results.json",
+      "id": "f2af3c22-3cb1-48e2-b3d2-1532873c356b",
+      "status": 200,
+      "note": "OK",
+      "ok": true,
+      "contentType": "image/jpeg",
+      "contentLength": "5889190"
+    },
+    {
+      "url": "https://irrzpwzyqcubhhjeuakc.supabase.co/storage/v1/object/public/imagens-sitios/juriti%2F20251107_162239.jpg",
+      "source": "verify-uploads.results.json",
+      "id": "c7519b78-ab99-494c-95d7-c243e2036181",
+      "status": 200,
+      "note": "OK",
+      "ok": true,
+      "contentType": "image/jpeg",
+      "contentLength": "10465666"
+    },
+    {
+      "url": "https://irrzpwzyqcubhhjeuakc.supabase.co/storage/v1/object/public/imagens-sitios/juriti%2F20251107_162155.jpg",
+      "source": "verify-uploads.results.json",
+      "id": "5363af60-4fb8-4fdd-b3e5-b2cafb8509b5",
+      "status": 200,
+      "note": "OK",
+      "ok": true,
+      "contentType": "image/jpeg",
+      "contentLength": "9302508"
+    },
+    {
+      "url": "https://irrzpwzyqcubhhjeuakc.supabase.co/storage/v1/object/public/imagens-sitios/juriti%2F20251107_162356.jpg",
+      "source": "verify-uploads.results.json",
+      "id": "de1c1de7-31ee-40ef-9618-cd046a71c0f0",
+      "status": 200,
+      "note": "OK",
+      "ok": true,
+      "contentType": "image/jpeg",
+      "contentLength": "9705659"
+    },
+    {
+      "url": "https://irrzpwzyqcubhhjeuakc.supabase.co/storage/v1/object/public/imagens-sitios/juriti%2F20251107_162403.jpg",
+      "source": "verify-uploads.results.json",
+      "id": "a9b85d9b-cdd9-49eb-98fc-8cab0720bf15",
+      "status": 200,
+      "note": "OK",
+      "ok": true,
+      "contentType": "image/jpeg",
+      "contentLength": "11043673"
+    },
+    {
+      "url": "https://irrzpwzyqcubhhjeuakc.supabase.co/storage/v1/object/public/imagens-sitios/juriti%2Fphotos%2F20251107_162023.jpg",
+      "source": "verify-uploads.results.json",
+      "id": "4ccc6c66-883b-4adf-9a8c-cf02064ae2cd",
+      "status": 200,
+      "note": "OK",
+      "ok": true,
+      "contentType": "image/jpeg",
+      "contentLength": "9718898"
+    },
+    {
+      "url": "https://irrzpwzyqcubhhjeuakc.supabase.co/storage/v1/object/public/imagens-sitios/juriti%2F20251107_162537.jpg",
+      "source": "verify-uploads.results.json",
+      "id": "17ae2ea7-0bfc-4aa5-b964-6531d5e434bc",
+      "status": 200,
+      "note": "OK",
+      "ok": true,
+      "contentType": "image/jpeg",
+      "contentLength": "11625480"
+    },
+    {
+      "url": "https://irrzpwzyqcubhhjeuakc.supabase.co/storage/v1/object/public/imagens-sitios/juriti%2Fphotos%2F20251107_162100.jpg",
+      "source": "verify-uploads.results.json",
+      "id": "451e9802-0349-4083-9deb-712fdc9bc5b7",
+      "status": 200,
+      "note": "OK",
+      "ok": true,
+      "contentType": "image/jpeg",
+      "contentLength": "8067666"
+    },
+    {
+      "url": "https://irrzpwzyqcubhhjeuakc.supabase.co/storage/v1/object/public/imagens-sitios/juriti%2Fphotos%2F20251107_162155.jpg",
+      "source": "verify-uploads.results.json",
+      "id": "0c3521fc-b376-4714-a4ea-18f4e8bfef61",
+      "status": 200,
+      "note": "OK",
+      "ok": true,
+      "contentType": "image/jpeg",
+      "contentLength": "9302508"
+    },
+    {
+      "url": "https://irrzpwzyqcubhhjeuakc.supabase.co/storage/v1/object/public/imagens-sitios/juriti%2Fphotos%2F20251107_162143.jpg",
+      "source": "verify-uploads.results.json",
+      "id": "6e7cd9cf-04aa-4ec0-934c-fd0a63258964",
+      "status": 200,
+      "note": "OK",
+      "ok": true,
+      "contentType": "image/jpeg",
+      "contentLength": "7843679"
+    },
+    {
+      "url": "https://irrzpwzyqcubhhjeuakc.supabase.co/storage/v1/object/public/imagens-sitios/juriti%2Fphotos%2F20251107_162025.jpg",
+      "source": "verify-uploads.results.json",
+      "id": "e9e9523b-bb14-4609-be5d-377260b121b2",
+      "status": 200,
+      "note": "OK",
+      "ok": true,
+      "contentType": "image/jpeg",
+      "contentLength": "9328090"
+    },
+    {
+      "url": "https://irrzpwzyqcubhhjeuakc.supabase.co/storage/v1/object/public/imagens-sitios/juriti%2Fphotos%2F20251107_162052.jpg",
+      "source": "verify-uploads.results.json",
+      "id": "5e689be5-80cb-4498-99e4-6a8bd46290f7",
+      "status": 200,
+      "note": "OK",
+      "ok": true,
+      "contentType": "image/jpeg",
+      "contentLength": "11929142"
+    },
+    {
+      "url": "https://irrzpwzyqcubhhjeuakc.supabase.co/storage/v1/object/public/imagens-sitios/juriti%2Fvideos%2F20251113_164219.jpg",
+      "source": "verify-uploads.results.json",
+      "id": "5d65c43c-94b0-4192-addb-4429a4e50c78",
+      "status": 200,
+      "note": "OK",
+      "ok": true,
+      "contentType": "image/jpeg",
+      "contentLength": "7267739"
+    },
+    {
+      "url": "https://irrzpwzyqcubhhjeuakc.supabase.co/storage/v1/object/public/imagens-sitios/juriti%2Fphotos%2F20251107_162239.jpg",
+      "source": "verify-uploads.results.json",
+      "id": "f0c4fcb5-c549-4fed-8fbf-7d19ebfd69f1",
+      "status": 200,
+      "note": "OK",
+      "ok": true,
+      "contentType": "image/jpeg",
+      "contentLength": "10465666"
+    },
+    {
+      "url": "https://irrzpwzyqcubhhjeuakc.supabase.co/storage/v1/object/public/imagens-sitios/juriti%2Fphotos%2F20251107_162356.jpg",
+      "source": "verify-uploads.results.json",
+      "id": "ad6918b2-e1c9-441e-904e-b8dc36fd467b",
+      "status": 200,
+      "note": "OK",
+      "ok": true,
+      "contentType": "image/jpeg",
+      "contentLength": "9705659"
+    },
+    {
+      "url": "https://irrzpwzyqcubhhjeuakc.supabase.co/storage/v1/object/public/imagens-sitios/mergulhao%2F20251107_163212.jpg",
+      "source": "verify-uploads.results.json",
+      "id": "0abb52e6-2d24-4750-a5d7-706908773c9b",
+      "status": 200,
+      "note": "OK",
+      "ok": true,
+      "contentType": "image/jpeg",
+      "contentLength": "9355285"
+    },
+    {
+      "url": "https://irrzpwzyqcubhhjeuakc.supabase.co/storage/v1/object/public/imagens-sitios/juriti%2Fvideos%2F20251107_162422_compressed.mp4",
+      "source": "verify-uploads.results.json",
+      "id": "61e71341-16ee-473e-bb27-ee3ec187668c",
+      "status": 200,
+      "note": "OK",
+      "ok": true,
+      "contentType": "video/mp4",
+      "contentLength": "18335846"
+    },
+    {
+      "url": "https://irrzpwzyqcubhhjeuakc.supabase.co/storage/v1/object/public/imagens-sitios/juriti%2Fphotos%2F20251107_162336.jpg",
+      "source": "verify-uploads.results.json",
+      "id": "c22439c9-2913-494b-8040-4b866e387491",
+      "status": 200,
+      "note": "OK",
+      "ok": true,
+      "contentType": "image/jpeg",
+      "contentLength": "5889190"
+    },
+    {
+      "url": "https://irrzpwzyqcubhhjeuakc.supabase.co/storage/v1/object/public/imagens-sitios/juriti%2Fphotos%2F20251107_162403.jpg",
+      "source": "verify-uploads.results.json",
+      "id": "41351e94-e6d1-4d17-b7ac-d1639e7c6092",
+      "status": 200,
+      "note": "OK",
+      "ok": true,
+      "contentType": "image/jpeg",
+      "contentLength": "11043673"
+    },
+    {
+      "url": "https://irrzpwzyqcubhhjeuakc.supabase.co/storage/v1/object/public/imagens-sitios/mergulhao%2F20251107_163306.jpg",
+      "source": "verify-uploads.results.json",
+      "id": "3999ec6e-3601-4498-9ffd-dfd3bde1938c",
+      "status": 200,
+      "note": "OK",
+      "ok": true,
+      "contentType": "image/jpeg",
+      "contentLength": "4230360"
+    },
+    {
+      "url": "https://irrzpwzyqcubhhjeuakc.supabase.co/storage/v1/object/public/imagens-sitios/juriti%2Fphotos%2F20251107_162537.jpg",
+      "source": "verify-uploads.results.json",
+      "id": "40218872-2b31-44d3-ac21-6145049b62f8",
+      "status": 200,
+      "note": "OK",
+      "ok": true,
+      "contentType": "image/jpeg",
+      "contentLength": "11625480"
+    },
+    {
+      "url": "https://irrzpwzyqcubhhjeuakc.supabase.co/storage/v1/object/public/imagens-sitios/mergulhao%2F20251107_163239.jpg",
+      "source": "verify-uploads.results.json",
+      "id": "52f2095f-dceb-41cf-8d33-e5b867f89e03",
+      "status": 200,
+      "note": "OK",
+      "ok": true,
+      "contentType": "image/jpeg",
+      "contentLength": "7297792"
+    },
+    {
+      "url": "https://irrzpwzyqcubhhjeuakc.supabase.co/storage/v1/object/public/imagens-sitios/mergulhao%2F20251107_163252.jpg",
+      "source": "verify-uploads.results.json",
+      "id": "090864f0-4977-46b7-92c4-f86c374cc3b2",
+      "status": 200,
+      "note": "OK",
+      "ok": true,
+      "contentType": "image/jpeg",
+      "contentLength": "4151973"
+    },
+    {
+      "url": "https://irrzpwzyqcubhhjeuakc.supabase.co/storage/v1/object/public/imagens-sitios/mergulhao%2F20251107_163415.jpg",
+      "source": "verify-uploads.results.json",
+      "id": "e0a70b5a-4bec-4d5a-9957-0125310722d3",
+      "status": 200,
+      "note": "OK",
+      "ok": true,
+      "contentType": "image/jpeg",
+      "contentLength": "12074486"
+    },
+    {
+      "url": "https://irrzpwzyqcubhhjeuakc.supabase.co/storage/v1/object/public/imagens-sitios/mergulhao%2F20251107_163506.jpg",
+      "source": "verify-uploads.results.json",
+      "id": "9fa11859-4328-461f-9f6a-0094f0277d97",
+      "status": 200,
+      "note": "OK",
+      "ok": true,
+      "contentType": "image/jpeg",
+      "contentLength": "16949829"
+    },
+    {
+      "url": "https://irrzpwzyqcubhhjeuakc.supabase.co/storage/v1/object/public/imagens-sitios/mergulhao%2F20251107_163720.jpg",
+      "source": "verify-uploads.results.json",
+      "id": "ec29af35-badd-45af-b68b-ff91a0702eda",
+      "status": 200,
+      "note": "OK",
+      "ok": true,
+      "contentType": "image/jpeg",
+      "contentLength": "11379540"
+    },
+    {
+      "url": "https://irrzpwzyqcubhhjeuakc.supabase.co/storage/v1/object/public/imagens-sitios/mergulhao%2F20251107_163847.jpg",
+      "source": "verify-uploads.results.json",
+      "id": "0f4fada6-e4bb-41ef-bc58-48fb6039376d",
+      "status": 200,
+      "note": "OK",
+      "ok": true,
+      "contentType": "image/jpeg",
+      "contentLength": "10394096"
+    },
+    {
+      "url": "https://irrzpwzyqcubhhjeuakc.supabase.co/storage/v1/object/public/imagens-sitios/mergulhao%2F20251107_163820.jpg",
+      "source": "verify-uploads.results.json",
+      "id": "b64b71c8-58ec-4cc3-83ac-863f94964ef9",
+      "status": 200,
+      "note": "OK",
+      "ok": true,
+      "contentType": "image/jpeg",
+      "contentLength": "7647131"
+    },
+    {
+      "url": "https://irrzpwzyqcubhhjeuakc.supabase.co/storage/v1/object/public/imagens-sitios/mergulhao%2F20251107_163903.jpg",
+      "source": "verify-uploads.results.json",
+      "id": "e0cefaaa-8abb-4718-afa9-466a6f625cfe",
+      "status": 200,
+      "note": "OK",
+      "ok": true,
+      "contentType": "image/jpeg",
+      "contentLength": "3023016"
+    },
+    {
+      "url": "https://irrzpwzyqcubhhjeuakc.supabase.co/storage/v1/object/public/imagens-sitios/mergulhao%2F20251107_163856.jpg",
+      "source": "verify-uploads.results.json",
+      "id": "67fcdf7b-1c7e-4dde-8631-1ff6a7e05213",
+      "status": 200,
+      "note": "OK",
+      "ok": true,
+      "contentType": "image/jpeg",
+      "contentLength": "12371698"
+    }
+  ]
+}

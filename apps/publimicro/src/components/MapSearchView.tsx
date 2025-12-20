@@ -4,6 +4,7 @@ import { useEffect, useRef } from "react";
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
 import { renderToStaticMarkup } from "react-dom/server";
+import { getFirstPhoto } from '@/lib/photoUtils';
 
 interface Property {
   id: string;
@@ -130,11 +131,7 @@ export default function MapSearchView({
       // Popup content
       const popupContent = `
         <div style="min-width: 200px;">
-          ${
-            property.fotos && property.fotos[0]
-              ? `<img src="${property.fotos[0]}" alt="${property.title}" style="width: 100%; height: 120px; object-fit: cover; border-radius: 8px; margin-bottom: 8px;" />`
-              : ""
-          }
+          <img src="${getFirstPhoto(property.fotos)}" alt="${property.title}" style="width: 100%; height: 120px; object-fit: cover; border-radius: 8px; margin-bottom: 8px;" />
           <h3 style="color: #E6C98B; font-weight: bold; font-size: 16px; margin-bottom: 4px;">${property.title}</h3>
           <p style="color: #8B9B6E; font-size: 12px; margin-bottom: 8px;">${property.location}</p>
           <p style="color: #A8C97F; font-weight: bold; font-size: 18px;">R$ ${property.price?.toLocaleString("pt-BR")}</p>

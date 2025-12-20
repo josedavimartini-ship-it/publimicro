@@ -1,0 +1,65 @@
+{
+  "timestamp": "2025-12-20T18:22:09.103Z",
+  "properties": [
+    {
+      "slug": "abare",
+      "id": "abare",
+      "nome": null,
+      "fotos": [],
+      "fotos_status": [],
+      "videos": [],
+      "videos_status": [],
+      "note": "property not found in DB"
+    },
+    {
+      "slug": "bigua",
+      "id": "bigua",
+      "nome": null,
+      "fotos": [],
+      "fotos_status": [],
+      "videos": [],
+      "videos_status": [],
+      "note": "property not found in DB"
+    },
+    {
+      "slug": "mergulhao",
+      "id": "mergulhao",
+      "nome": null,
+      "fotos": [],
+      "fotos_status": [],
+      "videos": [],
+      "videos_status": [],
+      "note": "property not found in DB"
+    },
+    {
+      "slug": "seriema",
+      "id": "seriema",
+      "nome": null,
+      "fotos": [],
+      "fotos_status": [],
+      "videos": [],
+      "videos_status": [],
+      "note": "property not found in DB"
+    },
+    {
+      "slug": "juriti",
+      "id": "juriti",
+      "nome": null,
+      "fotos": [],
+      "fotos_status": [],
+      "videos": [],
+      "videos_status": [],
+      "note": "property not found in DB"
+    },
+    {
+      "slug": "surucua",
+      "id": "surucua",
+      "nome": null,
+      "fotos": [],
+      "fotos_status": [],
+      "videos": [],
+      "videos_status": [],
+      "note": "property not found in DB"
+    }
+  ]
+}

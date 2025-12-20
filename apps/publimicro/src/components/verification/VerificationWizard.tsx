@@ -184,17 +184,17 @@ export default function VerificationWizard() {
 
   if (loading && currentStep === 'personal_info') {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gray-50">
+      <div className="min-h-screen flex items-center justify-center">
         <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto"></div>
-          <p className="mt-4 text-gray-600">Carregando...</p>
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 mx-auto" style={{ borderBottomColor: 'var(--text-accent)' }}></div>
+          <p className="mt-4 text-warm">Carregando...</p>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
+    <div className="min-h-screen py-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-3xl mx-auto">
         {/* Progress Indicator */}
         <div className="mb-8">
@@ -205,13 +205,15 @@ export default function VerificationWizard() {
               active={currentStep === 'personal_info'}
               completed={['documents', 'processing', 'result'].includes(currentStep)}
             />
-            <div className="flex-1 h-1 bg-gray-200 mx-2">
+            <div className="flex-1 h-1 mx-2" style={{ background: 'var(--border-subtle)' }}>
               <div
-                className={`h-full transition-all duration-500 ${
-                  ['documents', 'processing', 'result'].includes(currentStep)
-                    ? 'bg-blue-600 w-full'
-                    : 'bg-gray-200 w-0'
-                }`}
+                className="h-full transition-all duration-500"
+                style={{
+                  background: ['documents', 'processing', 'result'].includes(currentStep)
+                    ? 'linear-gradient(90deg, var(--accent-bronze), var(--accent-gold))'
+                    : 'var(--border-subtle)',
+                  width: ['documents', 'processing', 'result'].includes(currentStep) ? '100%' : '0',
+                }}
               />
             </div>
             <StepIndicator
@@ -220,13 +222,15 @@ export default function VerificationWizard() {
               active={currentStep === 'documents'}
               completed={['processing', 'result'].includes(currentStep)}
             />
-            <div className="flex-1 h-1 bg-gray-200 mx-2">
+            <div className="flex-1 h-1 mx-2" style={{ background: 'var(--border-subtle)' }}>
               <div
-                className={`h-full transition-all duration-500 ${
-                  ['processing', 'result'].includes(currentStep)
-                    ? 'bg-blue-600 w-full'
-                    : 'bg-gray-200 w-0'
-                }`}
+                className="h-full transition-all duration-500"
+                style={{
+                  background: ['processing', 'result'].includes(currentStep)
+                    ? 'linear-gradient(90deg, var(--accent-bronze), var(--accent-gold))'
+                    : 'var(--border-subtle)',
+                  width: ['processing', 'result'].includes(currentStep) ? '100%' : '0',
+                }}
               />
             </div>
             <StepIndicator
@@ -235,11 +239,13 @@ export default function VerificationWizard() {
               active={currentStep === 'processing'}
               completed={currentStep === 'result'}
             />
-            <div className="flex-1 h-1 bg-gray-200 mx-2">
+            <div className="flex-1 h-1 mx-2" style={{ background: 'var(--border-subtle)' }}>
               <div
-                className={`h-full transition-all duration-500 ${
-                  currentStep === 'result' ? 'bg-blue-600 w-full' : 'bg-gray-200 w-0'
-                }`}
+                className="h-full transition-all duration-500"
+                style={{
+                  background: currentStep === 'result' ? 'linear-gradient(90deg, var(--accent-bronze), var(--accent-gold))' : 'var(--border-subtle)',
+                  width: currentStep === 'result' ? '100%' : '0',
+                }}
               />
             </div>
             <StepIndicator
@@ -252,7 +258,7 @@ export default function VerificationWizard() {
         </div>
 
         {/* Step Content */}
-        <div className="bg-white shadow-lg rounded-lg p-8">
+        <div className="bg-card shadow-lg rounded-lg p-8">
           {currentStep === 'personal_info' && (
             <PersonalInfoStep
               initialData={verificationData}
@@ -307,24 +313,22 @@ function StepIndicator({
   active: boolean;
   completed: boolean;
 }) {
+  const circleStyle: React.CSSProperties = completed
+    ? { backgroundColor: 'var(--color-success)', color: 'var(--text-strong-dark)' }
+    : active
+    ? { backgroundColor: 'var(--accent-bronze)', color: 'var(--text-strong-dark)' }
+    : { backgroundColor: 'var(--border-subtle)', color: 'var(--text-muted)' };
+
+  const labelStyle: React.CSSProperties = active
+    ? { color: 'var(--accent-bronze)' }
+    : { color: 'var(--text-secondary)' };
+
   return (
     <div className="flex flex-col items-center">
-      <div
-        className={`w-10 h-10 rounded-full flex items-center justify-center font-semibold transition-colors ${
-          completed
-            ? 'bg-green-600 text-white'
-            : active
-            ? 'bg-blue-600 text-white'
-            : 'bg-gray-200 text-gray-600'
-        }`}
-      >
+      <div className="w-10 h-10 rounded-full flex items-center justify-center font-semibold transition-colors" style={circleStyle}>
         {completed ? '✓' : number}
       </div>
-      <span
-        className={`mt-2 text-xs font-medium ${
-          active ? 'text-blue-600' : 'text-gray-500'
-        }`}
-      >
+      <span className="mt-2 text-xs font-medium" style={labelStyle}>
         {label}
       </span>
     </div>

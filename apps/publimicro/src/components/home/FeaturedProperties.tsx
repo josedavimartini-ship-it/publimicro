@@ -1,5 +1,6 @@
 import { supabase } from "@/lib/supabaseClient";
 import Image from "next/image";
+import { getPhotoUrl } from '@/lib/photoUtils';
 
 interface Item {
   id: string | number;
@@ -35,7 +36,7 @@ export default async function FeaturedProperties(): Promise<JSX.Element> {
           >
             {item.imagem && (
               <Image
-                src={item.imagem}
+                src={getPhotoUrl(item.imagem)}
                 alt={item.titulo || "Imagem do imóvel"}
                 width={600}
                 height={400}

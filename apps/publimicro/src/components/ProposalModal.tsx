@@ -152,7 +152,7 @@ export default function ProposalModal({
 
             <div className="space-y-3 max-w-sm mx-auto">
               {!profile && (
-                <a href={`/entrar?redirect=${encodeURIComponent(typeof window !== 'undefined' ? window.location.pathname : '/')}`} className="block px-6 py-3 bg-gradient-to-r from-[#B87333] to-[#FFD700] text-[#0a0a0a] font-bold rounded-xl">{t('sitioscarcara.login') || 'Fazer Login'}</a>
+                <a href={`/entrar?redirect=${encodeURIComponent(typeof window !== 'undefined' ? window.location.pathname : '/')}`} className="block px-6 py-3 btn-primary rounded-xl">{t('sitioscarcara.login') || 'Fazer Login'}</a>
               )}
 
               {profile && !profile.profile_completed && (
@@ -162,14 +162,14 @@ export default function ProposalModal({
               {profile && profile.profile_completed && !profile.verified && (
                 <div className="p-4 bg-yellow-900/10 border border-yellow-500/20 rounded-lg">
                   <p className="text-sm text-yellow-300 mb-3">{t('sitioscarcara.verification_needed') || 'Sua conta precisa ser verificada antes de enviar propostas.'}</p>
-                  <a href={`/schedule-visit?propertyId=${adId}`} className="inline-block px-6 py-3 bg-gradient-to-r from-[#0D7377] to-[#5F7161] text-white font-bold rounded-lg">{t('sitioscarcara.schedule_visit') || 'Agendar Visita'}</a>
+                  <a href={`/schedule-visit?propertyId=${adId}`} className="inline-block px-6 py-3 btn-secondary rounded-lg">{t('sitioscarcara.schedule_visit') || 'Agendar Visita'}</a>
                 </div>
               )}
 
               {profile && profile.profile_completed && profile.verified && !profile.can_place_bids && (
                 <div className="p-4 bg-amber-500/10 border border-amber-500/20 rounded-lg text-amber-300">
                   <p className="text-sm">{t('sitioscarcara.visit_required_before_bids') || 'Você precisa realizar a visita e obter autorização da nossa equipe para poder dar lances.'}</p>
-                  <a href={`/schedule-visit?propertyId=${adId}`} className="mt-3 inline-block px-6 py-3 bg-gradient-to-r from-[#CD7F32] to-[#B87333] text-[#0a0a0a] font-bold rounded-lg">{t('sitioscarcara.schedule_visit') || 'Agendar Visita'}</a>
+                  <a href={`/schedule-visit?propertyId=${adId}`} className="mt-3 inline-block px-6 py-3 btn-primary rounded-lg">{t('sitioscarcara.schedule_visit') || 'Agendar Visita'}</a>
                 </div>
               )}
             </div>

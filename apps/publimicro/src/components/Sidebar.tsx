@@ -199,7 +199,7 @@ export default function Sidebar({ side, className = "" }: SidebarProps) {
 
                   <button
                     onClick={handleLocationFilter}
-                    className="w-full flex items-center justify-center gap-2 bg-gradient-to-r from-[#6B7F5C] to-[#8B9B6E] text-white py-2 rounded-lg text-sm font-medium hover:opacity-90 transition-opacity"
+                    className="w-full flex items-center justify-center gap-2 bg-gradient-to-r from-[#6B7F5C] to-[#8B9B6E] text-warm py-2 rounded-lg text-sm font-medium hover:opacity-90 transition-opacity"
                   >
                     <Search className="w-4 h-4" />
                     Filtrar

@@ -133,6 +133,19 @@ export interface Carcara3DProps {
 }
 
 export function Carcara3D({ className = "", onSoundTrigger, scale = 2.5, autoRotate = false, rotationSpeed = 0.3, modelPath = '/models/eagle/harpy_eagle.fbx', ariaLabel = 'Carcará 3D model' }: Carcara3DProps) {
+  const [hasWebGL, setHasWebGL] = useState(true);
+
+  // Check for WebGL availability in the current environment; in headless or GPU-limited environments this will be false
+  useEffect(() => {
+    try {
+      const canvas = document.createElement('canvas');
+      const gl = canvas.getContext('webgl2') || canvas.getContext('webgl') || canvas.getContext('experimental-webgl');
+      if (!gl) setHasWebGL(false);
+    } catch (err) {
+      setHasWebGL(false);
+    }
+  }, []);
+
   // preload the model path to reduce visual load when first shown
   useEffect(() => {
     try {
@@ -150,6 +163,20 @@ export function Carcara3D({ className = "", onSoundTrigger, scale = 2.5, autoRot
       console.warn('carcara model preload failed', modelPath, err);
     }
   }, [modelPath]);
+
+  // If WebGL is unavailable, render a static fallback to avoid repeated WebGL errors in logs
+  if (!hasWebGL) {
+    return (
+      <div className={`w-full h-full ${className} flex items-center justify-center bg-[#0a0a0a]`} aria-label={ariaLabel} role="img">
+        {/* Small illustrative fallback */}
+        <svg width="120" height="120" viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden>
+          <rect width="120" height="120" rx="16" fill="#1a1a1a" stroke="#2a2a2a" />
+          <path d="M30 80 C50 60, 70 60, 90 80" stroke="#D4AF37" strokeWidth="4" strokeLinecap="round" fill="none" />
+          <circle cx="60" cy="44" r="18" fill="#C9A87C" />
+        </svg>
+      </div>
+    );
+  }
 
   return (
     <div className={`w-full h-full ${className}`} aria-label={ariaLabel} role="img">

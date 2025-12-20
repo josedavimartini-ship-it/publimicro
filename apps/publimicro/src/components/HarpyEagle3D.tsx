@@ -74,12 +74,15 @@ function HarpyEagleModel({ onPhaseChange, attackInterval = 15000 }: HarpyEagleMo
     const w = viewport.width;
     const h = viewport.height;
 
+    // Make base scale easy to change in one place
+    const baseScale = 0.03; // increased from 0.015
+
     switch (phase) {
       case 'background': {
-        // Fly in circular pattern in background
+        // Fly in gentle pattern biased towards center-right of the hero
         const t = timeRef.current * 0.5;
-        const radius = Math.min(w, h) * 0.4;
-        obj.position.x = Math.sin(t) * radius;
+        const radius = Math.min(w, h) * 0.35;
+        obj.position.x = Math.sin(t) * radius * 0.6 + viewport.width * 0.15; // bias to the right
         obj.position.y = Math.cos(t * 0.7) * 1.5 + 2;
         obj.position.z = -8 + Math.sin(t * 0.3) * 2;
         
@@ -88,6 +91,9 @@ function HarpyEagleModel({ onPhaseChange, attackInterval = 15000 }: HarpyEagleMo
         obj.rotation.z = Math.sin(t) * 0.15;
         obj.rotation.x = Math.cos(t * 0.7) * 0.1;
         
+        // Ensure base scale is applied
+        obj.scale.setScalar(baseScale);
+
         // Check if time for attack
         if (timeRef.current - lastAttackRef.current > attackInterval / 1000) {
           lastAttackRef.current = timeRef.current;
@@ -133,13 +139,13 @@ function HarpyEagleModel({ onPhaseChange, attackInterval = 15000 }: HarpyEagleMo
           obj.rotation.x = THREE.MathUtils.lerp(-0.5, -0.8, eased);
           // Scale up slightly for impact
           const scale = 1 + eased * 0.3;
-          obj.scale.setScalar(0.015 * scale);
+          obj.scale.setScalar(baseScale * scale);
         } else {
           // Recoil
           const recoilProgress = (progress - 0.4) / 0.6;
           obj.position.z = THREE.MathUtils.lerp(5, 2, recoilProgress);
           obj.rotation.x = THREE.MathUtils.lerp(-0.8, 0, recoilProgress);
-          obj.scale.setScalar(0.015);
+          obj.scale.setScalar(baseScale);
         }
         
         // Shake/vibrate during attack
@@ -226,6 +232,18 @@ export function HarpyEagle3D({
 }: HarpyEagle3DProps) {
   const [isAttacking, setIsAttacking] = useState(false);
   const [showFlash, setShowFlash] = useState(false);
+  const [hasWebGL, setHasWebGL] = useState(true);
+
+  // Detect WebGL support in the environment to avoid noisy canvas errors in headless or GPU-restricted environments
+  useEffect(() => {
+    try {
+      const canvas = document.createElement('canvas');
+      const gl = canvas.getContext('webgl2') || canvas.getContext('webgl') || canvas.getContext('experimental-webgl');
+      if (!gl) setHasWebGL(false);
+    } catch (err) {
+      setHasWebGL(false);
+    }
+  }, []);
 
   const handlePhaseChange = (phase: Phase) => {
     setIsAttacking(phase === 'attacking' || phase === 'diving');
@@ -236,6 +254,22 @@ export function HarpyEagle3D({
       setTimeout(() => setShowFlash(false), 300);
     }
   };
+
+  // If no WebGL, render a lightweight visual fallback and skip creating a Canvas
+  if (!hasWebGL) {
+    return (
+      <>
+        <ScreenFlash active={showFlash} />
+        <div className={`w-full h-full ${className} ${isAttacking ? 'z-50' : 'z-10'} flex items-center justify-center bg-[#0a0a0a]`} aria-label="Harpy Eagle (fallback)" role="img">
+          <svg width="160" height="160" viewBox="0 0 160 160" xmlns="http://www.w3.org/2000/svg" aria-hidden>
+            <rect width="160" height="160" rx="12" fill="#121212" stroke="#2a2a2a" />
+            <path d="M30 110 C60 80, 100 80, 130 110" stroke="#D4AF37" strokeWidth="5" strokeLinecap="round" fill="none" />
+            <circle cx="80" cy="50" r="26" fill="#C9A87C" />
+          </svg>
+        </div>
+      </>
+    );
+  }
 
   return (
     <>

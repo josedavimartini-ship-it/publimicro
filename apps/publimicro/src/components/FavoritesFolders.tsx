@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import { Folder, FolderOpen, Heart, Plus, Trash2, Edit2, Check, X } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
+import { getFirstPhoto } from '@/lib/photoUtils';
 
 interface FavoriteFolder {
   id: string;
@@ -183,11 +184,7 @@ export default function FavoritesFolders() {
                   <div key={property.id} className="bg-gradient-to-br from-[#1a1a1a] to-[#0d0d0d] border-2 border-[#2a2a1a] rounded-2xl overflow-hidden">
                     <Link href={`/imoveis/${property.id}`}>
                       <div className="relative w-full h-48 bg-[#2a2a1a]">
-                        {property.fotos && property.fotos[0] ? (
-                          <Image src={property.fotos[0]} alt={property.title} fill sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw" className="object-cover" unoptimized />
-                        ) : (
-                          <div className="w-full h-full flex items-center justify-center"><Heart className="w-16 h-16 text-[#959595]" /></div>
-                        )}
+                        <Image src={getFirstPhoto(property.fotos)} alt={property.title} fill sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw" className="object-cover" unoptimized />
                       </div>
                     </Link>
 

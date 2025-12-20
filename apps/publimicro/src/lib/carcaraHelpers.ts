@@ -100,7 +100,9 @@ const VERIFIED_RANCH_VIDEOS: Record<string, string> = {
 
 // Get cover photo for a ranch
 export function getRanchCoverPhoto(slug: string): string {
-  return RANCH_COVER_PHOTOS[slug.toLowerCase()] || `${STORAGE_BASE}/pordosol4mediumearthwide.jpg`;
+  // Prefer verified ranch photo when available, otherwise fall back to a
+  // local public asset to avoid broken external links in production.
+  return RANCH_COVER_PHOTOS[slug.toLowerCase()] || '/images/sections/publiProper-bg.jpg';
 }
 
 // Get video URL for a ranch

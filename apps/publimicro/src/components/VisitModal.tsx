@@ -130,7 +130,7 @@ export default function VisitModal({ adId, adTitle, open, onClose }: VisitModalP
               </p>
               <button
                 onClick={() => router.push(`/entrar?redirect=${encodeURIComponent(window.location.pathname)}`)}
-                className="w-full px-6 py-3 bg-gradient-to-r from-[#B87333] to-[#FFD700] hover:from-[#FFD700] hover:to-[#B87333] text-[#0a0a0a] font-bold rounded-xl transition-all shadow-lg"
+                className="w-full px-6 py-3 btn-primary rounded-xl transition-all shadow-lg"
               >
                 Fazer Login
               </button>
@@ -190,7 +190,7 @@ export default function VisitModal({ adId, adTitle, open, onClose }: VisitModalP
                 <textarea name="notes" placeholder="Informações adicionais..." value={form.notes} onChange={handleChange} rows={3} className="w-full px-4 py-3 bg-[#232323] border border-[#0D7377] rounded-lg text-[#f2e6b1] placeholder-[#676767] focus:outline-none focus:border-[#0D7377] resize-none" />
               </div>
               {error && <div className="bg-red-900/20 border border-red-500/50 rounded-lg p-3 text-red-400 text-sm">{error}</div>}
-              <button type="submit" disabled={loading} className="w-full px-6 py-4 bg-gradient-to-r from-[#6B7F5C] to-[#2C5F6F] hover:from-[#7A8F6B] hover:to-[#3A6F7F] text-[#D4C4A8] font-bold rounded-lg transition-all disabled:opacity-50 shadow-lg">
+              <button type="submit" disabled={loading} className="w-full px-6 py-4 btn-secondary rounded-lg transition-all disabled:opacity-50 shadow-lg">
                 {loading ? <span className="flex items-center justify-center gap-2"><svg className="animate-spin h-5 w-5" viewBox="0 0 24 24"><circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none" /><path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" /></svg>Agendando...</span> : <span className="flex items-center justify-center gap-2"><Calendar className="w-5 h-5" />Agendar Visita</span>}
               </button>
             </form>

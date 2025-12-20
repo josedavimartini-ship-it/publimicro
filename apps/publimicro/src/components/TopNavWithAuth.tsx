@@ -2,10 +2,12 @@
 
 import Link from "next/link";
 import {
-  Heart, User,
+  User,
   LogOut, LayoutDashboard, ChevronDown,
   PlusCircle, Settings, Package, Gavel
 } from 'lucide-react';
+import EmuHeaderIcon from './EmuHeaderIcon';
+import PostIcon from './PostIcon';
 import { useMemo, useState, useRef, useEffect } from "react";
 import { useAuth } from "./AuthProvider";
 import { createBrowserSupabaseClient } from "@/lib/supabaseBrowser";
@@ -182,32 +184,33 @@ export function TopNavWithAuth({
             </form>
 
             {/* ACTIONS - Navigation icons with better spacing */}
-            <nav className="flex items-center gap-6 sm:gap-8">
-              {/* 1. Favorites (gostei) - Heart icon */}
+            <nav className="flex items-center gap-12 sm:gap-16 header-actions">
+              {/* 1. Favorites (gostei) - Emu head with starry eyes */}
               <Link href={favHref} className="relative flex flex-col items-center text-[#E6C98B] hover:text-[#D4AF37] transition-all group">
-                <div className="p-2.5 rounded-lg bg-gradient-to-br from-black/30 to-transparent shadow-lg transform-gpu transition-transform hover:-translate-y-1 hover:scale-105">
-                  <Heart className="w-6 h-6 sm:w-7 sm:h-7 drop-shadow-[0_6px_18px_rgba(0,0,0,0.6)]" strokeWidth={2.5} />
+                <div className="p-3.5 rounded-lg bg-gradient-to-br from-black/30 to-transparent shadow-lg transform-gpu transition-transform hover:-translate-y-1 hover:scale-105">
+                  <EmuHeaderIcon className="w-7 h-7" />
                 </div>
                 <span className="text-[10px] sm:text-xs font-bold mt-1.5">gostei</span>
               </Link>
 
               {/* 2. Chat - Animated Handshake (conversations & negotiations) */}
               <Link href={chatHref} className="relative flex flex-col items-center text-[#A8C97F] hover:text-[#8B9B6E] transition-all group">
-                <div className="p-2.5 rounded-lg bg-gradient-to-br from-black/25 to-transparent shadow-2xl transform-gpu transition-transform hover:-translate-y-1 hover:scale-105">
+                <div className="p-3.5 rounded-lg bg-gradient-to-br from-black/25 to-transparent shadow-2xl transform-gpu transition-transform hover:-translate-y-1 hover:scale-105">
                   <AnimatedHandshake size={26} className="drop-shadow-[0_8px_24px_rgba(0,0,0,0.6)]" />
                 </div>
                 <span className="text-[10px] sm:text-xs font-bold mt-1.5">Chat</span>
               </Link>
 
-              {/* 3. Postar - Prominent post button */}
+              {/* 3. Post - Prominent post button using PostIcon */}
               <Link
                 href="/postar"
-                className="relative flex items-center gap-2 px-5 sm:px-7 py-2.5 sm:py-3 bg-gradient-to-r from-[#D4AF37] via-[#CD7F32] to-[#B87333] hover:from-[#B87333] hover:via-[#CD7F32] hover:to-[#D4AF37] text-[#0a0a0a] rounded-xl transition-all transform-gpu hover:-translate-y-1 hover:scale-105 shadow-[0_10px_30px_rgba(212,165,116,0.12)] font-bold border-2 border-[#D4AF37]/30"
+                className="relative flex items-center gap-3 px-4 sm:px-5 py-2 sm:py-2.5 btn-secondary rounded-xl transition-all transform-gpu hover:-translate-y-1 hover:scale-105 shadow-lg font-bold"
               >
-                <div className="p-1 rounded-md bg-black/10 backdrop-blur-sm">
-                  <PlusCircle className="w-5 h-5 sm:w-6 sm:h-6" strokeWidth={3} />
+                <div className="flex items-center justify-center"><PostIcon className="w-8 h-8" /></div>
+                <div className="flex flex-col text-left">
+                  <span className="text-sm sm:text-base">Post</span>
+                  <span className="text-xs text-muted">Post your free ad</span>
                 </div>
-                <span className="hidden sm:inline text-sm sm:text-base">Postar</span>
               </Link>
               
               {/* 4. Account - User profile/login */}

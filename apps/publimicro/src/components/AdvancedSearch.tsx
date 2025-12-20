@@ -8,6 +8,7 @@ import {
   TrendingUp, Clock
 } from "lucide-react";
 import { supabase } from "@/lib/supabaseClient";
+import { getFirstPhoto } from '@/lib/photoUtils';
 
 // Section configurations for search
 const searchSections = [
@@ -132,7 +133,7 @@ export default function AdvancedSearch({
             title: s.nome,
             price: s.preco,
             location: s.localizacao || "",
-            image: Array.isArray(s.fotos) && s.fotos.length > 0 ? s.fotos[0] : "/placeholder.jpg",
+            image: getFirstPhoto(s.fotos),
             section: "proper",
             href: `/imoveis/${s.id}`,
           })));

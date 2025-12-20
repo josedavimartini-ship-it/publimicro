@@ -242,7 +242,7 @@ export default function CarcaraProjectPage() {
                     
                     {/* Video indicator */}
                     {sitio.video_url && (
-                      <div className="absolute bottom-4 left-4 bg-black/70 backdrop-blur-sm px-3 py-1 rounded-full text-xs text-white flex items-center gap-1">
+                      <div className="absolute bottom-4 left-4 bg-black/70 backdrop-blur-sm px-3 py-1 rounded-full text-xs text-warm flex items-center gap-1">
                         <Play className="w-3 h-3" />
                         Vídeo disponível
                       </div>

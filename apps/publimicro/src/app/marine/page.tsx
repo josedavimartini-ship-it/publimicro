@@ -244,7 +244,7 @@ export default function MarinePage() {
               placeholder="Buscar lanchas, jet skis, veleiros..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full pl-12 pr-4 py-4 bg-[#1a1a1a] border border-[#2a2a1a] rounded-xl text-white placeholder-[#676767] focus:outline-none focus:border-[#0D7377] transition-colors"
+              className="w-full pl-12 pr-4 py-4 bg-[#1a1a1a] border border-[#2a2a1a] rounded-xl text-warm placeholder-[#676767] focus:outline-none focus:border-[#0D7377] transition-colors"
             />
           </div>
           
@@ -299,7 +299,7 @@ export default function MarinePage() {
                   <select
                     value={selectedBrand}
                     onChange={(e) => setSelectedBrand(e.target.value)}
-                    className="w-full px-4 py-3 bg-[#0d0d0d] border border-[#2a2a1a] rounded-xl text-white appearance-none cursor-pointer focus:outline-none focus:border-[#0D7377]"
+                    className="w-full px-4 py-3 bg-[#0d0d0d] border border-[#2a2a1a] rounded-xl text-warm appearance-none cursor-pointer focus:outline-none focus:border-[#0D7377]"
                   >
                     <option value="">Todas as marcas</option>
                     {marineBrands.map((brand) => (
@@ -370,7 +370,7 @@ export default function MarinePage() {
                         onChange={() => setSelectedHull(selectedHull === hull ? "" : hull)}
                         className="w-4 h-4 accent-[#0D7377]"
                       />
-                      <span className="text-[#d8c68e] group-hover:text-white transition-colors">{hull}</span>
+                      <span className="text-[#d8c68e] group-hover:text-warm transition-colors">{hull}</span>
                     </label>
                   ))}
                 </div>

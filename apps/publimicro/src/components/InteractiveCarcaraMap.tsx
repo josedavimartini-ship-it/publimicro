@@ -196,8 +196,10 @@ export default function InteractiveCarcaraMap({
 
   // Load and parse all KML files
   const loadAllKMLs = useCallback(async () => {
+    // Only fetch KML files that exist in the public/kml folder (canonical Carcará set)
+    const AVAILABLE_KMLS = ['abare','bigua','mergulhao','seriema','juriti','surucua'];
     const kmlFiles = Object.keys(ALL_SITES).filter(slug => 
-      !onlyForSale || ALL_SITES[slug].forSale
+      AVAILABLE_KMLS.includes(slug) && (!onlyForSale || ALL_SITES[slug].forSale)
     );
 
     const parsedPolygons: typeof polygons = [];

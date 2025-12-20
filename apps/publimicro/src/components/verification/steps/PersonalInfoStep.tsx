@@ -111,17 +111,17 @@ export default function PersonalInfoStep({
 
   return (
     <div>
-      <h2 className="text-2xl font-bold text-gray-900 mb-2">
+      <h2 className="text-2xl font-bold text-heading mb-2">
         Informações Pessoais
       </h2>
-      <p className="text-gray-600 mb-6">
+      <p className="text-warm mb-6">
         Para garantir a segurança da plataforma, precisamos verificar sua identidade.
       </p>
 
       <form onSubmit={(e) => void handleSubmit(e)} className="space-y-6">
         {/* Full Name */}
         <div>
-          <label htmlFor="full_name" className="block text-sm font-medium text-gray-700 mb-2">
+          <label htmlFor="full_name" className="block text-sm font-medium text-warm mb-2">
             Nome Completo *
           </label>
           <input
@@ -130,20 +130,21 @@ export default function PersonalInfoStep({
             name="full_name"
             value={formData.full_name}
             onChange={handleChange}
-            className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent ${
-              errors.full_name ? 'border-red-500' : 'border-gray-300'
+            className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:border-transparent ${
+              errors.full_name ? '' : ''
             }`}
+            style={{ borderColor: errors.full_name ? 'var(--color-error)' : 'var(--border-subtle)' }}
             placeholder="João da Silva"
             disabled={loading}
           />
           {errors.full_name && (
-            <p className="mt-1 text-sm text-red-600">{errors.full_name}</p>
+            <p className="mt-1 text-sm" style={{ color: 'var(--color-error)' }}>{errors.full_name}</p>
           )}
         </div>
 
         {/* CPF */}
         <div>
-          <label htmlFor="cpf" className="block text-sm font-medium text-gray-700 mb-2">
+          <label htmlFor="cpf" className="block text-sm font-medium text-warm mb-2">
             CPF *
           </label>
           <input
@@ -153,23 +154,24 @@ export default function PersonalInfoStep({
             value={formData.cpf}
             onChange={handleChange}
             maxLength={14}
-            className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent ${
-              errors.cpf ? 'border-red-500' : 'border-gray-300'
+            className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:border-transparent ${
+              errors.cpf ? '' : ''
             }`}
+            style={{ borderColor: errors.cpf ? 'var(--color-error)' : 'var(--border-subtle)' }}
             placeholder="000.000.000-00"
             disabled={loading}
           />
           {errors.cpf && (
-            <p className="mt-1 text-sm text-red-600">{errors.cpf}</p>
+            <p className="mt-1 text-sm" style={{ color: 'var(--color-error)' }}>{errors.cpf}</p>
           )}
-          <p className="mt-1 text-xs text-gray-500">
+          <p className="mt-1 text-xs text-muted">
             Seu CPF será validado com a Receita Federal
           </p>
         </div>
 
         {/* Date of Birth */}
         <div>
-          <label htmlFor="date_of_birth" className="block text-sm font-medium text-gray-700 mb-2">
+          <label htmlFor="date_of_birth" className="block text-sm font-medium text-warm mb-2">
             Data de Nascimento *
           </label>
           <input
@@ -184,13 +186,13 @@ export default function PersonalInfoStep({
             disabled={loading}
           />
           {errors.date_of_birth && (
-            <p className="mt-1 text-sm text-red-600">{errors.date_of_birth}</p>
+            <p className="mt-1 text-sm" style={{ color: 'var(--color-error)' }}>{errors.date_of_birth}</p>
           )}
         </div>
 
         {/* Phone Number */}
         <div>
-          <label htmlFor="phone_number" className="block text-sm font-medium text-gray-700 mb-2">
+          <label htmlFor="phone_number" className="block text-sm font-medium text-warm mb-2">
             Telefone (Opcional)
           </label>
           <input
@@ -207,17 +209,18 @@ export default function PersonalInfoStep({
             disabled={loading}
           />
           {errors.phone_number && (
-            <p className="mt-1 text-sm text-red-600">{errors.phone_number}</p>
+            <p className="mt-1 text-sm" style={{ color: 'var(--color-error)' }}>{errors.phone_number}</p>
           )}
         </div>
 
         {/* Privacy Notice */}
-        <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
+        <div className="bg-card border rounded-lg p-4" style={{ borderColor: 'var(--border-subtle)' }}>
           <div className="flex">
             <svg
-              className="h-5 w-5 text-blue-600 mt-0.5"
+              className="h-5 w-5 mt-0.5"
               fill="currentColor"
               viewBox="0 0 20 20"
+              style={{ color: 'var(--text-accent)' }}
             >
               <path
                 fillRule="evenodd"
@@ -226,10 +229,10 @@ export default function PersonalInfoStep({
               />
             </svg>
             <div className="ml-3">
-              <h3 className="text-sm font-medium text-blue-800">
+              <h3 className="text-sm font-medium text-heading">
                 Suas informações estão seguras
               </h3>
-              <p className="mt-1 text-sm text-blue-700">
+              <p className="mt-1 text-sm text-warm">
                 Seus dados pessoais são criptografados e usados apenas para verificação de identidade.
                 Consulte nossa <a href="/privacy" className="underline">política de privacidade</a>.
               </p>
@@ -241,7 +244,7 @@ export default function PersonalInfoStep({
         <button
           type="submit"
           disabled={loading}
-          className="w-full bg-blue-600 text-white py-3 px-4 rounded-lg font-medium hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+          className="btn-primary w-full disabled:opacity-50 disabled:cursor-not-allowed"
         >
           {loading ? 'Salvando...' : 'Continuar'}
         </button>

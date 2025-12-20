@@ -1,0 +1,24 @@
+{
+  "timestamp": "2025-12-20T18:20:59.990Z",
+  "sitios_no_photos": {
+    "count": 0,
+    "sample": []
+  },
+  "sitios_empty_photos": {
+    "count": 0,
+    "sample": []
+  },
+  "listings_missing_cover": {
+    "count": 1,
+    "sample": [
+      {
+        "id": "cc3e59ce-17a9-48d5-ade8-6f0acef4cd5b",
+        "nome": "Samsung A7"
+      }
+    ]
+  },
+  "media_placeholders": {
+    "count": 0,
+    "sample": []
+  }
+}

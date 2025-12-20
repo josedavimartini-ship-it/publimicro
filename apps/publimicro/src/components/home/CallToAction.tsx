@@ -1,6 +1,6 @@
 export default function CallToAction(): JSX.Element {
   return (
-    <section className="py-16 bg-emerald-900 text-white text-center">
+    <section className="py-16 bg-emerald-900 text-warm text-center">
       <div className="max-w-4xl mx-auto px-6">
         <h2 className="text-2xl font-bold">
           Pronto para anunciar ou conhecer novas oportunidades?

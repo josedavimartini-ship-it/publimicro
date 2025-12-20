@@ -1,0 +1,32 @@
+name: Media scan (scan → generate)
+
+on:
+  workflow_dispatch: {}
+
+jobs:
+  scan-and-generate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v2
+        with:
+          version: 8
+      - name: Install deps
+        run: pnpm install -w
+      - name: Run storage scanner
+        env:
+          NEXT_PUBLIC_SUPABASE_URL: ${{ secrets.NEXT_PUBLIC_SUPABASE_URL }}
+          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+        run: |
+          node scripts/list-storage-files.mjs --bucket imagens-sitios --slugs abare,bigua,mergulhao,seriema,juriti,surucua --out artifacts/storage-files.json
+      - name: Generate mapping SQL
+        run: |
+          node scripts/generate-media-sql.mjs --in artifacts/storage-files.json --out-sql sql/media-mapping-apply.sql --out-dry sql/media-mapping-dryrun.sql
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: media-mapping-artifacts
+          path: |
+            artifacts/storage-files.json
+            sql/media-mapping-dryrun.sql
+            sql/media-mapping-apply.sql

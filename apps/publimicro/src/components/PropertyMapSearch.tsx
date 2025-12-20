@@ -5,6 +5,7 @@ import dynamic from 'next/dynamic';
 import { MapPin, X, Maximize2, List, Map, Filter } from 'lucide-react';
 import Link from 'next/link';
 import Image from 'next/image';
+import { getFirstPhoto } from '@/lib/photoUtils';
 
 // Dynamic import to avoid SSR issues with Leaflet
 const MapContainer = dynamic(
@@ -109,15 +110,15 @@ export default function PropertyMapSearch({
     >
       {/* Image */}
       <div className={`relative ${compact ? 'h-32' : 'h-48'} w-full`}>
-        {property.fotos && property.fotos[0] ? (
+        {property.fotos && property.fotos.length > 0 ? (
           <Image
-            src={property.fotos[0]}
+            src={getFirstPhoto(property.fotos)}
             alt={property.nome}
             fill
             className="object-cover"
           />
         ) : (
-          <div className="w-full h-full bg-[#2a2a2a] flex items-center justify-center">
+          <div className="w-full h-full flex items-center justify-center">
             <MapPin className="w-8 h-8 text-[#676767]" />
           </div>
         )}
@@ -264,16 +265,14 @@ export default function PropertyMapSearch({
                   <Marker key={property.id} position={[property.latitude, property.longitude]}>
                     <Popup maxWidth={280}>
                       <div className="p-1">
-                        {property.fotos && property.fotos[0] && (
                           <div className="relative w-full h-24 mb-2 rounded overflow-hidden">
                             <Image
-                              src={property.fotos[0]}
+                              src={getFirstPhoto(property.fotos)}
                               alt={property.nome}
                               fill
                               className="object-cover"
                             />
                           </div>
-                        )}
                         <h3 className="font-bold text-gray-900 text-sm">{property.nome}</h3>
                         {property.preco && (
                           <p className="text-[#CD7F32] font-bold text-sm mt-1">
@@ -282,7 +281,7 @@ export default function PropertyMapSearch({
                         )}
                         <Link
                           href={`/imoveis/${property.slug || property.id}`}
-                          className="mt-2 block w-full text-center py-1.5 bg-[#CD7F32] text-white text-xs font-semibold rounded hover:bg-[#B87333] transition-colors"
+                          className="mt-2 block w-full text-center py-1.5 bg-[#CD7F32] text-warm text-xs font-semibold rounded hover:bg-[#B87333] transition-colors"
                         >
                           Ver detalhes
                         </Link>

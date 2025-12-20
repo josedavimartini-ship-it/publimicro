@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import Image from "next/image";
+import { getFirstPhoto, getPhotoUrl } from '@/lib/photoUtils';
 
 interface Site {
   id?: string;
@@ -16,7 +17,7 @@ interface SiteCardProps {
 }
 
 export default function SiteCard({ site }: SiteCardProps): JSX.Element {
-  const imgSrc = site.imagem || "/images/carcara-1.png";
+  const imgSrc = site.fotos && site.fotos.length > 0 ? getFirstPhoto(site.fotos) : getPhotoUrl(site.imagem);
 
   return (
     <div className="border-2 border-[#3a4a3a] rounded-xl overflow-hidden shadow-lg bg-[#1a2a1a] hover:shadow-2xl hover:border-[#6B7F5C] transition">

@@ -68,7 +68,7 @@ export default function ContactForm({ itemTitle }: ContactFormProps): JSX.Elemen
         <button
           type="submit"
           disabled={status === "sending"}
-          className="bg-primary text-white px-6 py-3 rounded-lg font-medium hover:bg-green-800 transition"
+          className="bg-primary text-warm px-6 py-3 rounded-lg font-medium hover:bg-green-800 transition"
         >
           {status === "sending" ? "Enviando..." : "Enviar mensagem"}
         </button>

@@ -101,7 +101,7 @@ export default function ChatBalloon({
       {/* Chat Button */}
       <motion.button
         onClick={handleClick}
-        className={`${sizeConfig[size].button} ${className} rounded-full bg-gradient-to-br from-[#25D366] to-[#128C7E] text-white flex items-center justify-center shadow-lg hover:shadow-xl transition-shadow`}
+        className={`${sizeConfig[size].button} ${className} rounded-full bg-gradient-to-br from-[#25D366] to-[#128C7E] text-warm flex items-center justify-center shadow-lg hover:shadow-xl transition-shadow`}
         whileHover={{ scale: 1.1 }}
         whileTap={{ scale: 0.95 }}
         title="Enviar mensagem ao vendedor"

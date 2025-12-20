@@ -176,7 +176,7 @@ export default function WelcomeModal() {
             
             <button
               onClick={handleNext}
-              className="px-8 py-3 bg-gradient-to-r from-[#6B7F5C] to-[#2C5F6F] text-[#D4C4A8] font-bold rounded-full hover:scale-105 transition-all shadow-lg"
+              className="px-8 py-3 btn-secondary rounded-full hover:scale-105 transition-all shadow-lg"
               aria-label={currentStep === steps.length - 1 ? "Finalizar tour" : "Ir para próximo passo"}
             >
               {currentStep === steps.length - 1 ? "Começar!" : "Próximo"}

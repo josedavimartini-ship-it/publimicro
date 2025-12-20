@@ -66,7 +66,7 @@ export default function ContactVisitForm({
 
       <button
         type="submit"
-        className="bg-amber-700 text-white px-4 py-2 rounded hover:bg-amber-800 transition"
+        className="bg-amber-700 text-warm px-4 py-2 rounded hover:bg-amber-800 transition"
       >
         Enviar
       </button>

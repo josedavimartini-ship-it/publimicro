@@ -270,7 +270,7 @@ export default function TudoPage() {
         <div className="max-w-7xl mx-auto">
           <div className="flex items-center justify-between mb-6">
             <div>
-              <h1 className="text-4xl font-bold text-white mb-2 flex items-center gap-3">
+              <h1 className="text-4xl font-bold text-warm mb-2 flex items-center gap-3">
                 <ShoppingBag className="w-10 h-10" />
                 PubliTudo
               </h1>
@@ -278,7 +278,7 @@ export default function TudoPage() {
             </div>
             <Link
               href="/postar"
-              className="flex items-center gap-2 px-6 py-3 bg-white text-[#B8904D] font-bold rounded-full hover:bg-[#faf5ef] transition-all shadow-lg"
+              className="flex items-center gap-2 px-6 py-3 btn-secondary rounded-full font-bold transition-all shadow-lg"
             >
               <Plus className="w-5 h-5" />
               Anunciar Grátis
@@ -293,7 +293,7 @@ export default function TudoPage() {
               placeholder="O que você está procurando?"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full pl-12 pr-4 py-4 bg-[#1a1a1a]/90 backdrop-blur-sm border border-[#2a2a2a] rounded-xl text-white placeholder-[#676767] focus:outline-none focus:border-[#D4A55A] transition-colors"
+              className="w-full pl-12 pr-4 py-4 bg-[#1a1a1a]/90 backdrop-blur-sm border border-[#2a2a2a] rounded-xl text-warm placeholder-[#676767] focus:outline-none focus:border-[#D4A55A] transition-colors"
             />
           </div>
         </div>
@@ -314,8 +314,8 @@ export default function TudoPage() {
                   }}
                   className={`flex items-center gap-2 px-4 py-3 rounded-lg font-medium whitespace-nowrap transition-all ${
                     selectedCategory === cat.id
-                      ? "bg-gradient-to-r from-[#B8904D] to-[#D4A55A] text-white"
-                      : "text-[#888] hover:text-white hover:bg-[#1a1a1a]"
+                  ? "bg-gradient-to-r from-[#B8904D] to-[#D4A55A] text-warm"
+                      : "text-[#888] hover:text-warm hover:bg-[#1a1a1a]"
                   }`}
                 >
                   <Icon className="w-4 h-4" />
@@ -337,7 +337,7 @@ export default function TudoPage() {
           >
             <div className="bg-gradient-to-br from-[#1a1a1a] to-[#0d0d0d] border border-[#2a2a2a] rounded-2xl p-6 sticky top-24">
               <div className="flex items-center justify-between mb-6">
-                <h3 className="text-lg font-bold text-white flex items-center gap-2">
+                <h3 className="text-lg font-bold text-warm flex items-center gap-2">
                   <SlidersHorizontal className="w-5 h-5 text-[#D4A55A]" />
                   Filtros
                 </h3>
@@ -453,7 +453,7 @@ export default function TudoPage() {
                   {showFilters ? "Ocultar" : "Filtros"}
                 </button>
                 <span className="text-[#888]">
-                  <span className="text-white font-semibold">{filteredListings.length}</span>{" "}
+                  <span className="text-warm font-semibold">{filteredListings.length}</span>{" "}
                   anúncios encontrados
                 </span>
               </div>
@@ -462,7 +462,7 @@ export default function TudoPage() {
                 <div className="flex items-center gap-1 bg-[#1a1a1a] border border-[#2a2a2a] rounded-lg p-1">
                   <button
                     onClick={() => setViewMode("grid")}
-                    className={`p-2 rounded ${viewMode === "grid" ? "bg-[#B8904D] text-white" : "text-[#888] hover:text-white"}`}
+                    className={`p-2 rounded ${viewMode === "grid" ? "bg-[#B8904D] text-warm" : "text-[#888] hover:text-warm"}`}
                   >
                     <Grid className="w-4 h-4" />
                   </button>

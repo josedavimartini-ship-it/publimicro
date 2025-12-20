@@ -179,7 +179,7 @@ export default function SwipeGallery({
 
           {/* Counter */}
           {showCounter && images.length > 1 && (
-            <div className="absolute top-4 right-4 px-3 py-1.5 bg-black/70 backdrop-blur-sm rounded-full text-white text-sm font-semibold">
+            <div className="absolute top-4 right-4 px-3 py-1.5 bg-black/70 backdrop-blur-sm rounded-full text-warm text-sm font-semibold">
               {currentIndex + 1} / {images.length}
             </div>
           )}
@@ -188,7 +188,7 @@ export default function SwipeGallery({
           {enableFullscreen && (
             <button
               onClick={() => setIsFullscreen(true)}
-              className="absolute top-4 left-4 p-2 bg-black/70 backdrop-blur-sm rounded-full text-white hover:bg-black/90 transition-all focus:outline-none focus:ring-2 focus:ring-[#A8C97F] md:opacity-0 md:group-hover:opacity-100"
+              className="absolute top-4 left-4 p-2 bg-black/70 backdrop-blur-sm rounded-full text-warm hover:bg-black/90 transition-all focus:outline-none focus:ring-2 focus:ring-[#A8C97F] md:opacity-0 md:group-hover:opacity-100"
               aria-label="Ver em tela cheia"
             >
               <Maximize2 className="w-5 h-5" />
@@ -290,7 +290,7 @@ export default function SwipeGallery({
             />
 
             {/* Counter in Fullscreen */}
-            <div className="absolute top-4 left-1/2 -translate-x-1/2 px-4 py-2 bg-black/70 backdrop-blur-sm rounded-full text-white font-semibold">
+            <div className="absolute top-4 left-1/2 -translate-x-1/2 px-4 py-2 bg-black/70 backdrop-blur-sm rounded-full text-warm font-semibold">
               {currentIndex + 1} / {images.length}
             </div>
 

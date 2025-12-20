@@ -25,7 +25,7 @@
   /* Interactive colors */
   --accent-moss: #6B7F5C;      /* Moss green - calming */
   --accent-petrol: #2C5F6F;    /* Petrol blue - cool accent */
-  --accent-bronze: #8B6F47;    /* Burnt bronze - primary */
+  --accent-bronze: #9A7F56;      /* Burnt bronze - primary (adjusted for contrast) */
   --accent-amber: #9B6B3E;     /* Dark amber - attention */
   --accent-gold: #B8904D;      /* Burnt gold - emphasis */
   
@@ -34,6 +34,20 @@
   --color-warning: #9B6B3E;    /* Dark amber */
   --color-error: #A85F4F;      /* Muted terracotta */
   
+  /* Extra accents - nature-inspired */
+  --accent-lilac: #8B6FA2;     /* Soft lilac for subtle highlights */
+  --accent-petrol: #0F4C5C;    /* Deep petrol blue */
+  --accent-rust: #B4523A;      /* Rusty red */
+  --accent-granite: #3E3F46;   /* Granite neutral */
+  --accent-sapphire: #0E3A5F;  /* Dark sapphire */
+  --accent-emerald: #2A7A57;   /* Emerald green */
+
+  /* Background alternative - slightly lighter but still dark */
+  --bg-soft: #2f3233;
+
+  /* Text strong dark variant (for raised headings on light backgrounds) */
+  --text-strong-dark: #1f1f1f;
+
   /* Borders */
   --border-default: #3a3a3a;
   --border-subtle: #2e2e2e;
@@ -49,7 +63,7 @@ html, body, #root {
 }
 
 body {
-  background: var(--bg-primary);
+  background: linear-gradient(180deg, var(--bg-primary) 0%, var(--bg-soft) 100%);
   color: var(--text-primary);
   font-family: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
   -webkit-font-smoothing: antialiased;
@@ -66,9 +80,26 @@ a:hover {
   color: var(--text-heading);
 }
 
+/* Theme helper classes */
+.text-heading { color: var(--text-heading); }
+.text-warm { color: var(--text-primary); }
+.text-muted { color: var(--text-secondary); }
+.text-success { color: var(--color-success); }
+.bg-card { background: linear-gradient(180deg, var(--bg-secondary) 0%, var(--bg-tertiary) 100%); }
+.border-default { border: 2px solid var(--border-default); }
+.border-accent-gold { border-color: var(--text-accent) !important; }
+.price-badge { background: var(--text-accent); color: #0a0a0a; font-weight: 700; padding: 0.25rem 0.75rem; border-radius: 0.5rem; }
+.carcara-overlay { background: linear-gradient(180deg, rgba(0,0,0,0.8) 0%, rgba(0,0,0,0.5) 50%, rgba(0,0,0,0.3) 100%); }
+.section-overlay { background: linear-gradient(180deg, rgba(0,0,0,0.9) 0%, rgba(0,0,0,0.6) 50%, rgba(0,0,0,0.35) 100%); }
+.carcara-badge { background: linear-gradient(90deg, var(--text-accent), var(--accent-bronze)); color: #0a0a0a; }
+.btn-primary { background: linear-gradient(90deg, var(--accent-bronze), var(--accent-gold)); color: var(--text-strong-dark); padding: 0.5rem 1.25rem; border-radius: 0.75rem; font-weight:700; display:inline-flex; gap:0.5rem; align-items:center; }
+.btn-secondary { background: linear-gradient(90deg, var(--accent-moss), var(--accent-petrol)); color: var(--text-primary); padding: 0.5rem 1rem; border-radius: 0.5rem; font-weight:600; }
+.group:hover .group-hover-text-accent { color: var(--text-accent); transition: color 0.15s; }
+.border-top-default { border-top: 1px solid var(--border-default); }
+
 /* Raised text effect for headings */
 h1, h2, .heading-raised {
-  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.7), 0 1px 3px rgba(201, 168, 124, 0.4);
+  text-shadow: 0 4px 12px rgba(0, 0, 0, 0.85), 0 2px 6px rgba(201, 168, 124, 0.6);
 }
 
 h1, h2 {
@@ -117,6 +148,10 @@ select:focus-visible {
   outline: 3px solid #FF6B35;
   outline-offset: 2px;
 }
+
+/* Header action grouping helper (spacing for right-side icons) */
+.header-actions { gap: 3rem; }
+@media (min-width: 640px) { .header-actions { gap: 4rem; } }
 
 /* Skip Navigation Link */
 .skip-to-content {
@@ -213,7 +248,7 @@ select:focus-visible {
   animation: fly-continuous 12s cubic-bezier(0.7,0.2,0.3,1) infinite;
   will-change: transform;
   z-index: 300 !important;
-  filter: drop-shadow(0 8px 32px #FFD700cc) drop-shadow(0 0 12px #fff8) drop-shadow(0 0 2px #0008);
+  filter: drop-shadow(0 8px 32px #FFD700cc) drop-shadow(0 0 12px rgba(212,175,116,0.18)) drop-shadow(0 0 2px #0008);
 }
 
 @keyframes gold-pulse { 0%,100%{ opacity:0.7; filter: blur(4px);} 50%{ opacity:1; filter: blur(0);} }

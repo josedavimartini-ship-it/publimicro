@@ -310,7 +310,7 @@ export default function ChatPage() {
                           className="w-12 h-12 rounded-full border-2 border-[#2a2a2a]"
                         />
                       ) : (
-                        <div className="w-12 h-12 rounded-full bg-gradient-to-br from-[#6B7F5C] to-[#8B9B6E] flex items-center justify-center text-white font-bold">
+                        <div className="w-12 h-12 rounded-full bg-gradient-to-br from-[#6B7F5C] to-[#8B9B6E] flex items-center justify-center text-warm font-bold">
                           {conv.participant.name[0]}
                         </div>
                       )}
@@ -384,7 +384,7 @@ export default function ChatPage() {
                       className="w-10 h-10 rounded-full border-2 border-[#2a2a2a]"
                     />
                   ) : (
-                    <div className="w-10 h-10 rounded-full bg-gradient-to-br from-[#6B7F5C] to-[#8B9B6E] flex items-center justify-center text-white font-bold">
+                    <div className="w-10 h-10 rounded-full bg-gradient-to-br from-[#6B7F5C] to-[#8B9B6E] flex items-center justify-center text-warm font-bold">
                       {selectedConversation.participant.name[0]}
                     </div>
                   )}
@@ -471,7 +471,7 @@ export default function ChatPage() {
                         </p>
                         {msg.offerStatus === "pending" && !msg.fromMe && (
                           <div className="flex gap-2 mt-3">
-                            <button className="flex-1 py-2 bg-[#8B9B6E] text-white rounded-lg text-sm font-medium hover:bg-[#6B7F5C] transition-colors">
+                            <button className="flex-1 py-2 bg-[#8B9B6E] text-warm rounded-lg text-sm font-medium hover:bg-[#6B7F5C] transition-colors">
                               Aceitar
                             </button>
                             <button className="flex-1 py-2 bg-[#1a1a1a] text-[#E6C98B] rounded-lg text-sm font-medium hover:bg-[#252525] transition-colors">
@@ -548,7 +548,7 @@ export default function ChatPage() {
                   <button
                     onClick={handleSendMessage}
                     disabled={!newMessage.trim()}
-                    className="p-3 bg-gradient-to-r from-[#6B7F5C] to-[#8B9B6E] text-white rounded-full disabled:opacity-50 disabled:cursor-not-allowed hover:opacity-90 transition-opacity"
+                    className="p-3 bg-gradient-to-r from-[#6B7F5C] to-[#8B9B6E] text-warm rounded-full disabled:opacity-50 disabled:cursor-not-allowed hover:opacity-90 transition-opacity"
                   >
                     <Send className="w-5 h-5" />
                   </button>

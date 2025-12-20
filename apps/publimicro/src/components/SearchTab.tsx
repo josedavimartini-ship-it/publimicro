@@ -135,7 +135,7 @@ export default function SearchTab({ onFilterChange, initialSection = DEFAULT_SEC
               />
               <button
                 onClick={() => applyFilters()}
-                className="px-8 py-5 rounded-2xl bg-gradient-to-r from-[#A8C97F] to-[#6B7F5C] hover:from-[#B8D78F] hover:to-[#7A8F6B] text-[#0a0a0a] font-black text-lg shadow-xl hover:shadow-2xl transform hover:scale-105 transition-all"
+                className="px-8 py-5 rounded-2xl btn-secondary font-black text-lg shadow-xl hover:shadow-2xl transform hover:scale-105 transition-all"
               >
                 🚀 Buscar Agora
               </button>

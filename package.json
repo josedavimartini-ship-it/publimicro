@@ -2,7 +2,7 @@
   "name": "publimicro-monorepo",
   "version": "1.0.0",
   "private": true,
-  "packageManager": "pnpm@10.26.0+sha512.3b3f6c725ebe712506c0ab1ad4133cf86b1f4b687effce62a9b38b4d72e3954242e643190fc51fa1642949c735f403debd44f5cb0edd657abe63a8b6a7e1e402",
+  "packageManager": "pnpm@10.26.1+sha512.664074abc367d2c9324fdc18037097ce0a8f126034160f709928e9e9f95d98714347044e5c3164d65bd5da6c59c6be362b107546292a8eecb7999196e5ce58fa",
   "scripts": {
     "dev": "next dev -p 3000",
     "build": "turbo run build",
@@ -10,13 +10,19 @@
     "start": "next start",
     "lint": "node tools/remove-eslintignore.js && node --max-old-space-size=4096 ./node_modules/eslint/bin/eslint.js . --ext .js,.jsx,.ts,.tsx",
     "format": "prettier --write .",
-    "type-check": "tsc --noEmit"
+    "type-check": "tsc --noEmit",
+    "check-media-urls": "node scripts/check-media-urls.mjs",
+    "check-fotos-usage": "node scripts/check-fotos-usage.mjs",
+    "check-carcara-media": "node scripts/check-carcara-media.mjs"
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.89.0",
     "adm-zip": "^0.5.16",
     "framer-motion": "^12.23.26",
-    "lucide-react": "^0.553.0"
+    "glob": "^13.0.0",
+    "lucide-react": "^0.553.0",
+    "node-fetch": "^3.3.2",
+    "pg": "^8.16.3"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3.3.3",

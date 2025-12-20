@@ -48,20 +48,20 @@ export default function Tour3D({
                 <>
                   <button
                     onClick={() => setCurrentImageIndex((prev) => (prev - 1 + images.length) % images.length)}
-                    className="absolute left-4 top-1/2 -translate-y-1/2 w-10 h-10 bg-black/50 hover:bg-black/70 rounded-full flex items-center justify-center text-white transition-all"
+                    className="absolute left-4 top-1/2 -translate-y-1/2 w-10 h-10 bg-black/50 hover:bg-black/70 rounded-full flex items-center justify-center text-warm transition-all"
                   >
                     ←
                   </button>
                   <button
                     onClick={() => setCurrentImageIndex((prev) => (prev + 1) % images.length)}
-                    className="absolute right-4 top-1/2 -translate-y-1/2 w-10 h-10 bg-black/50 hover:bg-black/70 rounded-full flex items-center justify-center text-white transition-all"
+                    className="absolute right-4 top-1/2 -translate-y-1/2 w-10 h-10 bg-black/50 hover:bg-black/70 rounded-full flex items-center justify-center text-warm transition-all"
                   >
                     →
                   </button>
                 </>
               )}
               {/* Image Counter */}
-              <div className="absolute bottom-4 right-4 px-3 py-1 bg-black/70 rounded-full text-white text-sm">
+              <div className="absolute bottom-4 right-4 px-3 py-1 bg-black/70 rounded-full text-warm text-sm">
                 {currentImageIndex + 1} / {images.length}
               </div>
             </div>

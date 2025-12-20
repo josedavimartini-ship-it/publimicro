@@ -684,7 +684,7 @@ export function OnboardingModal({ isOpen, onComplete, userId }: OnboardingModalP
                 <button
                   type="button"
                   onClick={handleNext}
-                  className="flex-1 px-6 py-3 bg-gradient-to-r from-[#6B7F5C] to-[#2C5F6F] hover:from-[#7A8F6B] hover:to-[#3A6F7F] text-[#D4C4A8] rounded-lg transition-all font-bold shadow-lg"
+                  className="flex-1 px-6 py-3 btn-secondary rounded-lg transition-all font-bold shadow-lg"
                 >
                   Próximo
                 </button>

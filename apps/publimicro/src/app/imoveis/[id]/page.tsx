@@ -702,6 +702,17 @@ export default function PropertyPage() {
           >
             {t('sitioscarcara.submit_offer') || 'Fazer Proposta'}
           </ActionButton>
+
+          {/* Post quick action (mobile) */}
+          <ActionButton
+            variant="primary"
+            icon={<svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3 8v8a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V8" stroke="#D4AF37" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/><path d="M21 8l-9 6L3 8" stroke="#D4AF37" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/></svg>}
+            onClick={() => {
+              router.push('/postar');
+            }}
+          >
+            Post
+          </ActionButton>
         </div>
       </StickyMobileAction>
 
@@ -717,7 +728,7 @@ export default function PropertyPage() {
                     previouslyFocusedElement.current.focus();
                   }
                 }}
-                className="absolute -top-12 right-0 text-white hover:text-[#A8C97F] text-2xl font-bold"
+                className="absolute -top-12 right-0 text-warm hover:text-[#A8C97F] text-2xl font-bold"
                 aria-label={t('sitioscarcara.close_modal') || 'Fechar modal de agendamento'}
               >
                 ✕ {t('sitioscarcara.close') || 'Fechar'}

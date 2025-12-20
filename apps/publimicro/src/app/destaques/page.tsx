@@ -244,7 +244,7 @@ export default function DestaquesPage() {
                 <WhatsAppLink
                   number={carcaraProject.whatsapp}
                   message={"Olá! Tenho interesse no projeto Sítios Carcará."}
-                  className="block text-center px-6 py-3 bg-[#25D366] hover:bg-[#20BD5A] text-white text-sm font-bold rounded-xl transition-all hover:scale-[1.02] flex items-center justify-center gap-2"
+                  className="block text-center px-6 py-3 bg-[#25D366] hover:bg-[#20BD5A] text-warm text-sm font-bold rounded-xl transition-all hover:scale-[1.02] flex items-center justify-center gap-2"
                 >
                   <span className="text-xl">💬</span>
                   Contato via WhatsApp
@@ -323,7 +323,7 @@ export default function DestaquesPage() {
                     >
                       Ver Detalhes
                     </Link>
-                    <WhatsAppLink number={item.whatsapp} className="px-4 py-3 bg-[#25D366] hover:bg-[#20BD5A] text-white rounded-lg transition-all hover:scale-105 flex items-center justify-center" aria-label="Contato via WhatsApp">
+                    <WhatsAppLink number={item.whatsapp} className="px-4 py-3 bg-[#25D366] hover:bg-[#20BD5A] text-warm rounded-lg transition-all hover:scale-105 flex items-center justify-center" aria-label="Contato via WhatsApp">
                       <span className="text-xl">💬</span>
                     </WhatsAppLink>
                   </div>

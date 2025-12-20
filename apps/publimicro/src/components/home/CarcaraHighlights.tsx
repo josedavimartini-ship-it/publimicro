@@ -71,7 +71,7 @@ export default function CarcaraHighlights() {
       {/* Super highlight banner with 3D Bird - DARKER text for contrast */}
       <Link
         href="/projetos/carcara"
-        className="relative block h-[420px] md:h-[480px] w-full mb-16 group overflow-hidden rounded-2xl shadow-2xl"
+        className="relative block h-[420px] md:h-[480px] min-h-[420px] md:min-h-[480px] w-full mb-16 group overflow-hidden rounded-2xl shadow-2xl"
       >
         <Image
           src="https://irrzpwzyqcubhhjeuakc.supabase.co/storage/v1/object/public/imagens-sitios/pordosol4mediumearthwide.jpg"
@@ -81,12 +81,12 @@ export default function CarcaraHighlights() {
           priority
         />
         {/* Stronger dark overlay for text readability */}
-        <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/50 to-black/30 group-hover:from-black/70 transition-all"></div>
+        <div className="absolute inset-0 carcara-overlay group-hover:opacity-95 transition-all"></div>
         
-        {/* 3D Carcará Bird */}
-        <div className="absolute top-4 left-4 w-[160px] h-[160px] md:w-[220px] md:h-[220px] z-30 hidden lg:block pointer-events-none">
+        {/* 3D Carcará Bird - larger, centered-right and behind overlay text */}
+        <div className="absolute top-1/2 right-20 transform -translate-y-1/2 w-[320px] h-[320px] md:w-[440px] md:h-[440px] z-10 hidden lg:block pointer-events-none">
           <Carcara3D 
-            scale={1.0} 
+            scale={2.0} 
             autoRotate={true}
             rotationSpeed={0.2}
             onSoundTrigger={() => {
@@ -100,19 +100,19 @@ export default function CarcaraHighlights() {
         </div>
         
         <div className="absolute inset-0 flex flex-col items-center justify-center text-center px-6">
-          <div className="inline-flex items-center gap-2 mb-4 px-5 py-2 bg-gradient-to-r from-[#D4AF37] to-[#CD7F32] rounded-full shadow-lg">
+          <div className="inline-flex items-center gap-2 mb-4 px-5 py-2 carcara-badge rounded-full shadow-lg">
             <Sparkles className="w-4 h-4 text-black animate-pulse" />
             <span className="text-black font-bold text-sm tracking-widest uppercase">Destaque</span>
           </div>
           
           {/* Title with text-shadow for better readability */}
-          <h2 className="text-4xl md:text-5xl font-black mb-3 tracking-tight text-white drop-shadow-[0_2px_10px_rgba(0,0,0,0.8)]">
+          <h2 className="text-4xl md:text-5xl font-black mb-3 tracking-tight text-heading drop-shadow-[0_2px_10px_rgba(0,0,0,0.8)]">
             Sítios Carcará
           </h2>
-          <p className="max-w-2xl text-base md:text-lg leading-relaxed text-gray-200 drop-shadow-lg mb-6">
+          <p className="max-w-2xl text-base md:text-lg leading-relaxed text-muted drop-shadow-lg mb-6">
             Natureza, conforto e sustentabilidade em 6 sítios exclusivos às margens do Lago das Brisas
           </p>
-          <span className="inline-flex items-center gap-2 bg-gradient-to-r from-[#CD7F32] to-[#B87333] hover:from-[#D4AF37] hover:to-[#CD7F32] text-black font-bold px-6 py-3 rounded-xl transition shadow-xl">
+          <span className="inline-flex items-center gap-2 btn-primary">
             <span>🦅</span>
             <span>Conhecer Projeto</span>
           </span>
@@ -126,10 +126,10 @@ export default function CarcaraHighlights() {
 
       {/* Section Title */}
       <div className="text-center mb-8">
-        <h3 className="text-2xl md:text-3xl font-bold text-[#D4AF37] mb-2">
+        <h3 className="text-2xl md:text-3xl font-bold text-heading mb-2">
           🏡 Destaques Rurais
         </h3>
-        <p className="text-[#8B9B6E]">
+        <p className="text-muted">
           {ranches.length > 0 ? `${ranches.length} sítios disponíveis no projeto Carcará` : 'Carregando propriedades...'}
         </p>
       </div>
@@ -137,7 +137,7 @@ export default function CarcaraHighlights() {
       {/* Ranch Cards Grid */}
       {loading ? (
         <div className="flex justify-center py-12">
-          <div className="animate-spin rounded-full h-12 w-12 border-4 border-[#D4AF37] border-t-transparent"></div>
+          <div className="animate-spin rounded-full h-12 w-12 border-4 border-accent-gold border-t-transparent"></div>
         </div>
       ) : ranches.length > 0 ? (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -145,21 +145,29 @@ export default function CarcaraHighlights() {
             <Link
               key={ranch.id}
               href={`/imoveis/${ranch.slug || ranch.id}`}
-              className="group relative bg-gradient-to-br from-[#1a1a1a] to-[#0d0d0d] rounded-2xl overflow-hidden border-2 border-[#2a2a1a] hover:border-[#D4AF37]/50 transition-all hover:scale-[1.02] shadow-xl"
+              className="group relative bg-card rounded-2xl overflow-hidden border-default hover:border-accent-gold transition-all hover:scale-[1.02] shadow-xl"
             >
               {/* Image */}
-              <div className="relative h-48 overflow-hidden">
-                <Image
+              <div className="relative h-48 min-h-[192px] overflow-hidden">
+                <img
                   src={getRanchPhotoUrl(ranch.slug || '')}
                   alt={ranch.title}
-                  fill
-                  className="object-cover group-hover:scale-110 transition-transform duration-500"
+                  loading="lazy"
+                  decoding="async"
+                  className="absolute inset-0 w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                  onError={(e) => {
+                    const img = e.currentTarget as HTMLImageElement;
+                    if (!img.dataset.fallback) {
+                      img.dataset.fallback = 'true';
+                      img.src = '/images/sections/placeholder-section.svg';
+                    }
+                  }}
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent" />
                 
                 {/* Price badge */}
                 {ranch.price && ranch.price > 0 && (
-                  <div className="absolute top-3 right-3 bg-[#D4AF37] text-black font-bold px-3 py-1 rounded-lg text-sm">
+                  <div className="absolute top-3 right-3 price-badge">
                     R$ {(ranch.price / 1000).toFixed(0)}k
                   </div>
                 )}
@@ -167,17 +175,17 @@ export default function CarcaraHighlights() {
               
               {/* Content */}
               <div className="p-4">
-                <h4 className="text-lg font-bold text-[#E6C98B] mb-2 group-hover:text-[#D4AF37] transition-colors">
+                <h4 className="text-lg font-bold text-warm mb-2 group-hover-text-accent transition-colors">
                   {ranch.title}
                 </h4>
                 
-                <div className="flex items-center gap-2 text-sm text-[#8B9B6E] mb-2">
+                <div className="flex items-center gap-2 text-sm text-muted mb-2">
                   <MapPin className="w-4 h-4" />
                   <span>Lago das Brisas, GO</span>
                 </div>
                 
                 {ranch.total_area && (
-                  <div className="flex items-center gap-2 text-sm text-[#A8C97F]">
+                  <div className="flex items-center gap-2 text-sm text-success">
                     <Ruler className="w-4 h-4" />
                     <span>{ranch.total_area.toLocaleString('pt-BR')} m²</span>
                   </div>

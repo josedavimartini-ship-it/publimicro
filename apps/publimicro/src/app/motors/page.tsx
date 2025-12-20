@@ -178,9 +178,9 @@ export default function MotorsPage() {
             </div>
             <Link
               href="/postar?category=vehicle"
-              className="flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-blue-500 to-cyan-500 hover:from-blue-600 hover:to-cyan-600 text-white font-bold rounded-xl transition-all hover:scale-105"
+              className="flex items-center gap-2 px-6 py-3 btn-secondary font-bold rounded-xl transition-all hover:scale-105"
             >
-              <Plus className="w-5 h-5" />
+              <Plus className="w-5 h-5 text-warm" />
               Anunciar Veículo
             </Link>
           </div>
@@ -201,7 +201,7 @@ export default function MotorsPage() {
               onClick={() => setShowFilters(!showFilters)}
               className={`flex items-center gap-2 px-6 py-4 rounded-xl font-bold transition-all ${
                 showFilters 
-                  ? 'bg-blue-500 text-white' 
+                  ? 'bg-blue-500 text-warm' 
                   : 'bg-[#2a2a2a] border border-[#3a3a3a] text-[#D4A574] hover:border-blue-500'
               }`}
             >
@@ -218,7 +218,7 @@ export default function MotorsPage() {
                 onClick={() => setSelectedCategory(cat.id)}
                 className={`flex items-center gap-2 px-4 py-2 rounded-full font-medium transition-all ${
                   selectedCategory === cat.id
-                    ? 'bg-blue-500 text-white'
+                    ? 'bg-blue-500 text-warm'
                     : 'bg-[#2a2a2a] text-[#676767] hover:bg-[#3a3a3a]'
                 }`}
               >

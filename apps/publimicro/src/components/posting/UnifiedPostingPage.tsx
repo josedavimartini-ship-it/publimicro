@@ -5,14 +5,14 @@ import { useRouter } from 'next/navigation';
 import { createBrowserSupabaseClient } from '@/lib/supabaseBrowser';
 import { 
   X, DollarSign, MapPin, ArrowLeft, ArrowRight, 
-  Check, AlertCircle, Image as ImageIcon, Crown
+  Check, AlertCircle, Image as ImageIcon, Crown, Video
 } from 'lucide-react';
 import CategorySelector, { PostingCategory, CATEGORIES } from '@/components/posting/CategorySelector';
 import VehicleForm, { VehicleFormData } from '@/components/posting/VehicleForm';
 import MarineForm, { MarineFormData } from '@/components/posting/MarineForm';
 import MachineryForm, { MachineryFormData } from '@/components/posting/MachineryForm';
 import TierSelector from '@/components/posting/TierSelector';
-import { getTierLimits, validatePhotoCount, canPostFreeListing } from '@/lib/listingTiers';
+import { getTierLimits, validatePhotoCount, validateVideo, canPostFreeListing } from '@/lib/listingTiers';
 
 // Property types for real estate category
 const PROPERTY_TYPES = [
@@ -66,9 +66,14 @@ export default function UnifiedPostingPage() {
   const [neighborhood, setNeighborhood] = useState('');
   const [cep, setCep] = useState('');
 
-  // Photos
+  // Photos & Videos
   const [photos, setPhotos] = useState<File[]>([]);
   const [photoPreviews, setPhotoPreviews] = useState<string[]>([]);
+
+  // Videos support
+  const [videos, setVideos] = useState<File[]>([]);
+  const [videoPreviews, setVideoPreviews] = useState<string[]>([]);
+
 
   // Category-specific data
   const [propertyType, setPropertyType] = useState('sitio');
@@ -131,6 +136,45 @@ export default function UnifiedPostingPage() {
         reader.readAsDataURL(file);
       });
     }
+  };
+
+  // Video handling
+  const handleVideoChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files) {
+      const newFiles = Array.from(e.target.files);
+      const maxVideos = tierLimits?.maxVideos || 0;
+
+      if (maxVideos === 0) {
+        setError('Seu plano atual não permite upload de vídeos.');
+        return;
+      }
+
+      if (videos.length + newFiles.length > maxVideos) {
+        setError(`Máximo de ${maxVideos} vídeo${maxVideos > 1 ? 's' : ''} permitidos no plano selecionado`);
+        return;
+      }
+
+      // Basic size validation (MB)
+      for (const f of newFiles) {
+        const sizeMB = f.size / (1024 * 1024);
+        if (sizeMB > (tierLimits?.maxVideoSizeMB || 0)) {
+          setError(`Vídeo ${f.name} excede o tamanho máximo de ${(tierLimits?.maxVideoSizeMB || 0)}MB`);
+          return;
+        }
+      }
+
+      setVideos(prev => [...prev, ...newFiles]);
+
+      newFiles.forEach(file => {
+        const url = URL.createObjectURL(file);
+        setVideoPreviews(prev => [...prev, url]);
+      });
+    }
+  };
+
+  const removeVideo = (index: number) => {
+    setVideos(videos.filter((_, i) => i !== index));
+    setVideoPreviews(videoPreviews.filter((_, i) => i !== index));
   };
 
   const removePhoto = (index: number) => {
@@ -318,6 +362,41 @@ export default function UnifiedPostingPage() {
               is_cover: i === 0,
               display_order: i
             });
+        }
+      }
+
+      // Upload videos (if any) - upload raw and request server-side transcode
+      for (let i = 0; i < videos.length; i++) {
+        const video = videos[i];
+        const fileExt = video.name.split('.').pop();
+        const rawPath = `raw/${listing.id}/${Date.now()}_${i}.${fileExt}`;
+
+        const { error: uploadError } = await supabase.storage
+          .from('property-videos')
+          .upload(rawPath, video);
+
+        if (uploadError) {
+          console.error('Video upload error:', uploadError);
+          continue;
+        }
+
+        // Request server to transcode/process the raw video
+        try {
+          const resp = await fetch('/api/uploads/convert-video', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ storagePath: rawPath, listingId: listing.id, displayOrder: i, isCover: i === 0 })
+          });
+
+          const json = await resp.json();
+          if (!resp.ok) {
+            console.error('Video processing error:', json);
+            continue;
+          }
+
+          // Insert result into listing_videos handled by server; optional client-side action could refresh listing
+        } catch (errVideo) {
+          console.error('Video processing request failed:', errVideo);
         }
       }
 
@@ -545,7 +624,30 @@ export default function UnifiedPostingPage() {
                     PNG, JPG ou WEBP. Máximo {tierLimits?.maxPhotos || 3} fotos, 5MB cada.
                   </p>
                 </label>
-              </div>
+
+                {/* Video upload */}
+                <div className="mt-6 border-2 border-dashed border-[#3a3a3a] rounded-xl p-6 text-center hover:border-[#A8C97F] transition-colors">
+                  <input
+                    type="file"
+                    accept="video/*"
+                    multiple
+                    onChange={handleVideoChange}
+                    className="hidden"
+                    id="video-input"
+                    disabled={videos.length >= (tierLimits?.maxVideos || 0)}
+                  />
+                  <label htmlFor="video-input" className={`cursor-pointer ${videos.length >= (tierLimits?.maxVideos || 0) ? 'opacity-50' : ''}`}>
+                    <Video className="w-12 h-12 text-[#676767] mx-auto mb-4" />
+                    <p className="text-[#D4A574] font-semibold mb-2">
+                      {videos.length >= (tierLimits?.maxVideos || 0)
+                        ? 'Limite de vídeos atingido'
+                        : 'Clique para adicionar vídeos (MP4 preferido)'}
+                    </p>
+                    <p className="text-[#676767] text-sm">
+                      Máximo: {tierLimits?.maxVideos || 0} vídeo(s), {tierLimits?.maxVideoSizeMB || 0}MB cada.
+                    </p>
+                  </label>
+                </div>
 
               {photoPreviews.length > 0 && (
                 <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
@@ -559,13 +661,32 @@ export default function UnifiedPostingPage() {
                       <button
                         type="button"
                         onClick={() => removePhoto(index)}
-                        className="absolute top-2 right-2 bg-red-500 text-white p-1.5 rounded-full opacity-0 group-hover:opacity-100 transition"
+                        className="absolute top-2 right-2 bg-red-500 text-warm p-1.5 rounded-full opacity-0 group-hover:opacity-100 transition"
                       >
                         <X className="w-4 h-4" />
                       </button>
                       {index === 0 && (
                         <span className="absolute bottom-2 left-2 bg-[#A8C97F] text-[#0a0a0a] text-xs font-bold px-2 py-1 rounded">
                           Capa
+                        </span>
+                      )}
+                    </div>
+                  ))}
+                </div>
+              )}
+
+              {/* Video previews */}
+              {videoPreviews.length > 0 && (
+                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+                  {videoPreviews.map((preview, idx) => (
+                    <div key={idx} className="relative group aspect-video rounded-lg overflow-hidden border border-[#3a3a3a]">
+                      <video src={preview} controls className="w-full h-full object-cover" />
+                      <button type="button" onClick={() => removeVideo(idx)} className="absolute top-2 right-2 bg-red-500 text-warm p-1.5 rounded-full opacity-0 group-hover:opacity-100 transition">
+                        <X className="w-4 h-4" />
+                      </button>
+                      {idx === 0 && (
+                        <span className="absolute bottom-2 left-2 bg-[#A8C97F] text-[#0a0a0a] text-xs font-bold px-2 py-1 rounded">
+                          Principal
                         </span>
                       )}
                     </div>
@@ -800,7 +921,7 @@ export default function UnifiedPostingPage() {
                 type="button"
                 onClick={() => void handleSubmit()}
                 disabled={submitting}
-                className="px-8 py-3 bg-gradient-to-r from-[#6B7F5C] to-[#2C5F6F] hover:from-[#7A8F6B] hover:to-[#3A6F7F] text-white font-bold rounded-lg flex items-center gap-2 disabled:opacity-50 transition"
+                className="px-8 py-3 btn-secondary font-bold rounded-lg flex items-center gap-2 disabled:opacity-50 transition"
               >
                 {submitting ? 'Publicando...' : 'Publicar Anúncio'}
                 <Check className="w-5 h-5" />

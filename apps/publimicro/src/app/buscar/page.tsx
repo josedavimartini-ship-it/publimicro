@@ -7,6 +7,7 @@ import { supabase } from "@/lib/supabaseClient";
 import Link from "next/link";
 import Image from "next/image";
 import { MapPin, Maximize2, DollarSign, ArrowLeft, Heart } from "lucide-react";
+import { getFirstPhoto } from '@/lib/photoUtils';
 
 interface Property {
   id: string;
@@ -180,9 +181,9 @@ function SearchPageContent() {
               >
                 {/* Image */}
                 <div className="relative w-full h-64 bg-[#2a2a1a] overflow-hidden">
-                  {property.fotos && property.fotos[0] ? (
+                  {property.fotos && property.fotos.length > 0 ? (
                     <Image
-                      src={property.fotos[0]}
+                      src={getFirstPhoto(property.fotos)}
                       alt={property.nome}
                       fill
                       sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"

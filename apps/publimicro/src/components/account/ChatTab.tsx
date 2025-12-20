@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { getFirstPhoto } from '@/lib/photoUtils';
 
 const TABS = [
   { key: "ativas", label: "Ativas" },
@@ -83,7 +84,7 @@ export default function ChatTab({ user: _user }: { user?: unknown }) {
         <div className="space-y-4">
           {chats.map((c) => (
             <div key={c.id} className="bg-white rounded shadow p-4 flex gap-4 items-center relative group hover:shadow-lg transition-shadow">
-              <img src={c.property.fotos[0]} alt={c.property.title} className="w-16 h-16 object-cover rounded" />
+              <img src={getFirstPhoto(c.property.fotos)} alt={c.property.title} className="w-16 h-16 object-cover rounded" />
               <div className="flex-1">
                 <div className="font-bold text-lg mb-1">{c.property.title}</div>
                 <div className="text-sm text-gray-600 mb-1">{c.property.location} • R$ {c.property.price.toLocaleString('pt-BR')}</div>

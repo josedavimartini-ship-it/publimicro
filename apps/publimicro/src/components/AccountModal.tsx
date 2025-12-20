@@ -267,7 +267,7 @@ export default function AccountModal({ open, onClose }: AccountModalProps) {
               <button
                 type="submit"
                 disabled={loading}
-                className="w-full px-4 py-2.5 bg-gradient-to-r from-[#6B7F5C] to-[#2C5F6F] hover:from-[#7A8F6B] hover:to-[#3A6F7F] text-[#D4C4A8] font-bold rounded-lg transition-all hover:scale-105 disabled:opacity-50 disabled:hover:scale-100 text-sm shadow-lg"
+                className="w-full px-4 py-2.5 btn-secondary text-sm shadow-lg disabled:opacity-50 disabled:hover:scale-100 transition-all hover:scale-105"
               >
                 {loading ? 'Processando...' : otpSent ? 'Verificar Código' : 'Enviar Código'}
               </button>
@@ -338,7 +338,7 @@ export default function AccountModal({ open, onClose }: AccountModalProps) {
             <button
               type="submit"
               disabled={loading}
-              className="w-full px-4 py-2.5 bg-gradient-to-r from-[#6B7F5C] to-[#7A8F6B] hover:from-[#7A8F6B] hover:to-[#6B7F5C] text-[#D4C4A8] font-bold rounded-lg transition-all hover:scale-105 disabled:opacity-50 disabled:hover:scale-100 text-sm shadow-lg"
+              className="w-full px-4 py-2.5 btn-secondary text-sm shadow-lg disabled:opacity-50 disabled:hover:scale-100 transition-all hover:scale-105"
             >
               {loading ? 'Processando...' : mode === 'login' ? 'Entrar' : 'Criar Conta'}
             </button>

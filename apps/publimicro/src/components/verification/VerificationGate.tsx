@@ -66,7 +66,7 @@ export function VerificationGate({
   if (loading) {
     return (
       <div className="flex items-center justify-center py-8">
-        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600" />
+        <div className="animate-spin rounded-full h-8 w-8 border-b-2" style={{ borderBottomColor: 'var(--text-accent)' }} />
       </div>
     );
   }
@@ -123,17 +123,17 @@ function VerificationRequired({ status }: { status: string }) {
   const config = statusConfig[status as keyof typeof statusConfig] || statusConfig.not_started;
 
   return (
-    <div className="bg-gradient-to-br from-blue-50 to-indigo-50 border-2 border-blue-200 rounded-lg p-8 text-center">
+    <div className="bg-card border rounded-lg p-8 text-center" style={{ borderColor: 'var(--border-default)' }}>
       <div className="text-6xl mb-4">{config.icon}</div>
-      <h3 className="text-2xl font-bold text-gray-900 mb-2">
+      <h3 className="text-2xl font-bold text-heading mb-2">
         {config.title}
       </h3>
-      <p className="text-gray-600 mb-6 max-w-md mx-auto">
+      <p className="text-warm mb-6 max-w-md mx-auto">
         {config.description}
       </p>
       <button
         onClick={config.buttonAction}
-        className="bg-blue-600 text-white py-3 px-6 rounded-lg font-medium hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-colors inline-flex items-center gap-2"
+        className="btn-primary inline-flex items-center gap-2"
       >
         {config.buttonText}
         <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -141,8 +141,8 @@ function VerificationRequired({ status }: { status: string }) {
         </svg>
       </button>
 
-      <div className="mt-6 pt-6 border-t border-blue-200">
-        <p className="text-sm text-gray-600">
+      <div className="mt-6 pt-6 border-t" style={{ borderTopColor: 'var(--border-subtle)' }}>
+        <p className="text-sm text-warm">
           💡 <strong>Por que precisamos verificar?</strong> A verificação garante segurança para todos os usuários e previne fraudes na plataforma.
         </p>
       </div>
@@ -166,29 +166,33 @@ export function VerificationBadge({ status, size = 'md' }: VerificationBadgeProp
     approved: {
       icon: '✓',
       label: 'Verificado',
-      className: 'bg-green-100 text-green-800 border border-green-200',
+      className: 'bg-card text-warm',
+      style: { borderColor: 'var(--color-success)' },
     },
     pending: {
       icon: '⏳',
       label: 'Aguardando',
-      className: 'bg-yellow-100 text-yellow-800 border border-yellow-200',
+      className: 'bg-card text-warm',
+      style: { borderColor: 'var(--color-warning)' },
     },
     rejected: {
       icon: '✗',
       label: 'Rejeitado',
-      className: 'bg-red-100 text-red-800 border border-red-200',
+      className: 'bg-card text-warm',
+      style: { borderColor: 'var(--color-error)' },
     },
     not_started: {
       icon: '○',
       label: 'Não Verificado',
-      className: 'bg-gray-100 text-gray-800 border border-gray-200',
+      className: 'bg-card text-warm',
+      style: { borderColor: 'var(--border-subtle)' },
     },
   };
 
   const config = statusConfig[status];
 
   return (
-    <span className={`inline-flex items-center gap-1 rounded-full font-medium ${sizeClasses[size]} ${config.className}`}>
+    <span className={`inline-flex items-center gap-1 rounded-full font-medium ${sizeClasses[size]} ${config.className}`} style={config.style}>
       <span>{config.icon}</span>
       <span>{config.label}</span>
     </span>

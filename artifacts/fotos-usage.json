@@ -1,0 +1,11 @@
+{
+  "timestamp": "2025-12-20T18:22:25.599Z",
+  "occurrences": [
+    {
+      "file": "apps\\publimicro\\src\\lib\\photoUtils.ts",
+      "index": 1956,
+      "line": 63
+    }
+  ],
+  "count": 1
+}

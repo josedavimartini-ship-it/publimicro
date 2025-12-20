@@ -283,7 +283,7 @@ export default function OutdoorPage() {
         <div className="max-w-7xl mx-auto">
           <div className="flex items-center justify-between mb-6">
             <div>
-              <h1 className="text-4xl font-bold text-white mb-2 flex items-center gap-3">
+              <h1 className="text-4xl font-bold text-warm mb-2 flex items-center gap-3">
                 <TreePine className="w-10 h-10" />
                 PubliOutdoor
               </h1>
@@ -291,7 +291,7 @@ export default function OutdoorPage() {
             </div>
             <Link
               href="/postar"
-              className="flex items-center gap-2 px-6 py-3 bg-white text-[#5F7161] font-bold rounded-full hover:bg-[#f0f5eb] transition-all shadow-lg"
+              className="flex items-center gap-2 px-6 py-3 btn-secondary rounded-full font-bold transition-all shadow-lg"
             >
               <Plus className="w-5 h-5" />
               Anunciar Equipamento
@@ -306,7 +306,7 @@ export default function OutdoorPage() {
               placeholder="Buscar equipamentos, trilhas, guias..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full pl-12 pr-4 py-4 bg-[#1a1a1a]/90 backdrop-blur-sm border border-[#2a2a2a] rounded-xl text-white placeholder-[#676767] focus:outline-none focus:border-[#6C8C5E] transition-colors"
+              className="w-full pl-12 pr-4 py-4 bg-[#1a1a1a]/90 backdrop-blur-sm border border-[#2a2a2a] rounded-xl text-warm placeholder-[#676767] focus:outline-none focus:border-[#6C8C5E] transition-colors"
             />
           </div>
         </div>
@@ -347,7 +347,7 @@ export default function OutdoorPage() {
           >
             <div className="bg-gradient-to-br from-[#1a1a1a] to-[#0d0d0d] border border-[#2a2a2a] rounded-2xl p-6 sticky top-24">
               <div className="flex items-center justify-between mb-6">
-                <h3 className="text-lg font-bold text-white flex items-center gap-2">
+                <h3 className="text-lg font-bold text-warm flex items-center gap-2">
                   <SlidersHorizontal className="w-5 h-5 text-[#6C8C5E]" />
                   Filtros
                 </h3>

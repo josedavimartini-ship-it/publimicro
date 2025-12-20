@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
+import { getFirstPhoto } from '@/lib/photoUtils';
 import { Clock, MapPin, DollarSign, Maximize2 } from "lucide-react";
 
 interface RecentProperty {
@@ -61,20 +62,14 @@ export default function RecentlyViewed() {
             >
               {/* Image */}
               <div className="relative w-full h-40 bg-[#2a2a1a] overflow-hidden">
-                {property.fotos && property.fotos[0] ? (
-                  <Image
-                    src={property.fotos[0]}
-                    alt={property.nome}
-                    fill
-                    sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 20vw"
-                    className="object-cover group-hover:scale-110 transition-transform duration-300"
-                    unoptimized
-                  />
-                ) : (
-                  <div className="w-full h-full flex items-center justify-center">
-                    <MapPin className="w-12 h-12 text-[#676767]" />
-                  </div>
-                )}
+                <Image
+                  src={getFirstPhoto(property.fotos)}
+                  alt={property.nome}
+                  fill
+                  sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 20vw"
+                  className="object-cover group-hover:scale-110 transition-transform duration-300"
+                  unoptimized
+                />
               </div>
 
               {/* Content */}

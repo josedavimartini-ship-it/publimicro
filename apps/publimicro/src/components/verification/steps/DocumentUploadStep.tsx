@@ -139,17 +139,17 @@ export default function DocumentUploadStep({
 
   return (
     <div>
-      <h2 className="text-2xl font-bold text-gray-900 mb-2">
+      <h2 className="text-2xl font-bold text-heading mb-2">
         Documentos de Identificação
       </h2>
-      <p className="text-gray-600 mb-6">
+      <p className="text-warm mb-6">
         Envie fotos nítidas do seu documento oficial com foto.
       </p>
 
       <form onSubmit={(e) => void handleSubmit(e)} className="space-y-6">
         {/* Document Type */}
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-2">
+          <label className="block text-sm font-medium text-warm mb-2">
             Tipo de Documento *
           </label>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
@@ -165,9 +165,10 @@ export default function DocumentUploadStep({
                 onClick={() => setFormData({ ...formData, document_type: doc.value as DocumentType })}
                 className={`py-3 px-4 rounded-lg border-2 font-medium transition-colors ${
                   formData.document_type === doc.value
-                    ? 'border-blue-600 bg-blue-50 text-blue-700'
-                    : 'border-gray-300 hover:border-gray-400'
+                    ? 'border-accent-gold bg-card text-warm'
+                    : 'border'
                 }`}
+                style={formData.document_type === doc.value ? { borderColor: 'var(--text-accent)' } : { borderColor: 'var(--border-subtle)' }}
                 disabled={loading}
               >
                 {doc.label}
@@ -178,7 +179,7 @@ export default function DocumentUploadStep({
 
         {/* Document Number */}
         <div>
-          <label htmlFor="document_number" className="block text-sm font-medium text-gray-700 mb-2">
+          <label htmlFor="document_number" className="block text-sm font-medium text-warm mb-2">
             Número do Documento *
           </label>
           <input
@@ -186,14 +187,15 @@ export default function DocumentUploadStep({
             id="document_number"
             value={formData.document_number}
             onChange={(e) => setFormData({ ...formData, document_number: e.target.value })}
-            className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent ${
-              errors.document_number ? 'border-red-500' : 'border-gray-300'
+            className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:border-transparent ${
+              errors.document_number ? '' : ''
             }`}
+            style={{ borderColor: errors.document_number ? 'var(--color-error)' : 'var(--border-subtle)' }}
             placeholder={formData.document_type === 'rg' ? '12.345.678-9' : ''}
             disabled={loading}
           />
           {errors.document_number && (
-            <p className="mt-1 text-sm text-red-600">{errors.document_number}</p>
+            <p className="mt-1 text-sm" style={{ color: 'var(--color-error)' }}>{errors.document_number}</p>
           )}
         </div>
 
@@ -238,11 +240,11 @@ export default function DocumentUploadStep({
         />
 
         {/* Tips */}
-        <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4">
-          <h4 className="text-sm font-medium text-yellow-800 mb-2">
+        <div className="bg-card border rounded-lg p-4" style={{ borderColor: 'var(--color-warning)' }}>
+          <h4 className="text-sm font-medium text-heading mb-2">
             📸 Dicas para fotos perfeitas:
           </h4>
-          <ul className="text-sm text-yellow-700 space-y-1 list-disc list-inside">
+          <ul className="text-sm text-warm space-y-1 list-disc list-inside">
             <li>Use um local bem iluminado (luz natural é melhor)</li>
             <li>Evite reflexos e sombras sobre o documento</li>
             <li>Certifique-se de que todos os dados estão legíveis</li>
@@ -256,14 +258,14 @@ export default function DocumentUploadStep({
             type="button"
             onClick={onBack}
             disabled={loading}
-            className="flex-1 bg-gray-200 text-gray-700 py-3 px-4 rounded-lg font-medium hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 disabled:opacity-50 transition-colors"
+            className="flex-1 btn-secondary disabled:opacity-50"
           >
             Voltar
           </button>
           <button
             type="submit"
             disabled={loading}
-            className="flex-1 bg-blue-600 text-white py-3 px-4 rounded-lg font-medium hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+            className="flex-1 btn-primary disabled:opacity-50 disabled:cursor-not-allowed"
           >
             {loading ? 'Enviando...' : 'Enviar Documentos'}
           </button>
@@ -297,7 +299,7 @@ function FileUploadField({
 }) {
   return (
     <div>
-      <label className="block text-sm font-medium text-gray-700 mb-2">
+  <label className="block text-sm font-medium text-warm mb-2">
         {label} {required && '*'}
       </label>
       
@@ -316,15 +318,17 @@ function FileUploadField({
             type="button"
             onClick={() => inputRef.current?.click()}
             disabled={loading}
-            className={`w-full border-2 border-dashed rounded-lg p-8 text-center hover:border-blue-500 hover:bg-blue-50 transition-colors ${
-              error ? 'border-red-500' : 'border-gray-300'
+            className={`w-full border-2 border-dashed rounded-lg p-8 text-center transition-colors ${
+              error ? '' : ''
             }`}
-          >
+            style={{ borderColor: error ? 'var(--color-error)' : 'var(--border-subtle)' }}
+          >          >
             <svg
-              className="mx-auto h-12 w-12 text-gray-400"
+              className="mx-auto h-12 w-12"
               stroke="currentColor"
               fill="none"
               viewBox="0 0 48 48"
+              style={{ color: 'var(--border-subtle)' }}
             >
               <path
                 d="M28 8H12a4 4 0 00-4 4v20m32-12v8m0 0v8a4 4 0 01-4 4H12a4 4 0 01-4-4v-4m32-4l-3.172-3.172a4 4 0 00-5.656 0L28 28M8 32l9.172-9.172a4 4 0 015.656 0L28 28m0 0l4 4m4-24h8m-4-4v8m-12 4h.02"
@@ -333,11 +337,11 @@ function FileUploadField({
                 strokeLinejoin="round"
               />
             </svg>
-            <p className="mt-2 text-sm text-gray-600">
+            <p className="mt-2 text-sm text-warm">
               Clique para fazer upload ou tirar foto
             </p>
             {helpText && (
-              <p className="mt-1 text-xs text-gray-500">{helpText}</p>
+              <p className="mt-1 text-xs text-muted">{helpText}</p>
             )}
           </button>
         </div>
@@ -346,13 +350,15 @@ function FileUploadField({
           <img
             src={preview}
             alt="Preview"
-            className="w-full h-64 object-cover rounded-lg border border-gray-300"
+            className="w-full h-64 object-cover rounded-lg"
+            style={{ border: '1px solid var(--border-subtle)' }}
           />
           <button
             type="button"
             onClick={onRemove}
             disabled={loading}
-            className="absolute top-2 right-2 bg-red-600 text-white p-2 rounded-full hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500"
+            className="absolute top-2 right-2 p-2 rounded-full focus:outline-none"
+            style={{ background: 'var(--color-error)', color: 'var(--text-strong-dark)' }}
           >
             <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
@@ -362,7 +368,7 @@ function FileUploadField({
       )}
       
       {error && (
-        <p className="mt-1 text-sm text-red-600">{error}</p>
+        <p className="mt-1 text-sm" style={{ color: 'var(--color-error)' }}>{error}</p>
       )}
     </div>
   );

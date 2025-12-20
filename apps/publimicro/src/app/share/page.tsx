@@ -286,7 +286,7 @@ export default function SharePage() {
         <div className="max-w-7xl mx-auto">
           <div className="flex items-center justify-between mb-6">
             <div>
-              <h1 className="text-4xl font-bold text-white mb-2 flex items-center gap-3">
+              <h1 className="text-4xl font-bold text-warm mb-2 flex items-center gap-3">
                 <Share2 className="w-10 h-10" />
                 PubliShare
               </h1>
@@ -294,7 +294,7 @@ export default function SharePage() {
             </div>
             <Link
               href="/postar"
-              className="flex items-center gap-2 px-6 py-3 bg-white text-[#6B7F5C] font-bold rounded-full hover:bg-[#f0f5eb] transition-all shadow-lg"
+              className="flex items-center gap-2 px-6 py-3 btn-secondary rounded-full font-bold transition-all shadow-lg"
             >
               <Plus className="w-5 h-5" />
               Compartilhar Item
@@ -309,7 +309,7 @@ export default function SharePage() {
               placeholder="O que você precisa alugar?"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full pl-12 pr-4 py-4 bg-[#1a1a1a]/90 backdrop-blur-sm border border-[#2a2a2a] rounded-xl text-white placeholder-[#676767] focus:outline-none focus:border-[#7A8F6B] transition-colors"
+              className="w-full pl-12 pr-4 py-4 bg-[#1a1a1a]/90 backdrop-blur-sm border border-[#2a2a2a] rounded-xl text-warm placeholder-[#676767] focus:outline-none focus:border-[#7A8F6B] transition-colors"
             />
           </div>
         </div>
@@ -327,8 +327,8 @@ export default function SharePage() {
                   onClick={() => setSelectedCategory(cat.id)}
                   className={`flex items-center gap-2 px-4 py-3 rounded-lg font-medium whitespace-nowrap transition-all ${
                     selectedCategory === cat.id
-                      ? "bg-gradient-to-r from-[#6B7F5C] to-[#7A8F6B] text-white"
-                      : "text-[#888] hover:text-white hover:bg-[#1a1a1a]"
+                      ? "bg-gradient-to-r from-[#6B7F5C] to-[#7A8F6B] text-warm"
+                      : "text-[#888] hover:text-warm hover:bg-[#1a1a1a]"
                   }`}
                 >
                   <Icon className="w-4 h-4" />
@@ -350,7 +350,7 @@ export default function SharePage() {
           >
             <div className="bg-gradient-to-br from-[#1a1a1a] to-[#0d0d0d] border border-[#2a2a2a] rounded-2xl p-6 sticky top-24">
               <div className="flex items-center justify-between mb-6">
-                <h3 className="text-lg font-bold text-white flex items-center gap-2">
+                <h3 className="text-lg font-bold text-warm flex items-center gap-2">
                   <SlidersHorizontal className="w-5 h-5 text-[#7A8F6B]" />
                   Filtros
                 </h3>
@@ -484,7 +484,7 @@ export default function SharePage() {
                   {showFilters ? "Ocultar" : "Filtros"}
                 </button>
                 <span className="text-[#888]">
-                  <span className="text-white font-semibold">{filteredListings.length}</span>{" "}
+                  <span className="text-warm font-semibold">{filteredListings.length}</span>{" "}
                   itens disponíveis
                 </span>
               </div>
@@ -555,7 +555,7 @@ export default function SharePage() {
                       fill
                       className="object-cover group-hover:scale-105 transition-transform duration-500"
                     />
-                    <div className="absolute top-3 left-3 px-2 py-1 bg-green-500/90 text-white text-xs font-bold rounded-full">
+                    <div className="absolute top-3 left-3 px-2 py-1 bg-green-500/90 text-warm text-xs font-bold rounded-full">
                       {listing.availability}
                     </div>
                     <button className="absolute top-3 right-3 p-2 bg-black/50 backdrop-blur-sm rounded-full text-white hover:bg-[#6B7F5C] transition-colors">

@@ -8,6 +8,7 @@ import {
 import { useState, useEffect } from "react";
 import { supabase } from "@/lib/supabaseClient";
 import CarcaraHighlights from "@/components/home/CarcaraHighlights";
+import { getFirstPhoto } from '@/lib/photoUtils';
 
 // The 8 main sections of AcheMe with Unsplash backgrounds
 const sections = [
@@ -170,13 +171,18 @@ export default function HomePage() {
           </p>
 
           {/* Single prominent CTA */}
-          <div className="flex justify-center">
+          <div className="flex flex-col items-center gap-4">
             <Link
               href="/buscar"
-              className="flex items-center gap-3 px-10 py-4 bg-gradient-to-r from-[#6B7F5C] to-[#8B9B6E] text-white rounded-full font-semibold text-lg hover:scale-105 transition-all shadow-2xl shadow-[#6B7F5C]/20"
+              className="flex items-center gap-3 px-10 py-4 btn-secondary rounded-full font-semibold text-lg hover:scale-105 transition-all shadow-2xl"
             >
               <Search className="w-5 h-5" />
               Explorar
+            </Link>
+
+            {/* Post your free ad CTA - primary, prominent */}
+            <Link href="/postar" className="btn-primary text-center">
+              Post your free ad
             </Link>
           </div>
         </div>
@@ -206,47 +212,58 @@ export default function HomePage() {
                 <Link
                   key={section.id}
                   href={section.href}
-                  className="group relative overflow-hidden rounded-2xl border-2 border-[#2a2a1a] hover:border-[#6B7F5C]/50 transition-all hover:scale-[1.02] hover:shadow-xl min-h-[200px]"
+                  className="group relative overflow-hidden rounded-2xl bg-card border-default hover:border-accent-gold transition-all hover:scale-[1.02] hover:shadow-xl min-h-[200px]"
                 >
-                  {/* Background Image */}
-                  <div 
-                    className="absolute inset-0 bg-cover bg-center transition-transform duration-500 group-hover:scale-110"
-                    style={{ backgroundImage: `url(${section.bgImage})` }}
+                  {/* Background Image - use <img> with fallback to local SVG if remote fails */}
+                  <img
+                    src={section.bgImage}
+                    alt={`${section.name} background`}
+                    loading="lazy"
+                    decoding="async"
+                    className="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                    onError={(e) => {
+                      // Replace broken Unsplash images with a lightweight inline SVG placeholder
+                      const target = e.currentTarget as HTMLImageElement;
+                      if (!target.dataset.fallback) {
+                        target.dataset.fallback = 'true';
+                        target.src = '/images/sections/placeholder-section.svg';
+                      }
+                    }}
                   />
                   
                   {/* Dark overlay */}
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/60 to-black/30 group-hover:from-black/85 group-hover:via-black/50 transition-all" />
+                  <div className="absolute inset-0 section-overlay group-hover:opacity-95 transition-all" />
                   
                   {/* Colored accent overlay on hover */}
-                  <div className={`absolute inset-0 bg-gradient-to-br ${section.color} opacity-0 group-hover:opacity-30 transition-opacity`} />
+                  <div className={`absolute inset-0 bg-gradient-to-br ${section.color} opacity-0 group-hover:opacity-25 transition-opacity`} />
                   
                   <div className="relative p-6 h-full flex flex-col justify-end">
                     {/* Icon */}
                     <div className={`w-12 h-12 rounded-xl bg-gradient-to-br ${section.color} flex items-center justify-center mb-3 group-hover:scale-110 transition-transform shadow-lg`}>
-                      <Icon className="w-6 h-6 text-white" />
+                      <Icon className="w-6 h-6 text-warm" />
                     </div>
 
                     {/* Content */}
-                    <h3 className="text-lg font-bold text-white mb-0.5 drop-shadow-lg">
+                    <h3 className="text-lg font-bold text-warm mb-0.5 drop-shadow-lg">
                       {section.name}
                     </h3>
-                    <p className="text-sm text-[#E6C98B] mb-1 drop-shadow">
+                    <p className="text-sm text-muted mb-1 drop-shadow">
                       {section.subtitle}
                     </p>
-                    <p className="text-xs text-gray-300/80 line-clamp-2 drop-shadow">
+                    <p className="text-xs text-muted line-clamp-2 drop-shadow">
                       {section.description}
                     </p>
 
                     {/* Stats */}
                     {count > 0 && (
-                      <p className="text-xs text-[#A8C97F] mt-2 drop-shadow">
+                      <p className="text-xs text-success mt-2 drop-shadow">
                         <span className="font-bold">{count.toLocaleString("pt-BR")}</span> {section.stats.label}
                       </p>
                     )}
 
                     {/* Arrow */}
                     <div className="absolute top-4 right-4 opacity-0 group-hover:opacity-100 transition-opacity">
-                      <ArrowRight className="w-5 h-5 text-white drop-shadow-lg" />
+                      <ArrowRight className="w-5 h-5 text-warm drop-shadow-lg" />
                     </div>
                   </div>
                 </Link>
@@ -281,26 +298,20 @@ export default function HomePage() {
                 <Link
                   key={listing.id}
                   href={`/imoveis/${listing.id}`}
-                  className="group rounded-xl overflow-hidden bg-[#1a1a1a] border border-[#2a2a1a] hover:border-[#6B7F5C]/50 transition-all"
+                  className="group rounded-xl overflow-hidden bg-card border-default hover:border-accent-gold transition-all"
                 >
                   <div className="aspect-[4/3] relative overflow-hidden">
-                    {listing.fotos?.[0] ? (
-                      <img
-                        src={listing.fotos[0]}
-                        alt={listing.nome}
-                        className="w-full h-full object-cover group-hover:scale-105 transition-transform"
-                      />
-                    ) : (
-                      <div className="w-full h-full bg-[#2a2a1a] flex items-center justify-center">
-                        <Building2 className="w-8 h-8 text-[#676767]" />
-                      </div>
-                    )}
+                    <img
+                      src={getFirstPhoto(listing.fotos)}
+                      alt={listing.nome}
+                      className="w-full h-full object-cover group-hover:scale-105 transition-transform"
+                    />
                   </div>
                   <div className="p-4">
-                    <h3 className="text-sm font-medium text-[#E6C98B] line-clamp-1">
+                    <h3 className="text-sm font-medium text-warm line-clamp-1">
                       {listing.nome}
                     </h3>
-                    <p className="text-lg font-bold text-[#A8C97F]">
+                    <p className="text-lg font-bold text-success">
                       R$ {listing.preco?.toLocaleString("pt-BR")}
                     </p>
                   </div>

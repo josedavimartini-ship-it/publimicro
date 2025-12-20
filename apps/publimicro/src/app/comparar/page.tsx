@@ -6,6 +6,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { X, ArrowLeft, Share2, Download, MapPin, Maximize2, DollarSign } from "lucide-react";
 import Breadcrumbs from "@/components/Breadcrumbs";
+import { getFirstPhoto } from '@/lib/photoUtils';
 
 interface Property {
   id: string;
@@ -205,9 +206,9 @@ export default function ComparePage() {
                       </button>
                       
                       <div className="w-full h-32 bg-[#2a2a1a] rounded-lg overflow-hidden mb-3">
-                        {property.fotos && property.fotos[0] ? (
+                        {property.fotos && property.fotos.length > 0 ? (
                           <Image
-                            src={property.fotos[0]}
+                            src={getFirstPhoto(property.fotos)}
                             alt={property.nome}
                             width={200}
                             height={128}

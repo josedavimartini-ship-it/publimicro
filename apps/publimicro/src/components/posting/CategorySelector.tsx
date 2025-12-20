@@ -153,7 +153,7 @@ export default function CategorySelector({ selectedCategory, onSelectCategory }:
             }`}
           >
             <div className={`w-full flex flex-col items-center text-center`}>
-              <div className={`p-3 rounded-full bg-gradient-to-br ${category.color} text-white mb-3 group-hover:scale-110 transition-transform`}>
+              <div className={`p-3 rounded-full bg-gradient-to-br ${category.color} text-warm mb-3 group-hover:scale-110 transition-transform`}>
                 {category.icon}
               </div>
               <h3 className="font-bold text-[#D4A574] mb-1">{category.label}</h3>
