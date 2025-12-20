@@ -1,0 +1,73 @@
+name: Media mapping (scan → generate → dry-run)
+
+on:
+  workflow_dispatch:
+    inputs:
+      apply:
+        description: 'If true, run the apply SQL (use with caution)'
+        required: false
+        default: 'false'
+
+jobs:
+  scan-and-generate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v2
+        with:
+          version: 8
+      - name: Install deps
+        run: pnpm install -w
+      - name: Run storage scanner
+        env:
+          NEXT_PUBLIC_SUPABASE_URL: ${{ secrets.NEXT_PUBLIC_SUPABASE_URL }}
+          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+        run: |
+          node scripts/list-storage-files.mjs --bucket imagens-sitios --slugs abare,bigua,mergulhao,seriema,juriti,surucua --out artifacts/storage-files.json
+      - name: Generate mapping SQL
+        run: |
+          node scripts/generate-media-sql.mjs --in artifacts/storage-files.json --out-sql sql/media-mapping-apply.sql --out-dry sql/media-mapping-dryrun.sql
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: media-mapping-artifacts
+          path: |
+            artifacts/storage-files.json
+            sql/media-mapping-dryrun.sql
+            sql/media-mapping-apply.sql
+
+  dry-run-db:
+    needs: scan-and-generate
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Download artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: media-mapping-artifacts
+      - name: Show dry-run SQL head
+        run: |
+          echo "----- DRY-RUN SQL -----"
+          sed -n '1,200p' sql/media-mapping-dryrun.sql || true
+
+  apply-sql (manual):
+    if: ${{ github.event.inputs.apply == 'true' }}
+    needs: dry-run-db
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Download artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: media-mapping-artifacts
+      - name: Execute apply SQL (Caution!)
+        env:
+          SUPABASE_DB_URL: ${{ secrets.SUPABASE_DB_URL }}
+        run: |
+          if [ -z "$SUPABASE_DB_URL" ]; then echo 'SUPABASE_DB_URL secret is missing'; exit 1; fi
+          echo "---- Installing psql client ----"
+          sudo apt-get update -y && sudo apt-get install -y postgresql-client
+          echo "---- Applying SQL (first 200 lines) ----"
+          sed -n '1,200p' sql/media-mapping-apply.sql
+          echo "---- Running apply SQL ----"
+          psql "$SUPABASE_DB_URL" -f sql/media-mapping-apply.sql
