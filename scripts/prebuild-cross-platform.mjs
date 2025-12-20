@@ -56,6 +56,23 @@ const repoRoot = path.resolve(path.dirname(__filename), '..', '..');
       console.warn('\nThese are fine for developer workflows on Windows or where pwsh is available, but ensure CI and builders do not try to execute them directly.');
     }
 
+    // Verify critical env vars when running in CI (fail early to avoid broken deploys)
+    const isCI = !!(process.env.CI || process.env.VERCEL);
+    const required = [
+      'NEXT_PUBLIC_SUPABASE_URL',
+      'NEXT_PUBLIC_SUPABASE_ANON_KEY'
+    ];
+    const missing = required.filter((k) => !process.env[k]);
+    if (missing.length > 0) {
+      const msg = `Missing required env vars: ${missing.join(', ')}`;
+      if (isCI) {
+        console.error('ERROR:', msg);
+        throw new Error(msg);
+      } else {
+        console.warn('Warning:', msg, '\nThis is OK for local dev but must be set in preview/production deployments.');
+      }
+    }
+
     // Run existing turbod cleanup (if present)
     const cleanScript = path.join(repoRoot, 'scripts', 'clean-turbod.mjs');
     if (fs.existsSync(cleanScript)) {
