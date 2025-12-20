@@ -40,7 +40,7 @@ export async function POST(req: NextRequest) {
           if (data && data.length > 0) {
             // append unique ids
             for (const r of data) {
-              const row = r as Record<string, unknown>;
+              const row = r as unknown as Record<string, unknown>;
               const idStr = String(row.id ?? "");
               if (!found.find((f) => String(f.id) === idStr)) found.push(row);
             }

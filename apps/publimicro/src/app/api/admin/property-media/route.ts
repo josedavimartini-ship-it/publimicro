@@ -80,7 +80,7 @@ export async function POST(req: NextRequest) {
         const buffer = Buffer.from(base64, 'base64');
         const { error: upErr } = await svc.storage.from('property-photos').upload(path, buffer, { contentType: mime || 'application/octet-stream', upsert: false });
         if (upErr) {
-          const upErrMsg = upErr && typeof upErr === 'object' && 'message' in upErr ? String((upErr as Record<string, unknown>)['message']) : String(upErr);
+          const upErrMsg = upErr && typeof upErr === 'object' && 'message' in upErr ? String((upErr as unknown)['message']) : String(upErr);
           uploads.push({ name: nameRaw, error: upErrMsg });
           continue;
         }
@@ -125,7 +125,8 @@ export async function POST(req: NextRequest) {
     }
 
     const USE_PLACEHOLDERS = process.env.FEATURE_MEDIA_PLACEHOLDERS === 'true';
-    const successful = uploads.filter((u): u is Record<string, unknown> & { publicUrl: string } => typeof u.publicUrl === 'string');
+    // Only consider uploads that have both a publicUrl and a name (required by downstream inserts)
+    const successful = uploads.filter((u): u is Record<string, unknown> & { publicUrl: string; name: string } => typeof u.publicUrl === 'string' && typeof u.name === 'string');
     for (const u of successful) {
       try {
         if (USE_PLACEHOLDERS) {

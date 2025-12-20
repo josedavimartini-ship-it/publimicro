@@ -65,12 +65,12 @@ export async function POST(req: NextRequest) {
         const contentType = String(f.mime ?? 'application/octet-stream');
         const { error: upErr } = await svc.storage.from('property-photos').upload(name, buffer, { contentType, upsert: false });
         if (upErr) {
-          const upErrMsg = upErr && typeof upErr === 'object' && 'message' in upErr ? String((upErr as Record<string, unknown>)['message']) : String(upErr);
+          const upErrMsg = upErr && typeof upErr === 'object' && 'message' in upErr ? String((upErr as unknown as Record<string, unknown>)['message']) : String(upErr);
           uploads.push({ name: fname, error: upErrMsg });
           continue;
         }
         const { data } = svc.storage.from('property-photos').getPublicUrl(name);
-        const publicUrl = data && typeof data === 'object' && 'publicUrl' in data ? String((data as Record<string, unknown>)['publicUrl']) : undefined;
+        const publicUrl = data && typeof data === 'object' && 'publicUrl' in data ? String((data as unknown as Record<string, unknown>)['publicUrl']) : undefined;
         uploads.push({ name: fname, publicUrl, path: name, thumbnail: (f.thumbnail as string) || null });
       } catch (e: unknown) {
         const msg = e instanceof Error ? e.message : String(e);
@@ -85,13 +85,15 @@ export async function POST(req: NextRequest) {
         const kmlPayload: _KmlPayload = { name: String(kml.name ?? 'map.kml'), base64: String(kml.base64), mime: String(kml.mime ?? 'application/vnd.google-earth.kml+xml') };
         const buffer = Buffer.from(kmlPayload.base64, 'base64');
         const contentType = kmlPayload.mime;
-        const { error: kErr } = await svc.storage.from('property-photos').upload(name, buffer, { contentType, upsert: false });
+        const kmlFolder = `properties/${propertyId}`;
+        const kname = `${kmlFolder}/${Date.now()}_${Math.random().toString(36).slice(2,8)}_${kmlPayload.name}`;
+        const { error: kErr } = await svc.storage.from('property-photos').upload(kname, buffer, { contentType, upsert: false });
         if (!kErr) {
-          const { data } = svc.storage.from('property-photos').getPublicUrl(name);
-          kmlPublicUrl = data && typeof data === 'object' && 'publicUrl' in data ? String((data as Record<string, unknown>)['publicUrl']) : null;
+          const { data } = svc.storage.from('property-photos').getPublicUrl(kname);
+          kmlPublicUrl = data && typeof data === 'object' && 'publicUrl' in data ? String((data as unknown as Record<string, unknown>)['publicUrl']) : null;
         } else {
-          const kErrMsg = kErr && typeof kErr === 'object' && 'message' in kErr ? String((kErr as Record<string, unknown>)['message']) : String(kErr);
-          uploads.push({ name: kname, error: kErrMsg });
+          const kErrMsg = kErr && typeof kErr === 'object' && 'message' in kErr ? String((kErr as unknown as Record<string, unknown>)['message']) : String(kErr);
+          uploads.push({ name: kmlPayload.name || 'map.kml', error: kErrMsg });
         }
       } catch (e: unknown) {
         const msg = e instanceof Error ? e.message : String(e);
@@ -101,7 +103,7 @@ export async function POST(req: NextRequest) {
 
     // Insert into unified media table when feature flag enabled, otherwise legacy property_photos
     const USE_PLACEHOLDERS = process.env.FEATURE_MEDIA_PLACEHOLDERS === 'true';
-    const successful = uploads.filter((u): u is Record<string, unknown> & { publicUrl: string } => typeof u.publicUrl === 'string');
+    const successful = uploads.filter((u): u is _UploadResult & { publicUrl: string } => typeof u.publicUrl === 'string');
     for (let i = 0; i < successful.length; i++) {
       const u = successful[i];
       try {

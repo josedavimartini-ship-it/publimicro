@@ -82,7 +82,7 @@ export async function POST(req: NextRequest) {
             if (data && data.length > 0) {
               for (const r of data) {
                 // Normalize the candidate value server-side in JS and ensure the digits match
-                const row = r as Record<string, unknown>;
+                const row = r as unknown as Record<string, unknown>;
                 const rawVal = row[col as string];
                 const val = (typeof rawVal === 'string' || typeof rawVal === 'number') ? String(rawVal) : "";
                 const digits = val.replace(/\D/g, "");

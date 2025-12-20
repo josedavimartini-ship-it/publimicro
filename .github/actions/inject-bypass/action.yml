@@ -1,0 +1,19 @@
+name: Inject Vercel Bypass Secret
+description: Injects the VERCEL_PROTECTION_BYPASS secret into the job environment (writes to $GITHUB_ENV) if provided.
+inputs:
+  bypass:
+    description: 'The bypass token to inject'
+    required: false
+    default: ''
+runs:
+  using: 'composite'
+  steps:
+    - name: Inject bypass to GITHUB_ENV
+      shell: bash
+      run: |
+        if [ -n "${{ inputs.bypass }}" ]; then
+          echo "VERCEL_PROTECTION_BYPASS=${{ inputs.bypass }}" >> $GITHUB_ENV
+        elif [ -n "${{ secrets.VERCEL_PROTECTION_BYPASS }}" ]; then
+          # Fallback to repository secret if input not provided
+          echo "VERCEL_PROTECTION_BYPASS=${{ secrets.VERCEL_PROTECTION_BYPASS }}" >> $GITHUB_ENV
+        fi
