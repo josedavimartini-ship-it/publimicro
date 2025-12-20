@@ -5,7 +5,7 @@
   "scripts": {
     "dev": "next dev -p 3000",
     "admin-upload-cli": "node ./scripts/admin-upload-cli.js",
-    "prebuild": "powershell -NoProfile -ExecutionPolicy Bypass -Command \"try { [Console]::OutputEncoding = [System.Text.Encoding]::UTF8; & '../../scripts/clean-turbod.ps1' -Force *>&1 | Out-File -FilePath $env:TEMP\\publimicro-cleanup.log -Encoding UTF8 } catch { Write-Host 'clean-turbod failed, continuing' }\"",
+    "prebuild": "node ../../scripts/clean-turbod.mjs",
     "build": "next build && node ./scripts/mark-next-built.mjs",
     "start": "next start",
     "lint": "eslint --config ../../.eslintrc.cjs . --ext .js,.jsx,.ts,.tsx",
