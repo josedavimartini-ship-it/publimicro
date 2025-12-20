@@ -50,7 +50,7 @@ jobs:
           echo "----- DRY-RUN SQL -----"
           sed -n '1,200p' sql/media-mapping-dryrun.sql || true
 
-  apply-sql (manual):
+  apply-sql-manual:
     if: ${{ github.event.inputs.apply == 'true' }}
     needs: dry-run-db
     runs-on: ubuntu-latest
