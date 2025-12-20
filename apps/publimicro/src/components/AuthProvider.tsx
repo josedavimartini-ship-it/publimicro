@@ -29,6 +29,9 @@ export interface UserProfile {
   verified: boolean;
   phone_verified?: boolean;
   email_verified?: boolean;
+  // Subscription (derived from user_subscriptions)
+  subscription_tier?: string | null;
+  subscription_active?: boolean;
   
   // Terms
   terms_accepted: boolean;
@@ -69,23 +72,36 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   const loadProfile = useCallback(async (userId: string) => {
     try {
-      const { data, error } = await supabase
-        .from("user_profiles")
-        .select("*")
-        .eq("id", userId)
-        .single();
+      const [{ data: profileData, error: profileError }, { data: subData, error: subError }] =
+        await Promise.all([
+          supabase.from("user_profiles").select("*").eq("id", userId).maybeSingle(),
+          supabase
+            .from("user_subscriptions")
+            .select("tier,status")
+            .eq("user_id", userId)
+            .eq("status", "active")
+            .limit(1)
+            .maybeSingle(),
+        ]);
 
-      if (error) {
-        // Profile doesn't exist yet - this is normal for new users
-        if (error.code === 'PGRST116') {
-          // console.log("Profile not found, will be created on signup");
-          return null;
-        }
-        console.error("Error loading profile:", error);
+      if (profileError) {
+        if (profileError.code === "PGRST116") return null;
+        console.error("Error loading profile:", profileError);
         return null;
       }
 
-      return data as UserProfile;
+      if (subError) {
+        // Non-fatal: subscription lookup failed, but return profile without subscription info
+        console.warn("Error loading subscription info:", subError);
+      }
+
+      const result = {
+        ...(profileData ?? {}),
+        subscription_tier: subData?.tier ?? null,
+        subscription_active: !!subData,
+      } as UserProfile;
+
+      return result;
     } catch (err) {
       console.error("Error loading profile:", err);
       return null;

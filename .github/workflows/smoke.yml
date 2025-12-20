@@ -8,14 +8,12 @@ jobs:
   smoke:
     runs-on: ubuntu-latest
     timeout-minutes: 30
+    env:
+      PREVIEW_URL: ${{ github.event.inputs['preview-url'] || 'http://127.0.0.1:3000' }}
+      BYPASS_INPUT: ${{ github.event.inputs['bypass-token'] || '' }}
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-
-      - name: Setup Node
-        uses: actions/setup-node@v4
-        with:
-          node-version: '22'
 
       - name: Setup pnpm
         uses: pnpm/action-setup@v2
@@ -43,28 +41,24 @@ jobs:
       - name: Install Playwright browser
         run: npx playwright install chromium
 
+      - name: Inject bypass secret via local action
+        uses: ./.github/actions/inject-bypass
+
+
+
+
       - name: Run smoke script
         env:
           SAVE_ARTIFACTS: '1'
-          BYPASS_INPUT: ${{ github.event.inputs['bypass-token'] || '' }}
         run: |
-          # If a preview URL is provided (workflow_dispatch), use it; otherwise default to local server
-          PREVIEW_URL="${{ github.event.inputs['preview-url'] }}"
-          if [ -z "$PREVIEW_URL" ]; then
-            PREVIEW_URL="http://127.0.0.1:3000"
-          fi
-
-          # Prefer input token; if not set, fall back to repo secret at runtime
-          VERCEL_PROTECTION_BYPASS="$BYPASS_INPUT"
-          if [ -z "$VERCEL_PROTECTION_BYPASS" ] && [ -n "${{ secrets.VERCEL_PROTECTION_BYPASS }}" ]; then
-            VERCEL_PROTECTION_BYPASS="${{ secrets.VERCEL_PROTECTION_BYPASS }}"
-          fi
+          # Prefer input token; if not set, fall back to VERCEL_PROTECTION_BYPASS set in env by previous step
+          VERCEL_PROTECTION_BYPASS="${BYPASS_INPUT:-$VERCEL_PROTECTION_BYPASS}"
 
           if [ -n "$VERCEL_PROTECTION_BYPASS" ]; then
             echo "Using Vercel bypass token (masked): ${VERCEL_PROTECTION_BYPASS:0:4}...${VERCEL_PROTECTION_BYPASS: -4}"
-            export VERCEL_PROTECTION_BYPASS
           fi
 
+          PREVIEW_URL="${PREVIEW_URL:-http://127.0.0.1:3000}"
           node tools/smoke-whatsapp.js "$PREVIEW_URL"
 
       - name: Upload artifacts
