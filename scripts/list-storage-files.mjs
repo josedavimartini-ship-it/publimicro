@@ -31,6 +31,8 @@ async function main() {
   const supabase = createClient(supabaseUrl, svcKey, { auth: { persistSession: false } });
 
   const out = { timestamp: new Date().toISOString(), by_slug: {} };
+  // If we fallback to list under 'public' bucket, this variable holds the folder name (e.g. 'imagens-sitios')
+  let PUBLIC_PREFIX = null;
 
   // Ensure bucket defaults to 'imagens-sitios' which holds the sitio folders
   const effectiveBucket = params.bucket || 'imagens-sitios';
@@ -63,13 +65,15 @@ async function main() {
               // mark a debug note
               console.log(`Fallback: found folder '${found.name}' in 'public' bucket, searching inside it`);
               // adjust a marker so later code builds candidate paths accordingly
-              var PUBLIC_PREFIX = found.name; // eslint-disable-line no-var
+              PUBLIC_PREFIX = found.name;
             }
           }
         } catch (e) {
           // ignore
         }
       }
+      const bucketBase = (typeof PUBLIC_PREFIX === 'string' && PUBLIC_PREFIX) ? PUBLIC_PREFIX : (prefix || effectiveBucket);
+      const bucketPrefixBase = bucketBase.replace(/\/\+$/,'');
       const normalizedSlug = stripDiacritics(slug);
       // Find candidate folder names in root that match the slug (either exact or diacritics-insensitive)
       const candidates = [];
@@ -113,12 +117,12 @@ async function main() {
               const nestedPath = `${folder}${item.name}/`;
               let { data: nested } = await supabase.storage.from(effectiveBucket).list(nestedPath, { limit: 500, offset: 0 });
               for (const f of nested || []) {
-                const candidate = `${effectiveBucket}/${cand}/${item.name}/${f.name}`;
+                const candidate = `${bucketPrefixBase}/${cand}/${item.name}/${f.name}`;
                 const publicUrl = `${supabaseUrl}/storage/v1/object/public/${candidate}`.replace(/\\/g, '/');
                 if (await urlExists(publicUrl)) out.by_slug[slug].files.push({ name: f.name, path: `${item.name}/${f.name}`, publicUrl });
               }
             } else {
-              const candidate = `${effectiveBucket}/${cand}/${item.name}`;
+              const candidate = `${bucketPrefixBase}/${cand}/${item.name}`;
               const publicUrl = `${supabaseUrl}/storage/v1/object/public/${candidate}`.replace(/\\/g, '/');
               if (await urlExists(publicUrl)) out.by_slug[slug].files.push({ name: item.name, path: item.name, publicUrl });
             }
@@ -132,7 +136,7 @@ async function main() {
       if (!foundAny) {
         for (const it of rootItems || []) {
           if (it.type === 'file' && stripDiacritics(it.name).includes(normalizedSlug)) {
-            const candidate = `${effectiveBucket}/${it.name}`;
+            const candidate = `${bucketPrefixBase}/${it.name}`;
             const publicUrl = `${supabaseUrl}/storage/v1/object/public/${candidate}`.replace(/\\/g, '/');
             if (await urlExists(publicUrl)) out.by_slug[slug].files.push({ name: it.name, path: it.name, publicUrl });
           }
