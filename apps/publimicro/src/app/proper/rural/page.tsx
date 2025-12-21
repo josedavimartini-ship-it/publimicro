@@ -5,6 +5,7 @@ import Image from 'next/image';
 import { useState, useEffect } from 'react';
 import { supabase } from '@/lib/supabaseClient';
 import { MapPin, Maximize2 } from 'lucide-react';
+import { getFirstPhoto } from '@/lib/photoUtils';
 
 // The 6 Carcará ranch slugs
 const CARCARA_SLUGS = ['surucua', 'juriti', 'seriema', 'mergulhao', 'bigua', 'abare'];
@@ -91,6 +92,7 @@ export default function ProperRuralPage() {
                 >
                   {/* Image */}
                   <div className="relative w-full h-64 bg-[#2a2a1a] overflow-hidden">
+                    {getFirstPhoto(property.fotos) ? (
                       <Image
                         src={getFirstPhoto(property.fotos)}
                         alt={`Sítio ${property.nome}`}

@@ -4,7 +4,7 @@ import Link from "next/link";
 import {
   User,
   LogOut, LayoutDashboard, ChevronDown,
-  PlusCircle, Settings, Package, Gavel
+  Settings, Package, Gavel
 } from 'lucide-react';
 import EmuHeaderIcon from './EmuHeaderIcon';
 import PostIcon from './PostIcon';

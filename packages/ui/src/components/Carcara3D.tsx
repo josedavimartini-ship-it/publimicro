@@ -46,7 +46,10 @@ function CarcaraModel({ scale = 2.5, onAnimationStart, onAnimationComplete, auto
           undefined,
           (err: unknown) => { console.warn('FBX load error', modelPath, err); }
         );
-      }).catch((err) => console.warn('FBX loader import failed', err));
+        }).catch((err) => {
+          // eslint-disable-next-line no-console
+          console.warn('FBX loader import failed', err);
+        });
     } else {
       // @ts-ignore - dynamic import of example loader may not have typings in this environment
       import('three/examples/jsm/loaders/GLTFLoader').then((mod) => {
@@ -67,7 +70,10 @@ function CarcaraModel({ scale = 2.5, onAnimationStart, onAnimationComplete, auto
           undefined,
           (err: unknown) => { console.warn('GLTF load error', modelPath, err); }
         );
-      }).catch((err) => console.warn('GLTF loader import failed', err));
+        }).catch((err) => {
+          // eslint-disable-next-line no-console
+          console.warn('GLTF loader import failed', err);
+        });
     }
     return () => { mounted = false; };
   }, [modelPath]);
@@ -159,9 +165,9 @@ export function Carcara3D({ className = "", onSoundTrigger, scale = 2.5, autoRot
         (useFBX as unknown as { preload?: (p: string) => void }).preload?.(modelPath);
       }
     } catch (err) {
-      // eslint-disable-next-line no-console
-      console.warn('carcara model preload failed', modelPath, err);
-    }
+        // eslint-disable-next-line no-console
+        console.warn('carcara model preload failed', modelPath, err);
+      }
   }, [modelPath]);
 
   // If WebGL is unavailable, render a static fallback to avoid repeated WebGL errors in logs

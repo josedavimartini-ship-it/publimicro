@@ -322,7 +322,7 @@ function FileUploadField({
               error ? '' : ''
             }`}
             style={{ borderColor: error ? 'var(--color-error)' : 'var(--border-subtle)' }}
-          >          >
+          >
             <svg
               className="mx-auto h-12 w-12"
               stroke="currentColor"

@@ -25,6 +25,7 @@ export default function WhatsAppLink({
 
   const handleClick: React.MouseEventHandler<HTMLAnchorElement> = (e) => {
     try {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       const dl = (window as any).dataLayer;
       if (dl && typeof dl.push === "function") {
         dl.push({ event: "whatsapp_click", number: sanitizedNumber, url });

@@ -240,7 +240,7 @@ export function HarpyEagle3D({
       const canvas = document.createElement('canvas');
       const gl = canvas.getContext('webgl2') || canvas.getContext('webgl') || canvas.getContext('experimental-webgl');
       if (!gl) setHasWebGL(false);
-    } catch (err) {
+    } catch (_err) {
       setHasWebGL(false);
     }
   }, []);
