@@ -40,10 +40,11 @@ async function checkPwshShebangs(repoRoot) {
   return results;
 }
 
+import { fileURLToPath } from 'url';
+
 async function main() {
-  import { fileURLToPath } from 'url';
-const __filename = fileURLToPath(import.meta.url);
-const repoRoot = path.resolve(path.dirname(__filename), '..', '..');
+  const __filename = fileURLToPath(import.meta.url);
+  const repoRoot = path.resolve(path.dirname(__filename), '..', '..');
   console.log('Running cross-platform prebuild checks');
   console.log(`Platform: ${os.platform()} ${os.release()}`);
 

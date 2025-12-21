@@ -13,7 +13,7 @@ import { spawnSync } from 'child_process';
 
 async function uploadFile(supabase, bucket, slug, srcPath, destSubPath) {
   const fileName = path.basename(srcPath);
-  const dest = `${slug}/${destSubPath ? destSubPath + '/' : ''}${fileName}`.replace(/\/g, '/');
+  const dest = `${slug}/${destSubPath ? destSubPath + '/' : ''}${fileName}`.replace(/\\/g, '/');
   const stream = fs.createReadStream(srcPath);
   const ext = path.extname(fileName).toLowerCase();
   let contentType = 'application/octet-stream';
