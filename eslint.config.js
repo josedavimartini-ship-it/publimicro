@@ -66,6 +66,10 @@ module.exports = [
       'storybook-static/',
       'backup/**',
       'artifacts/**',
+      'dist/**',
+      'packages/*/dist/**',
+      'apps/*/dist/**',
+      '**/dist/**',
     ],
   },
 
