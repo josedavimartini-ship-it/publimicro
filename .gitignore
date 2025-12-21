@@ -76,6 +76,12 @@ prisma/migrations/*_*/
 *.so
 *.dylib
 
+# Ignore backup, artifacts and package dist folders
+backup/**
+artifacts/**
+**/dist/**
+packages/*/dist/**
+
 # Debug
 debug/
 *.log

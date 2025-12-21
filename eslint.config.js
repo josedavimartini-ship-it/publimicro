@@ -64,6 +64,8 @@ module.exports = [
       'yarn.lock',
       '.storybook/',
       'storybook-static/',
+      'backup/**',
+      'artifacts/**',
     ],
   },
 
@@ -89,6 +91,8 @@ module.exports = [
       'apps/*/scripts/**/*.{js,cjs,mjs}',
       'packages/*/scripts/**/*.{js,cjs,mjs}',
       '**/scripts/**/*.{js,cjs,mjs}',
+      'tools/**/*.{js,cjs,mjs}',
+      'services/**/*.{js,cjs,mjs}',
     ],
     rules: {
       'no-console': 'off',
@@ -252,6 +256,8 @@ module.exports = [
       'apps/*/scripts/**/*.{js,cjs,mjs}',
       'packages/*/scripts/**/*.{js,cjs,mjs}',
       '**/scripts/**/*.{js,cjs,mjs}',
+      'tools/**/*.{js,cjs,mjs}',
+      'services/**/*.{js,cjs,mjs}',
     ],
     rules: {
       'no-console': 'off',
