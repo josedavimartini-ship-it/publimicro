@@ -23,14 +23,18 @@
   "search.exclude": {
     "**/node_modules": true,
     "**/.next": true,
-    "**/.turbo": true
+    "**/.turbo": true,
+    "backup/": true,
+    "tmp/": true
   },
   "files.exclude": {
     "**/node_modules": true,
-    "**/.next": true
+    "**/.next": true,
+    "backup/": true,
+    "tmp/": true
   },
   "eslint.run": "onSave",
-  "editor.formatOnSave": false,
+  "editor.formatOnSave": true,
   "files.autoSave": "off",
   "markdownlint.enable": false,
   "typescript.tsserver.maxTsServerMemory": 2048,
