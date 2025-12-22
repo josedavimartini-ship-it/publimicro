@@ -10,6 +10,7 @@ interface Site {
   categoria?: string;
   preco?: number | string;
   imagem?: string | null;
+  fotos?: string[];
 }
 
 interface SiteCardProps {

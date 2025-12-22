@@ -12,7 +12,7 @@ import VehicleForm, { VehicleFormData } from '@/components/posting/VehicleForm';
 import MarineForm, { MarineFormData } from '@/components/posting/MarineForm';
 import MachineryForm, { MachineryFormData } from '@/components/posting/MachineryForm';
 import TierSelector from '@/components/posting/TierSelector';
-import { getTierLimits, validatePhotoCount, validateVideo, canPostFreeListing } from '@/lib/listingTiers';
+import { getTierLimits, validatePhotoCount, canPostFreeListing } from '@/lib/listingTiers';
 
 // Property types for real estate category
 const PROPERTY_TYPES = [
@@ -648,6 +648,7 @@ export default function UnifiedPostingPage() {
                     </p>
                   </label>
                 </div>
+              </div>
 
               {photoPreviews.length > 0 && (
                 <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">

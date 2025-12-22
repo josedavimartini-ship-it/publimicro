@@ -35,7 +35,7 @@ export default function FloatingWhatsAppWrapper() {
 
   // Check if user is verified or has a subscription tier
   const isVerified = profile?.verified === true;
-  const hasSubscription = Boolean((profile as any)?.subscription_tier || (profile as any)?.subscription_active);
+  const hasSubscription = Boolean(profile?.subscription_tier || profile?.subscription_active);
 
   // If authorized, show the WhatsApp button
   if (isVerified || hasSubscription) {

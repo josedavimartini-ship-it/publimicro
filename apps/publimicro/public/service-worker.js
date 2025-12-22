@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 const CACHE_NAME = 'publimicro-v1';
 const STATIC_CACHE = 'publimicro-static-v1';
 const DYNAMIC_CACHE = 'publimicro-dynamic-v1';

@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 // Register Service Worker for PWA
 if ('serviceWorker' in navigator) {
   async function fetchAndRegisterWorker() {

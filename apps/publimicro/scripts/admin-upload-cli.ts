@@ -4,7 +4,6 @@
  * Usage: node admin-upload-cli.js <zip-path> <property-id> --admin-key <key>
  */
 import fs from 'fs';
-import path from 'path';
 import fetch from 'node-fetch';
 import logger = require('../../../scripts/logger.cjs');
 

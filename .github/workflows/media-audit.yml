@@ -33,7 +33,7 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile=false
 
-      - name: Failsafe: check for direct `fotos[0]` usages
+      - name: "Failsafe: check for direct `fotos[0]` usages"
         run: |
           mkdir -p artifacts
           pnpm run check-fotos-usage || true
@@ -85,6 +85,8 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           echo "Media audit completed — artifacts uploaded: media-audit-artifacts" > /tmp/media_audit_comment.txt
-          if [ -n "${{ github.event.pull_request }}" ]; then
-            gh pr comment ${{ github.event.pull_request.number }} --repo ${{ github.repository }} --body-file /tmp/media_audit_comment.txt || true
+          # Use gh to detect a PR in the current repo/run context instead of relying on github.event.pull_request
+          if gh pr view --json number >/dev/null 2>&1; then
+            PR_NUMBER=$(gh pr view --json number --jq .number)
+            gh pr comment "$PR_NUMBER" --repo ${{ github.repository }} --body-file /tmp/media_audit_comment.txt || true
           fi

@@ -240,7 +240,9 @@ export function HarpyEagle3D({
       const canvas = document.createElement('canvas');
       const gl = canvas.getContext('webgl2') || canvas.getContext('webgl') || canvas.getContext('experimental-webgl');
       if (!gl) setHasWebGL(false);
-    } catch (_err) {
+    } catch (err) {
+      // Known: accessing WebGL context may throw in some environments; error is noisy and not actionable
+      void err;
       setHasWebGL(false);
     }
   }, []);
