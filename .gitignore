@@ -87,6 +87,11 @@ artifacts/**
 **/dist/**
 packages/*/dist/**
 
+# Ignore FFmpeg binary/archive added for local dev (use setup scripts instead)
+tools/ffmpeg/*.zip
+tools/ffmpeg/*.7z
+tools/ffmpeg/*.exe
+
 # Debug
 debug/
 *.log
